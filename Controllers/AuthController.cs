@@ -105,7 +105,6 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok("Admin access granted.");
         }
 
-
         [HttpGet("user-only")]
         [Authorize(Roles = "User")]
         public IActionResult UserOnlyEndpoint()
