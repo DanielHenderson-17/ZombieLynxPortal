@@ -33,7 +33,6 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
-
 // Configure Authorization Policies
 builder.Services.AddAuthorization(options =>
 {
