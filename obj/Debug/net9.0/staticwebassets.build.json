@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "9AeDTW3nTEnydwG1kZ2EgRE+dZurBLQV3M1VPUFaORw=",
+  "Source": "ZombieLynxPortalAPI",
+  "BasePath": "_content/ZombieLynxPortalAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
