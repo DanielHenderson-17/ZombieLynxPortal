@@ -4,7 +4,7 @@ import {
   linkSteamAccount,
   unlinkSteamAccount,
   getLinkedSteamAccount,
-  removeSteamJwtToken,
+  getMainJwtToken, // ✅ Import the main app token handler
 } from "../../managers/steamAuthManager";
 import "../../assets/styles/Member.css";
 
@@ -15,19 +15,23 @@ export default function Member({ loggedInUser }) {
 
   // ✅ Load Steam account if user is logged in
   useEffect(() => {
-    if (loggedInUser) {
+    if (loggedInUser && getMainJwtToken()) {
+      // ✅ Ensure the main app JWT exists
+      console.log("Fetching linked Steam account...");
       setLoading(true);
       getLinkedSteamAccount()
         .then((data) => {
+          console.log("Fetched Steam account data:", data);
           setSteamAccount(data?.steamId ? data : null);
           setLoading(false);
         })
-        .catch(() => {
-          console.log("Steam Account is not yet linked ");
-          setError("Failed to fetch Steam account.");
+        .catch((err) => {
+          console.error("Error loading Steam account:", err);
+          setError("Failed to load your Steam account.");
           setLoading(false);
         });
     } else {
+      console.warn("No logged-in user or auth token found.");
       setSteamAccount(null);
       setLoading(false);
     }
@@ -35,6 +39,12 @@ export default function Member({ loggedInUser }) {
 
   // ✅ Handle linking Steam account
   const handleLinkSteam = () => {
+    if (!getMainJwtToken()) {
+      console.error("No valid main app token. Cannot link Steam.");
+      setError("Please log in to link your Steam account.");
+      return;
+    }
+
     setError(null);
     linkSteamAccount(() => {
       getLinkedSteamAccount()
@@ -48,10 +58,15 @@ export default function Member({ loggedInUser }) {
 
   // ✅ Handle unlinking Steam account
   const handleUnlinkSteam = () => {
+    if (!getMainJwtToken()) {
+      console.error("No valid main app token. Cannot unlink Steam.");
+      setError("Please log in to unlink your Steam account.");
+      return;
+    }
+
     setError(null);
     unlinkSteamAccount(loggedInUser.id)
       .then(() => {
-        removeSteamJwtToken(); // ✅ Clear the token after unlinking
         setSteamAccount(null);
       })
       .catch((err) => {
@@ -100,7 +115,6 @@ export default function Member({ loggedInUser }) {
         )}
       </div>
       {error && <p className="text-danger">{error}</p>}{" "}
-      {/* ❗ Display errors */}
       <nav className="d-flex justify-content-start member-nav">
         <div className="col-6 d-flex justify-content-end">
           <NavLink
