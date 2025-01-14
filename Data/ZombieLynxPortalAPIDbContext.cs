@@ -7,7 +7,6 @@ namespace ZombieLynxPortalAPI.Data
     {
         private readonly IConfiguration _configuration;
 
-        // ✅ Single Constructor with IConfiguration
         public ZombieLynxPortalAPIDbContext(DbContextOptions<ZombieLynxPortalAPIDbContext> options, IConfiguration configuration)
             : base(options)
         {
@@ -16,12 +15,16 @@ namespace ZombieLynxPortalAPI.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<UserTicket> UserTickets { get; set; }
+        public DbSet<AdminTicket> AdminTickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            var adminId = Guid.NewGuid();  // Ensure consistency across seeding
+            // ✅ Use Static GUID for Admin User
+            var adminId = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var adminPassword = _configuration["AdminPassword"] ?? "Zlg1717!";
 
             // ✅ Seed Admin User
@@ -33,7 +36,7 @@ namespace ZombieLynxPortalAPI.Data
                 Role = "Admin"
             });
 
-            // ✅ Seed Admin Profile
+            // ✅ Seed Admin UserProfile
             modelBuilder.Entity<UserProfile>().HasData(new UserProfile
             {
                 Id = 1,
@@ -41,6 +44,75 @@ namespace ZombieLynxPortalAPI.Data
                 LastName = "User",
                 UserId = adminId
             });
+
+            // ✅ Seed Ticket (UserProfileId 1 must exist first)
+            modelBuilder.Entity<Ticket>().HasData(new Ticket
+            {
+                Id = 1,
+                Subject = "Test Ticket",
+                Category = "Bug",
+                Game = "Ark:SA",
+                Server = "NA-East",
+                Description = "Initial test ticket for the system.",
+                Status = "Open",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                UserProfileId = 1  // 🔑 Matches seeded UserProfile
+            });
+
+            // ✅ Seed UserTicket
+            modelBuilder.Entity<UserTicket>().HasData(new UserTicket
+            {
+                UserProfileId = 1,
+                TicketId = 1,
+                AssignedAt = DateTime.UtcNow
+            });
+
+            // ✅ Seed AdminTicket
+            modelBuilder.Entity<AdminTicket>().HasData(new AdminTicket
+            {
+                AdminId = 1,
+                TicketId = 1,
+                AssignedAt = DateTime.UtcNow
+            });
+
+            // ✅ Composite Keys for Join Tables
+            modelBuilder.Entity<UserTicket>()
+                .HasKey(ut => new { ut.UserProfileId, ut.TicketId });
+
+            modelBuilder.Entity<AdminTicket>()
+                .HasKey(at => new { at.AdminId, at.TicketId });
+
+            // ✅ Ticket Relationships
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.UserProfile)
+                .WithMany()
+                .HasForeignKey(t => t.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserTicket>()
+                .HasOne(ut => ut.UserProfile)
+                .WithMany()
+                .HasForeignKey(ut => ut.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserTicket>()
+                .HasOne(ut => ut.Ticket)
+                .WithMany(t => t.UserTickets)
+                .HasForeignKey(ut => ut.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AdminTicket>()
+                .HasOne(at => at.Admin)
+                .WithMany()
+                .HasForeignKey(at => at.AdminId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AdminTicket>()
+                .HasOne(at => at.Ticket)
+                .WithMany(t => t.AdminTickets)
+                .HasForeignKey(at => at.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
