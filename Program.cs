@@ -16,16 +16,14 @@ builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
                warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning))
 );
 
-// Configure CORS
+// Configure CORS to allow frontend access
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy.WithOrigins("http://localhost:5176")  // React frontend URL
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
+    options.AddPolicy("AllowFrontend",
+        builder => builder.WithOrigins("https://zlg.gg", "https://profile.zlg.gg", "http://localhost:5176")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials());  // 🔑 Must allow credentials
 });
 
 // Configure JWT Authentication
@@ -42,6 +40,19 @@ builder.Services.AddAuthentication("Bearer")
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
+        };
+
+        // ✅ Handle CORS Preflight Requests for Authentication
+        options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Method.Equals("OPTIONS", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.NoResult();  // Ignore preflight requests
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -78,8 +89,6 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityRequirement(securityRequirement);
 });
 
-var adminPassword = builder.Configuration["AdminPassword"];
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -96,7 +105,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Enable CORS globally
+// ✅ Enable CORS globally BEFORE Authentication
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();

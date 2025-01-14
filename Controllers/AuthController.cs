@@ -30,19 +30,23 @@ namespace ZombieLynxPortalAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
+            // ❗ Validate password confirmation
             if (dto.Password != dto.ConfirmPassword)
                 return BadRequest("Passwords do not match.");
 
+            // ❗ Check for duplicate email
             if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
                 return BadRequest("Email is already in use.");
 
+            // 🔐 Hash the password
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
+            // ➕ Create the user
             var user = new User
             {
                 Email = dto.Email,
                 PasswordHash = hashedPassword,
-                Role = "User",  // Default role assigned automatically
+                Role = "User",  // Default role
                 Profile = new UserProfile
                 {
                     FirstName = dto.FirstName,
@@ -53,8 +57,17 @@ namespace ZombieLynxPortalAPI.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok("User registered successfully.");
+            // ✅ Return created user with profile info
+            return Ok(new
+            {
+                user.Id,
+                user.Email,
+                user.Role,
+                user.Profile.FirstName,
+                user.Profile.LastName
+            });
         }
+
 
         // POST: api/Auth/Login
         [HttpPost("login")]
@@ -77,12 +90,21 @@ namespace ZombieLynxPortalAPI.Controllers
             var jwtSettings = _configuration.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
 
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role)
-            };
+            // Support multiple roles if needed
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim("UserId", user.Id.ToString()),  // Explicit user ID for matching
+        new Claim("FullName", $"{user.Profile.FirstName} {user.Profile.LastName}") // Optional
+    };
+
+            // If the role is a single value
+            claims.Add(new Claim(ClaimTypes.Role, user.Role));
+
+            // If the role could be multiple, use this:
+            // var roles = user.Roles.Split(',');  // Example if roles are stored as comma-separated
+            // claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

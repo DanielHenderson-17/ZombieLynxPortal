@@ -174,7 +174,7 @@ export default function SingleTicket() {
                           )
                       )
                       .map((user) => (
-                        <li key={ticket.id}>
+                        <li key={user.id}>
                           <button
                             className="dropdown-item"
                             onClick={() => handleAssignUser(user.id)}

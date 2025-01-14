@@ -1,16 +1,20 @@
-const _apiUrl = "https://localhost:7254/api/userprofile";
+const _apiUrl = "/api/userprofile";
 
-// 📥 Get the token from session storage
+// ✅ Use localStorage for persistent authentication
 const getToken = () => {
-  return sessionStorage.getItem("authToken");
+  return localStorage.getItem("authToken");
 };
+
+// ✅ Centralized function to attach Authorization headers
+const getAuthHeaders = () => ({
+  Authorization: `Bearer ${getToken()}`,
+  "Content-Type": "application/json",
+});
 
 // 🔍 Get the current logged-in user's profile
 export const getUserProfiles = () => {
   return fetch(_apiUrl, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: getAuthHeaders(),
   }).then((res) =>
     res.ok ? res.json() : Promise.reject("Failed to fetch profile")
   );
@@ -19,9 +23,7 @@ export const getUserProfiles = () => {
 // 🔍 Get all users (Admin only)
 export const getAllUsers = () => {
   return fetch(`${_apiUrl}/all`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: getAuthHeaders(),
   })
     .then((res) => {
       if (!res.ok) {
@@ -38,9 +40,7 @@ export const getAllUsers = () => {
 // 🔍 Get user profiles with roles (Admin only)
 export const getUserProfilesWithRoles = () => {
   return fetch(`${_apiUrl}/withroles`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: getAuthHeaders(),
   }).then((res) =>
     res.ok ? res.json() : Promise.reject("Failed to fetch profiles with roles")
   );
@@ -50,9 +50,7 @@ export const getUserProfilesWithRoles = () => {
 export const promoteUser = (userId) => {
   return fetch(`${_apiUrl}/promote/${userId}`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: getAuthHeaders(),
   }).then((res) => {
     if (!res.ok) throw new Error("Failed to promote user");
   });
@@ -62,9 +60,7 @@ export const promoteUser = (userId) => {
 export const demoteUser = (userId) => {
   return fetch(`${_apiUrl}/demote/${userId}`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: getAuthHeaders(),
   }).then((res) => {
     if (!res.ok) throw new Error("Failed to demote user");
   });

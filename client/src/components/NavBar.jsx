@@ -13,21 +13,30 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     if (loggedInUser) {
       getUserProfiles()
         .then((profiles) => {
+          let profile = null;
+
+          // ✅ Handle both array and object responses
           if (Array.isArray(profiles)) {
-            const profile = profiles.find(
+            profile = profiles.find(
               (p) =>
-                p.identityUserId === loggedInUser.id || p.id === loggedInUser.id
+                p.email === loggedInUser.email ||
+                p.userId === loggedInUser.id ||
+                p.id === loggedInUser.id
             );
-            setUserProfile(profile);
-          } else {
+          } else if (profiles) {
             if (
-              profiles.identityUserId === loggedInUser.id ||
+              profiles.email === loggedInUser.email ||
+              profiles.userId === loggedInUser.id ||
               profiles.id === loggedInUser.id
             ) {
-              setUserProfile(profiles);
-            } else {
-              console.error("Profile does not match logged-in user");
+              profile = profiles;
             }
+          }
+
+          if (profile) {
+            setUserProfile(profile);
+          } else {
+            console.error("❗ Profile does not match logged-in user", profiles);
           }
         })
         .catch((error) =>
@@ -86,10 +95,10 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
         </div>
       </div>
 
-      {/* Backdrop (Dim Background) */}
+      {/* Backdrop */}
       {open && <div className="backdrop" onClick={() => setOpen(false)}></div>}
 
-      {/* Slide-Out Mobile Menu */}
+      {/* Mobile Menu */}
       {open && (
         <div className="mobile-menu bg-dark text-white position-absolute top-0 end-0 vh-100 w-75 d-lg-none">
           <div className="d-flex justify-content-end p-3">

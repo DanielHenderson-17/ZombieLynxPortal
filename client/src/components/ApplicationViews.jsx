@@ -7,49 +7,56 @@ import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
 import Shop from "../components/shop/Shop";
 import LoginSuccess from "./auth/LoginSuccess";
+import NavBar from "./NavBar";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
-    <Routes>
-      {/* Member Layout for logged-in users */}
-      <Route
-        path="/"
-        element={
-          <AuthorizedRoute loggedInUser={loggedInUser}>
-            <Member loggedInUser={loggedInUser} />
-          </AuthorizedRoute>
-        }
-      >
-        {/* Nested routes rendered within Member */}
+    <>
+      {/* NavBar only shows when a user is logged in */}
+      {loggedInUser && (
+        <NavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
+      )}
+
+      <Routes>
+        {/* Protected Routes */}
         <Route
-          path="tickets/*"
-          element={<Tickets loggedInUser={loggedInUser} />}
-        />
-        <Route path="stats" element={<Stats />} />
-        <Route path="shop" element={<Shop />} />
+          path="/"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Member loggedInUser={loggedInUser} />
+            </AuthorizedRoute>
+          }
+        >
+          {/* Nested routes rendered within Member */}
+          <Route
+            path="tickets/*"
+            element={<Tickets loggedInUser={loggedInUser} />}
+          />
+          <Route path="stats" element={<Stats />} />
+          <Route path="shop" element={<Shop />} />
+          <Route
+            index
+            element={<p>Select a module from the navigation above.</p>}
+          />
+        </Route>
+
+        {/* Public Routes (No NavBar) */}
         <Route
-          index
-          element={<p>Select a module from the navigation above.</p>}
+          path="login"
+          element={<Login setLoggedInUser={setLoggedInUser} />}
         />
-      </Route>
+        <Route
+          path="/login-success"
+          element={<LoginSuccess setLoggedInUser={setLoggedInUser} />}
+        />
+        <Route
+          path="register"
+          element={<Register setLoggedInUser={setLoggedInUser} />}
+        />
 
-      {/* Login and Register for unauthenticated users */}
-      <Route
-        path="login"
-        element={<Login setLoggedInUser={setLoggedInUser} />}
-      />
-      <Route
-        path="/login-success"
-        element={<LoginSuccess setLoggedInUser={setLoggedInUser} />}
-      />
-
-      <Route
-        path="register"
-        element={<Register setLoggedInUser={setLoggedInUser} />}
-      />
-
-      {/* Catch-all for invalid routes */}
-      <Route path="*" element={<p>Whoops, nothing here...</p>} />
-    </Routes>
+        {/* Catch-all for invalid routes */}
+        <Route path="*" element={<p>Whoops, nothing here...</p>} />
+      </Routes>
+    </>
   );
 }
