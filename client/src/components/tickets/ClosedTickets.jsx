@@ -1,0 +1,186 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getClosedTickets,
+  restoreTicketAPI,
+  deleteTicket,
+} from "../../managers/ticketManager";
+import { truncateText } from "../../utils/truncateText";
+import { getGameImage } from "../../utils/gameFormatter";
+
+export default function ClosedTickets({ onTicketChange }) {
+  const [tickets, setTickets] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+
+  const navigate = useNavigate();
+
+  const fetchTickets = async () => {
+    try {
+      const data = await getClosedTickets();
+      setTickets(data);
+    } catch (error) {
+      console.error("Error fetching closed tickets:", error);
+      setError("Failed to fetch closed tickets. Please try again.");
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    // Start the fetch
+    fetchTickets();
+
+    // Set a timeout to show the loading message if fetching takes longer than 1 second
+    const timeout = setTimeout(() => {
+      if (fetching) {
+        setLoading(true);
+      }
+    }, 1000);
+
+    // Cleanup timeout if fetching finishes before timeout
+    return () => clearTimeout(timeout);
+  }, [fetching]);
+
+  const handleRestoreTicket = async (ticketId) => {
+    try {
+      await restoreTicketAPI(ticketId);
+      setTickets((prevTickets) =>
+        prevTickets.filter((ticket) => ticket.id !== ticketId)
+      );
+      onTicketChange();
+    } catch (error) {
+      console.error("Error restoring ticket:", error);
+    }
+  };
+
+  const handleDeleteTicket = async (ticketId) => {
+    try {
+      await deleteTicket(ticketId);
+      setTickets((prevTickets) =>
+        prevTickets.filter((ticket) => ticket.id !== ticketId)
+      );
+    } catch (error) {
+      console.error("Error deleting ticket:", error);
+    }
+  };
+
+  const handleTicketClick = (ticketId) => {
+    navigate(`/tickets/ticket/${ticketId}`);
+  };
+
+  if (error) {
+    return <p className="text-danger">{error}</p>;
+  }
+
+  if (loading) {
+    return <p className="mt-5 text-white">Loading tickets...</p>;
+  }
+
+  if (fetching) {
+    return null;
+  }
+
+  return (
+    <div className="col-12 h-100 ticket-body1">
+      {tickets.length === 0 ? (
+        <p className="mt-5 text-white">You have no tickets yet!</p>
+      ) : (
+        <table className="table table-dark table-striped align-middle">
+          <thead className="thead-dark">
+            <tr>
+              <th className="text-start col-md-4 col-8">Topic</th>
+              <th className="text-start col-1 d-none d-lg-table-cell">Game</th>
+              <th className="text-start col-2 d-none d-lg-table-cell">
+                Server
+              </th>
+              <th className="text-end col-2 pe-3">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tickets
+              .slice()
+              .reverse()
+              .map((ticket) => (
+                <tr
+                  key={ticket.id}
+                  onClick={() => handleTicketClick(ticket.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <td className="text-start col-4">
+                    <div>
+                      <strong className="text-white">
+                        {truncateText(ticket.subject, 35)}
+                      </strong>
+                      <div className="d-flex">
+                        <strong className="sub-text col-12">
+                          {ticket.category}
+                        </strong>
+                      </div>
+                      <div className="d-md-none d-flex">
+                        <img
+                          className="gameImg2 me-2 my-auto"
+                          src={getGameImage(ticket.game)}
+                          alt=""
+                        />
+                        <small>{ticket.server}</small>
+                      </div>
+                      <small className="sub-text">
+                        {new Date(ticket.createdAt).toLocaleString()}
+                      </small>
+                      <br />
+                      <small className="sub-text">
+                        {ticket.assignedUsers
+                          .map((user) => `${user.firstName}`)
+                          .join(", ")}
+                      </small>
+                    </div>
+                  </td>
+                  <td className="text-start col-1 d-none d-lg-table-cell">
+                    <span className="text-warning fw-bold mx-auto">
+                      <img
+                        className="gameImg ms-1"
+                        src={getGameImage(ticket.game)}
+                        alt=""
+                      />
+                    </span>
+                  </td>
+                  <td className="text-start col-2 d-none d-lg-table-cell">
+                    <span className="text-white fw-bold">
+                      {truncateText(ticket.server)}
+                    </span>
+                  </td>
+                  <td className="text-start col-1 position-relative">
+                    <div className="d-flex justify-content-end pe-2">
+                      <button
+                        className="btn btn-primary btn-sm ticket-button me-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRestoreTicket(ticket.id);
+                        }}
+                      >
+                        <i className="bi bi-arrow-counterclockwise"></i>
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm ticket-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTicket(ticket.id);
+                        }}
+                      >
+                        <i className="bi bi-trash3"></i>
+                      </button>
+                    </div>
+                    <small className="position-absolute ticket-id">
+                      Ticket ID: {ticket.id}
+                    </small>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}

@@ -16,6 +16,18 @@ builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
                warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning))
 );
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5176")  // React frontend URL
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 builder.Services.AddAuthentication("Bearer")
@@ -60,9 +72,7 @@ builder.Services.AddSwaggerGen(c =>
 
     var securityRequirement = new OpenApiSecurityRequirement
     {
-        {
-            securityScheme, new[] { "Bearer" }
-        }
+        { securityScheme, new[] { "Bearer" } }
     };
 
     c.AddSecurityRequirement(securityRequirement);
@@ -85,6 +95,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS globally
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
