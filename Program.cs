@@ -3,6 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using ZombieLynxPortalAPI.Data;
+using AspNet.Security.OpenId.Steam;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,45 +18,75 @@ builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
                warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning))
 );
 
-// Configure CORS to allow frontend access
+// Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
+    options.AddPolicy("AllowAllOrigins",
         builder => builder.WithOrigins("https://zlg.gg", "https://profile.zlg.gg", "http://localhost:5176")
                           .AllowAnyHeader()
                           .AllowAnyMethod()
-                          .AllowCredentials());  // 🔑 Must allow credentials
+                          .AllowCredentials());  // ✅ Must allow credentials for cookies
 });
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
-        };
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-        // ✅ Handle CORS Preflight Requests for Authentication
-        options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                if (context.Request.Method.Equals("OPTIONS", StringComparison.OrdinalIgnoreCase))
-                {
-                    context.NoResult();  // Ignore preflight requests
-                }
-                return Task.CompletedTask;
-            }
-        };
-    });
+    options.DefaultSignInScheme = "Cookies";
+})
+.AddCookie("Cookies", options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.None;  // ⚠️ Allow cross-origin requests (important for Steam redirect)
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
+    };
+})
+.AddSteam(options =>
+{
+    options.ApplicationKey = builder.Configuration["Authentication:Steam:ApiKey"];
+    options.CallbackPath = "/api/SteamAuth/link-steam";  // ✅ Ensure this matches the Steam dashboard
+
+    options.Events.OnRedirectToIdentityProvider = context =>
+{
+    // ✅ Correct Steam OpenID login URL
+    var redirectUrl = $"https://steamcommunity.com/openid/login" +
+                      $"?openid.ns=http://specs.openid.net/auth/2.0" +
+                      $"&openid.mode=checkid_setup" +
+                      $"&openid.return_to={Uri.EscapeDataString(context.Properties.RedirectUri)}" +  // ✅ Fixed this line
+                      $"&openid.realm={Uri.EscapeDataString($"{context.Request.Scheme}://{context.Request.Host}")}" +
+                      $"&openid.identity=http://specs.openid.net/auth/2.0/identifier_select" +
+                      $"&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select";
+
+    context.Response.Redirect(redirectUrl);
+    return Task.CompletedTask;
+};
+
+
+    options.Events.OnRemoteFailure = context =>
+    {
+        context.Response.Redirect($"/error?message={Uri.EscapeDataString(context.Failure?.Message ?? "Unknown error")}");
+        context.HandleResponse();
+        return Task.CompletedTask;
+    };
+});
+
+
 
 // Configure Authorization Policies
 builder.Services.AddAuthorization(options =>
@@ -94,23 +126,18 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // Enable Swagger in development mode
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZombieLynxPortal API V1");
-        c.RoutePrefix = string.Empty;  // Swagger UI at root
+        c.RoutePrefix = string.Empty;
     });
 }
 
 app.UseHttpsRedirection();
-
-// ✅ Enable CORS globally BEFORE Authentication
-app.UseCors("AllowFrontend");
-
+app.UseCors("AllowAllOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

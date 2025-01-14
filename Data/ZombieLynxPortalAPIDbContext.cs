@@ -18,12 +18,12 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<UserTicket> UserTickets { get; set; }
         public DbSet<AdminTicket> AdminTickets { get; set; }
+        public DbSet<ZLGMember> ZLGMembers { get; set; }  // ✅ Added ZLGMember
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // ✅ Use Static GUID for Admin User
             var adminId = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var adminPassword = _configuration["AdminPassword"] ?? "Zlg1717!";
 
@@ -45,7 +45,23 @@ namespace ZombieLynxPortalAPI.Data
                 UserId = adminId
             });
 
-            // ✅ Seed Ticket (UserProfileId 1 must exist first)
+            // ✅ Seed ZLGMember for Steam (Linked to Admin)
+            modelBuilder.Entity<ZLGMember>().HasData(new ZLGMember
+            {
+                Id = 1,
+                UserProfileId = 1,
+                SteamId = "76561198021051512",
+                SteamName = "AdminSteam",
+                SteamImgUrl = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/adm/adminsteam.jpg",
+                DiscordId = "123456789012345678",
+                DiscordName = "AdminDiscord",
+                DiscordImgUrl = "https://cdn.discordapp.com/avatars/123456789012345678/admin-discord.png",
+                EosId = "eos-admin-id",
+                EpicName = "AdminEpic",
+                EpicImgUrl = "https://static.epicgames.com/admin-epic-avatar.png"
+            });
+
+            // ✅ Seed Ticket
             modelBuilder.Entity<Ticket>().HasData(new Ticket
             {
                 Id = 1,
@@ -57,7 +73,7 @@ namespace ZombieLynxPortalAPI.Data
                 Status = "Open",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                UserProfileId = 1  // 🔑 Matches seeded UserProfile
+                UserProfileId = 1
             });
 
             // ✅ Seed UserTicket
@@ -83,7 +99,7 @@ namespace ZombieLynxPortalAPI.Data
             modelBuilder.Entity<AdminTicket>()
                 .HasKey(at => new { at.AdminId, at.TicketId });
 
-            // ✅ Ticket Relationships
+            // ✅ Relationships for Tickets
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.UserProfile)
                 .WithMany()
@@ -112,6 +128,13 @@ namespace ZombieLynxPortalAPI.Data
                 .HasOne(at => at.Ticket)
                 .WithMany(t => t.AdminTickets)
                 .HasForeignKey(at => at.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ ZLGMember Relationship
+            modelBuilder.Entity<ZLGMember>()
+                .HasOne(z => z.UserProfile)
+                .WithMany()
+                .HasForeignKey(z => z.UserProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
