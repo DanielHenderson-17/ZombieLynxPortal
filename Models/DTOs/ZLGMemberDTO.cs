@@ -11,10 +11,9 @@ namespace ZombieLynxPortalAPI.DTOs
         public string? DiscordImgUrl { get; set; }
         public string? EosId { get; set; }
         public string? EpicName { get; set; }
-
         public string? EpicImgUrl { get; set; }
 
-        public int UserProfileId { get; set; }
-        public UserProfileDTO UserProfile { get; set; }
+        public int? UserProfileId { get; set; }
+        public UserProfileDTO? UserProfile { get; set; }
     }
 }

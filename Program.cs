@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -21,11 +25,11 @@ builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
-        builder => builder.WithOrigins("https://zlg.gg", "https://profile.zlg.gg", "http://localhost:5176")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials());  // ✅ Must allow credentials for cookies
+    options.AddPolicy("AllowLocalhost",
+        policy => policy.WithOrigins("http://localhost:5173", "http://localhost:5176")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
 });
 
 // Configure JWT Authentication
@@ -134,10 +138,46 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var errorFeature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        if (errorFeature != null)
+        {
+            var error = errorFeature.Error;
+            await context.Response.WriteAsync(new
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = "Internal Server Error.",
+                Detailed = error.Message
+            }.ToString());
+        }
+    });
+});
+
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next.Invoke();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"💥 Unhandled exception: {ex.Message}");
+        await context.Response.WriteAsync("Something went wrong.");
+    }
+});
+
+
 app.UseHttpsRedirection();
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 
 app.Run();

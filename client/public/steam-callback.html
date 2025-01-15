@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Steam Authentication</title>
+  </head>
+  <body>
+    <script>
+      // ✅ Extract the Steam ID from the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const steamIdUrl = urlParams.get("openid.claimed_id");
+      const steamId = steamIdUrl ? steamIdUrl.split('/').pop() : null;
+
+      if (steamId && window.opener) {
+        // ✅ Send the Steam ID back to the main window
+        window.opener.postMessage({ type: "STEAM_AUTH_SUCCESS", steamId }, window.origin);
+        window.close(); // ✅ Close the popup
+      } else {
+        window.close(); // 🚨 Close even if something goes wrong
+      }
+    </script>
+    <p>Linking your Steam account... Please wait.</p>
+  </body>
+</html>

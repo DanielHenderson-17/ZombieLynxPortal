@@ -496,3 +496,8 @@ client/dist/
 
 # Environment files
 client/.env
+
+.env
+
+appsettings.json
+appsettings.Development.json
