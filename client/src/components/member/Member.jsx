@@ -4,75 +4,73 @@ import {
   linkSteamAccount,
   unlinkSteamAccount,
   getLinkedSteamAccount,
-  getMainJwtToken, // ✅ Import the main app token handler
+  getMainJwtToken,
 } from "../../managers/steamAuthManager";
 import "../../assets/styles/Member.css";
 
 export default function Member({ loggedInUser }) {
   const [steamAccount, setSteamAccount] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // ❗ For error handling
+  const [loading, setLoading] = useState(false); // ⬅ Changed from `true` to `false`
+  const [error, setError] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
 
-  // ✅ Load Steam account if user is logged in
+  // ✅ Fetch linked Steam account on load or refresh
   useEffect(() => {
+    fetchLinkedAccount();
+  }, [refreshTrigger]);
+
+  const fetchLinkedAccount = () => {
     if (loggedInUser && getMainJwtToken()) {
-      // ✅ Ensure the main app JWT exists
-      console.log("Fetching linked Steam account...");
+      console.log("🔎 Fetching linked Steam account from backend...");
       setLoading(true);
       getLinkedSteamAccount()
         .then((data) => {
-          console.log("Fetched Steam account data:", data);
+          console.log("📦 Fetched Steam account data:", data);
           setSteamAccount(data?.steamId ? data : null);
-          setLoading(false);
         })
         .catch((err) => {
-          console.error("Error loading Steam account:", err);
+          console.error("❌ Error fetching Steam account:", err);
           setError("Failed to load your Steam account.");
-          setLoading(false);
-        });
-    } else {
-      console.warn("No logged-in user or auth token found.");
-      setSteamAccount(null);
-      setLoading(false);
+        })
+        .finally(() => setLoading(false));
     }
-  }, [loggedInUser]);
+  };
 
-  // ✅ Handle linking Steam account
   const handleLinkSteam = () => {
     if (!getMainJwtToken()) {
-      console.error("No valid main app token. Cannot link Steam.");
+      console.error("❌ No valid JWT token.");
       setError("Please log in to link your Steam account.");
       return;
     }
 
+    console.log("🔗 Starting Steam linking process...");
     setError(null);
+    setLoading(true);
+
     linkSteamAccount(() => {
-      getLinkedSteamAccount()
-        .then((data) => setSteamAccount(data?.steamId ? data : null))
-        .catch((err) => {
-          console.error("Failed to fetch linked Steam account:", err);
-          setError("Failed to link Steam account.");
-        });
+      console.log("✅ Steam account linked. Triggering UI refresh...");
+      setRefreshTrigger((prev) => !prev);
+      setLoading(false);
     });
   };
 
-  // ✅ Handle unlinking Steam account
   const handleUnlinkSteam = () => {
     if (!getMainJwtToken()) {
-      console.error("No valid main app token. Cannot unlink Steam.");
+      console.error("❌ No valid JWT token.");
       setError("Please log in to unlink your Steam account.");
       return;
     }
 
+    console.log("🗑️ Unlinking Steam account...");
     setError(null);
-    unlinkSteamAccount(loggedInUser.id)
-      .then(() => {
-        setSteamAccount(null);
-      })
-      .catch((err) => {
-        console.error("Failed to unlink Steam account:", err);
-        setError("Failed to unlink Steam account.");
-      });
+    setLoading(true);
+
+    unlinkSteamAccount(() => {
+      console.log("✅ Steam account unlinked. Refreshing UI...");
+      setSteamAccount(null);
+      setRefreshTrigger((prev) => !prev);
+      setLoading(false);
+    });
   };
 
   return (
@@ -81,6 +79,7 @@ export default function Member({ loggedInUser }) {
         <h1>Welcome, {loggedInUser?.username || "Member"}!</h1>
         <p>Manage your account and navigate through the system below.</p>
       </div>
+
       <div className="d-flex align-items-center mb-3">
         <button
           className={`btn me-3 ${steamAccount ? "btn-danger" : "btn-primary"}`}
@@ -88,14 +87,16 @@ export default function Member({ loggedInUser }) {
           disabled={loading}
         >
           {loading
-            ? "Processing..."
+            ? steamAccount
+              ? "Unlinking Steam Account..."
+              : "Linking Steam Account..."
             : steamAccount
             ? "Unlink Steam Account"
             : "Link Steam Account"}
         </button>
 
         {loading ? (
-          <p>Loading Steam account...</p>
+          <p>Processing...</p>
         ) : steamAccount ? (
           <div className="d-flex align-items-center">
             <img
@@ -114,13 +115,15 @@ export default function Member({ loggedInUser }) {
           <p className="text-white">No Steam account linked.</p>
         )}
       </div>
-      {error && <p className="text-danger">{error}</p>}{" "}
+
+      {error && <p className="text-danger">{error}</p>}
+
       <nav className="d-flex justify-content-start member-nav">
         <div className="col-6 d-flex justify-content-end">
           <NavLink
             to="stats"
             className={({ isActive }) =>
-              `mx-4 text-white text-decoration-none ${
+              `mx-4 text-white ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
@@ -130,7 +133,7 @@ export default function Member({ loggedInUser }) {
           <NavLink
             to="shop"
             className={({ isActive }) =>
-              `me-4 text-white text-decoration-none ${
+              `me-4 text-white ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
@@ -140,7 +143,7 @@ export default function Member({ loggedInUser }) {
           <NavLink
             to="tickets"
             className={({ isActive }) =>
-              `text-white text-decoration-none me-4 ${
+              `text-white me-4 ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
@@ -150,7 +153,7 @@ export default function Member({ loggedInUser }) {
           <NavLink
             to="notifications"
             className={({ isActive }) =>
-              `text-white text-decoration-none ${
+              `text-white ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
@@ -159,6 +162,7 @@ export default function Member({ loggedInUser }) {
           </NavLink>
         </div>
       </nav>
+
       <div className="member-content">
         <Outlet />
       </div>

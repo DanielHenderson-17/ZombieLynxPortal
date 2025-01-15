@@ -1,92 +1,153 @@
-const _authUrl = "/api/SteamAuth";
+const STEAM_OPENID_URL = "https://steamcommunity.com/openid/login";
+const REDIRECT_URL = `${window.location.origin}/steam-callback.html`;
+const API_BASE_URL = "https://localhost:5001/api/Steam";
 
-// ✅ Use the correct main app JWT token (authToken)
+// ✅ Retrieve JWT from local storage
 export const getMainJwtToken = () => {
-  const token = localStorage.getItem("authToken");
-  console.log("Retrieved Main App JWT Token:", token);
-  return token;
+  return localStorage.getItem("authToken");
 };
 
+// ✅ Validate the JWT
 export const isMainJwtValid = () => {
   const token = getMainJwtToken();
   if (!token) return false;
 
   const payload = JSON.parse(atob(token.split(".")[1]));
-  const isExpired = payload.exp * 1000 < Date.now();
-
-  console.log("Main JWT Valid:", !isExpired);
-  return !isExpired;
+  return payload.exp * 1000 > Date.now();
 };
 
-// ✅ Get linked Steam account using main app JWT
+// ✅ Fetch linked Steam account from the backend
 export const getLinkedSteamAccount = () => {
-  if (!isMainJwtValid()) {
-    console.warn("Main JWT is invalid or expired.");
-    return Promise.resolve(null);
-  }
+  if (!isMainJwtValid()) return Promise.resolve(null);
 
-  return fetch(`${_authUrl}/linked`, {
+  return fetch(`${API_BASE_URL}/linked`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${getMainJwtToken()}`, // ✅ Using main JWT
+      Authorization: `Bearer ${getMainJwtToken()}`,
+    },
+  }).then((res) => (res.ok ? res.json() : null));
+};
+
+export const fetchSteamApiKey = () => {
+  console.log("🔑 Fetching Steam API Key...");
+
+  return fetch(`${API_BASE_URL}/get-api-key`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${getMainJwtToken()}`, // ✅ Ensure this is correct
     },
   })
     .then((res) => {
-      console.log("Steam Linked Response:", res);
-      return res.ok ? res.json() : null;
+      if (!res.ok) throw new Error("Failed to retrieve Steam API key.");
+      return res.json();
+    })
+    .then((data) => {
+      console.log("✅ Received Steam API Key:", data.apiKey);
+      return data.apiKey;
     })
     .catch((err) => {
-      console.error("Error fetching Steam account:", err);
+      console.error("❌ Error fetching Steam API key:", err);
       return null;
     });
 };
 
-// ✅ Link Steam account with Authorization header
-export const linkSteamAccount = (onWindowClose) => {
-  const steamWindow = window.open(
-    "/api/SteamAuth/login", // ✅ Removed auth token in URL
-    "Steam Login",
-    "width=600,height=800"
-  );
-
-  const handleMessage = (event) => {
-    console.log("Received message from Steam window:", event.data);
-    if (event.data?.type === "steamLinked") {
-      console.log("Steam account linked successfully.");
-      getLinkedSteamAccount().finally(() => {
-        window.removeEventListener("message", handleMessage);
-      });
+// ✅ Open Steam login popup and handle callback with state update
+export const linkSteamAccount = (onSuccess) => {
+  fetchSteamApiKey().then((apiKey) => {
+    if (!apiKey) {
+      console.error("❌ Cannot proceed without Steam API key.");
+      return;
     }
-  };
 
-  window.addEventListener("message", handleMessage);
+    const steamLoginUrl =
+      `${STEAM_OPENID_URL}?openid.ns=http://specs.openid.net/auth/2.0` +
+      `&openid.mode=checkid_setup` +
+      `&openid.return_to=${encodeURIComponent(REDIRECT_URL)}` +
+      `&openid.realm=${window.location.origin}` +
+      `&openid.identity=http://specs.openid.net/auth/2.0/identifier_select` +
+      `&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select`;
 
-  const checkWindowClosed = setInterval(() => {
-    if (steamWindow.closed) {
-      clearInterval(checkWindowClosed);
-      window.removeEventListener("message", handleMessage);
-      onWindowClose && onWindowClose();
-    }
-  }, 500);
+    const steamWindow = window.open(
+      steamLoginUrl,
+      "Steam Login",
+      "width=600,height=800"
+    );
+
+    const handleMessage = (event) => {
+      if (event.origin !== window.location.origin) return;
+
+      const { type, steamId } = event.data;
+      if (type === "STEAM_AUTH_SUCCESS" && steamId) {
+        console.log("✅ Steam ID received:", steamId);
+
+        // ✅ Use CORS Proxy to bypass CORS issue
+        const proxyUrl = "https://cors.bridged.cc/";
+        const steamApiUrl = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId}`;
+
+        fetch(proxyUrl + steamApiUrl, {
+          method: "GET",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.response || !data.response.players.length) {
+              throw new Error("❌ No player data received.");
+            }
+
+            const player = data.response.players[0];
+            const steamData = {
+              SteamId: steamId,
+              SteamName: player.personaname,
+              SteamImgUrl: player.avatarfull,
+            };
+
+            fetch(`${API_BASE_URL}/link-steam`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getMainJwtToken()}`,
+              },
+              body: JSON.stringify(steamData),
+            })
+              .then((res) => {
+                if (res.ok) {
+                  console.log("✅ Steam account linked.");
+                  if (onSuccess) onSuccess();
+
+                  if (steamWindow && !steamWindow.closed) {
+                    steamWindow.close();
+                  }
+                  window.removeEventListener("message", handleMessage);
+                } else {
+                  console.error("❌ Failed to link Steam account.");
+                }
+              })
+              .catch((err) =>
+                console.error("❌ Error linking Steam account:", err)
+              );
+          })
+          .catch((err) =>
+            console.error("❌ Error fetching Steam profile:", err)
+          );
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+  });
 };
 
-// ✅ Unlink Steam account with main app JWT
-export const unlinkSteamAccount = (identityUserId) => {
-  if (!isMainJwtValid()) {
-    console.error("Cannot unlink Steam account. JWT is invalid.");
-    return Promise.reject("Invalid or expired JWT.");
-  }
-
-  return fetch(`${_authUrl}/unlink`, {
+// ✅ Unlink Steam account with state update
+export const unlinkSteamAccount = (onSuccess) => {
+  return fetch(`${API_BASE_URL}/unlink-steam`, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getMainJwtToken()}`, // ✅ Using main JWT
+      Authorization: `Bearer ${getMainJwtToken()}`,
     },
-    body: JSON.stringify({ identityUserId }),
   }).then((res) => {
-    console.log("Unlink Response:", res);
-    if (!res.ok) throw new Error("Failed to unlink Steam account.");
-    return res.text();
+    if (res.ok) {
+      console.log("Steam account unlinked.");
+      if (onSuccess) onSuccess(); // ✅ Trigger state update in Member.jsx
+    } else {
+      console.error("Failed to unlink Steam account.");
+    }
   });
 };
