@@ -74,46 +74,49 @@ export default function Member({ loggedInUser }) {
   };
 
   return (
-    <div className="member-layout border mt-5 w-100 px-0">
-      <div className="member-header">
-        <h1>Welcome, {loggedInUser?.username || "Member"}!</h1>
-        <p>Manage your account and navigate through the system below.</p>
-      </div>
+    <div className="member-layout border mt-5 pt-3 w-100 px-0">
+      <div className="member-header border-danger border d-flex align-items-center">
+        <div className="profile-info col-6 border border-success">
+          <div className="d-flex align-items-center mb-3">
+            {loading ? (
+              <p>Processing...</p>
+            ) : steamAccount ? (
+              <div className="align-items-center ms-5 ps-3 mb-5">
+                <div className="hexagon h-50">
+                  <img
+                    className="d-block"
+                    src={steamAccount.steamImgUrl}
+                    alt="Steam Profile"
+                  />
+                </div>
 
-      <div className="d-flex align-items-center mb-3">
-        <button
-          className={`btn me-3 ${steamAccount ? "btn-danger" : "btn-primary"}`}
-          onClick={steamAccount ? handleUnlinkSteam : handleLinkSteam}
-          disabled={loading}
-        >
-          {loading
-            ? steamAccount
-              ? "Unlinking Steam Account..."
-              : "Linking Steam Account..."
-            : steamAccount
-            ? "Unlink Steam Account"
-            : "Link Steam Account"}
-        </button>
-
-        {loading ? (
-          <p>Processing...</p>
-        ) : steamAccount ? (
-          <div className="d-flex align-items-center">
-            <img
-              src={steamAccount.steamImgUrl}
-              alt="Steam Profile"
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                marginRight: "10px",
-              }}
-            />
-            <span className="text-white">{steamAccount.steamName}</span>
+                <h3 className="text-white d-block mb-5 mt-3 pb-5">
+                  {steamAccount.steamName}
+                </h3>
+              </div>
+            ) : (
+              <p className="text-white">No Steam account linked.</p>
+            )}
+            <button
+              className={`btn me-3 ${
+                steamAccount ? "btn-danger" : "btn-primary"
+              }`}
+              onClick={steamAccount ? handleUnlinkSteam : handleLinkSteam}
+              disabled={loading}
+            >
+              {loading
+                ? steamAccount
+                  ? "Unlinking Steam Account..."
+                  : "Linking Steam Account..."
+                : steamAccount
+                ? "Unlink Steam Account"
+                : "Link Steam Account"}
+            </button>
           </div>
-        ) : (
-          <p className="text-white">No Steam account linked.</p>
-        )}
+        </div>
+        <div className="shop-popular col-6 border border-success">
+          <p>test</p>
+        </div>
       </div>
 
       {error && <p className="text-danger">{error}</p>}

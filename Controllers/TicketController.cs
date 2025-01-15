@@ -209,13 +209,13 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok(new { categories, games, servers });
         }
 
-        // ✅ Get all users (Admin only)
+        // ✅ Get all users (Accessible by all authenticated users)
         [HttpGet("users")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]  // Removed "Roles = Admin" restriction
         public IActionResult GetUsers()
         {
             var users = _dbContext.UserProfiles
-                .Include(up => up.User)  // Include the linked User entity for email/role
+                .Include(up => up.User)
                 .Select(up => new
                 {
                     up.Id,
@@ -228,6 +228,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(users);
         }
+
 
 
         // ✅ Create a ticket

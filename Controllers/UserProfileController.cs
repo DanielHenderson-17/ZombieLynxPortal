@@ -49,7 +49,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
         // 🔒 Get all users (Admin only)
         [HttpGet("all")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _context.Users
