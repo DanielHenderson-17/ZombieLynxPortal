@@ -7,164 +7,290 @@ import {
   getMainJwtToken,
 } from "../../managers/steamAuthManager";
 import "../../assets/styles/Member.css";
+import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
+import tierOne from "../../assets/images/tierOne.png";
+import tierTwo from "../../assets/images/tierTwo.png";
+import tierThree from "../../assets/images/tierThree.png";
+import zlgCoin from "../../assets/images/zlgCoin.png";
 
 export default function Member({ loggedInUser }) {
   const [steamAccount, setSteamAccount] = useState(null);
-  const [loading, setLoading] = useState(false); // ⬅ Changed from `true` to `false`
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(false);
+  const [randomSeed, setRandomSeed] = useState(null);
 
-  // ✅ Fetch linked Steam account on load or refresh
+  // Mock for other accounts
+  const [linkedAccounts, setLinkedAccounts] = useState([]);
+  const availableAccounts = [
+    { name: "Epic", icon: "../../../../public/epicIcon.png" },
+    { name: "Discord", icon: "../../../../public/discordIcon.png" },
+    { name: "Steam", icon: "../../../../public/steamIcon.png" },
+  ];
+
   useEffect(() => {
     fetchLinkedAccount();
   }, [refreshTrigger]);
 
+  useEffect(() => {
+    setRandomSeed(generateRandomSeed());
+  }, []);
+
   const fetchLinkedAccount = () => {
     if (loggedInUser && getMainJwtToken()) {
-      console.log("🔎 Fetching linked Steam account from backend...");
       setLoading(true);
       getLinkedSteamAccount()
         .then((data) => {
-          console.log("📦 Fetched Steam account data:", data);
-          setSteamAccount(data?.steamId ? data : null);
+          if (data?.steamId) {
+            setSteamAccount(data);
+            setLinkedAccounts([{ name: "Steam", ...data }]);
+          } else {
+            setSteamAccount(null);
+            setLinkedAccounts([]);
+          }
         })
-        .catch((err) => {
-          console.error("❌ Error fetching Steam account:", err);
-          setError("Failed to load your Steam account.");
-        })
+        .catch(() => setError("Failed to load your Steam account."))
         .finally(() => setLoading(false));
     }
   };
 
-  const handleLinkSteam = () => {
+  const handleLinkAccount = (platform) => {
     if (!getMainJwtToken()) {
-      console.error("❌ No valid JWT token.");
-      setError("Please log in to link your Steam account.");
+      setError("Please log in to link your account.");
       return;
     }
 
-    console.log("🔗 Starting Steam linking process...");
-    setError(null);
     setLoading(true);
 
-    linkSteamAccount(() => {
-      console.log("✅ Steam account linked. Triggering UI refresh...");
-      setRefreshTrigger((prev) => !prev);
+    if (platform === "Steam") {
+      linkSteamAccount(() => {
+        setRefreshTrigger((prev) => !prev);
+        setLoading(false);
+      });
+    }
+    // Mock link for other platforms
+    else {
+      setLinkedAccounts((prev) => [
+        ...prev,
+        { name: platform, platformName: platform, imgUrl: "/default-icon.png" },
+      ]);
       setLoading(false);
-    });
+    }
   };
 
-  const handleUnlinkSteam = () => {
-    if (!getMainJwtToken()) {
-      console.error("❌ No valid JWT token.");
-      setError("Please log in to unlink your Steam account.");
-      return;
-    }
-
-    console.log("🗑️ Unlinking Steam account...");
-    setError(null);
+  const handleUnlinkAccount = (platform) => {
     setLoading(true);
 
-    unlinkSteamAccount(() => {
-      console.log("✅ Steam account unlinked. Refreshing UI...");
-      setSteamAccount(null);
-      setRefreshTrigger((prev) => !prev);
+    if (platform === "Steam") {
+      unlinkSteamAccount(() => {
+        setSteamAccount(null);
+        setLinkedAccounts((prev) => prev.filter((acc) => acc.name !== "Steam"));
+        setRefreshTrigger((prev) => !prev);
+        setLoading(false);
+      });
+    }
+    // Mock unlink for other platforms
+    else {
+      setLinkedAccounts((prev) => prev.filter((acc) => acc.name !== platform));
       setLoading(false);
-    });
+    }
   };
 
   return (
-    <div className="member-layout border mt-5 pt-3 w-100 px-0">
-      <div className="member-header border-danger border d-flex align-items-center">
-        <div className="profile-info col-6 border border-success">
-          <div className="d-flex align-items-center mb-3">
-            {loading ? (
-              <p>Processing...</p>
-            ) : steamAccount ? (
-              <div className="align-items-center ms-5 ps-3 mb-5">
-                <div className="hexagon h-50">
+    <div className="member-layout mt-5 pt-3 w-100 px-0">
+      <div className="member-container">
+        <div className="member-header d-flex justify-content-between align-items-start">
+          {/* LEFT SIDE - Profile Info */}
+          <div className="profile-info col-5 d-flex justify-content-center h-100">
+            {/* Profile Container: Image -> Name -> Points */}
+            <div className="d-flex justify-content-end align-items-end img-name-points col-6">
+              <div>
+                {/* Profile Image */}
+                <div className="hexagon mb-3">
                   <img
-                    className="d-block"
-                    src={steamAccount.steamImgUrl}
-                    alt="Steam Profile"
+                    src={
+                      steamAccount?.steamImgUrl ||
+                      `https://picsum.photos/seed/${randomSeed}/100/100`
+                    }
+                    alt="Profile"
+                    className="profile-img"
                   />
                 </div>
-                <h3 className="text-white d-flex align-items-center gap-2 mb-5 mt-2 pb-5">
-                  <i className="bi bi-steam fs-6"></i>
-                  <span>{steamAccount.steamName}</span>
+
+                {/* Username */}
+                <h3 className="text-white">
+                  {loggedInUser?.firstName || "Guest"}
                 </h3>
+
+                {/* Points */}
+                <p className="text-white">Points: 1455</p>
               </div>
-            ) : (
-              <p className="text-white">No Steam account linked.</p>
-            )}
-            <button
-              className={`btn me-3 ${
-                steamAccount ? "btn-danger" : "btn-primary"
-              }`}
-              onClick={steamAccount ? handleUnlinkSteam : handleLinkSteam}
-              disabled={loading}
-            >
-              {loading
-                ? steamAccount
-                  ? "Unlinking Steam Account..."
-                  : "Linking Steam Account..."
-                : steamAccount
-                ? "Unlink Steam Account"
-                : "Link Steam Account"}
-            </button>
+            </div>
+
+            {/* Linked/Unlinked Accounts */}
+            <div className="d-flex flex-column justify-content-start account-section mt-2 ms-4 col-5">
+              {/* Add Accounts Section */}
+              <div className="add-accounts mb-3 w-50">
+                <div className="text-white text-start align-items-center mb-1">
+                  <i className="bi bi-plus fs-6 my-0"></i>Add Accounts
+                </div>
+                <div className="d-flex gap-2 rounded px-2 py-1 available-accounts">
+                  {availableAccounts
+                    .filter(
+                      (acc) =>
+                        !linkedAccounts.some(
+                          (linked) => linked.name === acc.name
+                        )
+                    )
+                    .map((acc) => (
+                      <button
+                        key={acc.name}
+                        className="btn px-1 py-1 add-btn"
+                        onClick={() => handleLinkAccount(acc.name)}
+                        disabled={loading}
+                      >
+                        <img
+                          src={acc.icon}
+                          alt={`${acc.name} Icon`}
+                          style={{ width: "25px", height: "25px" }} // Adjust size as needed
+                        />
+                      </button>
+                    ))}
+                </div>
+              </div>
+
+              {/* Linked Accounts Section */}
+              <div className="linked-accounts">
+                <div className="text-white text-start mb-1">
+                  <i className="bi bi-link-45deg"></i>Linked Accounts
+                </div>
+                {linkedAccounts.length === 0 ? (
+                  <p className="text-white">No accounts linked.</p>
+                ) : (
+                  linkedAccounts.map((acc) => (
+                    <div
+                      key={acc.name}
+                      className="d-flex align-items-center justify-content-between linked-back rounded mb-2"
+                    >
+                      <div className="d-flex align-items-center gap-2">
+                        <img
+                          src={
+                            availableAccounts.find((a) => a.name === acc.name)
+                              ?.icon
+                          }
+                          alt={`${acc.name} Icon`}
+                          style={{
+                            width: "20px",
+                            height: "20px",
+                            marginLeft: "12px",
+                          }}
+                        />
+                        <div>
+                          <p className="mb-0 text-white text-start">
+                            {acc.steamName || acc.name}
+                          </p>
+                          <small className="text-muted">
+                            {acc.platformName}
+                          </small>
+                        </div>
+                      </div>
+                      <button
+                        className="btn btn-sm btn-link text-secondary"
+                        onClick={() => handleUnlinkAccount(acc.name)}
+                        disabled={loading}
+                      >
+                        <i className="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE - Shop */}
+          <div className="shop-popular col-7 d-flex justify-content-center align-items-center mt-3">
+            <div className="card p-1">
+              <div className="card-body p-1">
+                <img src={tierOne} alt="" />
+                <p className="card-text mb-1 mt-3">
+                  <img src={zlgCoin} alt="" className="zlg-coin me-1" />
+                  1100
+                </p>
+                <button className="btn btn-success w-50">Buy</button>
+              </div>
+            </div>
+            <div className="card p-1 mx-3 card-back">
+              <div className="card-body p-1">
+                <img src={tierTwo} alt="" />
+                <p className="card-text mb-1 mt-3">
+                  <img src={zlgCoin} alt="" className="zlg-coin me-1" />
+                  4600
+                </p>
+                <button className="btn btn-success w-50">Buy</button>
+              </div>
+            </div>
+            <div className="card p-1">
+              <div className="card-body p-1">
+                <img src={tierThree} alt="" />
+                <p className="card-text mb-1 mt-3">
+                  <img src={zlgCoin} alt="" className="zlg-coin me-1" />
+                  12000
+                </p>
+                <button className="btn btn-success w-50">Buy</button>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="shop-popular col-6 border border-success">
-          <p>test</p>
-        </div>
+
+        {error && <p className="text-danger text-center">{error}</p>}
+
+        {/* Navigation */}
+        <nav className="d-flex justify-content-start member-nav">
+          <div className="col-6 d-flex justify-content-end">
+            <NavLink
+              to="stats"
+              className={({ isActive }) =>
+                `mx-4 text-white text-decoration-none ${
+                  isActive ? "border-bottom border-danger border-5" : ""
+                }`
+              }
+            >
+              <i className="bi bi-bar-chart-fill me-1"></i>Stats
+            </NavLink>
+            <NavLink
+              to="shop"
+              className={({ isActive }) =>
+                `me-4 text-white text-decoration-none ${
+                  isActive ? "border-bottom border-danger border-5" : ""
+                }`
+              }
+            >
+              <i className="bi bi-bag-plus-fill me-1"></i>Shop
+            </NavLink>
+            <NavLink
+              to="tickets"
+              className={({ isActive }) =>
+                `text-white me-4 text-decoration-none ${
+                  isActive ? "border-bottom border-danger border-5" : ""
+                }`
+              }
+            >
+              <i className="bi bi-ticket-fill me-1"></i>Tickets
+            </NavLink>
+            <NavLink
+              to="notifications"
+              className={({ isActive }) =>
+                `text-white me-4 text-decoration-none ${
+                  isActive ? "border-bottom border-danger border-5" : ""
+                }`
+              }
+            >
+              <i className="bi bi-envelope-fill me-1"></i>Notifications
+            </NavLink>
+          </div>
+        </nav>
       </div>
-
-      {error && <p className="text-danger">{error}</p>}
-
-      <nav className="d-flex justify-content-start member-nav">
-        <div className="col-6 d-flex justify-content-end">
-          <NavLink
-            to="stats"
-            className={({ isActive }) =>
-              `mx-4 text-white text-decoration-none ${
-                isActive ? "border-bottom border-danger border-5" : ""
-              }`
-            }
-          >
-            <i className="bi bi-bar-chart-fill me-1"></i>Stats
-          </NavLink>
-          <NavLink
-            to="shop"
-            className={({ isActive }) =>
-              `me-4 text-white text-decoration-none ${
-                isActive ? "border-bottom border-danger border-5" : ""
-              }`
-            }
-          >
-            <i className="bi bi-bag-plus-fill me-1"></i>Shop
-          </NavLink>
-          <NavLink
-            to="tickets"
-            className={({ isActive }) =>
-              `text-white me-4 text-decoration-none ${
-                isActive ? "border-bottom border-danger border-5" : ""
-              }`
-            }
-          >
-            <i className="bi bi-ticket-fill me-1"></i> Tickets
-          </NavLink>
-          <NavLink
-            to="notifications"
-            className={({ isActive }) =>
-              `text-white text-decoration-none ${
-                isActive ? "border-bottom border-danger border-5" : ""
-              }`
-            }
-          >
-            <i className="bi bi-envelope-fill me-1"></i>Notifications
-          </NavLink>
-        </div>
-      </nav>
 
       <div className="member-content">
         <Outlet />
