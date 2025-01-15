@@ -126,42 +126,42 @@ export default function Member({ loggedInUser }) {
           <NavLink
             to="stats"
             className={({ isActive }) =>
-              `mx-4 text-white ${
+              `mx-4 text-white text-decoration-none ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
           >
-            Stats
+            <i className="bi bi-bar-chart-fill me-1"></i>Stats
           </NavLink>
           <NavLink
             to="shop"
             className={({ isActive }) =>
-              `me-4 text-white ${
+              `me-4 text-white text-decoration-none ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
           >
-            Shop
+            <i className="bi bi-bag-plus-fill me-1"></i>Shop
           </NavLink>
           <NavLink
             to="tickets"
             className={({ isActive }) =>
-              `text-white me-4 ${
+              `text-white me-4 text-decoration-none ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
           >
-            Tickets
+            <i className="bi bi-ticket-fill me-1"></i> Tickets
           </NavLink>
           <NavLink
             to="notifications"
             className={({ isActive }) =>
-              `text-white ${
+              `text-white text-decoration-none ${
                 isActive ? "border-bottom border-danger border-5" : ""
               }`
             }
           >
-            Notifications
+            <i className="bi bi-envelope-fill me-1"></i>Notifications
           </NavLink>
         </div>
       </nav>
