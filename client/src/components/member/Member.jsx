@@ -89,9 +89,9 @@ export default function Member({ loggedInUser }) {
                     alt="Steam Profile"
                   />
                 </div>
-
-                <h3 className="text-white d-block mb-5 mt-3 pb-5">
-                  {steamAccount.steamName}
+                <h3 className="text-white d-flex align-items-center gap-2 mb-5 mt-2 pb-5">
+                  <i className="bi bi-steam fs-6"></i>
+                  <span>{steamAccount.steamName}</span>
                 </h3>
               </div>
             ) : (
