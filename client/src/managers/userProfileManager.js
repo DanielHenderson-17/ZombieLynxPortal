@@ -20,7 +20,6 @@ export const getUserProfiles = () => {
   );
 };
 
-// 🔍 Get all users (Admin only)
 export const getAllUsers = () => {
   return fetch(`${_apiUrl}/all`, {
     headers: getAuthHeaders(),

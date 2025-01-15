@@ -26,10 +26,12 @@ builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost",
-        policy => policy.WithOrigins("http://localhost:5173", "http://localhost:5176")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials());
+        policy => policy
+            .SetIsOriginAllowed(origin =>
+                new Uri(origin).Host == "localhost")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
 });
 
 // Configure JWT Authentication
