@@ -80,54 +80,59 @@ export const linkSteamAccount = (onSuccess) => {
       if (type === "STEAM_AUTH_SUCCESS" && steamId) {
         console.log("✅ Steam ID received:", steamId);
 
-        // ✅ Use CORS Proxy to bypass CORS issue
-        const proxyUrl = "https://cors.bridged.cc/";
+        // ✅ Switched to a more reliable proxy
+        const proxyUrl = "https://corsproxy.io/?";
         const steamApiUrl = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId}`;
 
-        fetch(proxyUrl + steamApiUrl, {
-          method: "GET",
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (!data.response || !data.response.players.length) {
-              throw new Error("❌ No player data received.");
-            }
+        // Add a short delay to avoid hitting rate limits
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-            const player = data.response.players[0];
-            const steamData = {
-              SteamId: steamId,
-              SteamName: player.personaname,
-              SteamImgUrl: player.avatarfull,
-            };
-
-            fetch(`${API_BASE_URL}/link-steam`, {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getMainJwtToken()}`,
-              },
-              body: JSON.stringify(steamData),
-            })
-              .then((res) => {
-                if (res.ok) {
-                  console.log("✅ Steam account linked.");
-                  if (onSuccess) onSuccess();
-
-                  if (steamWindow && !steamWindow.closed) {
-                    steamWindow.close();
-                  }
-                  window.removeEventListener("message", handleMessage);
-                } else {
-                  console.error("❌ Failed to link Steam account.");
-                }
-              })
-              .catch((err) =>
-                console.error("❌ Error linking Steam account:", err)
-              );
+        delay(1000).then(() => {
+          fetch(proxyUrl + encodeURIComponent(steamApiUrl), {
+            method: "GET",
           })
-          .catch((err) =>
-            console.error("❌ Error fetching Steam profile:", err)
-          );
+            .then((res) => res.json())
+            .then((data) => {
+              if (!data.response || !data.response.players.length) {
+                throw new Error("❌ No player data received.");
+              }
+
+              const player = data.response.players[0];
+              const steamData = {
+                SteamId: steamId,
+                SteamName: player.personaname,
+                SteamImgUrl: player.avatarfull,
+              };
+
+              fetch(`${API_BASE_URL}/link-steam`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${getMainJwtToken()}`,
+                },
+                body: JSON.stringify(steamData),
+              })
+                .then((res) => {
+                  if (res.ok) {
+                    console.log("✅ Steam account linked.");
+                    if (onSuccess) onSuccess();
+
+                    if (steamWindow && !steamWindow.closed) {
+                      steamWindow.close();
+                    }
+                    window.removeEventListener("message", handleMessage);
+                  } else {
+                    console.error("❌ Failed to link Steam account.");
+                  }
+                })
+                .catch((err) =>
+                  console.error("❌ Error linking Steam account:", err)
+                );
+            })
+            .catch((err) =>
+              console.error("❌ Error fetching Steam profile:", err)
+            );
+        });
       }
     };
 

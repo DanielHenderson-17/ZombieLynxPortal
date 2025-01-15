@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: {
     open: true, // Automatically opens the browser on startup
+    port: 5174, // 👈 Fixed port number
+    strictPort: true, // 👈 Prevents Vite from switching to another port if 5176 is in use
     proxy: {
       "/api": {
         target: "https://localhost:5001", // 👈 Backend URL (matches Program.cs launch settings)
