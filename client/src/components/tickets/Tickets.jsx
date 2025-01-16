@@ -28,12 +28,14 @@ export default function Tickets({ loggedInUser }) {
   return (
     <div className="d-flex flex-column flex-lg-row ticket-container">
       {/* Sidebar for Desktop Navigation */}
-      <div className="col-lg-3 p-3 border ticket-nav d-none d-lg-block">
+      <div className="col-lg-3 p-3 border ticket-nav d-none d-lg-block border-0">
         <div>
           {/* New Ticket Button */}
           <Link
             to="/tickets/new-ticket"
-            className="d-flex justify-content-end text-decoration-none"
+            className={`d-flex justify-content-end text-decoration-none ${
+              location.pathname === "/tickets/new-ticket" ? "active" : ""
+            }`}
           >
             <button className="btn d-block w-25 text-start mb-3 btn-success">
               <i className="bi bi-plus-circle me-3"></i>Create
@@ -41,20 +43,31 @@ export default function Tickets({ loggedInUser }) {
           </Link>
 
           {/* Open Tickets Button */}
-          <Link to="/tickets/open-tickets" className="text-decoration-none">
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex justify-content-between">
+          <Link
+            to="/tickets/open-tickets"
+            className={`text-decoration-none ${
+              location.pathname === "/tickets/open-tickets" ? "active" : ""
+            }`}
+          >
+            <button className="btn d-block w-100 text-start mb-2 text-white d-flex justify-content-between align-items-center">
               <div>
-                <i className="bi bi-inbox me-3"></i>Open Tickets
+                <i className="bi bi-inbox me-3 text-white"></i>Open Tickets
               </div>
               {openTicketCount > 0 && (
                 <span className="badge bg-primary ms-2">{openTicketCount}</span>
               )}
             </button>
           </Link>
+
           <hr />
 
           {/* Closed Tickets Button */}
-          <Link to="/tickets/closed-tickets" className="text-decoration-none">
+          <Link
+            to="/tickets/closed-tickets"
+            className={`text-decoration-none ${
+              location.pathname === "/tickets/closed-tickets" ? "active" : ""
+            }`}
+          >
             <button className="btn d-block w-100 text-start text-white">
               <i className="bi bi-trash3 me-3"></i>Trash
             </button>
@@ -63,7 +76,7 @@ export default function Tickets({ loggedInUser }) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow-1 mb-0 border">
+      <div className="flex-grow-1 mb-0 ticket-main">
         <Routes>
           <Route path="ticket/:ticketId/edit" element={<EditTicket />} />
           <Route
@@ -94,7 +107,6 @@ export default function Tickets({ loggedInUser }) {
           >
             <div className="d-flex flex-column align-items-center">
               <i className="bi bi-plus-circle fs-4"></i>
-              {/* <small>Create</small> */}
             </div>
           </Link>
 
@@ -107,7 +119,6 @@ export default function Tickets({ loggedInUser }) {
           >
             <div className="d-flex flex-column align-items-center position-relative">
               <i className="bi bi-inbox fs-4 mt-1"></i>
-              {/* <small>Open</small> */}
               {openTicketCount > 0 && (
                 <span className="badge bg-primary position-absolute top-0 start-50 translate-middle">
                   {openTicketCount}
@@ -125,7 +136,6 @@ export default function Tickets({ loggedInUser }) {
           >
             <div className="d-flex flex-column align-items-center">
               <i className="bi bi-trash3 fs-4"></i>
-              {/* <small>Trash</small> */}
             </div>
           </Link>
         </div>

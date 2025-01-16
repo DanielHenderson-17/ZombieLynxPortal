@@ -130,7 +130,16 @@ export default function Member({ loggedInUser }) {
             {/* Linked/Unlinked Accounts */}
             <div className="d-flex flex-column justify-content-start account-section mt-2 ms-4 col-5">
               {/* Add Accounts Section */}
-              <div className="add-accounts mb-3 w-50">
+              <div
+                className={`add-accounts mb-3 w-50 ${
+                  availableAccounts.filter(
+                    (acc) =>
+                      !linkedAccounts.some((linked) => linked.name === acc.name)
+                  ).length === 0
+                    ? "d-none"
+                    : ""
+                }`}
+              >
                 <div className="text-white text-start align-items-center mb-1">
                   <i className="bi bi-plus fs-6 my-0"></i>Add Accounts
                 </div>
@@ -152,7 +161,7 @@ export default function Member({ loggedInUser }) {
                         <img
                           src={acc.icon}
                           alt={`${acc.name} Icon`}
-                          style={{ width: "25px", height: "25px" }} // Adjust size as needed
+                          style={{ width: "25px", height: "25px" }}
                         />
                       </button>
                     ))}
@@ -160,7 +169,16 @@ export default function Member({ loggedInUser }) {
               </div>
 
               {/* Linked Accounts Section */}
-              <div className="linked-accounts">
+              <div
+                className={`linked-accounts ${
+                  availableAccounts.filter(
+                    (acc) =>
+                      !linkedAccounts.some((linked) => linked.name === acc.name)
+                  ).length === 0
+                    ? "mt-4"
+                    : ""
+                }`}
+              >
                 <div className="text-white text-start mb-1">
                   <i className="bi bi-link-45deg"></i>Linked Accounts
                 </div>
@@ -189,13 +207,13 @@ export default function Member({ loggedInUser }) {
                           <p className="mb-0 text-white text-start">
                             {acc.steamName || acc.name}
                           </p>
-                          <small className="text-muted">
+                          {/* <small className="text-muted">
                             {acc.platformName}
-                          </small>
+                          </small> */}
                         </div>
                       </div>
                       <button
-                        className="btn btn-sm btn-link text-secondary"
+                        className="btn btn-sm btn-link text-secondary unlink-btn"
                         onClick={() => handleUnlinkAccount(acc.name)}
                         disabled={loading}
                       >
@@ -217,7 +235,14 @@ export default function Member({ loggedInUser }) {
                   <img src={zlgCoin} alt="" className="zlg-coin me-1" />
                   1100
                 </p>
-                <button className="btn btn-success w-50">Buy</button>
+                <button
+                  className="btn btn-success w-50"
+                  onClick={() =>
+                    (window.location.href = "https://zlg.gg/aseshop")
+                  }
+                >
+                  Buy
+                </button>
               </div>
             </div>
             <div className="card p-1 mx-3 card-back">
@@ -227,7 +252,14 @@ export default function Member({ loggedInUser }) {
                   <img src={zlgCoin} alt="" className="zlg-coin me-1" />
                   4600
                 </p>
-                <button className="btn btn-success w-50">Buy</button>
+                <button
+                  className="btn btn-success w-50"
+                  onClick={() =>
+                    (window.location.href = "https://zlg.gg/aseshop")
+                  }
+                >
+                  Buy
+                </button>
               </div>
             </div>
             <div className="card p-1">
@@ -237,7 +269,14 @@ export default function Member({ loggedInUser }) {
                   <img src={zlgCoin} alt="" className="zlg-coin me-1" />
                   12000
                 </p>
-                <button className="btn btn-success w-50">Buy</button>
+                <button
+                  className="btn btn-success w-50"
+                  onClick={() =>
+                    (window.location.href = "https://zlg.gg/aseshop")
+                  }
+                >
+                  Buy
+                </button>
               </div>
             </div>
           </div>

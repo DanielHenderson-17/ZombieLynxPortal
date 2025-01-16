@@ -2,12 +2,10 @@ const STEAM_OPENID_URL = "https://steamcommunity.com/openid/login";
 const REDIRECT_URL = `${window.location.origin}/steam-callback.html`;
 const API_BASE_URL = "https://localhost:5001/api/Steam";
 
-// ✅ Retrieve JWT from local storage
 export const getMainJwtToken = () => {
   return localStorage.getItem("authToken");
 };
 
-// ✅ Validate the JWT
 export const isMainJwtValid = () => {
   const token = getMainJwtToken();
   if (!token) return false;
@@ -16,7 +14,6 @@ export const isMainJwtValid = () => {
   return payload.exp * 1000 > Date.now();
 };
 
-// ✅ Fetch linked Steam account from the backend
 export const getLinkedSteamAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
 
@@ -34,7 +31,7 @@ export const fetchSteamApiKey = () => {
   return fetch(`${API_BASE_URL}/get-api-key`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${getMainJwtToken()}`, // ✅ Ensure this is correct
+      Authorization: `Bearer ${getMainJwtToken()}`,
     },
   })
     .then((res) => {
@@ -51,7 +48,6 @@ export const fetchSteamApiKey = () => {
     });
 };
 
-// ✅ Open Steam login popup and handle callback with state update
 export const linkSteamAccount = (onSuccess) => {
   fetchSteamApiKey().then((apiKey) => {
     if (!apiKey) {
@@ -80,11 +76,9 @@ export const linkSteamAccount = (onSuccess) => {
       if (type === "STEAM_AUTH_SUCCESS" && steamId) {
         console.log("✅ Steam ID received:", steamId);
 
-        // ✅ Switched to a more reliable proxy
         const proxyUrl = "https://corsproxy.io/?";
         const steamApiUrl = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId}`;
 
-        // Add a short delay to avoid hitting rate limits
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
         delay(1000).then(() => {
@@ -140,7 +134,6 @@ export const linkSteamAccount = (onSuccess) => {
   });
 };
 
-// ✅ Unlink Steam account with state update
 export const unlinkSteamAccount = (onSuccess) => {
   return fetch(`${API_BASE_URL}/unlink-steam`, {
     method: "PUT",
@@ -150,7 +143,7 @@ export const unlinkSteamAccount = (onSuccess) => {
   }).then((res) => {
     if (res.ok) {
       console.log("Steam account unlinked.");
-      if (onSuccess) onSuccess(); // ✅ Trigger state update in Member.jsx
+      if (onSuccess) onSuccess();
     } else {
       console.error("Failed to unlink Steam account.");
     }

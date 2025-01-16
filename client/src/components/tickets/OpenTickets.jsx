@@ -68,7 +68,7 @@ export default function OpenTickets({ onTicketChange }) {
   }
 
   return (
-    <div className="col-12 h-100 ticket-body1">
+    <div className="col-12 h-100 ticket-body1 border border-0">
       {tickets.length === 0 ? (
         <p className="mt-5 pt-4 text-white">You have no open tickets.</p>
       ) : (
