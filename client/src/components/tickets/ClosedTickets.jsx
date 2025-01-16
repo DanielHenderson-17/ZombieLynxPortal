@@ -83,7 +83,7 @@ export default function ClosedTickets({ onTicketChange }) {
   }
 
   return (
-    <div className="col-12 h-100 ticket-body1">
+    <div className="col-12 h-100 ticket-body1 border border-0">
       {tickets.length === 0 ? (
         <p className="mt-5 text-white">You have no tickets yet!</p>
       ) : (
