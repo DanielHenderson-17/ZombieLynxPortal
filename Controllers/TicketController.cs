@@ -204,10 +204,48 @@ namespace ZombieLynxPortalAPI.Controllers
         public IActionResult GetOptions()
         {
             var categories = new[] { "Bug", "Shop Issue", "Connection Issue", "Other" };
-            var games = new[] { "Ark:SA", "Ark:SE", "Palworld", "Empyrion", "Minecraft", "Eco" };
-            var servers = new[] { "NA-East", "EU-West", "Asia" };
-            return Ok(new { categories, games, servers });
+
+            // Define servers specific to each game
+            var gamesWithServers = new Dictionary<string, string[]>
+    {
+        { "Discord Issue", new[]
+            {
+                "Zombie Lynx Gaming Discord"
+            }
+        },
+        { "Ark:SE", new[]
+            {
+                "ZombieLynx-TheIsland-3X-PVPClusterORP",
+                "ZombieLynx-Extinction-3X-PVPClusterORP",
+                "ZombieLynx-Aberration-3X-PVPClusterORP",
+                "ZombieLynx-Gen2-3X-PVPClusterORP",
+                "ZombieLynx-Fjordur-3X-PVPClusterORP",
+                "ZombieLynx-CrystalIsles-3X-PVPClusterORP",
+                "ZombieLynx-ScorchedEarth-3X-PVPClusterORP",
+                "ZombieLynx-LostIsland-3X-PVPClusterORP",
+                "ZombieLynx-Gen1-3X-PVPClusterORP",
+                "ZombieLynx-ThCenter-3X-PVPClusterORP",
+                "ZombieLynx-Ragnarok-3X-PVPClusterORP",
+                "ZombieLynx-Valguero-3X-PVPClusterORP"
+            }
+        },
+        { "Ark:SA", new[]
+            {
+                "ZombieLynx-TheIsland-3X-PVP",
+                "ZombieLynx-ScorchedEarth-3X-PVPORP",
+                "ZombieLynx-TheCenter-3X-PVP",
+                "ZombieLynx-Aberration-3X-PVPORP"
+            }
+        },
+        { "Eco", new[] { "Zombie Lynx Gaming | Medium Collab | Beginner Friendly" } },
+        { "Minecraft", new[] { "Zombie Lynx Gaming Minecraft" } },
+        { "Empyrion", new[] { "Zombie Lynx Reforged Eden PVP" } },
+        { "Palworld", new[] { "Zombie Lynx Gaming Palworld 3X" } }
+    };
+
+            return Ok(new { categories, gamesWithServers });
         }
+
 
         // ✅ Get all users (Accessible by all authenticated users)
         [HttpGet("users")]

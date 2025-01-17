@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   linkSteamAccount,
@@ -97,16 +97,16 @@ export default function Member({ loggedInUser }) {
   };
 
   return (
-    <div className="member-layout mt-5 pt-3 w-100 px-0">
-      <div className="member-container">
+    <div className="member-layout mt-5 pt-2 px-0 col-md-9 col-12 mx-auto">
+      <div className="member-container rounded-top">
         <div className="member-header d-flex justify-content-between align-items-start">
           {/* LEFT SIDE - Profile Info */}
-          <div className="profile-info col-5 d-flex justify-content-center h-100">
+          <div className="profile-info col-md-5 col-12 d-md-flex justify-content-center h-100">
             {/* Profile Container: Image -> Name -> Points */}
-            <div className="d-flex justify-content-end align-items-end img-name-points col-6">
+            <div className="d-flex justify-content-md-end justify-content-center align-items-end img-name-points col-md-6 col-12 mb-md-0 mb-2">
               <div>
                 {/* Profile Image */}
-                <div className="hexagon mb-3">
+                <div className="hexagon mb-1">
                   <img
                     src={
                       steamAccount?.steamImgUrl ||
@@ -123,69 +123,38 @@ export default function Member({ loggedInUser }) {
                 </h3>
 
                 {/* Points */}
-                <p className="text-white">Points: 1455</p>
+                <div className="d-flex align-items-center justify-content-between border rounded-5 p-1 text-white fw-bold fs-6 w-75 mx-auto position-relative mb-md-4 mb-1">
+                  <img src={zlgCoin} alt="" className="zlg-coin" />
+
+                  <p className="mb-0 text-start">1455</p>
+
+                  <Link to="/buy-points" className="text-secondary plus-icon">
+                    <i className="bi bi-plus-circle-fill fs-6 cursor-pointer"></i>
+                  </Link>
+                </div>
               </div>
             </div>
 
             {/* Linked/Unlinked Accounts */}
-            <div className="d-flex flex-column justify-content-start account-section mt-2 ms-4 col-5">
-              {/* Add Accounts Section */}
-              <div
-                className={`add-accounts mb-3 w-50 ${
-                  availableAccounts.filter(
-                    (acc) =>
-                      !linkedAccounts.some((linked) => linked.name === acc.name)
-                  ).length === 0
-                    ? "d-none"
-                    : ""
-                }`}
-              >
-                <div className="text-white text-start align-items-center mb-1">
-                  <i className="bi bi-plus fs-6 my-0"></i>Add Accounts
-                </div>
-                <div className="d-flex gap-2 rounded px-2 py-1 available-accounts">
-                  {availableAccounts
-                    .filter(
+            <div className="d-md-flex d-none flex-md-column flex-row ms-2 justify-content-start account-section mt-2 ms-md-4 ms-0 col-md-5 col-12 mx-auto">
+              {/* Linked Accounts Section - Hidden on mobile if no linked accounts */}
+              {linkedAccounts.length > 0 ? (
+                <div
+                  className={`linked-accounts col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2 ${
+                    availableAccounts.filter(
                       (acc) =>
                         !linkedAccounts.some(
                           (linked) => linked.name === acc.name
                         )
-                    )
-                    .map((acc) => (
-                      <button
-                        key={acc.name}
-                        className="btn px-1 py-1 add-btn"
-                        onClick={() => handleLinkAccount(acc.name)}
-                        disabled={loading}
-                      >
-                        <img
-                          src={acc.icon}
-                          alt={`${acc.name} Icon`}
-                          style={{ width: "25px", height: "25px" }}
-                        />
-                      </button>
-                    ))}
-                </div>
-              </div>
-
-              {/* Linked Accounts Section */}
-              <div
-                className={`linked-accounts ${
-                  availableAccounts.filter(
-                    (acc) =>
-                      !linkedAccounts.some((linked) => linked.name === acc.name)
-                  ).length === 0
-                    ? "mt-4"
-                    : ""
-                }`}
-              >
-                <div className="text-white text-start mb-1">
-                  <i className="bi bi-link-45deg"></i>Linked Accounts
-                </div>
-                {linkedAccounts.length === 0 ? (
-                  <p className="text-white">No accounts linked.</p>
-                ) : (
-                  linkedAccounts.map((acc) => (
+                    ).length === 0
+                      ? "pt-4"
+                      : ""
+                  }`}
+                >
+                  <div className="text-white text-start mb-1 align-items-center">
+                    <i className="bi bi-link-45deg"></i> Linked Accounts
+                  </div>
+                  {linkedAccounts.map((acc) => (
                     <div
                       key={acc.name}
                       className="d-flex align-items-center justify-content-between linked-back rounded mb-2"
@@ -207,9 +176,6 @@ export default function Member({ loggedInUser }) {
                           <p className="mb-0 text-white text-start">
                             {acc.steamName || acc.name}
                           </p>
-                          {/* <small className="text-muted">
-                            {acc.platformName}
-                          </small> */}
                         </div>
                       </div>
                       <button
@@ -220,18 +186,70 @@ export default function Member({ loggedInUser }) {
                         <i className="bi bi-x-lg"></i>
                       </button>
                     </div>
-                  ))
-                )}
+                  ))}
+                </div>
+              ) : (
+                <div className="d-none d-md-block col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2">
+                  {/* Optional: You can show a placeholder or keep it empty */}
+                  <p className="text-white text-start">
+                    Link your accounts for rewards!
+                  </p>
+                </div>
+              )}
+
+              {/* Add Accounts Section - Adjusted on mobile when no linked accounts */}
+              <div
+                className={`add-accounts mb-3 mt-md-0 justify-content-md-start ms-md-0 ${
+                  linkedAccounts.length === 0
+                    ? "col-6 mx-auto justify-content-center order-2 order-md-1"
+                    : "col-4 col-md-6 order-2 order-md-1"
+                } ${
+                  availableAccounts.filter(
+                    (acc) =>
+                      !linkedAccounts.some((linked) => linked.name === acc.name)
+                  ).length === 0
+                    ? "d-none" // Hides the section when all accounts are linked
+                    : ""
+                }`}
+              >
+                {/* Hide "+ Add Accounts" on mobile */}
+                <div className="text-white text-md-start text-center align-items-center mb-1 d-flex justify-content-center justify-content-md-start">
+                  <i className="bi bi-plus fs-6 my-0"></i> Add Accounts
+                </div>
+
+                <div className="d-flex gap-2 rounded px-2 py-1 available-accounts d-flex mx-auto mx-0 mt-0">
+                  {availableAccounts
+                    .filter(
+                      (acc) =>
+                        !linkedAccounts.some(
+                          (linked) => linked.name === acc.name
+                        )
+                    )
+                    .map((acc) => (
+                      <button
+                        key={acc.name}
+                        className="btn px-md-1 py-md-1 p-0 add-btn"
+                        onClick={() => handleLinkAccount(acc.name)}
+                        disabled={loading}
+                      >
+                        <img
+                          src={acc.icon}
+                          alt={`${acc.name} Icon`}
+                          style={{ width: "25px", height: "25px" }}
+                        />
+                      </button>
+                    ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* RIGHT SIDE - Shop */}
-          <div className="shop-popular col-7 d-flex justify-content-center align-items-center mt-3">
+          <div className="shop-popular col-7 d-none d-md-flex justify-content-center align-items-center mt-3">
             <div className="card p-1">
               <div className="card-body p-1">
                 <img src={tierOne} alt="" />
-                <p className="card-text mb-1 mt-3">
+                <p className="card-text mb-1 mt-3 fs-6">
                   <img src={zlgCoin} alt="" className="zlg-coin me-1" />
                   1100
                 </p>
@@ -248,7 +266,7 @@ export default function Member({ loggedInUser }) {
             <div className="card p-1 mx-3 card-back">
               <div className="card-body p-1">
                 <img src={tierTwo} alt="" />
-                <p className="card-text mb-1 mt-3">
+                <p className="card-text mb-1 mt-3 fs-6">
                   <img src={zlgCoin} alt="" className="zlg-coin me-1" />
                   4600
                 </p>
@@ -265,7 +283,7 @@ export default function Member({ loggedInUser }) {
             <div className="card p-1">
               <div className="card-body p-1">
                 <img src={tierThree} alt="" />
-                <p className="card-text mb-1 mt-3">
+                <p className="card-text mb-1 mt-3 fs-6">
                   <img src={zlgCoin} alt="" className="zlg-coin me-1" />
                   12000
                 </p>
@@ -286,7 +304,7 @@ export default function Member({ loggedInUser }) {
 
         {/* Navigation */}
         <nav className="d-flex justify-content-start member-nav">
-          <div className="col-6 d-flex justify-content-end">
+          <div className="col-12 d-flex justify-content-center mt-0">
             <NavLink
               to="stats"
               className={({ isActive }) =>

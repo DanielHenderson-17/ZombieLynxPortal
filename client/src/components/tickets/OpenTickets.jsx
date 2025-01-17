@@ -75,9 +75,10 @@ export default function OpenTickets({ onTicketChange }) {
         <table className="table table-dark table-striped align-middle">
           <thead className="thead-dark">
             <tr>
+              <th className="text-center col-1 d-none d-lg-table-cell">Game</th>
               <th className="text-start col-md-4 col-8">Topic</th>
-              <th className="text-start col-1 d-none d-lg-table-cell">Game</th>
-              <th className="text-start col-2 d-none d-lg-table-cell">
+
+              <th className="text-start col-5 d-none d-lg-table-cell">
                 Server
               </th>
               <th className="text-end col-2 pe-3">Options</th>
@@ -93,6 +94,15 @@ export default function OpenTickets({ onTicketChange }) {
                   onClick={() => handleTicketClick(ticket.id)}
                   style={{ cursor: "pointer" }}
                 >
+                  <td className="text-start col-1 d-none d-lg-table-cell">
+                    <span className="text-warning fw-bold mx-auto">
+                      <img
+                        className="gameImg ms-1"
+                        src={getGameImage(ticket.game)}
+                        alt=""
+                      />
+                    </span>
+                  </td>
                   <td className="text-start col-4">
                     <div>
                       <strong className="text-white">
@@ -122,18 +132,10 @@ export default function OpenTickets({ onTicketChange }) {
                       </small>
                     </div>
                   </td>
-                  <td className="text-start col-1 d-none d-lg-table-cell">
-                    <span className="text-warning fw-bold mx-auto">
-                      <img
-                        className="gameImg ms-1"
-                        src={getGameImage(ticket.game)}
-                        alt=""
-                      />
-                    </span>
-                  </td>
+
                   <td className="text-start col-2 d-none d-lg-table-cell">
                     <span className="text-white fw-bold">
-                      {truncateText(ticket.server)}
+                      {truncateText(ticket.server, 50)}
                     </span>
                   </td>
                   <td className="text-start col-1 position-relative">

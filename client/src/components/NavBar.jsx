@@ -59,7 +59,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             <>
               {userProfile ? (
                 <span className="navbar-text me-3 text-white">
-                  {userProfile.email}
+                  {userProfile.firstName}
                 </span>
               ) : (
                 <span className="navbar-text me-3 text-white">Loading...</span>
@@ -109,7 +109,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           </div>
           <div className="p-4">
             {userProfile ? (
-              <div className="mb-4">{userProfile.email}</div>
+              <div className="mb-4">{userProfile.firstName}</div>
             ) : (
               <div className="mb-4">Loading...</div>
             )}

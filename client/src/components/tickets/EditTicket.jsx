@@ -12,9 +12,11 @@ export default function EditTicket() {
 
   const [options, setOptions] = useState({
     games: [],
-    servers: [],
+    gamesWithServers: {},
     categories: [],
   });
+
+  const [availableServers, setAvailableServers] = useState([]);
 
   const [formData, setFormData] = useState({
     subject: "",
@@ -35,11 +37,12 @@ export default function EditTicket() {
         const ticketOptions = await getTicketOptions();
 
         setOptions({
-          games: ticketOptions.games,
-          servers: ticketOptions.servers,
+          games: Object.keys(ticketOptions.gamesWithServers),
+          gamesWithServers: ticketOptions.gamesWithServers,
           categories: ticketOptions.categories,
         });
 
+        // Set form data and available servers based on the existing ticket's game
         setFormData({
           subject: ticket.subject,
           category: ticket.category,
@@ -49,6 +52,9 @@ export default function EditTicket() {
           assignedUserIds: ticket.assignedUsers.map((user) => user.id),
         });
 
+        // Set available servers for the pre-selected game
+        setAvailableServers(ticketOptions.gamesWithServers[ticket.game] || []);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -57,6 +63,14 @@ export default function EditTicket() {
 
     fetchData();
   }, [ticketId]);
+
+  // Update available servers when the game changes
+  useEffect(() => {
+    if (formData.game) {
+      setAvailableServers(options.gamesWithServers[formData.game] || []);
+      setFormData((prev) => ({ ...prev, server: "" }));
+    }
+  }, [formData.game, options.gamesWithServers]);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -149,9 +163,10 @@ export default function EditTicket() {
               onChange={handleChange}
               className="form-select"
               required
+              disabled={!formData.game}
             >
               <option value="">Select a server</option>
-              {options.servers.map((server, index) => (
+              {availableServers.map((server, index) => (
                 <option key={index} value={server}>
                   {server}
                 </option>

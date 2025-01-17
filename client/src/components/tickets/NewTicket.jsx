@@ -7,10 +7,13 @@ export default function NewTicket() {
   // State to manage ticket options and user data
   const [options, setOptions] = useState({
     games: [],
-    servers: [],
+    gamesWithServers: {},
     categories: [],
     users: [],
   });
+
+  // State to manage filtered server options
+  const [availableServers, setAvailableServers] = useState([]);
 
   // State to manage form input values
   const [formData, setFormData] = useState({
@@ -36,8 +39,8 @@ export default function NewTicket() {
         const users = await getAllUsers();
 
         setOptions({
-          games: ticketOptions.games,
-          servers: ticketOptions.servers,
+          games: Object.keys(ticketOptions.gamesWithServers),
+          gamesWithServers: ticketOptions.gamesWithServers,
           categories: ticketOptions.categories,
           users: users.map((user) => ({
             id: user.id,
@@ -53,6 +56,14 @@ export default function NewTicket() {
 
     fetchOptions();
   }, []);
+
+  // Update available servers when the game changes
+  useEffect(() => {
+    if (formData.game) {
+      setAvailableServers(options.gamesWithServers[formData.game] || []);
+      setFormData((prev) => ({ ...prev, server: "" })); // Reset server if game changes
+    }
+  }, [formData.game, options.gamesWithServers]);
 
   // Handle input changes in the form
   const handleChange = (e) => {
@@ -153,9 +164,10 @@ export default function NewTicket() {
               onChange={handleChange}
               className="form-select"
               required
+              disabled={!formData.game}
             >
               <option value="">Select a server</option>
-              {options.servers.map((server, index) => (
+              {availableServers.map((server, index) => (
                 <option key={index} value={server}>
                   {server}
                 </option>
