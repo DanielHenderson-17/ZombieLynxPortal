@@ -18,7 +18,8 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<UserTicket> UserTickets { get; set; }
         public DbSet<AdminTicket> AdminTickets { get; set; }
-        public DbSet<ZLGMember> ZLGMembers { get; set; }  // ✅ Added ZLGMember
+        public DbSet<ZLGMember> ZLGMembers { get; set; }
+        public DbSet<Message> Messages { get; set; }  // ✅ Added Message DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -92,6 +93,37 @@ namespace ZombieLynxPortalAPI.Data
                 AssignedAt = DateTime.UtcNow
             });
 
+            // Seed Message
+            modelBuilder.Entity<Message>().HasData(
+                new Message
+                {
+                    Id = 1,
+                    MessageGroupId = 1,
+                    UserProfileId = 1,
+                    Content = "This is the first message in the ticket conversation.",
+                    CreatedAt = DateTime.UtcNow,
+                    ImgUrl = null
+                },
+                new Message
+                {
+                    Id = 2,
+                    MessageGroupId = 1,
+                    UserProfileId = 1,
+                    Content = "Following up on the issue. Any updates?",
+                    CreatedAt = DateTime.UtcNow.AddMinutes(10),
+                    ImgUrl = null
+                },
+                new Message
+                {
+                    Id = 3,
+                    MessageGroupId = 1,
+                    UserProfileId = 1,
+                    Content = "Please let me know if you need more details.",
+                    CreatedAt = DateTime.UtcNow.AddMinutes(20),
+                    ImgUrl = null
+                }
+            );
+
             // ✅ Composite Keys for Join Tables
             modelBuilder.Entity<UserTicket>()
                 .HasKey(ut => new { ut.UserProfileId, ut.TicketId });
@@ -135,6 +167,19 @@ namespace ZombieLynxPortalAPI.Data
                 .HasOne(z => z.UserProfile)
                 .WithMany()
                 .HasForeignKey(z => z.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ Message Relationship
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Ticket)
+                .WithMany(t => t.Messages)
+                .HasForeignKey(m => m.MessageGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.UserProfile)
+                .WithMany()
+                .HasForeignKey(m => m.UserProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -145,3 +145,9 @@
 .plus-icon:hover {
   transform: scale(1.1); /* Slightly larger on hover */
 }
+
+.messages {
+  overflow-y: scroll;
+  overflow-x: auto;
+  max-height: 380px;
+}

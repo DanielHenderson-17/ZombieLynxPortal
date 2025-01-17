@@ -116,3 +116,14 @@ hr {
     height: 90vh;
   }
 }
+
+.single-img {
+}
+
+.description {
+  min-height: 100px;
+}
+
+.single-datetime {
+  font-size: 0.8rem;
+}
