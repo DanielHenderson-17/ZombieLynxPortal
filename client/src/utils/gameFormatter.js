@@ -2,17 +2,19 @@
 export const getGameImage = (gameName) => {
   switch (gameName) {
     case "Eco":
-      return "/src/assets/images/eco.png";
+      return "/src/assets/images/eco2.png";
     case "Empyrion":
-      return "/src/assets/images/empyrion.png";
+      return "/src/assets/images/empyrion2.png";
     case "Minecraft":
-      return "/src/assets/images/minecraft.png";
+      return "/src/assets/images/minecraft2.png";
     case "Palworld":
-      return "/src/assets/images/palworld.png";
+      return "/src/assets/images/palworld2.png";
     case "Ark:SA":
-      return "/src/assets/images/asa.png";
+      return "/src/assets/images/asa2.png";
     case "Ark:SE":
-      return "/src/assets/images/ase.png";
+      return "/src/assets/images/ase2.png";
+    case "Discord":
+      return "/src/assets/images/discord2.png";
     default:
       return "/src/assets/images/default.png";
   }

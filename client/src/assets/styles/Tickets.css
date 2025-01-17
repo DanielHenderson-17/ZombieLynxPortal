@@ -13,7 +13,7 @@
 .ticket-nav,
 .ticket-body,
 .ticket-container {
-  background-color: #181c23 !important;
+  background-color: #13151a !important;
 }
 
 .ticket-container {
@@ -23,6 +23,11 @@
 .ticket-body1 {
   overflow-y: scroll;
   overflow-x: hidden;
+  background: linear-gradient(145deg, #1a1d20, #1d2027);
+}
+
+.ticket-main {
+  background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
 
 .description-min-height {
@@ -42,7 +47,7 @@ hr {
 }
 
 .gameImg {
-  height: 25px;
+  height: 60px;
 }
 
 .gameImg2 {
@@ -57,7 +62,7 @@ hr {
 }
 
 .bottom-nav {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -72,7 +77,7 @@ hr {
 }
 
 .ticket-main {
-  border-left: 1px solid gray;
+  /* border-left: 1px solid gray; */
 }
 
 .ticket-container .flex-grow-1 {

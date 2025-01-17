@@ -28,16 +28,16 @@ export default function Tickets({ loggedInUser }) {
   return (
     <div className="d-flex flex-column flex-lg-row ticket-container">
       {/* Sidebar for Desktop Navigation */}
-      <div className="col-lg-3 p-3 border ticket-nav d-none d-lg-block border-0">
+      <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0">
         <div>
           {/* New Ticket Button */}
           <Link
             to="/tickets/new-ticket"
             className={`d-flex justify-content-end text-decoration-none ${
-              location.pathname === "/tickets/new-ticket" ? "active" : ""
+              location.pathname === "/tickets/new-ticket"
             }`}
           >
-            <button className="btn d-block w-25 text-start mb-3 btn-success">
+            <button className="btn d-block w-50 text-start mb-3 btn-success">
               <i className="bi bi-plus-circle me-3"></i>Create
             </button>
           </Link>
@@ -85,6 +85,10 @@ export default function Tickets({ loggedInUser }) {
           />
           <Route
             path="open-tickets"
+            element={<OpenTickets onTicketChange={fetchOpenTicketCount} />}
+          />
+          <Route
+            path=""
             element={<OpenTickets onTicketChange={fetchOpenTicketCount} />}
           />
           <Route
