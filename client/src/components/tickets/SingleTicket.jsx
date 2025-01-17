@@ -27,6 +27,7 @@ export default function SingleTicket() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch ticket and messages, update state as message is sent for the ticket
   useEffect(() => {
     const fetchTicketAndMessages = async () => {
       try {
@@ -54,6 +55,7 @@ export default function SingleTicket() {
     fetchTicketAndMessages();
   }, [ticketId]);
 
+  // Send message to console
   const handleSendMessage = async () => {
     if (newMessage.trim() === "") return;
 
@@ -79,6 +81,7 @@ export default function SingleTicket() {
     }
   };
 
+  // Close ticket
   const handleCloseTicket = async () => {
     try {
       await closeTicketAPI(ticketId);
@@ -89,6 +92,7 @@ export default function SingleTicket() {
     }
   };
 
+  // Restore ticket
   const handleRestoreTicket = async () => {
     try {
       await restoreTicketAPI(ticketId);
@@ -99,6 +103,7 @@ export default function SingleTicket() {
     }
   };
 
+  // Delete ticket
   const handleDeleteTicket = async () => {
     try {
       await deleteTicket(ticketId);
@@ -109,6 +114,7 @@ export default function SingleTicket() {
     }
   };
 
+  // Assign user to ticket
   const handleAssignUser = async (userId) => {
     try {
       await assignUserToTicket(ticketId, userId);
@@ -233,7 +239,7 @@ export default function SingleTicket() {
         {/* Right Column: Messages */}
         <div className="col-md-7 text-start mb-3 ps-0">
           <div
-            className=" p-3"
+            className="border rounded p-3"
             style={{ backgroundColor: "#1f1f1f", height: "100%" }}
           >
             <div className="d-flex flex-column h-100">
@@ -273,7 +279,6 @@ export default function SingleTicket() {
           </div>
         </div>
       </div>
-
       {error && <p className="text-danger mt-3">{error}</p>}
     </div>
   );
