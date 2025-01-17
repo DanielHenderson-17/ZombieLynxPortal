@@ -99,7 +99,10 @@ export default function SingleTicket() {
 
   return (
     <div className="text-white col-md-6 col-11 mx-auto mt-5 pt-3">
-      <h2 className="text-start mb-1 subject-font">{ticket.subject}</h2>
+      <div className="col-3"></div>
+
+      <h4 className="text-start mb-1 subject-font">{ticket.subject}</h4>
+
       <div className="d-md-flex d-block justify-content-between mb-1">
         <div className="d-flex align-items-center fs-5">
           <div
