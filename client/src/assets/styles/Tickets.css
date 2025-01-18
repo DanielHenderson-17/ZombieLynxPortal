@@ -54,6 +54,10 @@ hr {
   height: 15px;
 }
 
+.gameImg3 {
+  height: 100px;
+}
+
 .ticket-nav {
   display: block;
   height: auto;
@@ -102,6 +106,12 @@ hr {
 @media (max-width: 767.98px) {
   .subject-font {
     font-size: 1.25rem;
+  }
+  .single-details {
+    height: 150px !important;
+  }
+  .single-row {
+    height: 780px !important;
   }
 }
 
