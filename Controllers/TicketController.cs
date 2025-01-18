@@ -145,8 +145,8 @@ namespace ZombieLynxPortalAPI.Controllers
             if (ticket.Status == "Closed")
             {
                 ticket.Status = "Open";
-                ticket.UpdatedAt = DateTime.UtcNow;  // Use UTC for consistency
-                _dbContext.SaveChanges();  // 💾 Save changes to the database
+                ticket.UpdatedAt = DateTime.UtcNow;
+                _dbContext.SaveChanges();
 
                 return NoContent();  // ✅ Return 204 No Content
             }
@@ -163,8 +163,8 @@ namespace ZombieLynxPortalAPI.Controllers
         {
             // 🔍 Find the ticket by ID
             var ticket = _dbContext.Tickets
-                .Include(t => t.UserTickets)   // Ensure related UserTickets are loaded
-                .Include(t => t.AdminTickets)  // Ensure related AdminTickets are loaded
+                .Include(t => t.UserTickets)
+                .Include(t => t.AdminTickets)
                 .SingleOrDefault(t => t.Id == id);
 
             // ❌ If the ticket doesn't exist, return 404

@@ -94,10 +94,10 @@ export default function OpenTickets({ onTicketChange }) {
                   onClick={() => handleTicketClick(ticket.id)}
                   style={{ cursor: "pointer" }}
                 >
-                  <td className="text-start col-1 d-none d-lg-table-cell">
+                  <td className="text-start col-1 d-none d-lg-table-cell p-0">
                     <span className="text-warning fw-bold mx-auto">
                       <img
-                        className="gameImg ms-1"
+                        className="gameImg3 ms-1"
                         src={getGameImage(ticket.game)}
                         alt=""
                       />

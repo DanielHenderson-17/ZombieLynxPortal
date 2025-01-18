@@ -97,16 +97,16 @@ export default function Member({ loggedInUser }) {
   };
 
   return (
-    <div className="member-layout mt-5 pt-2 px-0 col-md-9 col-12 mx-auto">
+    <div className="member-layout mt-md-5 mt-2 pt-2 px-0 col-md-9 col-12 mx-auto">
       <div className="member-container rounded-top">
         <div className="member-header d-flex justify-content-between align-items-start">
           {/* LEFT SIDE - Profile Info */}
           <div className="profile-info col-md-5 col-12 d-md-flex justify-content-center h-100">
             {/* Profile Container: Image -> Name -> Points */}
             <div className="d-flex justify-content-md-end justify-content-center align-items-end img-name-points col-md-6 col-12 mb-md-0 mb-2">
-              <div>
+              <div className="d-flex d-md-block col-12 col-md-8 ms-md-0 justify-content-center align-items-center">
                 {/* Profile Image */}
-                <div className="hexagon mb-1">
+                <div className="hexagon mb-1 mt-md-0 mt-2 col-12">
                   <img
                     src={
                       steamAccount?.steamImgUrl ||
@@ -118,20 +118,81 @@ export default function Member({ loggedInUser }) {
                 </div>
 
                 {/* Username */}
-                <h3 className="text-white">
+                <h3 className="text-white d-none d-md-block">
                   {loggedInUser?.firstName || "Guest"}
                 </h3>
+                <div className="d-md-flex d-block col-6 col-md-12 justify-content-center ms-2 ms-md-0">
+                  <div className="d-flex align-items-center">
+                    <h3 className="text-white text-start d-md-none d-block mb-0 mt-4">
+                      {loggedInUser?.firstName || "Guest"}
+                    </h3>
+                    {/* Linked Accounts for Mobile */}
+                    {linkedAccounts.length > 0 && (
+                      <div className="d-md-none d-flex flex-row justify-content-start mt-3 ms-1">
+                        {linkedAccounts.map((acc) => (
+                          <button
+                            key={acc.name}
+                            className="btn p-0 m-1 border-0 bg-transparent"
+                            onClick={() => handleUnlinkAccount(acc.name)}
+                            disabled={loading}
+                          >
+                            <img
+                              src={
+                                availableAccounts.find(
+                                  (a) => a.name === acc.name
+                                )?.icon
+                              }
+                              alt={`${acc.name} Icon`}
+                              style={{ width: "20px", height: "20px" }}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <h6 className="text-start text-secondary d-md-none d-block">
+                    {loggedInUser?.email || "Please log in to view your email."}
+                  </h6>
+                  <div className="d-flex align-items-center justify-content-between border rounded-5 p-1 text-white fw-bold fs-6 col-md-9 col-12 mx-md-auto ms-0 position-relative mb-md-4 mb-1 mt-3">
+                    <img src={zlgCoin} alt="" className="zlg-coin" />
+                    <p className="mb-0 text-start">1455</p>
+                    <Link to="/buy-points" className="text-secondary plus-icon">
+                      <i className="bi bi-plus-circle-fill fs-6 cursor-pointer"></i>
+                    </Link>
+                  </div>
+                  {/* Add Accounts for Mobile */}
+                  {availableAccounts.filter(
+                    (acc) =>
+                      !linkedAccounts.some((linked) => linked.name === acc.name)
+                  ).length > 0 && (
+                    <div className="d-md-none d-flex flex-row justify-content-start mt-1 border-secondary border rounded-3 col-6 mt-3">
+                      {availableAccounts
+                        .filter(
+                          (acc) =>
+                            !linkedAccounts.some(
+                              (linked) => linked.name === acc.name
+                            )
+                        )
+                        .map((acc) => (
+                          <button
+                            key={acc.name}
+                            className="btn p-0 m-1 border-0 bg-transparent"
+                            onClick={() => handleLinkAccount(acc.name)}
+                            disabled={loading}
+                          >
+                            <img
+                              src={acc.icon}
+                              alt={`${acc.name} Icon`}
+                              style={{ width: "20px", height: "20px" }}
+                            />
+                          </button>
+                        ))}
+                      <i className="bi bi-plus my-auto ms-4 text-white"></i>
+                    </div>
+                  )}
+                </div>
 
                 {/* Points */}
-                <div className="d-flex align-items-center justify-content-between border rounded-5 p-1 text-white fw-bold fs-6 w-75 mx-auto position-relative mb-md-4 mb-1">
-                  <img src={zlgCoin} alt="" className="zlg-coin" />
-
-                  <p className="mb-0 text-start">1455</p>
-
-                  <Link to="/buy-points" className="text-secondary plus-icon">
-                    <i className="bi bi-plus-circle-fill fs-6 cursor-pointer"></i>
-                  </Link>
-                </div>
               </div>
             </div>
 

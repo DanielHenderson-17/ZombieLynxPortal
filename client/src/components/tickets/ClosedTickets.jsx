@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   getClosedTickets,
   restoreTicketAPI,
-  deleteTicket,
+  // deleteTicket,
 } from "../../managers/ticketManager";
 import { truncateText } from "../../utils/truncateText";
 import { getGameImage } from "../../utils/gameFormatter";
@@ -55,16 +55,16 @@ export default function ClosedTickets({ onTicketChange }) {
     }
   };
 
-  const handleDeleteTicket = async (ticketId) => {
-    try {
-      await deleteTicket(ticketId);
-      setTickets((prevTickets) =>
-        prevTickets.filter((ticket) => ticket.id !== ticketId)
-      );
-    } catch (error) {
-      console.error("Error deleting ticket:", error);
-    }
-  };
+  // const handleDeleteTicket = async (ticketId) => {
+  //   try {
+  //     await deleteTicket(ticketId);
+  //     setTickets((prevTickets) =>
+  //       prevTickets.filter((ticket) => ticket.id !== ticketId)
+  //     );
+  //   } catch (error) {
+  //     console.error("Error deleting ticket:", error);
+  //   }
+  // };
 
   const handleTicketClick = (ticketId) => {
     navigate(`/tickets/ticket/${ticketId}`);
@@ -164,7 +164,7 @@ export default function ClosedTickets({ onTicketChange }) {
                       >
                         <i className="bi bi-arrow-counterclockwise"></i>
                       </button>
-                      <button
+                      {/* <button
                         className="btn btn-danger btn-sm ticket-button"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -172,7 +172,7 @@ export default function ClosedTickets({ onTicketChange }) {
                         }}
                       >
                         <i className="bi bi-trash3"></i>
-                      </button>
+                      </button> */}
                     </div>
                     <small className="position-absolute ticket-id">
                       Ticket ID: {ticket.id}

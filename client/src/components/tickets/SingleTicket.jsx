@@ -132,9 +132,9 @@ export default function SingleTicket() {
 
   return (
     <div className="text-white container-fluid mt-0 pt-3 h-100">
-      <div className="row h-100 pb-3">
+      <div className="row single-row h-100 pb-3">
         {/* Left Column: Ticket Details */}
-        <div className="col-md-5 h-100 mb-3">
+        <div className="col-md-5 single-details h-100 mb-3">
           <div className="d-flex pt-2">
             {/* Game Image */}
             <img
@@ -199,7 +199,7 @@ export default function SingleTicket() {
           </div>
           <h6 className="text-start mt-3">{ticket.subject}</h6>
           {/* Description */}
-          <div className="text-start mt-5">
+          <div className="text-start mt-md-5 mt-3">
             <small>Description:</small>
             {isAdmin && (
               <button
@@ -209,7 +209,7 @@ export default function SingleTicket() {
                 <i className="bi bi-pencil fs-6"></i>
               </button>
             )}
-            <p className="p-0 mt-2 mb-0 mt-100 description">
+            <p className="p-0 mb-0 mt-md-1 mt-0 description">
               {ticket.description}
             </p>
           </div>
@@ -237,7 +237,7 @@ export default function SingleTicket() {
         </div>
 
         {/* Right Column: Messages */}
-        <div className="col-md-7 text-start mb-3 ps-0">
+        <div className="col-md-7 text-start mb-3 ps-md-0 ps-2">
           <div
             className="border rounded p-3"
             style={{ backgroundColor: "#1f1f1f", height: "100%" }}
