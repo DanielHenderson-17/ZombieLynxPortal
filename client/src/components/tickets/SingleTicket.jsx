@@ -4,7 +4,6 @@ import {
   getTicketById,
   closeTicketAPI,
   restoreTicketAPI,
-  deleteTicket,
   assignUserToTicket,
   getAllUsers,
 } from "../../managers/ticketManager";
@@ -16,6 +15,9 @@ import { formatLongDateTime } from "../../utils/longDateTime";
 import { formatShortDate } from "../../utils/shortDateTime.js";
 import { categoryFormatter } from "../../utils/categoryFormater";
 import { getGameImage } from "../../utils/gameFormatter";
+import { getLinkedSteamAccount } from "../../managers/steamAuthManager";
+import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
+import { truncateText } from "../../utils/truncateText.js";
 
 export default function SingleTicket() {
   const { ticketId } = useParams();
@@ -26,6 +28,8 @@ export default function SingleTicket() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [steamAccount, setSteamAccount] = useState(null);
+  const [randomSeed, setRandomSeed] = useState(null);
 
   // Fetch ticket and messages, update state as message is sent for the ticket
   useEffect(() => {
@@ -55,7 +59,30 @@ export default function SingleTicket() {
     fetchTicketAndMessages();
   }, [ticketId]);
 
-  // Send message to console
+  useEffect(() => {
+    const fetchSteamAccount = async () => {
+      try {
+        const updatedSteamAccount = await getLinkedSteamAccount();
+        if (
+          updatedSteamAccount &&
+          updatedSteamAccount.steamImgUrl !== steamAccount?.steamImgUrl
+        ) {
+          setSteamAccount(updatedSteamAccount);
+        }
+      } catch (error) {
+        console.error("Error fetching Steam account:", error);
+      }
+    };
+
+    fetchSteamAccount();
+    const intervalId = setInterval(fetchSteamAccount, 60000);
+    return () => clearInterval(intervalId);
+  }, [steamAccount]);
+
+  useEffect(() => {
+    setRandomSeed(generateRandomSeed());
+  }, []);
+
   const handleSendMessage = async () => {
     if (newMessage.trim() === "") return;
 
@@ -103,17 +130,6 @@ export default function SingleTicket() {
     }
   };
 
-  // Delete ticket
-  const handleDeleteTicket = async () => {
-    try {
-      await deleteTicket(ticketId);
-      navigate("/tickets/closed-tickets");
-    } catch (error) {
-      console.error("Error deleting ticket:", error);
-      setError("Failed to delete the ticket. Please try again.");
-    }
-  };
-
   // Assign user to ticket
   const handleAssignUser = async (userId) => {
     try {
@@ -144,13 +160,13 @@ export default function SingleTicket() {
             />
             <div className="ms-3">
               {/* Server Name */}
-              <h6 className="text-start">{ticket.server}</h6>
+              <h6 className="text-start">{truncateText(ticket.server, 30)}</h6>
 
               {/* Category */}
               <div className="d-flex align-items-center">
                 <div className="d-flex align-items-center col-10">
                   <div
-                    className="text-start"
+                    className="text-start me-1"
                     dangerouslySetInnerHTML={{
                       __html: categoryFormatter(ticket.category),
                     }}
@@ -182,7 +198,6 @@ export default function SingleTicket() {
                     {allUsers
                       .filter(
                         (user) =>
-                          // Exclude users already assigned
                           !ticket.assignedUsers.some(
                             (assignedUser) => assignedUser.id === user.id
                           )
@@ -228,33 +243,40 @@ export default function SingleTicket() {
                 >
                   Restore <i className="bi bi-arrow-counterclockwise ms-2"></i>
                 </button>
-                <button className="btn btn-danger" onClick={handleDeleteTicket}>
-                  Delete <i className="bi bi-trash3 ms-2"></i>
-                </button>
               </>
             )}
           </div>
         </div>
 
         {/* Right Column: Messages */}
-        <div className="col-md-7 text-start mb-3 ps-md-0 ps-2">
+        <div className="col-md-7 text-start mb-3 ps-md-0 ps-2 message-container">
           <div
-            className="border rounded p-3"
-            style={{ backgroundColor: "#1f1f1f", height: "100%" }}
+            className="border border-secondary rounded p-0 message-box"
+            style={{ backgroundColor: "#1f1f1f" }}
           >
-            <div className="d-flex flex-column h-100">
+            <div className="d-flex flex-column">
               {/* Messages Container */}
-              <div className="flex-grow-1 messages mb-3">
+              <div className="flex-grow-1 messages mb-0 p-md-3 p-1">
                 {messages.length > 0 ? (
                   messages.map((msg) => (
-                    <div key={msg.id} className="mb-2">
-                      <div className="d-flex align-items-center">
-                        <strong className="me-2">{msg.user.firstName}</strong>
-                        <small className="d-block text-secondary single-datetime">
-                          {formatShortDate(msg.createdAt)}
-                        </small>
+                    <div key={msg.id} className="mb-3 d-flex">
+                      <img
+                        src={
+                          steamAccount?.steamImgUrl ||
+                          `https://picsum.photos/seed/${randomSeed}/100/100`
+                        }
+                        alt="Profile"
+                        className="message-img me-2"
+                      />
+                      <div>
+                        <div className="d-flex align-items-center">
+                          <strong className="me-2">{msg.user.firstName}</strong>
+                          <small className="d-block text-secondary single-datetime">
+                            {formatShortDate(msg.createdAt)}
+                          </small>
+                        </div>
+                        {msg.content}
                       </div>
-                      {msg.content}
                     </div>
                   ))
                 ) : (
@@ -265,13 +287,16 @@ export default function SingleTicket() {
               <div className="d-flex">
                 <input
                   type="text"
-                  className="form-control me-2"
+                  className="form-control me-2 message-input"
                   placeholder="Type a message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                 />
-                <button className="btn btn-primary" onClick={handleSendMessage}>
+                <button
+                  className="btn btn-primary message-button"
+                  onClick={handleSendMessage}
+                >
                   Send
                 </button>
               </div>

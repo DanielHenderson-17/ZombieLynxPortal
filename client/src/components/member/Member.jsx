@@ -19,6 +19,7 @@ export default function Member({ loggedInUser }) {
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(false);
   const [randomSeed, setRandomSeed] = useState(null);
+  const [userLoading, setUserLoading] = useState(true);
 
   // Mock for other accounts
   const [linkedAccounts, setLinkedAccounts] = useState([]);
@@ -28,19 +29,21 @@ export default function Member({ loggedInUser }) {
     { name: "Steam", icon: "../../../../public/steamIcon.png" },
   ];
 
-  useEffect(() => {
-    fetchLinkedAccount();
-  }, [refreshTrigger]);
+  console.log("loggedinuser", loggedInUser);
 
+  // Generate a random seed once when the component mounts
   useEffect(() => {
     setRandomSeed(generateRandomSeed());
   }, []);
 
-  const fetchLinkedAccount = () => {
-    if (loggedInUser && getMainJwtToken()) {
-      setLoading(true);
-      getLinkedSteamAccount()
-        .then((data) => {
+  // Fetch Steam Account when user logs in or refreshTrigger changes
+  useEffect(() => {
+    const fetchLinkedAccount = async () => {
+      if (loggedInUser && getMainJwtToken()) {
+        setUserLoading(true);
+        setLoading(true);
+        try {
+          const data = await getLinkedSteamAccount();
           if (data?.steamId) {
             setSteamAccount(data);
             setLinkedAccounts([{ name: "Steam", ...data }]);
@@ -48,11 +51,20 @@ export default function Member({ loggedInUser }) {
             setSteamAccount(null);
             setLinkedAccounts([]);
           }
-        })
-        .catch(() => setError("Failed to load your Steam account."))
-        .finally(() => setLoading(false));
-    }
-  };
+        } catch (err) {
+          console.error("Failed to load your Steam account.", err);
+          setError("Failed to load your Steam account.");
+        } finally {
+          setLoading(false);
+          setUserLoading(false);
+        }
+      } else {
+        setUserLoading(false);
+      }
+    };
+
+    fetchLinkedAccount();
+  }, [loggedInUser, refreshTrigger]);
 
   const handleLinkAccount = (platform) => {
     if (!getMainJwtToken()) {
@@ -119,12 +131,16 @@ export default function Member({ loggedInUser }) {
 
                 {/* Username */}
                 <h3 className="text-white d-none d-md-block">
-                  {loggedInUser?.firstName || "Guest"}
+                  {userLoading
+                    ? "Loading..."
+                    : loggedInUser?.firstName || "Guest"}
                 </h3>
                 <div className="d-md-flex d-block col-6 col-md-12 justify-content-center ms-2 ms-md-0">
                   <div className="d-flex align-items-center">
                     <h3 className="text-white text-start d-md-none d-block mb-0 mt-4">
-                      {loggedInUser?.firstName || "Guest"}
+                      {userLoading
+                        ? "Loading..."
+                        : loggedInUser?.firstName || "Guest"}
                     </h3>
                     {/* Linked Accounts for Mobile */}
                     {linkedAccounts.length > 0 && (

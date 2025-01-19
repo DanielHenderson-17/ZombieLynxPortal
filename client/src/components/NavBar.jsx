@@ -1,13 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink as RRNavLink } from "react-router-dom";
 import { logout } from "../managers/authManager";
 import { getUserProfiles } from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
 import zlgLogo from "../assets/zlg-logo.png";
+import { getLinkedSteamAccount } from "../managers/steamAuthManager";
 
 export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [steamAccount, setSteamAccount] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [randomSeed, setRandomSeed] = useState(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (loggedInUser) {
@@ -15,7 +20,6 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
         .then((profiles) => {
           let profile = null;
 
-          // ✅ Handle both array and object responses
           if (Array.isArray(profiles)) {
             profile = profiles.find(
               (p) =>
@@ -45,6 +49,45 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     }
   }, [loggedInUser]);
 
+  useEffect(() => {
+    const generateRandomSeed = () => Math.floor(Math.random() * 1000);
+    setRandomSeed(generateRandomSeed());
+
+    const fetchSteamAccount = async () => {
+      try {
+        const updatedSteamAccount = await getLinkedSteamAccount();
+        if (
+          updatedSteamAccount &&
+          updatedSteamAccount.steamImgUrl !== steamAccount?.steamImgUrl
+        ) {
+          setSteamAccount(updatedSteamAccount);
+        }
+      } catch (error) {
+        console.error("Error fetching Steam account:", error);
+      }
+    };
+
+    if (loggedInUser) {
+      fetchSteamAccount();
+      const intervalId = setInterval(fetchSteamAccount, 60000);
+      return () => clearInterval(intervalId);
+    }
+  }, [loggedInUser, steamAccount]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto w-100 zlg-nav-bar bg-dark">
       <div className="container-fluid px-md-5 px-2">
@@ -52,30 +95,48 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
         <RRNavLink className="navbar-brand" to="/">
           <img className="zlg-logo" src={zlgLogo} alt="Zombie Lynx Gaming" />
         </RRNavLink>
-
         {/* Desktop Menu */}
-        <div className="d-none d-lg-flex align-items-center">
-          {loggedInUser && (
+        <div className="d-none d-lg-flex align-items-center position-relative">
+          {!loggedInUser ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => (window.location.href = "/login")}
+            >
+              Login
+            </button>
+          ) : (
             <>
-              {userProfile ? (
-                <span className="navbar-text me-3 text-white">
-                  {userProfile.firstName}
-                </span>
-              ) : (
-                <span className="navbar-text me-3 text-white">Loading...</span>
+              <img
+                src={
+                  steamAccount?.steamImgUrl ||
+                  `https://picsum.photos/seed/${randomSeed}/40/40`
+                }
+                alt="Profile"
+                className="profile-img rounded-circle"
+                style={{ width: "40px", height: "40px", cursor: "pointer" }}
+                onClick={() => setShowDropdown(!showDropdown)}
+              />
+
+              {showDropdown && (
+                <div
+                  ref={dropdownRef}
+                  className="dropdown-menu show mt-2"
+                  style={{ right: 0 }}
+                >
+                  <button
+                    className="dropdown-item"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      logout().then(() => {
+                        setLoggedInUser(null);
+                        setShowDropdown(false);
+                      });
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
               )}
-              <button
-                className="btn btn-primary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  logout().then(() => {
-                    setLoggedInUser(null);
-                    setOpen(false);
-                  });
-                }}
-              >
-                Logout
-              </button>
             </>
           )}
         </div>
