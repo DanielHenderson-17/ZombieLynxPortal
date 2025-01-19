@@ -21,7 +21,7 @@ export const getToken = () => {
  * @param {string} token - JWT token
  * @returns {object|null} - Decoded payload or null
  */
-const parseJwt = (token) => {
+export const parseJwt = (token) => {
   try {
     return JSON.parse(atob(token.split(".")[1]));
   } catch (e) {
@@ -50,7 +50,13 @@ export const login = (email, password) => {
     })
     .then((data) => {
       saveToken(data.token);
-      return parseJwt(data.token); // Return decoded user data
+      // 🔥 Directly fetch the full user profile here
+      return fetch("/api/Auth/me", {
+        headers: { Authorization: `Bearer ${data.token}` },
+      }).then((res) => {
+        if (res.ok) return res.json();
+        throw new Error("Failed to fetch user profile.");
+      });
     })
     .catch((error) => {
       console.error("Login failed:", error);

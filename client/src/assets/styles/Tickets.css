@@ -66,7 +66,6 @@ hr {
 }
 
 .bottom-nav {
-  /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -78,10 +77,6 @@ hr {
   font-size: 0.6rem;
   margin-top: 10px;
   margin-left: 10px;
-}
-
-.ticket-main {
-  /* border-left: 1px solid gray; */
 }
 
 .ticket-container .flex-grow-1 {
@@ -103,15 +98,62 @@ hr {
   color: #ffffff;
 }
 
+.description {
+  min-height: 100px;
+}
+
+.single-datetime {
+  font-size: 0.8rem;
+}
+
+.messages {
+  overflow-x: auto;
+  height: 430px;
+  overflow-y: scroll;
+}
+
+.message-container {
+  height: 100%;
+}
+
+.message-box {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.message-input,
+.message-button {
+  border-radius: 0;
+  margin: 0 !important;
+}
+
+.message-img {
+  height: 40px;
+  border-radius: 50%;
+}
+
 @media (max-width: 767.98px) {
   .subject-font {
     font-size: 1.25rem;
   }
   .single-details {
-    height: 150px !important;
+    height: 400px !important;
   }
   .single-row {
     height: 780px !important;
+  }
+  .message-box {
+    height: 340px !important;
+    padding: 5px !important;
+    overflow-y: scroll;
+  }
+  .messages {
+    min-height: 275px !important;
+    height: 100%;
+    overflow-y: hidden;
+  }
+  .message-container {
+    height: 400px !important;
   }
 }
 
@@ -125,15 +167,4 @@ hr {
   .ticket-container {
     height: 90vh;
   }
-}
-
-.single-img {
-}
-
-.description {
-  min-height: 100px;
-}
-
-.single-datetime {
-  font-size: 0.8rem;
 }
