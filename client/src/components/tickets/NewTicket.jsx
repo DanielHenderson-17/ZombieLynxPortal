@@ -4,7 +4,6 @@ import { createTicket, getTicketOptions } from "../../managers/ticketManager";
 import { getAllUsers } from "../../managers/userProfileManager";
 
 export default function NewTicket() {
-  // State to manage ticket options and user data
   const [options, setOptions] = useState({
     games: [],
     gamesWithServers: {},
@@ -12,10 +11,8 @@ export default function NewTicket() {
     users: [],
   });
 
-  // State to manage filtered server options
   const [availableServers, setAvailableServers] = useState([]);
 
-  // State to manage form input values
   const [formData, setFormData] = useState({
     subject: "",
     category: "",
@@ -25,10 +22,8 @@ export default function NewTicket() {
     assignedUserIds: [],
   });
 
-  // State to track loading status
   const [loading, setLoading] = useState(true);
 
-  // React Router's navigation function
   const navigate = useNavigate();
 
   // Fetch ticket options and user data
@@ -61,7 +56,7 @@ export default function NewTicket() {
   useEffect(() => {
     if (formData.game) {
       setAvailableServers(options.gamesWithServers[formData.game] || []);
-      setFormData((prev) => ({ ...prev, server: "" })); // Reset server if game changes
+      setFormData((prev) => ({ ...prev, server: "" }));
     }
   }, [formData.game, options.gamesWithServers]);
 

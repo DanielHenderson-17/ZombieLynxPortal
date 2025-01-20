@@ -39,7 +39,6 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<p>Select a module from the navigation above.</p>}
           />
         </Route>
-
         {/* Public Routes (No NavBar) */}
         <Route
           path="login"
@@ -53,7 +52,6 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="register"
           element={<Register setLoggedInUser={setLoggedInUser} />}
         />
-
         {/* Catch-all for invalid routes */}
         <Route path="*" element={<p>Whoops, nothing here...</p>} />
       </Routes>

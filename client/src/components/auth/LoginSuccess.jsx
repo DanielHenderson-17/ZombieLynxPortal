@@ -6,13 +6,12 @@ export default function LoginSuccess({ setLoggedInUser }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Verify if the user is logged in after redirect
     tryGetLoggedInUser().then((user) => {
       if (user) {
-        setLoggedInUser(user); // Set user in state
-        navigate("/"); // Redirect to homepage
+        setLoggedInUser(user);
+        navigate("/");
       } else {
-        navigate("/login"); // If not logged in, go back to login
+        navigate("/login");
       }
     });
   }, [navigate, setLoggedInUser]);

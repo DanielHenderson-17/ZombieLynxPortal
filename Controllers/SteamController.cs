@@ -23,7 +23,7 @@ namespace ZombieLynxPortalAPI.Controllers
             _configuration = configuration;
         }
 
-
+        // Ping API
         [HttpGet("ping")]
         public IActionResult Ping() => Ok("SteamAuthController is active.");
 

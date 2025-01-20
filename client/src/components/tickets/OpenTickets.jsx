@@ -25,17 +25,14 @@ export default function OpenTickets({ onTicketChange }) {
   };
 
   useEffect(() => {
-    // Start fetching tickets
     fetchTickets();
 
-    // Set a timeout to show the loading message if fetching takes longer than 1 second
     const timeout = setTimeout(() => {
       if (fetching) {
         setLoading(true);
       }
     }, 1000);
 
-    // Cleanup timeout if fetching finishes before the timeout
     return () => clearTimeout(timeout);
   }, [fetching]);
 
