@@ -95,7 +95,10 @@ export default function Tickets({ loggedInUser }) {
             path="closed-tickets"
             element={<ClosedTickets onTicketChange={fetchOpenTicketCount} />}
           />
-          <Route path="ticket/:ticketId" element={<SingleTicket />} />
+          <Route
+            path="ticket/:ticketId"
+            element={<SingleTicket loggedInUser={loggedInUser} />}
+          />
         </Routes>
       </div>
 

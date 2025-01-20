@@ -37,7 +37,11 @@ namespace ZombieLynxPortalAPI.Controllers
                     User = new
                     {
                         m.UserProfile.FirstName,
-                        m.UserProfile.LastName
+                        m.UserProfile.LastName,
+                        SteamImgUrl = _dbContext.ZLGMembers
+                            .Where(z => z.UserProfileId == m.UserProfile.Id)
+                            .Select(z => z.SteamImgUrl)
+                            .FirstOrDefault() // Ensure we only fetch one SteamImgUrl
                     }
                 })
                 .ToList();
@@ -49,6 +53,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(messages);
         }
+
 
         // ✅ Post a new message to a ticket
         [HttpPost]

@@ -12,8 +12,8 @@ using ZombieLynxPortalAPI.Data;
 namespace ZombieLynxPortalAPI.Migrations
 {
     [DbContext(typeof(ZombieLynxPortalAPIDbContext))]
-    [Migration("20250114151404_AddZLGMembers")]
-    partial class AddZLGMembers
+    [Migration("20250119231700_InitialCreate2")]
+    partial class InitialCreate2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@zombielynx.com",
-                            PasswordHash = "$2a$11$g2ZekxmGvhZj9VwsVSzsH.WIZvo6dSNvBLzfOQw7MakTZ8ny5hCdi",
+                            PasswordHash = "$2a$11$JhdQJu6gjHSUtBnfylE4qetIw1RdRrK07bKxdmb8SXM5VFU5qwQjS",
                             Role = "Admin"
                         });
                 });
@@ -80,7 +80,66 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             AdminId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 1, 14, 15, 14, 4, 77, DateTimeKind.Utc).AddTicks(875)
+                            AssignedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(1542)
+                        });
+                });
+
+            modelBuilder.Entity("ZombieLynxPortalAPI.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ImgUrl")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MessageGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageGroupId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.ToTable("Messages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Content = "This is the first message in the ticket conversation.",
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(2237),
+                            MessageGroupId = 1,
+                            UserProfileId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Following up on the issue. Any updates?",
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 26, 59, 927, DateTimeKind.Utc).AddTicks(2397),
+                            MessageGroupId = 1,
+                            UserProfileId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Please let me know if you need more details.",
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 36, 59, 927, DateTimeKind.Utc).AddTicks(2464),
+                            MessageGroupId = 1,
+                            UserProfileId = 1
                         });
                 });
 
@@ -141,13 +200,13 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Category = "Bug",
-                            CreatedAt = new DateTime(2025, 1, 14, 15, 14, 4, 76, DateTimeKind.Utc).AddTicks(9687),
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(272),
                             Description = "Initial test ticket for the system.",
                             Game = "Ark:SA",
                             Server = "NA-East",
                             Status = "Open",
                             Subject = "Test Ticket",
-                            UpdatedAt = new DateTime(2025, 1, 14, 15, 14, 4, 76, DateTimeKind.Utc).AddTicks(9773),
+                            UpdatedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(357),
                             UserProfileId = 1
                         });
                 });
@@ -212,7 +271,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             UserProfileId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 1, 14, 15, 14, 4, 77, DateTimeKind.Utc).AddTicks(371)
+                            AssignedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(976)
                         });
                 });
 
@@ -305,6 +364,25 @@ namespace ZombieLynxPortalAPI.Migrations
                     b.Navigation("Ticket");
                 });
 
+            modelBuilder.Entity("ZombieLynxPortalAPI.Models.Message", b =>
+                {
+                    b.HasOne("ZombieLynxPortalAPI.Models.Ticket", "Ticket")
+                        .WithMany("Messages")
+                        .HasForeignKey("MessageGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZombieLynxPortalAPI.Models.UserProfile", "UserProfile")
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ticket");
+
+                    b.Navigation("UserProfile");
+                });
+
             modelBuilder.Entity("ZombieLynxPortalAPI.Models.Ticket", b =>
                 {
                     b.HasOne("ZombieLynxPortalAPI.Models.UserProfile", "UserProfile")
@@ -366,6 +444,8 @@ namespace ZombieLynxPortalAPI.Migrations
             modelBuilder.Entity("ZombieLynxPortalAPI.Models.Ticket", b =>
                 {
                     b.Navigation("AdminTickets");
+
+                    b.Navigation("Messages");
 
                     b.Navigation("UserTickets");
                 });

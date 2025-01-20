@@ -77,9 +77,11 @@ export const register = (user) => {
     },
     body: JSON.stringify(user),
   })
-    .then((res) => {
-      if (res.ok) return res.json();
-      throw new Error("Registration failed.");
+    .then(async (res) => {
+      const data = await res.json();
+      if (res.ok) return data;
+      console.error("Server Response:", data);
+      throw new Error(data.message || "Registration failed.");
     })
     .catch((error) => {
       console.error("Registration error:", error);

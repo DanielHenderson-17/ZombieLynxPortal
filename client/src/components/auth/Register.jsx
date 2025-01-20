@@ -30,6 +30,7 @@ export default function Register({ setLoggedInUser }) {
         email,
         address,
         password,
+        confirmPassword,
       };
       register(newUser).then((user) => {
         if (user) {

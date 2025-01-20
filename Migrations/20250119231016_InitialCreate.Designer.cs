@@ -12,8 +12,8 @@ using ZombieLynxPortalAPI.Data;
 namespace ZombieLynxPortalAPI.Migrations
 {
     [DbContext(typeof(ZombieLynxPortalAPIDbContext))]
-    [Migration("20250114012700_FixTicketSeeding")]
-    partial class FixTicketSeeding
+    [Migration("20250119231016_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@zombielynx.com",
-                            PasswordHash = "$2a$11$aVpsppXfn9yBA8Dxed1PlOgek8cyWOF8RoBNYwCaOZJwo5aOl5fAO",
+                            PasswordHash = "$2a$11$akddPUcGExwpGhim36zqOeyt4CxyolGuoi7W5jyP9TKa9c4d1zPxm",
                             Role = "Admin"
                         });
                 });
@@ -80,7 +80,66 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             AdminId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 1, 14, 1, 26, 59, 765, DateTimeKind.Utc).AddTicks(6050)
+                            AssignedAt = new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(2026)
+                        });
+                });
+
+            modelBuilder.Entity("ZombieLynxPortalAPI.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ImgUrl")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MessageGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageGroupId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.ToTable("Messages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Content = "This is the first message in the ticket conversation.",
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(2746),
+                            MessageGroupId = 1,
+                            UserProfileId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Following up on the issue. Any updates?",
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 20, 15, 982, DateTimeKind.Utc).AddTicks(2928),
+                            MessageGroupId = 1,
+                            UserProfileId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Please let me know if you need more details.",
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 30, 15, 982, DateTimeKind.Utc).AddTicks(3000),
+                            MessageGroupId = 1,
+                            UserProfileId = 1
                         });
                 });
 
@@ -141,13 +200,13 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Category = "Bug",
-                            CreatedAt = new DateTime(2025, 1, 14, 1, 26, 59, 765, DateTimeKind.Utc).AddTicks(4791),
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(438),
                             Description = "Initial test ticket for the system.",
                             Game = "Ark:SA",
                             Server = "NA-East",
                             Status = "Open",
                             Subject = "Test Ticket",
-                            UpdatedAt = new DateTime(2025, 1, 14, 1, 26, 59, 765, DateTimeKind.Utc).AddTicks(4884),
+                            UpdatedAt = new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(540),
                             UserProfileId = 1
                         });
                 });
@@ -212,7 +271,83 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             UserProfileId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 1, 14, 1, 26, 59, 765, DateTimeKind.Utc).AddTicks(5531)
+                            AssignedAt = new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(1402)
+                        });
+                });
+
+            modelBuilder.Entity("ZombieLynxPortalAPI.Models.ZLGMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DiscordId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("DiscordImgUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<string>("DiscordName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("EosId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("EpicImgUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<string>("EpicName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("SteamId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("SteamImgUrl")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<string>("SteamName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UserProfileId1")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.HasIndex("UserProfileId1")
+                        .IsUnique();
+
+                    b.ToTable("ZLGMembers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DiscordId = "123456789012345678",
+                            DiscordImgUrl = "https://cdn.discordapp.com/avatars/123456789012345678/admin-discord.png",
+                            DiscordName = "AdminDiscord",
+                            EosId = "eos-admin-id",
+                            EpicImgUrl = "https://static.epicgames.com/admin-epic-avatar.png",
+                            EpicName = "AdminEpic",
+                            SteamId = "76561198021051512",
+                            SteamImgUrl = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/adm/adminsteam.jpg",
+                            SteamName = "AdminSteam",
+                            UserProfileId = 1
                         });
                 });
 
@@ -233,6 +368,25 @@ namespace ZombieLynxPortalAPI.Migrations
                     b.Navigation("Admin");
 
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("ZombieLynxPortalAPI.Models.Message", b =>
+                {
+                    b.HasOne("ZombieLynxPortalAPI.Models.Ticket", "Ticket")
+                        .WithMany("Messages")
+                        .HasForeignKey("MessageGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZombieLynxPortalAPI.Models.UserProfile", "UserProfile")
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ticket");
+
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("ZombieLynxPortalAPI.Models.Ticket", b =>
@@ -276,6 +430,21 @@ namespace ZombieLynxPortalAPI.Migrations
                     b.Navigation("UserProfile");
                 });
 
+            modelBuilder.Entity("ZombieLynxPortalAPI.Models.ZLGMember", b =>
+                {
+                    b.HasOne("ZombieLynxPortalAPI.Models.UserProfile", "UserProfile")
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZombieLynxPortalAPI.Models.UserProfile", null)
+                        .WithOne("ZLGMember")
+                        .HasForeignKey("ZombieLynxPortalAPI.Models.ZLGMember", "UserProfileId1");
+
+                    b.Navigation("UserProfile");
+                });
+
             modelBuilder.Entity("User", b =>
                 {
                     b.Navigation("Profile")
@@ -286,7 +455,14 @@ namespace ZombieLynxPortalAPI.Migrations
                 {
                     b.Navigation("AdminTickets");
 
+                    b.Navigation("Messages");
+
                     b.Navigation("UserTickets");
+                });
+
+            modelBuilder.Entity("ZombieLynxPortalAPI.Models.UserProfile", b =>
+                {
+                    b.Navigation("ZLGMember");
                 });
 #pragma warning restore 612, 618
         }
