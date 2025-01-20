@@ -80,7 +80,6 @@ export const register = (user) => {
     .then(async (res) => {
       const data = await res.json();
       if (res.ok) return data;
-      console.error("Server Response:", data);
       throw new Error(data.message || "Registration failed.");
     })
     .catch((error) => {
