@@ -16,9 +16,9 @@ export const AuthorizedRoute = ({
   // Authorization check
   const authed = roles.length
     ? all
-      ? roles.every((r) => userRoles.includes(r)) // Requires all roles
-      : roles.some((r) => userRoles.includes(r)) // Requires at least one role
-    : true; // No roles required
+      ? roles.every((r) => userRoles.includes(r))
+      : roles.some((r) => userRoles.includes(r))
+    : true;
 
   return authed ? children : <Navigate to="/login" />;
 };

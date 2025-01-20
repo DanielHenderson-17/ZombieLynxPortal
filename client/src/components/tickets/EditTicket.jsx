@@ -29,7 +29,6 @@ export default function EditTicket() {
 
   const [loading, setLoading] = useState(true);
 
-  // Fetch ticket details and options
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,7 +41,6 @@ export default function EditTicket() {
           categories: ticketOptions.categories,
         });
 
-        // Set form data and available servers based on the existing ticket's game
         setFormData({
           subject: ticket.subject,
           category: ticket.category,
@@ -52,7 +50,6 @@ export default function EditTicket() {
           assignedUserIds: ticket.assignedUsers.map((user) => user.id),
         });
 
-        // Set available servers for the pre-selected game
         setAvailableServers(ticketOptions.gamesWithServers[ticket.game] || []);
 
         setLoading(false);

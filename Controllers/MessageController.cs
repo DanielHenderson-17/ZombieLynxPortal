@@ -41,7 +41,7 @@ namespace ZombieLynxPortalAPI.Controllers
                         SteamImgUrl = _dbContext.ZLGMembers
                             .Where(z => z.UserProfileId == m.UserProfile.Id)
                             .Select(z => z.SteamImgUrl)
-                            .FirstOrDefault() // Ensure we only fetch one SteamImgUrl
+                            .FirstOrDefault()
                     }
                 })
                 .ToList();

@@ -44,7 +44,6 @@ export default function SingleTicket({ loggedInUser }) {
         const users = await getAllUsers();
         setAllUsers(users);
 
-        // Ensure isAdmin is set based on loggedInUser.role
         setIsAdmin(loggedInUser.role === "Admin");
       } catch (error) {
         if (error.message.includes("403")) {
