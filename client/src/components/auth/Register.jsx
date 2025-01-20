@@ -44,8 +44,12 @@ export default function Register({ setLoggedInUser }) {
   };
 
   return (
-    <div className="container" style={{ maxWidth: "500px" }}>
+    <div
+      className="container register-container rounded-3 p-3 shadow"
+      style={{ maxWidth: "500px" }}
+    >
       <h3>Sign Up</h3>
+
       <FormGroup>
         <Label>First Name</Label>
         <Input
@@ -128,10 +132,11 @@ export default function Register({ setLoggedInUser }) {
         color="primary"
         onClick={handleSubmit}
         disabled={passwordMismatch}
+        className="mt-3 mb-3"
       >
         Register
       </Button>
-      <p>
+      <p className="mb-0">
         Already signed up? Log in <Link to="/login">here</Link>
       </p>
     </div>

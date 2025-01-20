@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../managers/authManager";
 import { Button, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import "../../assets/styles/login.css";
+import zlglogo from "../../assets/images/zlglogo.png";
 
 export default function Login({ setLoggedInUser }) {
   const navigate = useNavigate();
@@ -22,8 +24,11 @@ export default function Login({ setLoggedInUser }) {
   };
 
   return (
-    <div className="container" style={{ maxWidth: "500px" }}>
-      <h3>Login</h3>
+    <div
+      className="container rounded-3 p-3 h-50 login-container shadow mt-5"
+      style={{ maxWidth: "500px" }}
+    >
+      <img src={zlglogo} alt="" className="col-6 mt-3 mb-3" />
       <FormGroup>
         <Label>Email</Label>
         <Input
@@ -50,7 +55,7 @@ export default function Login({ setLoggedInUser }) {
         <FormFeedback>Login failed.</FormFeedback>
       </FormGroup>
 
-      <Button color="primary" onClick={handleSubmit}>
+      <Button color="primary" onClick={handleSubmit} className="mt-3 mb-5">
         Login
       </Button>
 
