@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../managers/authManager";
-import { Button, FormFeedback, FormGroup, Input, Label } from "reactstrap";
-import "../../assets/styles/login.css";
+import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
 import zlglogo from "../../assets/images/zlglogo.png";
+import "../../assets/styles/Login.css";
 
 export default function Login({ setLoggedInUser }) {
   const navigate = useNavigate();
@@ -25,15 +25,18 @@ export default function Login({ setLoggedInUser }) {
 
   return (
     <div
-      className="container rounded-3 p-3 h-50 login-container shadow mt-5"
+      className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
       style={{ maxWidth: "500px" }}
     >
-      <img src={zlglogo} alt="" className="col-6 mt-3 mb-3" />
-      <FormGroup>
-        <Label>Email</Label>
+      <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
+      <h4>Welcome Back</h4>
+      <hr />
+
+      <FormGroup className="mb-4">
         <Input
-          invalid={failedLogin}
           type="text"
+          placeholder="Email"
+          invalid={failedLogin}
           value={email}
           onChange={(e) => {
             setFailedLogin(false);
@@ -41,11 +44,12 @@ export default function Login({ setLoggedInUser }) {
           }}
         />
       </FormGroup>
-      <FormGroup>
-        <Label>Password</Label>
+
+      <FormGroup className="mb-4">
         <Input
-          invalid={failedLogin}
           type="password"
+          placeholder="Password"
+          invalid={failedLogin}
           value={password}
           onChange={(e) => {
             setFailedLogin(false);
@@ -55,12 +59,14 @@ export default function Login({ setLoggedInUser }) {
         <FormFeedback>Login failed.</FormFeedback>
       </FormGroup>
 
-      <Button color="primary" onClick={handleSubmit} className="mt-3 mb-5">
+      <Button color="primary" onClick={handleSubmit} className="mt-3 mb-4">
         Login
       </Button>
 
-      <p>
-        Not signed up? Register <Link to="/register">here</Link>
+      <p className="mb-0">
+        <Link to="/register" className="text-decoration-none text-secondary">
+          Not signed up? Register here
+        </Link>
       </p>
     </div>
   );
