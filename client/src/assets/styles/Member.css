@@ -131,9 +131,41 @@
   height: 80px;
 }
 
-.zlg-coin {
+.zlg-coin2 {
   width: 20px;
   height: 20px !important;
+}
+
+.points-container {
+  background-color: #1c1f24;
+}
+
+.zlg-coin {
+  position: absolute;
+  top: -5px;
+  left: -10px;
+  width: 40px;
+  height: 40px;
+}
+
+.buy-points {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+}
+
+.buy-points img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.text-container {
+  flex: 1; /* Ensures it takes up the available space */
+  text-align: center; /* Centers the text horizontally */
+  display: flex;
+  align-items: center; /* Centers the text vertically */
+  justify-content: center; /* Centers the text horizontally */
 }
 
 .shop-popular .card {

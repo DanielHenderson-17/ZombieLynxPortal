@@ -12,6 +12,7 @@ import tierOne from "../../assets/images/tierOne.png";
 import tierTwo from "../../assets/images/tierTwo.png";
 import tierThree from "../../assets/images/tierThree.png";
 import zlgCoin from "../../assets/images/zlgCoin.png";
+import buyPoints from "../../assets/images/buyPoints.png";
 
 export default function Member({ loggedInUser }) {
   const [steamAccount, setSteamAccount] = useState(null);
@@ -169,13 +170,19 @@ export default function Member({ loggedInUser }) {
                   <h6 className="text-start text-secondary d-md-none d-block">
                     {loggedInUser?.email || "Please log in to view your email."}
                   </h6>
-                  <div className="d-flex align-items-center justify-content-between border rounded-5 p-1 text-white fw-bold fs-6 col-md-9 col-12 mx-md-auto ms-0 position-relative mb-md-4 mb-1 mt-3">
+                  <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-1 text-white fw-bold fs-6 col-md-9 col-12 mx-md-auto ms-0 position-relative mb-md-4 mb-1 mt-3 points-container">
                     <img src={zlgCoin} alt="" className="zlg-coin" />
-                    <p className="mb-0 text-start">1455</p>
-                    <Link to="/buy-points" className="text-secondary plus-icon">
-                      <i className="bi bi-plus-circle-fill fs-6 cursor-pointer"></i>
+                    <div className="text-container">
+                      <p className="mb-0">1455</p>
+                    </div>
+                    <Link
+                      to="/buy-points"
+                      className="text-secondary buy-points"
+                    >
+                      <img src={buyPoints} alt="" />
                     </Link>
                   </div>
+
                   {/* Add Accounts for Mobile */}
                   {availableAccounts.filter(
                     (acc) =>
@@ -323,11 +330,11 @@ export default function Member({ loggedInUser }) {
 
           {/* RIGHT SIDE - Shop */}
           <div className="shop-popular col-7 d-none d-md-flex justify-content-center align-items-center mt-3">
-            <div className="card p-1">
+            <div className="card p-1 border-0">
               <div className="card-body p-1">
                 <img src={tierOne} alt="" />
                 <p className="card-text mb-1 mt-3 fs-6">
-                  <img src={zlgCoin} alt="" className="zlg-coin me-1" />
+                  <img src={zlgCoin} alt="" className="zlg-coin2 me-1" />
                   1100
                 </p>
                 <button
@@ -340,11 +347,11 @@ export default function Member({ loggedInUser }) {
                 </button>
               </div>
             </div>
-            <div className="card p-1 mx-3 card-back">
+            <div className="card p-1 mx-3 card-back border-0">
               <div className="card-body p-1">
                 <img src={tierTwo} alt="" />
                 <p className="card-text mb-1 mt-3 fs-6">
-                  <img src={zlgCoin} alt="" className="zlg-coin me-1" />
+                  <img src={zlgCoin} alt="" className="zlg-coin2 me-1" />
                   4600
                 </p>
                 <button
@@ -357,11 +364,11 @@ export default function Member({ loggedInUser }) {
                 </button>
               </div>
             </div>
-            <div className="card p-1">
+            <div className="card p-1 border-0">
               <div className="card-body p-1">
                 <img src={tierThree} alt="" />
                 <p className="card-text mb-1 mt-3 fs-6">
-                  <img src={zlgCoin} alt="" className="zlg-coin me-1" />
+                  <img src={zlgCoin} alt="" className="zlg-coin2 me-1" />
                   12000
                 </p>
                 <button

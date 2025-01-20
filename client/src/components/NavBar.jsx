@@ -120,11 +120,11 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
               {showDropdown && (
                 <div
                   ref={dropdownRef}
-                  className="dropdown-menu show mt-2"
+                  className="dropdown-menu show profile-menu"
                   style={{ right: 0 }}
                 >
                   <button
-                    className="dropdown-item"
+                    className="dropdown-item text-white"
                     onClick={(e) => {
                       e.preventDefault();
                       logout().then(() => {
