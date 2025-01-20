@@ -30,8 +30,12 @@
   background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
 
-.description-min-height {
-  min-height: 150px !important;
+.description {
+  color: white;
+  min-height: 135px !important;
+  overflow-y: scroll;
+  background-color: #13151a;
+  border-radius: 5px;
 }
 
 .closed-status {
@@ -119,6 +123,7 @@ hr {
 .message-box {
   height: 100%;
   overflow-y: hidden;
+  background-color: #13151a !important;
 }
 
 .message-input,

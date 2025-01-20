@@ -50,7 +50,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@zombielynx.com",
-                            PasswordHash = "$2a$11$.h0U.ScO5JILPgV5Tglmt.EONPckp1aGXFl.2A7HI/LBSu/MjlvWy",
+                            PasswordHash = "$2a$11$JhdQJu6gjHSUtBnfylE4qetIw1RdRrK07bKxdmb8SXM5VFU5qwQjS",
                             Role = "Admin"
                         });
                 });
@@ -77,7 +77,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             AdminId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 1, 17, 15, 41, 9, 706, DateTimeKind.Utc).AddTicks(1070)
+                            AssignedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(1542)
                         });
                 });
 
@@ -118,7 +118,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Content = "This is the first message in the ticket conversation.",
-                            CreatedAt = new DateTime(2025, 1, 17, 15, 41, 9, 706, DateTimeKind.Utc).AddTicks(1847),
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(2237),
                             MessageGroupId = 1,
                             UserProfileId = 1
                         },
@@ -126,7 +126,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 2,
                             Content = "Following up on the issue. Any updates?",
-                            CreatedAt = new DateTime(2025, 1, 17, 15, 51, 9, 706, DateTimeKind.Utc).AddTicks(2001),
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 26, 59, 927, DateTimeKind.Utc).AddTicks(2397),
                             MessageGroupId = 1,
                             UserProfileId = 1
                         },
@@ -134,7 +134,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 3,
                             Content = "Please let me know if you need more details.",
-                            CreatedAt = new DateTime(2025, 1, 17, 16, 1, 9, 706, DateTimeKind.Utc).AddTicks(2069),
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 36, 59, 927, DateTimeKind.Utc).AddTicks(2464),
                             MessageGroupId = 1,
                             UserProfileId = 1
                         });
@@ -197,13 +197,13 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Category = "Bug",
-                            CreatedAt = new DateTime(2025, 1, 17, 15, 41, 9, 705, DateTimeKind.Utc).AddTicks(9808),
+                            CreatedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(272),
                             Description = "Initial test ticket for the system.",
                             Game = "Ark:SA",
                             Server = "NA-East",
                             Status = "Open",
                             Subject = "Test Ticket",
-                            UpdatedAt = new DateTime(2025, 1, 17, 15, 41, 9, 705, DateTimeKind.Utc).AddTicks(9897),
+                            UpdatedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(357),
                             UserProfileId = 1
                         });
                 });
@@ -268,7 +268,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             UserProfileId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 1, 17, 15, 41, 9, 706, DateTimeKind.Utc).AddTicks(513)
+                            AssignedAt = new DateTime(2025, 1, 19, 23, 16, 59, 927, DateTimeKind.Utc).AddTicks(976)
                         });
                 });
 

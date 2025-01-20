@@ -19,13 +19,13 @@ import { getLinkedSteamAccount } from "../../managers/steamAuthManager";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import { truncateText } from "../../utils/truncateText.js";
 
-export default function SingleTicket() {
+export default function SingleTicket({ loggedInUser }) {
   const { ticketId } = useParams();
   const [ticket, setTicket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [allUsers, setAllUsers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(loggedInUser.role === "Admin");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [steamAccount, setSteamAccount] = useState(null);
@@ -43,7 +43,9 @@ export default function SingleTicket() {
 
         const users = await getAllUsers();
         setAllUsers(users);
-        setIsAdmin(true);
+
+        // Ensure isAdmin is set based on loggedInUser.role
+        setIsAdmin(loggedInUser.role === "Admin");
       } catch (error) {
         if (error.message.includes("403")) {
           console.warn(
@@ -57,7 +59,7 @@ export default function SingleTicket() {
     };
 
     fetchTicketAndMessages();
-  }, [ticketId]);
+  }, [ticketId, loggedInUser.role]);
 
   useEffect(() => {
     const fetchSteamAccount = async () => {
@@ -189,48 +191,58 @@ export default function SingleTicket() {
                   </span>
                 ))}
 
-                <div className="mt-2">
-                  <select
-                    onChange={(e) => handleAssignUser(e.target.value)}
-                    className="form-select form-select-sm"
-                  >
-                    <option value="">Add User</option>
-                    {allUsers
-                      .filter(
-                        (user) =>
-                          !ticket.assignedUsers.some(
-                            (assignedUser) => assignedUser.id === user.id
-                          )
-                      )
-                      .map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.firstName} {user.lastName}
-                        </option>
-                      ))}
-                  </select>
-                </div>
+                {isAdmin && (
+                  <div className="mt-2">
+                    <select
+                      onChange={(e) => handleAssignUser(e.target.value)}
+                      className="form-select form-select-sm"
+                    >
+                      <option value="">Add User</option>
+                      {allUsers
+                        .filter(
+                          (user) =>
+                            !ticket.assignedUsers.some(
+                              (assignedUser) => assignedUser.id === user.id
+                            )
+                        )
+                        .map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.firstName} {user.lastName}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <h6 className="text-start mt-3">{ticket.subject}</h6>
+          <div className="d-flex justify-content-between">
+            <h6 className="text-start my-0">Ticket</h6>
+            <small className="text-secondary fst-italic">
+              Ticket #{ticket.id}
+            </small>
+          </div>
+
+          <h6 className="text-start mt-0">{ticket.subject}</h6>
           {/* Description */}
-          <div className="text-start mt-md-5 mt-3">
-            <small>Description:</small>
-            {isAdmin && (
+          <div className="text-start mt-md-4 mt-3">
+            <div className="d-flex justify-content-between align-items-center">
+              <small>Description:</small>
               <button
                 className="btn btn-link p-0 ms-2"
                 onClick={() => navigate(`/tickets/ticket/${ticket.id}/edit`)}
               >
-                <i className="bi bi-pencil fs-6"></i>
+                <small className="bi bi-pencil text-white me-2"></small>
               </button>
-            )}
-            <p className="p-0 mb-0 mt-md-1 mt-0 description">
+            </div>
+
+            <p className="p-2 mb-0 mt-md-1 mt-0 description shadow">
               {ticket.description}
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="d-flex justify-content-end mt-2">
+          <div className="d-flex justify-content-end mt-3 pt-0 ">
             {ticket.status === "Open" ? (
               <button className="btn btn-danger" onClick={handleCloseTicket}>
                 Close <i className="bi bi-x-circle ms-2"></i>
@@ -250,10 +262,7 @@ export default function SingleTicket() {
 
         {/* Right Column: Messages */}
         <div className="col-md-7 text-start mb-3 ps-md-0 ps-2 message-container">
-          <div
-            className="border border-secondary rounded p-0 message-box"
-            style={{ backgroundColor: "#1f1f1f" }}
-          >
+          <div className="shadow border-black rounded p-0 message-box">
             <div className="d-flex flex-column">
               {/* Messages Container */}
               <div className="flex-grow-1 messages mb-0 p-md-3 p-1">
@@ -262,7 +271,7 @@ export default function SingleTicket() {
                     <div key={msg.id} className="mb-3 d-flex">
                       <img
                         src={
-                          steamAccount?.steamImgUrl ||
+                          msg.user.steamImgUrl ||
                           `https://picsum.photos/seed/${randomSeed}/100/100`
                         }
                         alt="Profile"
@@ -275,7 +284,7 @@ export default function SingleTicket() {
                             {formatShortDate(msg.createdAt)}
                           </small>
                         </div>
-                        {msg.content}
+                        <p className="mb-0">{msg.content}</p>
                       </div>
                     </div>
                   ))

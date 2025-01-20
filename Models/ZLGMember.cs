@@ -38,7 +38,7 @@ namespace ZombieLynxPortalAPI.Models
         [Required]
         public int UserProfileId { get; set; }
 
-        [ForeignKey("UserProfileId")]
+        [ForeignKey("UserProfileId")] // Explicitly define the foreign key relationship
         public UserProfile UserProfile { get; set; }
     }
 }

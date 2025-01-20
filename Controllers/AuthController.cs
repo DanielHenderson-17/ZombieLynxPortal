@@ -30,6 +30,11 @@ namespace ZombieLynxPortalAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
+            Console.WriteLine("Incoming registration data: ");
+            Console.WriteLine($"Email: {dto.Email}, FirstName: {dto.FirstName}, LastName: {dto.LastName}");
+            Console.WriteLine($"DTO: {System.Text.Json.JsonSerializer.Serialize(dto)}");
+
+
             // ❗ Validate password confirmation
             if (dto.Password != dto.ConfirmPassword)
                 return BadRequest("Passwords do not match.");
@@ -66,6 +71,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 user.Profile.FirstName,
                 user.Profile.LastName
             });
+
         }
 
 
