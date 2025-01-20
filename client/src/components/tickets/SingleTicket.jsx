@@ -223,7 +223,9 @@ export default function SingleTicket({ loggedInUser }) {
             </small>
           </div>
 
-          <h6 className="text-start mt-0">{ticket.subject}</h6>
+          <h6 className="text-start mt-0">
+            {truncateText(ticket.subject, 40)}
+          </h6>
           {/* Description */}
           <div className="text-start mt-md-4 mt-3">
             <div className="d-flex justify-content-between align-items-center">
@@ -242,7 +244,7 @@ export default function SingleTicket({ loggedInUser }) {
           </div>
 
           {/* Action Buttons */}
-          <div className="d-flex justify-content-end mt-3 pt-0 ">
+          <div className="d-flex justify-content-end mt-3 pt-0">
             {ticket.status === "Open" ? (
               <button className="btn btn-danger" onClick={handleCloseTicket}>
                 Close <i className="bi bi-x-circle ms-2"></i>

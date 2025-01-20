@@ -148,13 +148,14 @@ hr {
     height: 780px !important;
   }
   .message-box {
+    margin-top: 30px;
     height: 340px !important;
     padding: 5px !important;
     overflow-y: scroll;
   }
   .messages {
     min-height: 275px !important;
-    height: 100%;
+    height: 100% !important;
     overflow-y: hidden;
   }
   .message-container {
