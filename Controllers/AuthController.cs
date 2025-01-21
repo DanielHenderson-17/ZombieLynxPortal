@@ -88,7 +88,8 @@ namespace ZombieLynxPortalAPI.Controllers
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+            var jwtKey = jwtSettings["Key"] ?? throw new ArgumentNullException("Jwt:Key", "JWT key is not configured.");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
             var claims = new List<Claim>
     {
@@ -106,7 +107,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(double.Parse(jwtSettings["ExpireHours"])),
+                expires: DateTime.UtcNow.AddHours(double.Parse(jwtSettings["ExpireHours"] ?? throw new ArgumentNullException("ExpireHours"))),
                 signingCredentials: creds
             );
 

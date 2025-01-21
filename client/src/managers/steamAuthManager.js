@@ -22,12 +22,23 @@ export const getLinkedSteamAccount = () => {
     headers: {
       Authorization: `Bearer ${getMainJwtToken()}`,
     },
-  }).then((res) => (res.ok ? res.json() : null));
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else if (res.status === 404) {
+        return null;
+      } else {
+        throw new Error(`Unexpected error: ${res.status}`);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      return null;
+    });
 };
 
 export const fetchSteamApiKey = () => {
-  console.log("🔑 Fetching Steam API Key...");
-
   return fetch(`${API_BASE_URL}/get-api-key`, {
     method: "GET",
     headers: {
@@ -39,7 +50,6 @@ export const fetchSteamApiKey = () => {
       return res.json();
     })
     .then((data) => {
-      console.log("✅ Received Steam API Key:", data.apiKey);
       return data.apiKey;
     })
     .catch((err) => {
@@ -74,8 +84,6 @@ export const linkSteamAccount = (onSuccess) => {
 
       const { type, steamId } = event.data;
       if (type === "STEAM_AUTH_SUCCESS" && steamId) {
-        console.log("✅ Steam ID received:", steamId);
-
         const proxyUrl = "https://corsproxy.io/?";
         const steamApiUrl = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId}`;
 
@@ -108,7 +116,6 @@ export const linkSteamAccount = (onSuccess) => {
               })
                 .then((res) => {
                   if (res.ok) {
-                    console.log("✅ Steam account linked.");
                     if (onSuccess) onSuccess();
 
                     if (steamWindow && !steamWindow.closed) {
@@ -142,7 +149,6 @@ export const unlinkSteamAccount = (onSuccess) => {
     },
   }).then((res) => {
     if (res.ok) {
-      console.log("Steam account unlinked.");
       if (onSuccess) onSuccess();
     } else {
       console.error("Failed to unlink Steam account.");

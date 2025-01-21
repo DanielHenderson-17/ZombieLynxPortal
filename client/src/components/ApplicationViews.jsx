@@ -21,7 +21,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
       <Routes>
         {/* Protected Routes */}
         <Route
-          path="/"
+          path="/*"
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
               <Member loggedInUser={loggedInUser} />
@@ -38,6 +38,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route path="notifications" element={<Notifications />} />
           <Route index element={<Tickets loggedInUser={loggedInUser} />} />
         </Route>
+
         {/* Public Routes (No NavBar) */}
         <Route
           path="login"
