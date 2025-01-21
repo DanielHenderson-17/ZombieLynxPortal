@@ -74,7 +74,7 @@ builder.Services.AddAuthentication(options =>
     var redirectUrl = $"https://steamcommunity.com/openid/login" +
                       $"?openid.ns=http://specs.openid.net/auth/2.0" +
                       $"&openid.mode=checkid_setup" +
-                      $"&openid.return_to={Uri.EscapeDataString(context.Properties.RedirectUri)}" +  // ✅ Fixed this line
+                      $"&openid.return_to={Uri.EscapeDataString(context.Properties.RedirectUri ?? string.Empty)}" +  // ✅ Fixed this line
                       $"&openid.realm={Uri.EscapeDataString($"{context.Request.Scheme}://{context.Request.Host}")}" +
                       $"&openid.identity=http://specs.openid.net/auth/2.0/identifier_select" +
                       $"&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select";
@@ -151,12 +151,12 @@ app.UseExceptionHandler(errorApp =>
         if (errorFeature != null)
         {
             var error = errorFeature.Error;
-            await context.Response.WriteAsync(new
+            await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
             {
-                StatusCode = context.Response.StatusCode,
+                context.Response.StatusCode,
                 Message = "Internal Server Error.",
                 Detailed = error.Message
-            }.ToString());
+            }));
         }
     });
 });

@@ -49,7 +49,11 @@ namespace ZombieLynxPortalAPI.Controllers
                 .FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
 
             if (zlgMember == null || string.IsNullOrEmpty(zlgMember.SteamId))
-                return NotFound("No Steam account linked.");
+                return Ok(new
+                {
+                    Message = "No Steam account linked.",
+                    IsLinked = false
+                });
 
             return Ok(new
             {
