@@ -13,7 +13,7 @@ export const getGameImage = (gameName) => {
       return "/src/assets/images/asa3.png";
     case "Ark:SE":
       return "/src/assets/images/ase3.png";
-    case "Discord":
+    case "Discord Issue":
       return "/src/assets/images/discord3.png";
     default:
       return "/src/assets/images/default.png";

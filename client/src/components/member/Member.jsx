@@ -30,8 +30,6 @@ export default function Member({ loggedInUser }) {
     { name: "Steam", icon: "../../../../public/steamIcon.png" },
   ];
 
-  console.log("loggedinuser", loggedInUser);
-
   // Generate a random seed once when the component mounts
   useEffect(() => {
     setRandomSeed(generateRandomSeed());
@@ -110,7 +108,7 @@ export default function Member({ loggedInUser }) {
   };
 
   return (
-    <div className="member-layout mt-md-5 mt-2 pt-2 px-0 col-md-9 col-12 mx-auto">
+    <div className="member-layout mt-md-5 mt-2 pt-md-5 pt-0 px-0 col-md-9 col-12 mx-auto">
       <div className="member-container rounded-top">
         <div className="member-header d-flex justify-content-between align-items-start">
           {/* LEFT SIDE - Profile Info */}
@@ -176,7 +174,7 @@ export default function Member({ loggedInUser }) {
                       <p className="mb-0">1455</p>
                     </div>
                     <Link
-                      to="/buy-points"
+                      to="https://zlg.gg/aseshop"
                       className="text-secondary buy-points"
                     >
                       <img src={buyPoints} alt="" />
@@ -214,11 +212,9 @@ export default function Member({ loggedInUser }) {
                     </div>
                   )}
                 </div>
-
                 {/* Points */}
               </div>
             </div>
-
             {/* Linked/Unlinked Accounts */}
             <div className="d-md-flex d-none flex-md-column flex-row ms-2 justify-content-start account-section mt-2 ms-md-4 ms-0 col-md-5 col-12 mx-auto">
               {/* Linked Accounts Section - Hidden on mobile if no linked accounts */}

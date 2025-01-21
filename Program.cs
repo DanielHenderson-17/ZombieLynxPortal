@@ -47,7 +47,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.None;  // ⚠️ Allow cross-origin requests (important for Steam redirect)
+    options.Cookie.SameSite = SameSiteMode.None;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 })
 .AddJwtBearer(options =>
