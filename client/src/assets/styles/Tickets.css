@@ -17,7 +17,7 @@
 }
 
 .ticket-container {
-  height: 500px;
+  height: 470px;
 }
 
 .ticket-body1 {
@@ -32,7 +32,7 @@
 
 .description {
   color: white;
-  min-height: 135px !important;
+  min-height: 105px !important;
   overflow-y: scroll;
   background-color: #13151a;
   border-radius: 5px;
@@ -112,7 +112,7 @@ hr {
 
 .messages {
   overflow-x: auto;
-  height: 430px;
+  height: 400px;
   overflow-y: scroll;
 }
 
