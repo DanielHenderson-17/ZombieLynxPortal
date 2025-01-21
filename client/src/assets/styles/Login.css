@@ -3,3 +3,7 @@
   color: white;
   background-color: #13151a;
 }
+
+hr {
+  margin-bottom: 50px !important;
+}

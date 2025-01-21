@@ -1,8 +1,7 @@
 export default function Stats() {
   return (
     <div>
-      <h2>Stats</h2>
-      <p>Here you can see your statistics.</p>
+      <h1>Stats Coming Soon</h1>
     </div>
   );
 }

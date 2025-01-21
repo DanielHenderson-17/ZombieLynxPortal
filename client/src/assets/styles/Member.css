@@ -148,6 +148,26 @@
   height: 40px;
 }
 
+.zlg-coin3 {
+  position: absolute;
+  top: -3px;
+  left: -10px;
+  width: 30px;
+  height: 30px;
+}
+
+.buy-points3 {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+}
+
+.buy-points3 img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
 .buy-points {
   position: absolute;
   top: -5px;

@@ -38,7 +38,7 @@ export default function Tickets({ loggedInUser }) {
             }`}
           >
             <button className="btn d-block w-50 text-start mb-3 btn-success">
-              <i className="bi bi-plus-circle me-3"></i>Create
+              <i className="bi bi-plus-circle me-2"></i>Create
             </button>
           </Link>
 

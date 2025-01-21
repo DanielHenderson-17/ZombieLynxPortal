@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink as RRNavLink } from "react-router-dom";
+import { NavLink as RRNavLink, Link } from "react-router-dom";
 import { logout } from "../managers/authManager";
 import { getUserProfiles } from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
 import zlgLogo from "../assets/zlg-logo.png";
 import { getLinkedSteamAccount } from "../managers/steamAuthManager";
+import zlgCoin from "../assets/images/zlgCoin.png";
+import buyPoints from "../assets/images/buyPoints.png";
 
 export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [open, setOpen] = useState(false);
@@ -89,14 +91,23 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   }, []);
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto w-100 zlg-nav-bar bg-dark">
+    <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark">
       <div className="container-fluid px-md-5 px-2">
         {/* Logo */}
         <RRNavLink className="navbar-brand" to="/">
-          <img className="zlg-logo" src={zlgLogo} alt="Zombie Lynx Gaming" />
+          <img
+            className="zlg-logo"
+            src={zlgLogo}
+            alt="Zombie Lynx Gaming"
+            style={{ transition: "transform 0.3s" }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
         </RRNavLink>
         {/* Desktop Menu */}
-        <div className="d-none d-lg-flex align-items-center position-relative">
+        <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
           {!loggedInUser ? (
             <button
               className="btn btn-primary"
@@ -105,16 +116,46 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
               Login
             </button>
           ) : (
-            <>
+            <div className="d-flex justify-content-between align-items-center col-10">
+              <div className="m-0 text-center col-8 ps-2 pe-4 my-2 border-end border-secondary">
+                <h5 className="text-white text-center mb-1">
+                  {loggedInUser.firstName}
+                </h5>
+
+                <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-12 col-12 mx-md-auto ms-0 position-relative">
+                  <img src={zlgCoin} alt="" className="zlg-coin3" />
+                  <div className="text-container">
+                    <p className="mb-0">1455</p>
+                  </div>
+                  <Link
+                    to="https://zlg.gg/aseshop"
+                    className="text-secondary buy-points3"
+                  >
+                    <img src={buyPoints} alt="" />
+                  </Link>
+                </div>
+              </div>
+
               <img
                 src={
                   steamAccount?.steamImgUrl ||
                   `https://picsum.photos/seed/${randomSeed}/40/40`
                 }
                 alt="Profile"
-                className="profile-img rounded-circle"
-                style={{ width: "40px", height: "40px", cursor: "pointer" }}
+                className="profile-img rounded-circle mx-3"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  cursor: "pointer",
+                  transition: "transform 0.3s",
+                }}
                 onClick={() => setShowDropdown(!showDropdown)}
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.1)")
+                }
+                onMouseOut={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
               />
 
               {showDropdown && (
@@ -137,7 +178,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                   </button>
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
 
