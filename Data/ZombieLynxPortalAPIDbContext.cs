@@ -19,7 +19,7 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<UserTicket> UserTickets { get; set; }
         public DbSet<AdminTicket> AdminTickets { get; set; }
         public DbSet<ZLGMember> ZLGMembers { get; set; }
-        public DbSet<Message> Messages { get; set; }  // ✅ Added Message DbSet
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,7 +51,7 @@ namespace ZombieLynxPortalAPI.Data
             {
                 Id = 1,
                 UserProfileId = 1,
-                SteamId = "76561198021051512",
+                SteamId = "76561198021051513",
                 SteamName = "AdminSteam",
                 SteamImgUrl = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/adm/adminsteam.jpg",
                 DiscordId = "123456789012345678",
@@ -138,6 +138,7 @@ namespace ZombieLynxPortalAPI.Data
                 .HasForeignKey(t => t.UserProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // ✅ Relationships for UserTickets
             modelBuilder.Entity<UserTicket>()
                 .HasOne(ut => ut.UserProfile)
                 .WithMany()
@@ -150,6 +151,7 @@ namespace ZombieLynxPortalAPI.Data
                 .HasForeignKey(ut => ut.TicketId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // ✅ Relationships for AdminTickets
             modelBuilder.Entity<AdminTicket>()
                 .HasOne(at => at.Admin)
                 .WithMany()
