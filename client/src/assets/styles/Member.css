@@ -158,34 +158,34 @@
 
 .buy-points3 {
   position: absolute;
-  top: -8px;
-  right: -10px;
+  top: -6px;
+  right: -13px;
 }
 
 .buy-points3 img {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   cursor: pointer;
 }
 
 .buy-points {
   position: absolute;
-  top: -5px;
+  top: -7px;
   right: -10px;
 }
 
 .buy-points img {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   cursor: pointer;
 }
 
 .text-container {
-  flex: 1; /* Ensures it takes up the available space */
-  text-align: center; /* Centers the text horizontally */
+  flex: 1;
+  text-align: center;
   display: flex;
-  align-items: center; /* Centers the text vertically */
-  justify-content: center; /* Centers the text horizontally */
+  align-items: center;
+  justify-content: center;
 }
 
 .shop-popular .card {

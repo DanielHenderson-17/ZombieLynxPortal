@@ -122,7 +122,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                   {loggedInUser.firstName}
                 </h5>
 
-                <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-12 col-12 mx-md-auto ms-0 position-relative">
+                <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
                   <img src={zlgCoin} alt="" className="zlg-coin3" />
                   <div className="text-container">
                     <p className="mb-0">1455</p>
@@ -144,8 +144,8 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 alt="Profile"
                 className="profile-img rounded-circle mx-3"
                 style={{
-                  width: "40px",
-                  height: "40px",
+                  width: "50px",
+                  height: "50px",
                   cursor: "pointer",
                   transition: "transform 0.3s",
                 }}

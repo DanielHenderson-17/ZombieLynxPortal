@@ -37,7 +37,7 @@ export default function Tickets({ loggedInUser }) {
               location.pathname === "/tickets/new-ticket"
             }`}
           >
-            <button className="btn d-block w-50 text-start mb-3 btn-success">
+            <button className="btn d-block col-6 text-start mb-3 btn-success">
               <i className="bi bi-plus-circle me-2"></i>Create
             </button>
           </Link>

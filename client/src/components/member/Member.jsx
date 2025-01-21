@@ -129,7 +129,7 @@ export default function Member({ loggedInUser }) {
                 </div>
 
                 {/* Username */}
-                <h3 className="text-white d-none d-md-block">
+                <h3 className="text-white d-none d-md-block mb-0">
                   {userLoading
                     ? "Loading..."
                     : loggedInUser?.firstName || "Guest"}
