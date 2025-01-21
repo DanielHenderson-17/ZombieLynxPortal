@@ -36,10 +36,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route path="stats" element={<Stats />} />
           <Route path="shop" element={<Shop />} />
           <Route path="notifications" element={<Notifications />} />
-          <Route
-            index
-            element={<p>Select a module from the navigation above.</p>}
-          />
+          <Route index element={<Tickets loggedInUser={loggedInUser} />} />
         </Route>
         {/* Public Routes (No NavBar) */}
         <Route
