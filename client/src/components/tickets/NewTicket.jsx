@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createTicket, getTicketOptions } from "../../managers/ticketManager";
 import { getAllUsers } from "../../managers/userProfileManager";
 
-export default function NewTicket() {
+export default function NewTicket({ loggedInUser }) {
   const [options, setOptions] = useState({
     games: [],
     gamesWithServers: {},
@@ -25,6 +25,22 @@ export default function NewTicket() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+
+  // User validation
+  useEffect(() => {
+    if (!loggedInUser) {
+      alert("You must be logged in to create a ticket.");
+      navigate("/login");
+      return;
+    }
+
+    // Optionally, validate role if needed
+    if (loggedInUser.role !== "User" && loggedInUser.role !== "Admin") {
+      alert("You do not have permission to create a ticket.");
+      navigate("/");
+      return;
+    }
+  }, [loggedInUser, navigate]);
 
   // Fetch ticket options and user data
   useEffect(() => {
@@ -70,7 +86,7 @@ export default function NewTicket() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createTicket(formData);
+      await createTicket({ ...formData, createdBy: loggedInUser.id });
       setFormData({
         subject: "",
         category: "",

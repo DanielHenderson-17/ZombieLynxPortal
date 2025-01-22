@@ -352,14 +352,17 @@ namespace ZombieLynxPortalAPI.Controllers
             var ticket = _dbContext.Tickets
                 .Include(t => t.UserTickets)
                     .ThenInclude(ut => ut.UserProfile)
+                        .ThenInclude(up => up.User)
                 .Include(t => t.AdminTickets)
                     .ThenInclude(at => at.Admin)
+                        .ThenInclude(up => up.User)
                 .FirstOrDefault(t => t.Id == id);
 
             if (ticket == null)
             {
                 return NotFound($"Ticket with ID {id} not found.");
             }
+
             var ticketDetails = new
             {
                 ticket.Id,
@@ -373,11 +376,13 @@ namespace ZombieLynxPortalAPI.Controllers
                 ticket.UpdatedAt,
                 AssignedUsers = ticket.UserTickets.Select(ut => new
                 {
+                    ut.UserProfile.User.Id, // Use the GUID from User class
                     ut.UserProfile.FirstName,
                     ut.UserProfile.LastName
                 }).ToList(),
                 AssignedAdmins = ticket.AdminTickets.Select(at => new
                 {
+                    at.Admin.User.Id, // Use the GUID from User class for Admins
                     at.Admin.FirstName,
                     at.Admin.LastName
                 }).ToList()
@@ -385,7 +390,6 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(ticketDetails);
         }
-
 
         // ✅ Assign user to ticket
         [HttpPost("{id}/assign-user")]

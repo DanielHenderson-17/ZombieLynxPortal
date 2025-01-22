@@ -7,6 +7,7 @@ import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
 import Shop from "../components/shop/Shop";
 import Notifications from "../components/notifications/Notifications";
+import CreateNotification from "../components/notifications/CreateNotification";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "./NavBar";
 
@@ -35,7 +36,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           />
           <Route path="stats" element={<Stats />} />
           <Route path="shop" element={<Shop />} />
-          <Route path="notifications" element={<Notifications />} />
+          <Route
+            path="notifications"
+            element={<Notifications loggedInUser={loggedInUser} />}
+          />
+          <Route
+            path="notifications/create"
+            element={<CreateNotification loggedInUser={loggedInUser} />}
+          />
           <Route
             index
             element={<p>Select a module from the navigation above.</p>}

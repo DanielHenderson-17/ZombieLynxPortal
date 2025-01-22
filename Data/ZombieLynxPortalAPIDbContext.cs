@@ -55,13 +55,13 @@ namespace ZombieLynxPortalAPI.Data
                 UserProfileId = 1,
                 SteamId = "76561198021051513",
                 SteamName = "AdminSteam",
-                SteamImgUrl = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/adm/adminsteam.jpg",
+                SteamImgUrl = null,
                 DiscordId = "123456789012345678",
                 DiscordName = "AdminDiscord",
-                DiscordImgUrl = "https://cdn.discordapp.com/avatars/123456789012345678/admin-discord.png",
+                DiscordImgUrl = null,
                 EosId = "eos-admin-id",
                 EpicName = "AdminEpic",
-                EpicImgUrl = "https://static.epicgames.com/admin-epic-avatar.png"
+                EpicImgUrl = null
             });
 
             // ✅ Seed Ticket
@@ -119,14 +119,14 @@ namespace ZombieLynxPortalAPI.Data
                 new UserNotification
                 {
                     Id = 1,
-                    UserProfileId = 1, // Assuming the Admin UserProfile has Id = 1
+                    UserProfileId = 1,
                     NotificationId = 1,
                     IsRead = false
                 },
                 new UserNotification
                 {
                     Id = 2,
-                    UserProfileId = 1, // Admin receiving the second notification
+                    UserProfileId = 1,
                     NotificationId = 2,
                     IsRead = false
                 }
@@ -239,7 +239,7 @@ namespace ZombieLynxPortalAPI.Data
 
             // ✅ UserNotification Configuration
             modelBuilder.Entity<UserNotification>()
-                .HasKey(un => new { un.UserProfileId, un.NotificationId }); // Composite Key
+                .HasKey(un => new { un.UserProfileId, un.NotificationId });
 
             modelBuilder.Entity<UserNotification>()
                 .HasOne(un => un.UserProfile)

@@ -24,6 +24,8 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public IActionResult GetMessagesForTicket(int ticketId)
         {
+            Console.WriteLine($"Fetching messages for Ticket ID: {ticketId}");
+
             var messages = _dbContext.Messages
                 .Where(m => m.MessageGroupId == ticketId)
                 .Include(m => m.UserProfile)
@@ -48,7 +50,8 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (!messages.Any())
             {
-                return NotFound($"No messages found for Ticket ID {ticketId}.");
+                Console.WriteLine("No messages found. Returning an empty list.");
+                return Ok(new List<object>());
             }
 
             return Ok(messages);
@@ -66,6 +69,7 @@ namespace ZombieLynxPortalAPI.Controllers
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine($"User ID from token: {userId}");
             var userProfile = _dbContext.UserProfiles.FirstOrDefault(up => up.UserId.ToString() == userId);
 
             if (userProfile == null)

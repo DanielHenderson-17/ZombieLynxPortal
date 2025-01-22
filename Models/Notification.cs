@@ -19,7 +19,5 @@ namespace ZombieLynxPortalAPI.Models
 
         [Required]
         public bool IsGlobal { get; set; } = false;
-        // Navigation property to UserNotifications
-        public ICollection<UserNotification> UserNotifications { get; set; }
     }
 }
