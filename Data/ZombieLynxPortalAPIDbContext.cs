@@ -20,6 +20,8 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<AdminTicket> AdminTickets { get; set; }
         public DbSet<ZLGMember> ZLGMembers { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -92,6 +94,43 @@ namespace ZombieLynxPortalAPI.Data
                 TicketId = 1,
                 AssignedAt = DateTime.UtcNow
             });
+
+            // Seed Notifications
+            modelBuilder.Entity<Notification>().HasData(
+                new Notification
+                {
+                    Id = 1,
+                    Message = "Welcome to Zombie Lynx Portal!",
+                    CreatedAt = DateTime.UtcNow,
+                    IsGlobal = true,
+                    Expiration = null
+                },
+                new Notification
+                {
+                    Id = 2,
+                    Message = "New server update available.",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    IsGlobal = false
+                }
+            );
+
+            // Seed UserNotifications
+            modelBuilder.Entity<UserNotification>().HasData(
+                new UserNotification
+                {
+                    Id = 1,
+                    UserProfileId = 1, // Assuming the Admin UserProfile has Id = 1
+                    NotificationId = 1,
+                    IsRead = false
+                },
+                new UserNotification
+                {
+                    Id = 2,
+                    UserProfileId = 1, // Admin receiving the second notification
+                    NotificationId = 2,
+                    IsRead = false
+                }
+            );
 
             // Seed Message
             modelBuilder.Entity<Message>().HasData(
@@ -182,6 +221,36 @@ namespace ZombieLynxPortalAPI.Data
                 .HasOne(m => m.UserProfile)
                 .WithMany()
                 .HasForeignKey(m => m.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ Notification Configuration
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.Message)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.IsGlobal)
+                .IsRequired();
+
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.CreatedAt)
+                .IsRequired();
+
+            // ✅ UserNotification Configuration
+            modelBuilder.Entity<UserNotification>()
+                .HasKey(un => new { un.UserProfileId, un.NotificationId }); // Composite Key
+
+            modelBuilder.Entity<UserNotification>()
+                .HasOne(un => un.UserProfile)
+                .WithMany()
+                .HasForeignKey(un => un.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserNotification>()
+                .HasOne(un => un.Notification)
+                .WithMany()
+                .HasForeignKey(un => un.NotificationId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
