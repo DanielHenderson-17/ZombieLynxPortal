@@ -159,7 +159,7 @@ hr {
     overflow-y: hidden;
   }
   .message-container {
-    height: 400px !important;
+    height: 430px !important;
   }
 }
 
@@ -171,6 +171,6 @@ hr {
 
 @media (max-width: 768px) {
   .ticket-container {
-    height: 90vh;
+    height: 65vh;
   }
 }

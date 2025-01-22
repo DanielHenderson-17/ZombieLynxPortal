@@ -6,7 +6,7 @@ import {
   getTicketOptions,
 } from "../../managers/ticketManager";
 
-export default function EditTicket() {
+export default function EditTicket({ loggedInUser }) {
   const { ticketId } = useParams();
   const navigate = useNavigate();
 
@@ -33,6 +33,19 @@ export default function EditTicket() {
     const fetchData = async () => {
       try {
         const ticket = await getTicketById(ticketId);
+
+        // Validate user authorization
+        const isAssigned = ticket.assignedUsers.some(
+          (user) => user.id === loggedInUser.id
+        );
+
+        if (!isAssigned) {
+          alert("You are not authorized to edit this ticket.");
+          navigate("/tickets/open-tickets");
+          return;
+        }
+
+        // Fetch ticket options
         const ticketOptions = await getTicketOptions();
 
         setOptions({
@@ -54,12 +67,13 @@ export default function EditTicket() {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching ticket data:", error);
+        navigate("/tickets/open-tickets"); // Redirect in case of an error
       }
     };
 
     fetchData();
-  }, [ticketId]);
+  }, [ticketId, loggedInUser, navigate]);
 
   // Update available servers when the game changes
   useEffect(() => {

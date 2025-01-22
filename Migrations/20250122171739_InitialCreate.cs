@@ -15,6 +15,22 @@ namespace ZombieLynxPortalAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Message = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    IsGlobal = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -77,6 +93,32 @@ namespace ZombieLynxPortalAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                columns: table => new
+                {
+                    UserProfileId = table.Column<int>(type: "integer", nullable: false),
+                    NotificationId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    IsRead = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => new { x.UserProfileId, x.NotificationId });
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Notifications_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_UserProfiles_UserProfileId",
+                        column: x => x.UserProfileId,
+                        principalTable: "UserProfiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ZLGMembers",
                 columns: table => new
                 {
@@ -91,8 +133,7 @@ namespace ZombieLynxPortalAPI.Migrations
                     EosId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     EpicName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     EpicImgUrl = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    UserProfileId = table.Column<int>(type: "integer", nullable: false),
-                    UserProfileId1 = table.Column<int>(type: "integer", nullable: true)
+                    UserProfileId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,11 +144,6 @@ namespace ZombieLynxPortalAPI.Migrations
                         principalTable: "UserProfiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ZLGMembers_UserProfiles_UserProfileId1",
-                        column: x => x.UserProfileId1,
-                        principalTable: "UserProfiles",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -190,9 +226,18 @@ namespace ZombieLynxPortalAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Notifications",
+                columns: new[] { "Id", "CreatedAt", "Expiration", "IsGlobal", "Message" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 1, 22, 17, 17, 39, 22, DateTimeKind.Utc).AddTicks(6942), null, true, "Welcome to Zombie Lynx Portal!" },
+                    { 2, new DateTime(2025, 1, 21, 17, 17, 39, 22, DateTimeKind.Utc).AddTicks(7372), null, false, "New server update available." }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "PasswordHash", "Role" },
-                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), "admin@zombielynx.com", "$2a$11$akddPUcGExwpGhim36zqOeyt4CxyolGuoi7W5jyP9TKa9c4d1zPxm", "Admin" });
+                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), "admin@zombielynx.com", "$2a$11$IfShfuwjz5GAtZHbhy/DueUfbFOEcgayHCn73ErU3QOPPmtLh3er6", "Admin" });
 
             migrationBuilder.InsertData(
                 table: "UserProfiles",
@@ -202,32 +247,41 @@ namespace ZombieLynxPortalAPI.Migrations
             migrationBuilder.InsertData(
                 table: "Tickets",
                 columns: new[] { "Id", "Category", "CreatedAt", "Description", "Game", "Server", "Status", "Subject", "UpdatedAt", "UserProfileId" },
-                values: new object[] { 1, "Bug", new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(438), "Initial test ticket for the system.", "Ark:SA", "NA-East", "Open", "Test Ticket", new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(540), 1 });
+                values: new object[] { 1, "Bug", new DateTime(2025, 1, 22, 17, 17, 39, 22, DateTimeKind.Utc).AddTicks(4182), "Initial test ticket for the system.", "Ark:SA", "NA-East", "Open", "Test Ticket", new DateTime(2025, 1, 22, 17, 17, 39, 22, DateTimeKind.Utc).AddTicks(4329), 1 });
+
+            migrationBuilder.InsertData(
+                table: "UserNotifications",
+                columns: new[] { "NotificationId", "UserProfileId", "Id", "IsRead" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, false },
+                    { 2, 1, 2, false }
+                });
 
             migrationBuilder.InsertData(
                 table: "ZLGMembers",
-                columns: new[] { "Id", "DiscordId", "DiscordImgUrl", "DiscordName", "EosId", "EpicImgUrl", "EpicName", "SteamId", "SteamImgUrl", "SteamName", "UserProfileId", "UserProfileId1" },
-                values: new object[] { 1, "123456789012345678", "https://cdn.discordapp.com/avatars/123456789012345678/admin-discord.png", "AdminDiscord", "eos-admin-id", "https://static.epicgames.com/admin-epic-avatar.png", "AdminEpic", "76561198021051512", "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/adm/adminsteam.jpg", "AdminSteam", 1, null });
+                columns: new[] { "Id", "DiscordId", "DiscordImgUrl", "DiscordName", "EosId", "EpicImgUrl", "EpicName", "SteamId", "SteamImgUrl", "SteamName", "UserProfileId" },
+                values: new object[] { 1, "123456789012345678", "https://cdn.discordapp.com/avatars/123456789012345678/admin-discord.png", "AdminDiscord", "eos-admin-id", "https://static.epicgames.com/admin-epic-avatar.png", "AdminEpic", "76561198021051513", "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/adm/adminsteam.jpg", "AdminSteam", 1 });
 
             migrationBuilder.InsertData(
                 table: "AdminTickets",
                 columns: new[] { "AdminId", "TicketId", "AssignedAt" },
-                values: new object[] { 1, 1, new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(2026) });
+                values: new object[] { 1, 1, new DateTime(2025, 1, 22, 17, 17, 39, 22, DateTimeKind.Utc).AddTicks(6115) });
 
             migrationBuilder.InsertData(
                 table: "Messages",
                 columns: new[] { "Id", "Content", "CreatedAt", "ImgUrl", "MessageGroupId", "UserProfileId" },
                 values: new object[,]
                 {
-                    { 1, "This is the first message in the ticket conversation.", new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(2746), null, 1, 1 },
-                    { 2, "Following up on the issue. Any updates?", new DateTime(2025, 1, 19, 23, 20, 15, 982, DateTimeKind.Utc).AddTicks(2928), null, 1, 1 },
-                    { 3, "Please let me know if you need more details.", new DateTime(2025, 1, 19, 23, 30, 15, 982, DateTimeKind.Utc).AddTicks(3000), null, 1, 1 }
+                    { 1, "This is the first message in the ticket conversation.", new DateTime(2025, 1, 22, 17, 17, 39, 22, DateTimeKind.Utc).AddTicks(9266), null, 1, 1 },
+                    { 2, "Following up on the issue. Any updates?", new DateTime(2025, 1, 22, 17, 27, 39, 22, DateTimeKind.Utc).AddTicks(9534), null, 1, 1 },
+                    { 3, "Please let me know if you need more details.", new DateTime(2025, 1, 22, 17, 37, 39, 22, DateTimeKind.Utc).AddTicks(9549), null, 1, 1 }
                 });
 
             migrationBuilder.InsertData(
                 table: "UserTickets",
                 columns: new[] { "TicketId", "UserProfileId", "AssignedAt" },
-                values: new object[] { 1, 1, new DateTime(2025, 1, 19, 23, 10, 15, 982, DateTimeKind.Utc).AddTicks(1402) });
+                values: new object[] { 1, 1, new DateTime(2025, 1, 22, 17, 17, 39, 22, DateTimeKind.Utc).AddTicks(5306) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AdminTickets_TicketId",
@@ -250,6 +304,11 @@ namespace ZombieLynxPortalAPI.Migrations
                 column: "UserProfileId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_NotificationId",
+                table: "UserNotifications",
+                column: "NotificationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserProfiles_UserId",
                 table: "UserProfiles",
                 column: "UserId",
@@ -264,12 +323,6 @@ namespace ZombieLynxPortalAPI.Migrations
                 name: "IX_ZLGMembers_UserProfileId",
                 table: "ZLGMembers",
                 column: "UserProfileId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ZLGMembers_UserProfileId1",
-                table: "ZLGMembers",
-                column: "UserProfileId1",
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -282,10 +335,16 @@ namespace ZombieLynxPortalAPI.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
+                name: "UserNotifications");
+
+            migrationBuilder.DropTable(
                 name: "UserTickets");
 
             migrationBuilder.DropTable(
                 name: "ZLGMembers");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Tickets");

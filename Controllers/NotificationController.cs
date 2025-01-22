@@ -131,26 +131,30 @@ namespace ZombieLynxPortalAPI.Controllers
             return NoContent();
         }
 
-        // ✅ Admin: Delete a Notification
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
-            var notification = await _dbContext.Notifications
-                .Include(n => n.UserNotifications)
-                .FirstOrDefaultAsync(n => n.Id == id);
+            // Find the notification
+            var notification = await _dbContext.Notifications.FindAsync(id);
 
             if (notification == null)
                 return NotFound($"Notification with ID {id} not found.");
 
-            // Remove associated UserNotifications
-            if (notification.UserNotifications != null && notification.UserNotifications.Any())
-                _dbContext.UserNotifications.RemoveRange(notification.UserNotifications);
+            // Remove associated UserNotifications explicitly
+            var userNotifications = await _dbContext.UserNotifications
+                .Where(un => un.NotificationId == id)
+                .ToListAsync();
 
+            if (userNotifications.Any())
+                _dbContext.UserNotifications.RemoveRange(userNotifications);
+
+            // Remove the notification itself
             _dbContext.Notifications.Remove(notification);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
+
     }
 }
