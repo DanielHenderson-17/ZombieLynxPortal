@@ -1,4 +1,10 @@
-import { NavLink, Outlet, Link } from "react-router-dom";
+import {
+  NavLink,
+  Outlet,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   linkSteamAccount,
@@ -21,6 +27,8 @@ export default function Member({ loggedInUser }) {
   const [refreshTrigger, setRefreshTrigger] = useState(false);
   const [randomSeed, setRandomSeed] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Mock for other accounts
   const [linkedAccounts, setLinkedAccounts] = useState([]);
@@ -34,6 +42,13 @@ export default function Member({ loggedInUser }) {
   useEffect(() => {
     setRandomSeed(generateRandomSeed());
   }, []);
+
+  // Redirect to /tickets if the user lands on the root URL
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("tickets");
+    }
+  }, [location.pathname, navigate]);
 
   // Fetch Steam Account when user logs in or refreshTrigger changes
   useEffect(() => {

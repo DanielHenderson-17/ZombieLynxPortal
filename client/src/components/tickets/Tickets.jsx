@@ -78,7 +78,10 @@ export default function Tickets({ loggedInUser }) {
       {/* Main Content */}
       <div className="flex-grow-1 mb-0 ticket-main">
         <Routes>
-          <Route path="ticket/:ticketId/edit" element={<EditTicket />} />
+          <Route
+            path="ticket/:ticketId/edit"
+            element={<EditTicket loggedInUser={loggedInUser} />}
+          />
           <Route
             path="new-ticket"
             element={<NewTicket loggedInUser={loggedInUser} />}
