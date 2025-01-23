@@ -18,7 +18,6 @@ namespace ZombieLynxPortalAPI.DTOs
 
         [Required]
         public string LastName { get; set; }
-        // Optional role assignment for admins
         public string? Role { get; set; }
     }
 }

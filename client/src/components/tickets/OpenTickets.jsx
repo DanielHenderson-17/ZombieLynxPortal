@@ -24,6 +24,7 @@ export default function OpenTickets({ onTicketChange }) {
     }
   };
 
+  // Fetch open tickets on component mount
   useEffect(() => {
     fetchTickets();
 
@@ -36,10 +37,12 @@ export default function OpenTickets({ onTicketChange }) {
     return () => clearTimeout(timeout);
   }, [fetching]);
 
+  // Handle ticket click and navigate to ticket details
   const handleTicketClick = (ticketId) => {
     navigate(`/tickets/ticket/${ticketId}`);
   };
 
+  // Handle closing a ticket
   const handleCloseTicket = async (ticketId) => {
     try {
       await closeTicketAPI(ticketId);

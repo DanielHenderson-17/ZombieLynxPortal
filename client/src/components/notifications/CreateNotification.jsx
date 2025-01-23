@@ -15,6 +15,7 @@ export default function CreateNotification() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // Fetch all users on component mount and set the allUsers and filteredUsers state variables to the fetched users
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -28,6 +29,7 @@ export default function CreateNotification() {
     fetchUsers();
   }, []);
 
+  // Filter users based on the search query and set the filteredUsers state variable to the filtered users array and the searchQuery state variable to the search query
   const handleSearch = (query) => {
     setSearchQuery(query);
     const lowerCaseQuery = query.toLowerCase();
@@ -40,6 +42,7 @@ export default function CreateNotification() {
     setFilteredUsers(filtered);
   };
 
+  // Add or remove a user ID from the targetUserIds state variable based on whether the user is already selected or not
   const handleCheckboxChange = (profileId) => {
     setTargetUserIds((prev) =>
       prev.includes(profileId)
@@ -48,6 +51,7 @@ export default function CreateNotification() {
     );
   };
 
+  // Handle form submission by checking if the message is empty or if no users are selected for a targeted notification, then create a notification with the message, isGlobal, and targetUserIds state variables
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) {

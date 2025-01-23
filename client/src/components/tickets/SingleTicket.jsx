@@ -60,6 +60,7 @@ export default function SingleTicket({ loggedInUser }) {
     fetchTicketAndMessages();
   }, [ticketId, loggedInUser.role]);
 
+  // Fetch Steam account and update every minute
   useEffect(() => {
     const fetchSteamAccount = async () => {
       try {
@@ -80,10 +81,12 @@ export default function SingleTicket({ loggedInUser }) {
     return () => clearInterval(intervalId);
   }, [steamAccount]);
 
+  // Generate random seed for profile images
   useEffect(() => {
     setRandomSeed(generateRandomSeed());
   }, []);
 
+  // Send message
   const handleSendMessage = async () => {
     if (newMessage.trim() === "") return;
 
@@ -103,6 +106,7 @@ export default function SingleTicket({ loggedInUser }) {
     }
   };
 
+  // Send message on Enter key press
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSendMessage();

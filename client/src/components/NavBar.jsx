@@ -16,6 +16,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [randomSeed, setRandomSeed] = useState(null);
   const dropdownRef = useRef(null);
 
+  // Fetch user profile on currently logged-in user
   useEffect(() => {
     if (loggedInUser) {
       getUserProfiles()
@@ -51,6 +52,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     }
   }, [loggedInUser]);
 
+  // Fetch Steam account and update every minute
   useEffect(() => {
     const generateRandomSeed = () => Math.floor(Math.random() * 1000);
     setRandomSeed(generateRandomSeed());
@@ -76,6 +78,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     }
   }, [loggedInUser, steamAccount]);
 
+  //Close dropdown when clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

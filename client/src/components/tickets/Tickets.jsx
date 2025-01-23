@@ -21,6 +21,7 @@ export default function Tickets({ loggedInUser }) {
     }
   };
 
+  // Fetch open ticket count on component mount
   useEffect(() => {
     fetchOpenTicketCount();
   }, []);
