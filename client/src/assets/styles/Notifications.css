@@ -12,13 +12,6 @@
   margin-bottom: 60px;
 }
 
-@media (max-width: 768px) {
-  .notifications-container,
-  .create-notification-container {
-    height: 65vh;
-  }
-}
-
 .single-notification,
 .create-notification-container {
   color: white;
@@ -37,4 +30,11 @@
   overflow-y: scroll;
   min-height: 120px;
   max-height: 150px;
+}
+
+@media (max-width: 768px) {
+  .notifications-container,
+  .create-notification-container {
+    height: 69vh;
+  }
 }
