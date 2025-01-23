@@ -29,3 +29,12 @@
   background-color: #3c4044;
   color: #8d97a0 !important;
 }
+
+.user-selection {
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 5px;
+  overflow-y: scroll;
+  min-height: 120px;
+  max-height: 150px;
+}

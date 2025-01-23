@@ -376,13 +376,13 @@ namespace ZombieLynxPortalAPI.Controllers
                 ticket.UpdatedAt,
                 AssignedUsers = ticket.UserTickets.Select(ut => new
                 {
-                    ut.UserProfile.User.Id, // Use the GUID from User class
+                    ut.UserProfile.User.Id,
                     ut.UserProfile.FirstName,
                     ut.UserProfile.LastName
                 }).ToList(),
                 AssignedAdmins = ticket.AdminTickets.Select(at => new
                 {
-                    at.Admin.User.Id, // Use the GUID from User class for Admins
+                    at.Admin.User.Id,
                     at.Admin.FirstName,
                     at.Admin.LastName
                 }).ToList()
