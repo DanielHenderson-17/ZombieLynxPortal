@@ -11,6 +11,7 @@ export default function Login({ setLoggedInUser }) {
   const [password, setPassword] = useState("");
   const [failedLogin, setFailedLogin] = useState(false);
 
+  // Handle form submission and login user
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email, password).then((user) => {

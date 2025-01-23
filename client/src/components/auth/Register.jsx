@@ -16,6 +16,7 @@ export default function Register({ setLoggedInUser }) {
 
   const navigate = useNavigate();
 
+  // Handle form submission and register user
   const handleSubmit = (e) => {
     e.preventDefault();
 
