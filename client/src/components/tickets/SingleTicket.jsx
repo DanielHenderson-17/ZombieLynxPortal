@@ -4,33 +4,47 @@ import {
   getTicketById,
   closeTicketAPI,
   restoreTicketAPI,
-  deleteTicket,
   assignUserToTicket,
   getAllUsers,
 } from "../../managers/ticketManager";
+import {
+  getMessagesByTicketId,
+  sendMessage,
+} from "../../managers/messageManager";
 import { formatLongDateTime } from "../../utils/longDateTime";
+import { formatShortDate } from "../../utils/shortDateTime.js";
 import { categoryFormatter } from "../../utils/categoryFormater";
 import { getGameImage } from "../../utils/gameFormatter";
+import { getLinkedSteamAccount } from "../../managers/steamAuthManager";
+import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
+import { truncateText } from "../../utils/truncateText.js";
 
-export default function SingleTicket() {
+export default function SingleTicket({ loggedInUser }) {
   const { ticketId } = useParams();
   const [ticket, setTicket] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
   const [allUsers, setAllUsers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(loggedInUser.role === "Admin");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [steamAccount, setSteamAccount] = useState(null);
+  const [randomSeed, setRandomSeed] = useState(null);
 
-  // Fetch the ticket details and check if the user is an admin
+  // Fetch ticket and messages, update state as message is sent for the ticket
   useEffect(() => {
-    const fetchTicket = async () => {
+    const fetchTicketAndMessages = async () => {
       try {
-        const data = await getTicketById(ticketId);
-        setTicket(data);
+        const ticketData = await getTicketById(ticketId);
+        setTicket(ticketData);
 
-        // Check if the user is an admin by attempting to fetch the list of all users
+        const messageData = await getMessagesByTicketId(ticketId);
+        setMessages(messageData);
+
         const users = await getAllUsers();
         setAllUsers(users);
-        setIsAdmin(true);
+
+        setIsAdmin(loggedInUser.role === "Admin");
       } catch (error) {
         if (error.message.includes("403")) {
           console.warn(
@@ -38,17 +52,68 @@ export default function SingleTicket() {
           );
         } else {
           console.error("Error fetching data:", error);
-          setError("Failed to fetch ticket details.");
+          setError("Failed to fetch ticket details or messages.");
         }
       }
     };
 
-    console.log("Ticket ID:", ticketId);
+    fetchTicketAndMessages();
+  }, [ticketId, loggedInUser.role]);
 
-    fetchTicket();
-  }, [ticketId]);
+  // Fetch Steam account and update every minute
+  useEffect(() => {
+    const fetchSteamAccount = async () => {
+      try {
+        const updatedSteamAccount = await getLinkedSteamAccount();
+        if (
+          updatedSteamAccount &&
+          updatedSteamAccount.steamImgUrl !== steamAccount?.steamImgUrl
+        ) {
+          setSteamAccount(updatedSteamAccount);
+        }
+      } catch (error) {
+        console.error("Error fetching Steam account:", error);
+      }
+    };
 
-  // Close the ticket
+    fetchSteamAccount();
+    const intervalId = setInterval(fetchSteamAccount, 60000);
+    return () => clearInterval(intervalId);
+  }, [steamAccount]);
+
+  // Generate random seed for profile images
+  useEffect(() => {
+    setRandomSeed(generateRandomSeed());
+  }, []);
+
+  // Send message
+  const handleSendMessage = async () => {
+    if (newMessage.trim() === "") return;
+
+    try {
+      await sendMessage({
+        messageGroupId: ticketId,
+        content: newMessage,
+        imgUrl: null,
+      });
+
+      const updatedMessages = await getMessagesByTicketId(ticketId);
+      setMessages(updatedMessages);
+      setNewMessage("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setError("Failed to send message.");
+    }
+  };
+
+  // Send message on Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
+  // Close ticket
   const handleCloseTicket = async () => {
     try {
       await closeTicketAPI(ticketId);
@@ -59,7 +124,7 @@ export default function SingleTicket() {
     }
   };
 
-  // Restore the ticket
+  // Restore ticket
   const handleRestoreTicket = async () => {
     try {
       await restoreTicketAPI(ticketId);
@@ -70,18 +135,7 @@ export default function SingleTicket() {
     }
   };
 
-  // Delete the ticket
-  const handleDeleteTicket = async () => {
-    try {
-      await deleteTicket(ticketId);
-      navigate("/tickets/closed-tickets");
-    } catch (error) {
-      console.error("Error deleting ticket:", error);
-      setError("Failed to delete the ticket. Please try again.");
-    }
-  };
-
-  // Assign user to the ticket
+  // Assign user to ticket
   const handleAssignUser = async (userId) => {
     try {
       await assignUserToTicket(ticketId, userId);
@@ -98,125 +152,172 @@ export default function SingleTicket() {
   }
 
   return (
-    <div className="text-white col-md-6 col-11 mx-auto mt-5 pt-3">
-      <div className="col-3"></div>
+    <div className="text-white container-fluid mt-0 pt-3 h-100">
+      <div className="row single-row h-100 pb-3">
+        {/* Left Column: Ticket Details */}
+        <div className="col-md-5 single-details h-100 mb-3">
+          <div className="d-flex pt-2">
+            {/* Game Image */}
+            <img
+              className="img-fluid single-img rounded mb-3 col-4"
+              src={getGameImage(ticket.game)}
+              alt={ticket.game}
+            />
+            <div className="ms-3">
+              {/* Server Name */}
+              <h6 className="text-start">{truncateText(ticket.server, 30)}</h6>
 
-      <h4 className="text-start mb-1 subject-font">{ticket.subject}</h4>
-
-      <div className="d-md-flex d-block justify-content-between mb-1">
-        <div className="d-flex align-items-center fs-5">
-          <div
-            className="me-2"
-            dangerouslySetInnerHTML={{
-              __html: categoryFormatter(ticket.category),
-            }}
-          ></div>
-          {ticket.category}
-        </div>
-        <div className="d-flex align-items-center">
-          <img
-            className="gameImg me-2"
-            src={getGameImage(ticket.game)}
-            alt=""
-          />{" "}
-          {ticket.server}
-        </div>
-      </div>
-      <small
-        className="text-start d-block mb-3 ms-1"
-        style={{ fontSize: "0.7rem" }}
-      >
-        <i className="bi bi-calendar-date me-2"></i>
-        {formatLongDateTime(ticket.updatedAt)}
-      </small>
-      <div className="text-start">
-        <strong className="text-start">
-          Description:
-          {isAdmin && (
-            <button
-              className="btn btn-link p-0 ms-2"
-              onClick={() => navigate(`/tickets/ticket/${ticket.id}/edit`)}
-            >
-              <i className="bi bi-pencil fs-6"></i>
-            </button>
-          )}
-        </strong>{" "}
-        <p className="border rounded-2 p-3 mt-2">{ticket.description}</p>
-      </div>
-      <div className="row">
-        <div className="col-12 col-md-7 d-flex align-items-center">
-          <div className="text-start col-8 col-md-5 d-flex">
-            {ticket.assignedUsers.map((user, index) => (
-              <div key={`${user.firstName}-${user.lastName}`} className="me-2">
-                {user.firstName}
-                {index < ticket.assignedUsers.length - 1 && ","}
+              {/* Category */}
+              <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center col-10">
+                  <div
+                    className="text-start me-1"
+                    dangerouslySetInnerHTML={{
+                      __html: categoryFormatter(ticket.category),
+                    }}
+                  ></div>
+                  <span className="text-start">{ticket.category}</span>
+                </div>
               </div>
-            ))}
-          </div>
-          {isAdmin && (
-            <div className="d-flex align-items-center ms-3 mt-0 col-4 col-md-7">
-              <i className="bi bi-person-plus me-2"></i>
-              <div className="dropdown">
-                <button
-                  className="btn btn-secondary dropdown-toggle btn-sm"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Add User
-                </button>
-                <ul className="dropdown-menu">
-                  {allUsers.length > 0 ? (
-                    allUsers
-                      .filter(
-                        (user) =>
-                          !ticket.assignedUsers.some(
-                            (assigned) =>
-                              `${assigned.firstName} ${assigned.lastName}` ===
-                              user.fullName
-                          )
-                      )
-                      .map((user) => (
-                        <li key={user.id}>
-                          <button
-                            className="dropdown-item"
-                            onClick={() => handleAssignUser(user.id)}
-                          >
-                            {user.fullName}
-                          </button>
-                        </li>
-                      ))
-                  ) : (
-                    <li>
-                      <span className="dropdown-item">No users available</span>
-                    </li>
-                  )}
-                </ul>
+
+              {/* Updated At */}
+              <small className="text-secondary text-start d-block">
+                <i className="bi bi-calendar-date me-2"></i>
+                {formatLongDateTime(ticket.updatedAt)}
+              </small>
+
+              {/* Assigned Users */}
+              <div className="mt-1 text-start h-100">
+                {ticket.assignedUsers.map((user, index) => (
+                  <span key={index} className="badge bg-secondary me-2">
+                    {user.firstName}
+                  </span>
+                ))}
+
+                {isAdmin && (
+                  <div className="mt-2">
+                    <select
+                      onChange={(e) => handleAssignUser(e.target.value)}
+                      className="form-select form-select-sm"
+                    >
+                      <option value="">Add User</option>
+                      {allUsers
+                        .filter(
+                          (user) =>
+                            !ticket.assignedUsers.some(
+                              (assignedUser) => assignedUser.id === user.id
+                            )
+                        )
+                        .map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.firstName} {user.lastName}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
-          )}
-        </div>
-        <div className="col-12 col-md-5 d-flex justify-content-end mt-4 mt-md-0">
-          {ticket.status === "Open" ? (
-            <button className="btn btn-danger" onClick={handleCloseTicket}>
-              Close <i className="bi bi-x-circle ms-2"></i>
-            </button>
-          ) : (
-            <>
+          </div>
+          <div className="d-flex justify-content-between">
+            <h6 className="text-start my-0">Ticket</h6>
+            <small className="text-secondary fst-italic">
+              Ticket #{ticket.id}
+            </small>
+          </div>
+
+          <h6 className="text-start mt-0">
+            {truncateText(ticket.subject, 40)}
+          </h6>
+          {/* Description */}
+          <div className="text-start mt-md-4 mt-3">
+            <div className="d-flex justify-content-between align-items-center">
+              <small>Description:</small>
               <button
-                className="btn btn-primary me-2"
-                onClick={handleRestoreTicket}
+                className="btn btn-link p-0 ms-2"
+                onClick={() => navigate(`/tickets/ticket/${ticket.id}/edit`)}
               >
-                Restore <i className="bi bi-arrow-counterclockwise ms-2"></i>
+                <small className="bi bi-pencil text-white me-2"></small>
               </button>
-              <button className="btn btn-danger" onClick={handleDeleteTicket}>
-                Delete<i className="bi bi-trash3 ms-2"></i>
+            </div>
+
+            <p className="p-2 mb-0 mt-md-1 mt-0 description shadow">
+              {ticket.description}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="d-flex justify-content-end mt-3 pt-0">
+            {ticket.status === "Open" ? (
+              <button className="btn btn-danger" onClick={handleCloseTicket}>
+                Close <i className="bi bi-x-circle ms-2"></i>
               </button>
-            </>
-          )}
+            ) : (
+              <>
+                <button
+                  className="btn btn-primary me-2"
+                  onClick={handleRestoreTicket}
+                >
+                  Restore <i className="bi bi-arrow-counterclockwise ms-2"></i>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column: Messages */}
+        <div className="col-md-7 text-start mb-3 ps-md-0 ps-2 message-container">
+          <div className="shadow border-black rounded p-0 message-box">
+            <div className="d-flex flex-column">
+              {/* Messages Container */}
+              <div className="flex-grow-1 messages mb-0 p-md-3 p-1">
+                {messages.length > 0 ? (
+                  messages.map((msg) => (
+                    <div key={msg.id} className="mb-3 d-flex">
+                      <img
+                        src={
+                          msg.user.steamImgUrl ||
+                          `https://picsum.photos/seed/${randomSeed}/100/100`
+                        }
+                        alt="Profile"
+                        className="message-img me-2"
+                      />
+                      <div>
+                        <div className="d-flex align-items-center">
+                          <strong className="me-2">{msg.user.firstName}</strong>
+                          <small className="d-block text-secondary single-datetime">
+                            {formatShortDate(msg.createdAt)}
+                          </small>
+                        </div>
+                        <p className="mb-0">{msg.content}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No messages yet.</p>
+                )}
+              </div>
+              {/* Input and Send Button */}
+              <div className="d-flex">
+                <input
+                  type="text"
+                  className="form-control me-2 message-input"
+                  placeholder="Type a message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <button
+                  className="btn btn-primary message-button"
+                  onClick={handleSendMessage}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
       {error && <p className="text-danger mt-3">{error}</p>}
     </div>
   );

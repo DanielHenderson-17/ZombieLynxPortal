@@ -18,7 +18,10 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<UserTicket> UserTickets { get; set; }
         public DbSet<AdminTicket> AdminTickets { get; set; }
-        public DbSet<ZLGMember> ZLGMembers { get; set; }  // ✅ Added ZLGMember
+        public DbSet<ZLGMember> ZLGMembers { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,15 +53,15 @@ namespace ZombieLynxPortalAPI.Data
             {
                 Id = 1,
                 UserProfileId = 1,
-                SteamId = "76561198021051512",
+                SteamId = "76561198021051513",
                 SteamName = "AdminSteam",
-                SteamImgUrl = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/adm/adminsteam.jpg",
+                SteamImgUrl = null,
                 DiscordId = "123456789012345678",
                 DiscordName = "AdminDiscord",
-                DiscordImgUrl = "https://cdn.discordapp.com/avatars/123456789012345678/admin-discord.png",
+                DiscordImgUrl = null,
                 EosId = "eos-admin-id",
                 EpicName = "AdminEpic",
-                EpicImgUrl = "https://static.epicgames.com/admin-epic-avatar.png"
+                EpicImgUrl = null
             });
 
             // ✅ Seed Ticket
@@ -92,6 +95,74 @@ namespace ZombieLynxPortalAPI.Data
                 AssignedAt = DateTime.UtcNow
             });
 
+            // Seed Notifications
+            modelBuilder.Entity<Notification>().HasData(
+                new Notification
+                {
+                    Id = 1,
+                    Message = "Welcome to Zombie Lynx Portal!",
+                    CreatedAt = DateTime.UtcNow,
+                    IsGlobal = true,
+                    Expiration = null
+                },
+                new Notification
+                {
+                    Id = 2,
+                    Message = "New server update available.",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    IsGlobal = false
+                }
+            );
+
+            // Seed UserNotifications
+            modelBuilder.Entity<UserNotification>().HasData(
+                new UserNotification
+                {
+                    Id = 1,
+                    UserProfileId = 1,
+                    NotificationId = 1,
+                    IsRead = false
+                },
+                new UserNotification
+                {
+                    Id = 2,
+                    UserProfileId = 1,
+                    NotificationId = 2,
+                    IsRead = false
+                }
+            );
+
+            // Seed Message
+            modelBuilder.Entity<Message>().HasData(
+                new Message
+                {
+                    Id = 1,
+                    MessageGroupId = 1,
+                    UserProfileId = 1,
+                    Content = "This is the first message in the ticket conversation.",
+                    CreatedAt = DateTime.UtcNow,
+                    ImgUrl = null
+                },
+                new Message
+                {
+                    Id = 2,
+                    MessageGroupId = 1,
+                    UserProfileId = 1,
+                    Content = "Following up on the issue. Any updates?",
+                    CreatedAt = DateTime.UtcNow.AddMinutes(10),
+                    ImgUrl = null
+                },
+                new Message
+                {
+                    Id = 3,
+                    MessageGroupId = 1,
+                    UserProfileId = 1,
+                    Content = "Please let me know if you need more details.",
+                    CreatedAt = DateTime.UtcNow.AddMinutes(20),
+                    ImgUrl = null
+                }
+            );
+
             // ✅ Composite Keys for Join Tables
             modelBuilder.Entity<UserTicket>()
                 .HasKey(ut => new { ut.UserProfileId, ut.TicketId });
@@ -106,6 +177,7 @@ namespace ZombieLynxPortalAPI.Data
                 .HasForeignKey(t => t.UserProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // ✅ Relationships for UserTickets
             modelBuilder.Entity<UserTicket>()
                 .HasOne(ut => ut.UserProfile)
                 .WithMany()
@@ -118,6 +190,7 @@ namespace ZombieLynxPortalAPI.Data
                 .HasForeignKey(ut => ut.TicketId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // ✅ Relationships for AdminTickets
             modelBuilder.Entity<AdminTicket>()
                 .HasOne(at => at.Admin)
                 .WithMany()
@@ -135,6 +208,49 @@ namespace ZombieLynxPortalAPI.Data
                 .HasOne(z => z.UserProfile)
                 .WithMany()
                 .HasForeignKey(z => z.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ Message Relationship
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Ticket)
+                .WithMany(t => t.Messages)
+                .HasForeignKey(m => m.MessageGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.UserProfile)
+                .WithMany()
+                .HasForeignKey(m => m.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ Notification Configuration
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.Message)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.IsGlobal)
+                .IsRequired();
+
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.CreatedAt)
+                .IsRequired();
+
+            // ✅ UserNotification Configuration
+            modelBuilder.Entity<UserNotification>()
+                .HasKey(un => new { un.UserProfileId, un.NotificationId });
+
+            modelBuilder.Entity<UserNotification>()
+                .HasOne(un => un.UserProfile)
+                .WithMany()
+                .HasForeignKey(un => un.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserNotification>()
+                .HasOne(un => un.Notification)
+                .WithMany()
+                .HasForeignKey(un => un.NotificationId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -20,6 +20,7 @@ export const getUserProfiles = () => {
   );
 };
 
+// 🔍 Get all users
 export const getAllUsers = () => {
   return fetch(`${_apiUrl}/all`, {
     headers: getAuthHeaders(),

@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createTicket, getTicketOptions } from "../../managers/ticketManager";
 import { getAllUsers } from "../../managers/userProfileManager";
 
-export default function NewTicket() {
-  // State to manage ticket options and user data
+export default function NewTicket({ loggedInUser }) {
   const [options, setOptions] = useState({
     games: [],
     gamesWithServers: {},
@@ -12,10 +11,8 @@ export default function NewTicket() {
     users: [],
   });
 
-  // State to manage filtered server options
   const [availableServers, setAvailableServers] = useState([]);
 
-  // State to manage form input values
   const [formData, setFormData] = useState({
     subject: "",
     category: "",
@@ -25,13 +22,27 @@ export default function NewTicket() {
     assignedUserIds: [],
   });
 
-  // State to track loading status
   const [loading, setLoading] = useState(true);
 
-  // React Router's navigation function
   const navigate = useNavigate();
 
-  // Fetch ticket options and user data
+  // User validation on component mount to ensure user is logged in and has the correct role to create a ticket
+  useEffect(() => {
+    if (!loggedInUser) {
+      alert("You must be logged in to create a ticket.");
+      navigate("/login");
+      return;
+    }
+
+    // Optionally, validate role if needed
+    if (loggedInUser.role !== "User" && loggedInUser.role !== "Admin") {
+      alert("You do not have permission to create a ticket.");
+      navigate("/");
+      return;
+    }
+  }, [loggedInUser, navigate]);
+
+  // Fetch ticket options and user data on component mount to populate the form select fields with the available options and users in the system
   useEffect(() => {
     const fetchOptions = async () => {
       try {
@@ -57,25 +68,25 @@ export default function NewTicket() {
     fetchOptions();
   }, []);
 
-  // Update available servers when the game changes
+  // Update available servers when the game changes in the form data state object and reset the server field to an empty string if the game changes to a new game without servers or if the game is cleared out in the form data state object (e.g., when the game select field is reset to its default value)
   useEffect(() => {
     if (formData.game) {
       setAvailableServers(options.gamesWithServers[formData.game] || []);
-      setFormData((prev) => ({ ...prev, server: "" })); // Reset server if game changes
+      setFormData((prev) => ({ ...prev, server: "" }));
     }
   }, [formData.game, options.gamesWithServers]);
 
-  // Handle input changes in the form
+  // Handle input changes in the form fields and update the form data state object accordingly
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission to create a new ticket
+  // Handle form submission to create a new ticket and redirect to the open tickets page on success or display an error message on failure
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createTicket(formData);
+      await createTicket({ ...formData, createdBy: loggedInUser.id });
       setFormData({
         subject: "",
         category: "",

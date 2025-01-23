@@ -30,23 +30,24 @@ namespace ZombieLynxPortalAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
-            // ❗ Validate password confirmation
+            Console.WriteLine("Incoming registration data: ");
+            Console.WriteLine($"Email: {dto.Email}, FirstName: {dto.FirstName}, LastName: {dto.LastName}");
+            Console.WriteLine($"DTO: {System.Text.Json.JsonSerializer.Serialize(dto)}");
+
+
             if (dto.Password != dto.ConfirmPassword)
                 return BadRequest("Passwords do not match.");
 
-            // ❗ Check for duplicate email
             if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
                 return BadRequest("Email is already in use.");
 
-            // 🔐 Hash the password
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-            // ➕ Create the user
             var user = new User
             {
                 Email = dto.Email,
                 PasswordHash = hashedPassword,
-                Role = "User",  // Default role
+                Role = "User",
                 Profile = new UserProfile
                 {
                     FirstName = dto.FirstName,
@@ -57,7 +58,6 @@ namespace ZombieLynxPortalAPI.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // ✅ Return created user with profile info
             return Ok(new
             {
                 user.Id,
@@ -66,6 +66,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 user.Profile.FirstName,
                 user.Profile.LastName
             });
+
         }
 
 
@@ -84,27 +85,21 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok(new { Token = token });
         }
 
-        // JWT Token Generation
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+            var jwtKey = jwtSettings["Key"] ?? throw new ArgumentNullException("Jwt:Key", "JWT key is not configured.");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
-            // Support multiple roles if needed
             var claims = new List<Claim>
     {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
         new Claim(ClaimTypes.Email, user.Email),
-        new Claim("UserId", user.Id.ToString()),  // Explicit user ID for matching
-        new Claim("FullName", $"{user.Profile.FirstName} {user.Profile.LastName}") // Optional
+        new Claim("UserId", user.Id.ToString()),
+        new Claim("FullName", $"{user.Profile.FirstName} {user.Profile.LastName}")
     };
 
-            // If the role is a single value
             claims.Add(new Claim(ClaimTypes.Role, user.Role));
-
-            // If the role could be multiple, use this:
-            // var roles = user.Roles.Split(',');  // Example if roles are stored as comma-separated
-            // claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -112,7 +107,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(double.Parse(jwtSettings["ExpireHours"])),
+                expires: DateTime.UtcNow.AddHours(double.Parse(jwtSettings["ExpireHours"] ?? throw new ArgumentNullException("ExpireHours"))),
                 signingCredentials: creds
             );
 
@@ -165,7 +160,6 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public IActionResult Logout()
         {
-            // Client must clear the token from session storage
             return Ok("Logged out successfully. Please clear your token.");
         }
         [HttpGet("verify-admin")]

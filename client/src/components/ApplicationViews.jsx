@@ -6,6 +6,8 @@ import Member from "../components/member/Member";
 import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
 import Shop from "../components/shop/Shop";
+import Notifications from "../components/notifications/Notifications";
+import CreateNotification from "../components/notifications/CreateNotification";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "./NavBar";
 
@@ -35,11 +37,18 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route path="stats" element={<Stats />} />
           <Route path="shop" element={<Shop />} />
           <Route
+            path="notifications"
+            element={<Notifications loggedInUser={loggedInUser} />}
+          />
+          <Route
+            path="notifications/create"
+            element={<CreateNotification loggedInUser={loggedInUser} />}
+          />
+          <Route
             index
             element={<p>Select a module from the navigation above.</p>}
           />
         </Route>
-
         {/* Public Routes (No NavBar) */}
         <Route
           path="login"
@@ -53,7 +62,6 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="register"
           element={<Register setLoggedInUser={setLoggedInUser} />}
         />
-
         {/* Catch-all for invalid routes */}
         <Route path="*" element={<p>Whoops, nothing here...</p>} />
       </Routes>

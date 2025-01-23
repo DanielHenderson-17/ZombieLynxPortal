@@ -108,22 +108,17 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public IActionResult CloseTicket(int id)
         {
-            // 🔍 Find the ticket by its ID
             var ticket = _dbContext.Tickets.SingleOrDefault(t => t.Id == id);
-
-            // ❌ If the ticket doesn't exist, return 404
             if (ticket == null)
             {
                 return NotFound($"Ticket with ID {id} not found.");
             }
-
-            // ✅ Update the ticket's status to 'Closed'
             ticket.Status = "Closed";
-            ticket.UpdatedAt = DateTime.UtcNow;  // Use UTC for consistency
+            ticket.UpdatedAt = DateTime.UtcNow;
 
-            _dbContext.SaveChanges();  // 💾 Save changes to the database
+            _dbContext.SaveChanges();
 
-            return NoContent();  // ✅ Return 204 No Content
+            return NoContent();
         }
 
 
@@ -132,54 +127,45 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public IActionResult RestoreTicket(int id)
         {
-            // 🔍 Find the ticket by its ID
             var ticket = _dbContext.Tickets.SingleOrDefault(t => t.Id == id);
 
-            // ❌ If the ticket doesn't exist, return 404
             if (ticket == null)
             {
                 return NotFound($"Ticket with ID {id} not found.");
             }
-
-            // ✅ Update the ticket's status to 'Open' if it was closed
             if (ticket.Status == "Closed")
             {
                 ticket.Status = "Open";
-                ticket.UpdatedAt = DateTime.UtcNow;  // Use UTC for consistency
-                _dbContext.SaveChanges();  // 💾 Save changes to the database
+                ticket.UpdatedAt = DateTime.UtcNow;
+                _dbContext.SaveChanges();
 
-                return NoContent();  // ✅ Return 204 No Content
+                return NoContent();
             }
 
-            // ⚠️ If the ticket is already open, notify the user
             return BadRequest("Ticket is already open.");
         }
-
 
         // ✅ Delete a closed ticket
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult DeleteTicket(int id)
         {
-            // 🔍 Find the ticket by ID
+
             var ticket = _dbContext.Tickets
-                .Include(t => t.UserTickets)   // Ensure related UserTickets are loaded
-                .Include(t => t.AdminTickets)  // Ensure related AdminTickets are loaded
+                .Include(t => t.UserTickets)
+                .Include(t => t.AdminTickets)
                 .SingleOrDefault(t => t.Id == id);
 
-            // ❌ If the ticket doesn't exist, return 404
             if (ticket == null)
             {
                 return NotFound($"Ticket with ID {id} not found.");
             }
 
-            // ⚠️ Only closed tickets can be deleted
             if (ticket.Status != "Closed")
             {
                 return BadRequest("Only closed tickets can be deleted.");
             }
 
-            // 🔄 Remove related UserTickets and AdminTickets to avoid foreign key constraint errors
             if (ticket.UserTickets != null && ticket.UserTickets.Any())
             {
                 _dbContext.UserTickets.RemoveRange(ticket.UserTickets);
@@ -190,13 +176,11 @@ namespace ZombieLynxPortalAPI.Controllers
                 _dbContext.AdminTickets.RemoveRange(ticket.AdminTickets);
             }
 
-            // 🗑 Delete the ticket
             _dbContext.Tickets.Remove(ticket);
-            _dbContext.SaveChanges();  // 💾 Save changes to the database
+            _dbContext.SaveChanges();
 
-            return NoContent();  // ✅ Return 204 No Content
+            return NoContent();
         }
-
 
         // ✅ Get options for ticket form
         [HttpGet("options")]
@@ -205,7 +189,6 @@ namespace ZombieLynxPortalAPI.Controllers
         {
             var categories = new[] { "Bug", "Shop Issue", "Connection Issue", "Other" };
 
-            // Define servers specific to each game
             var gamesWithServers = new Dictionary<string, string[]>
     {
         { "Discord Issue", new[]
@@ -249,7 +232,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
         // ✅ Get all users (Accessible by all authenticated users)
         [HttpGet("users")]
-        [Authorize]  // Removed "Roles = Admin" restriction
+        [Authorize]
         public IActionResult GetUsers()
         {
             var users = _dbContext.UserProfiles
@@ -306,7 +289,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 _dbContext.Tickets.Add(ticket);
                 _dbContext.SaveChanges();
 
-                // ✅ Check if this user-ticket pair already exists
                 bool isAlreadyAssigned = _dbContext.UserTickets
                     .Any(ut => ut.TicketId == ticket.Id && ut.UserProfileId == userProfile.Id);
 
@@ -320,8 +302,6 @@ namespace ZombieLynxPortalAPI.Controllers
                     });
                     _dbContext.SaveChanges();
                 }
-
-                // ✅ Handle additional assigned users
                 if (createTicketDto.AssignedUserIds != null && createTicketDto.AssignedUserIds.Any())
                 {
                     foreach (var assignedUserId in createTicketDto.AssignedUserIds)
@@ -372,8 +352,10 @@ namespace ZombieLynxPortalAPI.Controllers
             var ticket = _dbContext.Tickets
                 .Include(t => t.UserTickets)
                     .ThenInclude(ut => ut.UserProfile)
+                        .ThenInclude(up => up.User)
                 .Include(t => t.AdminTickets)
                     .ThenInclude(at => at.Admin)
+                        .ThenInclude(up => up.User)
                 .FirstOrDefault(t => t.Id == id);
 
             if (ticket == null)
@@ -381,7 +363,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 return NotFound($"Ticket with ID {id} not found.");
             }
 
-            // Return detailed ticket info with assigned users/admins
             var ticketDetails = new
             {
                 ticket.Id,
@@ -395,11 +376,13 @@ namespace ZombieLynxPortalAPI.Controllers
                 ticket.UpdatedAt,
                 AssignedUsers = ticket.UserTickets.Select(ut => new
                 {
+                    ut.UserProfile.User.Id,
                     ut.UserProfile.FirstName,
                     ut.UserProfile.LastName
                 }).ToList(),
                 AssignedAdmins = ticket.AdminTickets.Select(at => new
                 {
+                    at.Admin.User.Id,
                     at.Admin.FirstName,
                     at.Admin.LastName
                 }).ToList()
@@ -408,27 +391,24 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok(ticketDetails);
         }
 
-
         // ✅ Assign user to ticket
         [HttpPost("{id}/assign-user")]
         [Authorize(Roles = "Admin")]
         public IActionResult AssignUserToTicket(int id, [FromBody] int userId)
         {
-            // 🔍 Check if the ticket exists
+
             var ticket = _dbContext.Tickets.Find(id);
             if (ticket == null)
             {
                 return NotFound($"Ticket with ID {id} not found.");
             }
 
-            // 🔍 Check if the user exists
             var userProfile = _dbContext.UserProfiles.Find(userId);
             if (userProfile == null)
             {
                 return NotFound($"User with ID {userId} not found.");
             }
 
-            // ❗ Check if the user is already assigned to the ticket
             bool alreadyAssigned = _dbContext.UserTickets
                 .Any(ut => ut.TicketId == id && ut.UserProfileId == userId);
 
@@ -437,7 +417,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 return BadRequest("User is already assigned to this ticket.");
             }
 
-            // ➕ Assign user to the ticket
+
             var userTicket = new UserTicket
             {
                 TicketId = id,
@@ -467,7 +447,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 return NotFound($"Ticket with ID {id} not found.");
             }
 
-            // Update ticket fields
             ticket.Subject = editTicketDto.Subject ?? ticket.Subject;
             ticket.Category = editTicketDto.Category ?? ticket.Category;
             ticket.Game = editTicketDto.Game ?? ticket.Game;
@@ -477,7 +456,6 @@ namespace ZombieLynxPortalAPI.Controllers
 
             _dbContext.SaveChanges();
 
-            // Return the updated ticket as a response
             return Ok(new
             {
                 ticket.Id,
