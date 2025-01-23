@@ -2,10 +2,12 @@ const STEAM_OPENID_URL = "https://steamcommunity.com/openid/login";
 const REDIRECT_URL = `${window.location.origin}/steam-callback.html`;
 const API_BASE_URL = "https://localhost:5001/api/Steam";
 
+// Set JWT token in Local Storage
 export const getMainJwtToken = () => {
   return localStorage.getItem("authToken");
 };
 
+// Check if JWT token is valid
 export const isMainJwtValid = () => {
   const token = getMainJwtToken();
   if (!token) return false;
@@ -14,6 +16,7 @@ export const isMainJwtValid = () => {
   return payload.exp * 1000 > Date.now();
 };
 
+// Get linked Steam account
 export const getLinkedSteamAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
 
@@ -38,6 +41,7 @@ export const getLinkedSteamAccount = () => {
     });
 };
 
+// Fetch Steam API key
 export const fetchSteamApiKey = () => {
   return fetch(`${API_BASE_URL}/get-api-key`, {
     method: "GET",
@@ -58,6 +62,7 @@ export const fetchSteamApiKey = () => {
     });
 };
 
+// Link Steam account
 export const linkSteamAccount = (onSuccess) => {
   fetchSteamApiKey().then((apiKey) => {
     if (!apiKey) {
@@ -141,6 +146,7 @@ export const linkSteamAccount = (onSuccess) => {
   });
 };
 
+// Unlink Steam account
 export const unlinkSteamAccount = (onSuccess) => {
   return fetch(`${API_BASE_URL}/unlink-steam`, {
     method: "PUT",

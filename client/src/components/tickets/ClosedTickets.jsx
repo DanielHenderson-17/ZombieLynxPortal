@@ -27,6 +27,7 @@ export default function ClosedTickets({ onTicketChange }) {
     }
   };
 
+  // Fetch closed tickets on component mount
   useEffect(() => {
     fetchTickets();
     const timeout = setTimeout(() => {
@@ -39,6 +40,7 @@ export default function ClosedTickets({ onTicketChange }) {
     return () => clearTimeout(timeout);
   }, [fetching]);
 
+  // Handle restoring a ticket
   const handleRestoreTicket = async (ticketId) => {
     try {
       await restoreTicketAPI(ticketId);
@@ -51,6 +53,7 @@ export default function ClosedTickets({ onTicketChange }) {
     }
   };
 
+  // Handle ticket click and navigate to ticket details
   const handleTicketClick = (ticketId) => {
     navigate(`/tickets/ticket/${ticketId}`);
   };

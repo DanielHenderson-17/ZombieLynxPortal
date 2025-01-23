@@ -12,11 +12,11 @@ export default function Notification({ loggedInUser }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // ✅ Fetch notifications for the logged-in user and sort them by isRead status (unread notifications first)
   useEffect(() => {
     fetchNotifications();
   }, []);
 
-  // ✅ Fetch notifications
   const fetchNotifications = async () => {
     setLoading(true);
     try {
@@ -32,7 +32,7 @@ export default function Notification({ loggedInUser }) {
     }
   };
 
-  // ✅ Mark notification as read
+  // ✅ Mark notification as read by ID and refetch notifications to update the UI with the new status
   const handleMarkAsRead = async (id) => {
     try {
       await markNotificationAsRead(id);
@@ -42,7 +42,7 @@ export default function Notification({ loggedInUser }) {
     }
   };
 
-  // ✅ Delete a notification (Admin only)
+  // ✅ Delete a notification (Admin only) by ID and refetch notifications to update the UI with the new status
   const handleDeleteNotification = async (id) => {
     if (!window.confirm("Are you sure you want to delete this notification?")) {
       return;

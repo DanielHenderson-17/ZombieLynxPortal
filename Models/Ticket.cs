@@ -38,6 +38,6 @@ namespace ZombieLynxPortalAPI.Models
         public ICollection<UserTicket> UserTickets { get; set; }
         public ICollection<AdminTicket> AdminTickets { get; set; }
 
-        public ICollection<Message> Messages { get; set; }  // ✅ Added Message Relationship
+        public ICollection<Message> Messages { get; set; }
     }
 }

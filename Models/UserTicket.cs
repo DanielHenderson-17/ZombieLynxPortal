@@ -5,8 +5,6 @@ namespace ZombieLynxPortalAPI.Models
 {
     public class UserTicket
     {
-        // Composite Key: UserProfileId + TicketId
-
         [ForeignKey("UserProfile")]
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }

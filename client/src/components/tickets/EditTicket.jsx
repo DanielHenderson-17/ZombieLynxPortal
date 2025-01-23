@@ -29,12 +29,11 @@ export default function EditTicket({ loggedInUser }) {
 
   const [loading, setLoading] = useState(true);
 
+  // Fetch ticket data on component mount and check if the user is authorized to edit the ticket before populating the form fields with the ticket data and available options
   useEffect(() => {
     const fetchData = async () => {
       try {
         const ticket = await getTicketById(ticketId);
-
-        // Validate user authorization
         const isAssigned = ticket.assignedUsers.some(
           (user) => user.id === loggedInUser.id
         );
@@ -45,7 +44,6 @@ export default function EditTicket({ loggedInUser }) {
           return;
         }
 
-        // Fetch ticket options
         const ticketOptions = await getTicketOptions();
 
         setOptions({
@@ -68,14 +66,14 @@ export default function EditTicket({ loggedInUser }) {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching ticket data:", error);
-        navigate("/tickets/open-tickets"); // Redirect in case of an error
+        navigate("/tickets/open-tickets");
       }
     };
 
     fetchData();
   }, [ticketId, loggedInUser, navigate]);
 
-  // Update available servers when the game changes
+  // Update available servers when the game changes in the form data to show the correct servers for the selected game in the form select field
   useEffect(() => {
     if (formData.game) {
       setAvailableServers(options.gamesWithServers[formData.game] || []);

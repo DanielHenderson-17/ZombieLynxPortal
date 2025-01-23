@@ -58,7 +58,7 @@ namespace ZombieLynxPortalAPI.Controllers
             {
                 foreach (var userId in dto.TargetUserIds)
                 {
-                    if (await _dbContext.UserProfiles.AnyAsync(up => up.Id == userId)) // Assuming Id is Guid
+                    if (await _dbContext.UserProfiles.AnyAsync(up => up.Id == userId))
                     {
                         await _dbContext.UserNotifications.AddAsync(new UserNotification
                         {
