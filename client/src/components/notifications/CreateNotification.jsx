@@ -79,10 +79,10 @@ export default function CreateNotification() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form className="col-12" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="text-start col-8 pt-2 mt-4">
+          <label className="text-start col-md-8 col-11 pt-2 mt-4">
             Message:
             <textarea
-              className="col-8 p-2"
+              className="col-md-8 col-11 p-2"
               placeholder="Enter your notification here and then select the users you want to send it to."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -92,7 +92,7 @@ export default function CreateNotification() {
             ></textarea>
           </label>
         </div>
-        <div className="text-start col-8 mx-auto ps-2 d-flex justify-content-between">
+        <div className="text-start col-md-8 col-11 mx-auto ps-2 d-flex justify-content-between">
           <label>
             <input
               className="text-start me-2"
@@ -115,7 +115,7 @@ export default function CreateNotification() {
           </label>
         </div>
         {!isGlobal && (
-          <div className="mt-2 text-start col-8 mx-auto ">
+          <div className="mt-2 text-start col-md-8 col-11 mx-auto ">
             <input
               type="text"
               className="form-control my-2"
@@ -145,7 +145,7 @@ export default function CreateNotification() {
             </div>
           </div>
         )}
-        <div className="d-flex justify-content-end col-8 mx-auto">
+        <div className="d-flex justify-content-end col-md-8 col-11 mx-auto">
           <button type="submit" className="btn btn-success mb-3 me-0 mt-3">
             <i className="bi bi-plus"></i> Create Notification
           </button>

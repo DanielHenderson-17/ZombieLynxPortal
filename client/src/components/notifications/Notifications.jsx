@@ -80,11 +80,11 @@ export default function Notification({ loggedInUser }) {
           {notifications.map((notification) => (
             <li
               key={notification.id}
-              className={`list-group-item single-notification mb-2 rounded-2 shadow py-2 d-flex justify-content-between ${
+              className={`list-group-item single-notification mb-2 rounded-2 shadow py-0 d-flex justify-content-between ${
                 notification.isRead ? "isRead" : ""
               }`}
             >
-              <div className="text-start ms-3">
+              <div className="text-start ms-md-3 ms-1 p-1">
                 <p className="mb-0">
                   <strong>{notification.message}</strong>
                 </p>
@@ -98,7 +98,7 @@ export default function Notification({ loggedInUser }) {
               <div className="my-auto">
                 {!notification.isRead && (
                   <button
-                    className="btn btn-primary me-2 text-white align-self-center my-auto"
+                    className="btn btn-primary me-2 px-1 py-0 px-md-3 py-md-1 text-white align-self-center my-auto"
                     onClick={() => handleMarkAsRead(notification.id)}
                   >
                     <i className="bi bi-check-lg"></i>
@@ -106,7 +106,7 @@ export default function Notification({ loggedInUser }) {
                 )}
                 {loggedInUser?.role === "Admin" && (
                   <button
-                    className="btn btn-danger me-3"
+                    className="btn btn-danger me-3 px-1 py-0 px-md-3 py-md-1"
                     onClick={() => handleDeleteNotification(notification.id)}
                   >
                     <i className="bi bi-trash3"></i>
