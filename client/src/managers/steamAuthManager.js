@@ -84,6 +84,7 @@ export const linkSteamAccount = (onSuccess) => {
       "width=600,height=800"
     );
 
+    // Handle Steam auth response from popup window (steam-callback.html) and link account to user profile on server side if successful leveraging CORS proxy
     const handleMessage = (event) => {
       if (event.origin !== window.location.origin) return;
 
