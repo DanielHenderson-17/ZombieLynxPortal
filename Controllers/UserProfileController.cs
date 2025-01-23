@@ -53,9 +53,11 @@ namespace ZombieLynxPortalAPI.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _context.Users
+                .Include(u => u.Profile)
                 .Select(u => new
                 {
                     u.Id,
+                    Name = u.Profile != null ? $"{u.Profile.FirstName} {u.Profile.LastName}" : "No Name",
                     u.Email,
                     u.Role
                 })
@@ -63,6 +65,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(users);
         }
+
 
         // 🔒 Get all user profiles with roles (Admin only)
         [HttpGet("withroles")]

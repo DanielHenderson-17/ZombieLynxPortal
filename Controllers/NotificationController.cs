@@ -27,6 +27,8 @@ namespace ZombieLynxPortalAPI.Controllers
             if (dto == null || string.IsNullOrWhiteSpace(dto.Message))
                 return BadRequest("Invalid notification data.");
 
+            Console.WriteLine($"DTO Received: {System.Text.Json.JsonSerializer.Serialize(dto)}");
+
             var notification = new Notification
             {
                 Message = dto.Message,
@@ -38,10 +40,9 @@ namespace ZombieLynxPortalAPI.Controllers
             await _dbContext.Notifications.AddAsync(notification);
             await _dbContext.SaveChangesAsync();
 
-            // Handle UserNotifications based on IsGlobal flag
             if (dto.IsGlobal)
             {
-                // Assign the notification to all users
+                // Assign notification to all users
                 var userProfiles = await _dbContext.UserProfiles.ToListAsync();
                 foreach (var userProfile in userProfiles)
                 {
@@ -55,10 +56,9 @@ namespace ZombieLynxPortalAPI.Controllers
             }
             else if (dto.TargetUserIds != null && dto.TargetUserIds.Any())
             {
-                // Assign the notification to selected users
                 foreach (var userId in dto.TargetUserIds)
                 {
-                    if (await _dbContext.UserProfiles.AnyAsync(up => up.Id == userId))
+                    if (await _dbContext.UserProfiles.AnyAsync(up => up.Id == userId)) // Assuming Id is Guid
                     {
                         await _dbContext.UserNotifications.AddAsync(new UserNotification
                         {
@@ -69,8 +69,9 @@ namespace ZombieLynxPortalAPI.Controllers
                     }
                 }
             }
-            await _dbContext.SaveChangesAsync();
 
+
+            await _dbContext.SaveChangesAsync();
             return Ok(new { notification.Id, notification.Message, notification.IsGlobal });
         }
 
@@ -135,26 +136,45 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
-            // Find the notification
             var notification = await _dbContext.Notifications.FindAsync(id);
 
             if (notification == null)
                 return NotFound($"Notification with ID {id} not found.");
 
-            // Remove associated UserNotifications explicitly
             var userNotifications = await _dbContext.UserNotifications
                 .Where(un => un.NotificationId == id)
                 .ToListAsync();
 
             if (userNotifications.Any())
                 _dbContext.UserNotifications.RemoveRange(userNotifications);
-
-            // Remove the notification itself
             _dbContext.Notifications.Remove(notification);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
+        // ✅ Admin: Get All Users and their IDs
+        [HttpGet("GetAllUsersAndId")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsersAndId()
+        {
+            var users = await _dbContext.UserProfiles
+                .Include(up => up.User)
+                .Select(up => new
+                {
+                    UserId = up.User.Id,
+                    ProfileId = up.Id,
+                    FirstName = up.FirstName,
+                    LastName = up.LastName,
+                    Email = up.User.Email,
+                    Role = up.User.Role
+                })
+                .ToListAsync();
+
+            return Ok(users);
+        }
+
+
     }
 }
+

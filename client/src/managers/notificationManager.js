@@ -23,6 +23,8 @@ export const getUserNotifications = () => {
 
 // ✅ Create a Notification (Admin Only)
 export const createNotification = (notification) => {
+  console.log("Notification payload:", notification);
+
   return fetch(_apiUrl, {
     method: "POST",
     headers: getAuthHeaders(),
@@ -75,6 +77,27 @@ export const deleteNotification = (notificationId) => {
     })
     .catch((error) => {
       console.error("Error deleting notification:", error);
+      throw error;
+    });
+};
+
+// ✅ Get All Users with User ID and Profile ID
+export const getAllUsersAndId = () => {
+  return fetch(`${_apiUrl}/GetAllUsersAndId`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then((error) => {
+          throw new Error(
+            `HTTP error! status: ${res.status}, message: ${error.message}`
+          );
+        });
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching all users with ID:", error);
       throw error;
     });
 };
