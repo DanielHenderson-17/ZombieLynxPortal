@@ -47,8 +47,11 @@ During the development of the Zombie Lynx Portal API, I deepened my understandin
 Looking ahead, here are some planned features and enhancements:
 
 - **Connect to Discord.js**: Integrate the portal with Discord for richer community engagement and notifications.
-- **Add a Shop**: Create an in-app shop where players can purchase items or services.
-- **Integrate Stats Portal**: Add a stats portal to display player performance and in-game achievements.
+- **Add a Shop**: Connect to existing in game shop for better UI/UX experience.
+- **Integrate Stats Portal**: Connect to existing stats portal for single location solution for Zombie Lynx Gaming.
+- **Data Analytics**: Track Admin response and resolution time and deliver in graphs per Admin.
+- **Normalize Database Design** Check for redundancies in db design to improve integrity.
+- **Unit Tests for all endpoints** Create simple unit testing to test all endpoints moving forward.
 
 ## Getting Started
 
