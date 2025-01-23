@@ -16,7 +16,23 @@ Zombie Lynx Portal API is a .NET/React application that serves as a ticket and n
 - .NET Core for the backend API
 - React for the frontend
 - Entity Framework Core for database management
-- Integration with Steam, Discord, and Epic APIs (Discord and Epic coming soon!)
+- JWT Authentication
+- OpenID Login Integration with Steam, Discord, and Epic APIs (Discord and Epic coming soon!)
+
+## What I Learned
+
+During the development of the Zombie Lynx Portal API, I deepened my understanding of:
+
+- **OpenID**: Explored how OpenID works for secure user authentication and how to integrate it with third-party services like Steam.
+- **JWT**: Gained a comprehensive understanding of JWT (JSON Web Tokens), including how to generate, sign, validate, and use them effectively for user authentication and authorization.
+
+## Goals for the Future
+
+Looking ahead, here are some planned features and enhancements:
+
+- **Connect to Discord.js**: Integrate the portal with Discord for richer community engagement and notifications.
+- **Add a Shop**: Create an in-app shop where players can purchase items or services.
+- **Integrate Stats Portal**: Add a stats portal to display player performance and in-game achievements.
 
 ## Getting Started
 
@@ -25,7 +41,8 @@ To get started with the Zombie Lynx Portal API, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:DanielHenderson-17/jwt-repo.git
+   git clone git@github.com:DanielHenderson-17/ZombieLynxPortal.git
+
    ```
 
 2. Navigate to the project directory:
