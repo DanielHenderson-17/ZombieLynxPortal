@@ -2,7 +2,7 @@
 
 ## Overview
 
-Zombie Lynx Portal API is a .NET/React application that serves as a ticket and notification portal for players using Steam, Discord, and Epic.
+Zombie Lynx Portal API is a .NET/React application that serves as a ticket and notification portal for players using Steam, Discord, and Epic. Users can login to the portal and submit a ticket and have an ongoing conversation for real issues that may occur throughout their time at Zombie Lynx Gaming. Zombie Lynx Portal API serves as a customer service portal as well as an admin portal. Admins can assign users to tickets and issue notifications to one, many, or all users of the platform.
 
 ### Screenshots
 
