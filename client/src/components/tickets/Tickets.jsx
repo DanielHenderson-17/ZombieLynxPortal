@@ -21,6 +21,7 @@ export default function Tickets({ loggedInUser }) {
     }
   };
 
+  // Fetch open ticket count on component mount
   useEffect(() => {
     fetchOpenTicketCount();
   }, []);
@@ -37,8 +38,8 @@ export default function Tickets({ loggedInUser }) {
               location.pathname === "/tickets/new-ticket"
             }`}
           >
-            <button className="btn d-block w-50 text-start mb-3 btn-success">
-              <i className="bi bi-plus-circle me-3"></i>Create
+            <button className="btn d-block col-6 text-start mb-3 btn-success">
+              <i className="bi bi-plus-circle me-2"></i>Create
             </button>
           </Link>
 
@@ -78,7 +79,10 @@ export default function Tickets({ loggedInUser }) {
       {/* Main Content */}
       <div className="flex-grow-1 mb-0 ticket-main">
         <Routes>
-          <Route path="ticket/:ticketId/edit" element={<EditTicket />} />
+          <Route
+            path="ticket/:ticketId/edit"
+            element={<EditTicket loggedInUser={loggedInUser} />}
+          />
           <Route
             path="new-ticket"
             element={<NewTicket loggedInUser={loggedInUser} />}
@@ -95,7 +99,10 @@ export default function Tickets({ loggedInUser }) {
             path="closed-tickets"
             element={<ClosedTickets onTicketChange={fetchOpenTicketCount} />}
           />
-          <Route path="ticket/:ticketId" element={<SingleTicket />} />
+          <Route
+            path="ticket/:ticketId"
+            element={<SingleTicket loggedInUser={loggedInUser} />}
+          />
         </Routes>
       </div>
 

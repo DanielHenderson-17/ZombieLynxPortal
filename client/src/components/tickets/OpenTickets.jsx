@@ -24,25 +24,25 @@ export default function OpenTickets({ onTicketChange }) {
     }
   };
 
+  // Fetch open tickets on component mount
   useEffect(() => {
-    // Start fetching tickets
     fetchTickets();
 
-    // Set a timeout to show the loading message if fetching takes longer than 1 second
     const timeout = setTimeout(() => {
       if (fetching) {
         setLoading(true);
       }
     }, 1000);
 
-    // Cleanup timeout if fetching finishes before the timeout
     return () => clearTimeout(timeout);
   }, [fetching]);
 
+  // Handle ticket click and navigate to ticket details
   const handleTicketClick = (ticketId) => {
     navigate(`/tickets/ticket/${ticketId}`);
   };
 
+  // Handle closing a ticket
   const handleCloseTicket = async (ticketId) => {
     try {
       await closeTicketAPI(ticketId);
@@ -94,10 +94,10 @@ export default function OpenTickets({ onTicketChange }) {
                   onClick={() => handleTicketClick(ticket.id)}
                   style={{ cursor: "pointer" }}
                 >
-                  <td className="text-start col-1 d-none d-lg-table-cell">
+                  <td className="text-start col-1 d-none d-lg-table-cell p-0">
                     <span className="text-warning fw-bold mx-auto">
                       <img
-                        className="gameImg ms-1"
+                        className="gameImg3 ms-1"
                         src={getGameImage(ticket.game)}
                         alt=""
                       />

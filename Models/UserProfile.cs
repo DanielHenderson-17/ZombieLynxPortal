@@ -14,8 +14,6 @@ namespace ZombieLynxPortalAPI.Models
         [Required, MaxLength(50)]
         public string LastName { get; set; }
 
-
-        // Foreign Key to User
         [ForeignKey("User")]
         public Guid UserId { get; set; }
         public User User { get; set; }

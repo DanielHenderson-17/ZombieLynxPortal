@@ -22,7 +22,6 @@ body {
   background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ffffff" viewBox="0 0 16 16"><path d="M1 2.5h14M1 8h14M1 13.5h14" stroke="%23ffffff" stroke-width="1.5" stroke-linecap="round"/></svg>');
 }
 
-/* Backdrop to dim everything */
 .backdrop {
   position: fixed;
   top: 0;
@@ -33,7 +32,6 @@ body {
   z-index: 1040;
 }
 
-/* Slide-Out Mobile Menu */
 .mobile-menu {
   z-index: 1050;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
@@ -44,4 +42,12 @@ body {
     background-image: none !important;
     background-color: rgb(0, 0, 0);
   }
+}
+
+.profile-menu {
+  margin-top: 100px;
+}
+
+.profile-menu .dropdown-item:hover {
+  background-color: rgb(122, 122, 122);
 }

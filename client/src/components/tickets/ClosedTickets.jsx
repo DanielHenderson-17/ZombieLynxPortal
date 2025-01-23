@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   getClosedTickets,
   restoreTicketAPI,
-  deleteTicket,
 } from "../../managers/ticketManager";
 import { truncateText } from "../../utils/truncateText";
 import { getGameImage } from "../../utils/gameFormatter";
@@ -28,11 +27,9 @@ export default function ClosedTickets({ onTicketChange }) {
     }
   };
 
+  // Fetch closed tickets on component mount
   useEffect(() => {
-    // Start the fetch
     fetchTickets();
-
-    // Set a timeout to show the loading message if fetching takes longer than 1 second
     const timeout = setTimeout(() => {
       if (fetching) {
         setLoading(true);
@@ -43,6 +40,7 @@ export default function ClosedTickets({ onTicketChange }) {
     return () => clearTimeout(timeout);
   }, [fetching]);
 
+  // Handle restoring a ticket
   const handleRestoreTicket = async (ticketId) => {
     try {
       await restoreTicketAPI(ticketId);
@@ -55,17 +53,7 @@ export default function ClosedTickets({ onTicketChange }) {
     }
   };
 
-  const handleDeleteTicket = async (ticketId) => {
-    try {
-      await deleteTicket(ticketId);
-      setTickets((prevTickets) =>
-        prevTickets.filter((ticket) => ticket.id !== ticketId)
-      );
-    } catch (error) {
-      console.error("Error deleting ticket:", error);
-    }
-  };
-
+  // Handle ticket click and navigate to ticket details
   const handleTicketClick = (ticketId) => {
     navigate(`/tickets/ticket/${ticketId}`);
   };
@@ -163,15 +151,6 @@ export default function ClosedTickets({ onTicketChange }) {
                         }}
                       >
                         <i className="bi bi-arrow-counterclockwise"></i>
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm ticket-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteTicket(ticket.id);
-                        }}
-                      >
-                        <i className="bi bi-trash3"></i>
                       </button>
                     </div>
                     <small className="position-absolute ticket-id">

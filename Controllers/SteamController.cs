@@ -23,7 +23,7 @@ namespace ZombieLynxPortalAPI.Controllers
             _configuration = configuration;
         }
 
-
+        // Ping API
         [HttpGet("ping")]
         public IActionResult Ping() => Ok("SteamAuthController is active.");
 
@@ -49,7 +49,11 @@ namespace ZombieLynxPortalAPI.Controllers
                 .FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
 
             if (zlgMember == null || string.IsNullOrEmpty(zlgMember.SteamId))
-                return NotFound("No Steam account linked.");
+                return Ok(new
+                {
+                    Message = "No Steam account linked.",
+                    IsLinked = false
+                });
 
             return Ok(new
             {

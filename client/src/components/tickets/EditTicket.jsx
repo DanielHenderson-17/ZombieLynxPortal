@@ -6,7 +6,7 @@ import {
   getTicketOptions,
 } from "../../managers/ticketManager";
 
-export default function EditTicket() {
+export default function EditTicket({ loggedInUser }) {
   const { ticketId } = useParams();
   const navigate = useNavigate();
 
@@ -29,11 +29,21 @@ export default function EditTicket() {
 
   const [loading, setLoading] = useState(true);
 
-  // Fetch ticket details and options
+  // Fetch ticket data on component mount and check if the user is authorized to edit the ticket before populating the form fields with the ticket data and available options
   useEffect(() => {
     const fetchData = async () => {
       try {
         const ticket = await getTicketById(ticketId);
+        const isAssigned = ticket.assignedUsers.some(
+          (user) => user.id === loggedInUser.id
+        );
+
+        if (!isAssigned) {
+          alert("You are not authorized to edit this ticket.");
+          navigate("/tickets/open-tickets");
+          return;
+        }
+
         const ticketOptions = await getTicketOptions();
 
         setOptions({
@@ -42,7 +52,6 @@ export default function EditTicket() {
           categories: ticketOptions.categories,
         });
 
-        // Set form data and available servers based on the existing ticket's game
         setFormData({
           subject: ticket.subject,
           category: ticket.category,
@@ -52,19 +61,19 @@ export default function EditTicket() {
           assignedUserIds: ticket.assignedUsers.map((user) => user.id),
         });
 
-        // Set available servers for the pre-selected game
         setAvailableServers(ticketOptions.gamesWithServers[ticket.game] || []);
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching ticket data:", error);
+        navigate("/tickets/open-tickets");
       }
     };
 
     fetchData();
-  }, [ticketId]);
+  }, [ticketId, loggedInUser, navigate]);
 
-  // Update available servers when the game changes
+  // Update available servers when the game changes in the form data to show the correct servers for the selected game in the form select field
   useEffect(() => {
     if (formData.game) {
       setAvailableServers(options.gamesWithServers[formData.game] || []);

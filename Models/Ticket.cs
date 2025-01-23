@@ -31,12 +31,13 @@ namespace ZombieLynxPortalAPI.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        // Foreign Key to UserProfile
         [ForeignKey("UserProfile")]
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
 
         public ICollection<UserTicket> UserTickets { get; set; }
         public ICollection<AdminTicket> AdminTickets { get; set; }
+
+        public ICollection<Message> Messages { get; set; }
     }
 }
