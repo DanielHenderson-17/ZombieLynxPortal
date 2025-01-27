@@ -70,6 +70,7 @@ export const linkSteamAccount = (onSuccess) => {
       return;
     }
 
+    // Open Steam login popup window and redirect to Steam OpenID login page for authentication
     const steamLoginUrl =
       `${STEAM_OPENID_URL}?openid.ns=http://specs.openid.net/auth/2.0` +
       `&openid.mode=checkid_setup` +
@@ -88,6 +89,7 @@ export const linkSteamAccount = (onSuccess) => {
     const handleMessage = (event) => {
       if (event.origin !== window.location.origin) return;
 
+      // Extract Steam ID from auth response and fetch Steam profile data using Steam API key and CORS proxy server (corsproxy.io) to link account to user profile
       const { type, steamId } = event.data;
       if (type === "STEAM_AUTH_SUCCESS" && steamId) {
         const proxyUrl = "https://corsproxy.io/?";
