@@ -21,7 +21,6 @@ export default function Tickets({ loggedInUser }) {
     }
   };
 
-  // Fetch open ticket count on component mount
   useEffect(() => {
     fetchOpenTicketCount();
   }, []);
@@ -33,9 +32,9 @@ export default function Tickets({ loggedInUser }) {
         <div>
           {/* New Ticket Button */}
           <Link
-            to="/tickets/new-ticket"
+            to="/member/tickets/new-ticket"
             className={`d-flex justify-content-end text-decoration-none ${
-              location.pathname === "/tickets/new-ticket"
+              location.pathname === "/member/tickets/new-ticket" ? "active" : ""
             }`}
           >
             <button className="btn d-block col-6 text-start mb-3 btn-success">
@@ -45,9 +44,11 @@ export default function Tickets({ loggedInUser }) {
 
           {/* Open Tickets Button */}
           <Link
-            to="/tickets/open-tickets"
+            to="/member/tickets/open-tickets"
             className={`text-decoration-none ${
-              location.pathname === "/tickets/open-tickets" ? "active" : ""
+              location.pathname === "/member/tickets/open-tickets"
+                ? "active"
+                : ""
             }`}
           >
             <button className="btn d-block w-100 text-start mb-2 text-white d-flex justify-content-between align-items-center">
@@ -64,9 +65,11 @@ export default function Tickets({ loggedInUser }) {
 
           {/* Closed Tickets Button */}
           <Link
-            to="/tickets/closed-tickets"
+            to="/member/tickets/closed-tickets"
             className={`text-decoration-none ${
-              location.pathname === "/tickets/closed-tickets" ? "active" : ""
+              location.pathname === "/member/tickets/closed-tickets"
+                ? "active"
+                : ""
             }`}
           >
             <button className="btn d-block w-100 text-start text-white">
@@ -111,9 +114,9 @@ export default function Tickets({ loggedInUser }) {
         <div className="d-flex justify-content-around pt-2 pb-1 my-1">
           {/* New Ticket Button */}
           <Link
-            to="/tickets/new-ticket"
+            to="/member/tickets/new-ticket"
             className={`text-decoration-none text-white ${
-              location.pathname === "/tickets/new-ticket" ? "active" : ""
+              location.pathname === "/member/tickets/new-ticket" ? "active" : ""
             }`}
           >
             <div className="d-flex flex-column align-items-center">
@@ -123,9 +126,11 @@ export default function Tickets({ loggedInUser }) {
 
           {/* Open Tickets Button */}
           <Link
-            to="/tickets/open-tickets"
+            to="/member/tickets/open-tickets"
             className={`text-decoration-none text-white ${
-              location.pathname === "/tickets/open-tickets" ? "active" : ""
+              location.pathname === "/member/tickets/open-tickets"
+                ? "active"
+                : ""
             }`}
           >
             <div className="d-flex flex-column align-items-center position-relative">
@@ -140,9 +145,11 @@ export default function Tickets({ loggedInUser }) {
 
           {/* Closed Tickets Button */}
           <Link
-            to="/tickets/closed-tickets"
+            to="/member/tickets/closed-tickets"
             className={`text-decoration-none text-white ${
-              location.pathname === "/tickets/closed-tickets" ? "active" : ""
+              location.pathname === "/member/tickets/closed-tickets"
+                ? "active"
+                : ""
             }`}
           >
             <div className="d-flex flex-column align-items-center">

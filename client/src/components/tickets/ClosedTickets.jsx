@@ -55,7 +55,7 @@ export default function ClosedTickets({ onTicketChange }) {
 
   // Handle ticket click and navigate to ticket details
   const handleTicketClick = (ticketId) => {
-    navigate(`/tickets/ticket/${ticketId}`);
+    navigate(`/member/tickets/ticket/${ticketId}`);
   };
 
   if (error) {

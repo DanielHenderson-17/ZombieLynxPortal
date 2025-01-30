@@ -36,10 +36,9 @@ export default function OpenTickets({ onTicketChange }) {
 
     return () => clearTimeout(timeout);
   }, [fetching]);
-
   // Handle ticket click and navigate to ticket details
   const handleTicketClick = (ticketId) => {
-    navigate(`/tickets/ticket/${ticketId}`);
+    navigate(`/member/tickets/ticket/${ticketId}`);
   };
 
   // Handle closing a ticket

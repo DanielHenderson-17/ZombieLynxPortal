@@ -1,6 +1,6 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthorizedRoute } from "./auth/AuthorizedRoute";
-import Home from "../components/home/Home"; // Import Home component
+import Home from "../components/home/Home";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Member from "../components/member/Member";
@@ -13,10 +13,17 @@ import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "./NavBar";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
+  const location = useLocation();
+
+  // Routes where the NavBar should not be displayed
+  const hideNavBarRoutes = ["/login", "/register"];
+
   return (
     <>
-      {/* Always display NavBar */}
-      <NavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
+      {/* Conditionally display the NavBar */}
+      {!hideNavBarRoutes.includes(location.pathname) && (
+        <NavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
+      )}
 
       <Routes>
         {/* Public Routes */}
