@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink as RRNavLink, Link } from "react-router-dom";
+import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom"; // Added useNavigate
 import { logout } from "../managers/authManager";
 import { getUserProfiles } from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
@@ -15,6 +15,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [randomSeed, setRandomSeed] = useState(null);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate(); // Initialize navigate
 
   // Fetch user profile on currently logged-in user
   useEffect(() => {
@@ -78,7 +79,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     }
   }, [loggedInUser, steamAccount]);
 
-  //Close dropdown when clicked outside
+  // Close dropdown when clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -92,6 +93,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleLogout = () => {
+    logout().then(() => {
+      setLoggedInUser(null);
+      navigate("https://zlg.gg");
+    });
+  };
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark">
@@ -169,13 +177,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 >
                   <button
                     className="dropdown-item text-white"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      logout().then(() => {
-                        setLoggedInUser(null);
-                        setShowDropdown(false);
-                      });
-                    }}
+                    onClick={handleLogout} // Use handleLogout here
                   >
                     Logout
                   </button>
@@ -222,10 +224,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
               className="btn btn-primary w-100"
               onClick={(e) => {
                 e.preventDefault();
-                logout().then(() => {
-                  setLoggedInUser(null);
-                  setOpen(false);
-                });
+                handleLogout(); // Call handleLogout here as well
               }}
             >
               Logout
