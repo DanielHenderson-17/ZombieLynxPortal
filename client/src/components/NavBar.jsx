@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink as RRNavLink, Link } from "react-router-dom";
+import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
 import { logout } from "../managers/authManager";
 import { getUserProfiles } from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
@@ -15,36 +15,20 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [randomSeed, setRandomSeed] = useState(null);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
-  // Fetch user profile on currently logged-in user
+  // Fetch user profile
   useEffect(() => {
     if (loggedInUser) {
       getUserProfiles()
         .then((profiles) => {
-          let profile = null;
-
-          if (Array.isArray(profiles)) {
-            profile = profiles.find(
-              (p) =>
-                p.email === loggedInUser.email ||
-                p.userId === loggedInUser.id ||
-                p.id === loggedInUser.id
-            );
-          } else if (profiles) {
-            if (
-              profiles.email === loggedInUser.email ||
-              profiles.userId === loggedInUser.id ||
-              profiles.id === loggedInUser.id
-            ) {
-              profile = profiles;
-            }
-          }
-
-          if (profile) {
-            setUserProfile(profile);
-          } else {
-            console.error("❗ Profile does not match logged-in user", profiles);
-          }
+          let profile = profiles?.find(
+            (p) =>
+              p.email === loggedInUser.email ||
+              p.userId === loggedInUser.id ||
+              p.id === loggedInUser.id
+          );
+          if (profile) setUserProfile(profile);
         })
         .catch((error) =>
           console.error("Failed to fetch user profile:", error)
@@ -52,7 +36,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     }
   }, [loggedInUser]);
 
-  // Fetch Steam account and update every minute
+  // Fetch Steam account
   useEffect(() => {
     const generateRandomSeed = () => Math.floor(Math.random() * 1000);
     setRandomSeed(generateRandomSeed());
@@ -60,10 +44,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     const fetchSteamAccount = async () => {
       try {
         const updatedSteamAccount = await getLinkedSteamAccount();
-        if (
-          updatedSteamAccount &&
-          updatedSteamAccount.steamImgUrl !== steamAccount?.steamImgUrl
-        ) {
+        if (updatedSteamAccount?.steamImgUrl !== steamAccount?.steamImgUrl) {
           setSteamAccount(updatedSteamAccount);
         }
       } catch (error) {
@@ -78,7 +59,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     }
   }, [loggedInUser, steamAccount]);
 
-  //Close dropdown when clicked outside
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -87,11 +68,15 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleLogout = () => {
+    logout().then(() => {
+      setLoggedInUser(null);
+      navigate("/");
+    });
+  };
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark">
@@ -109,12 +94,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
         </RRNavLink>
+
         {/* Desktop Menu */}
         <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
           {!loggedInUser ? (
             <button
               className="btn btn-primary"
-              onClick={() => (window.location.href = "/login")}
+              onClick={() => navigate("/login")}
             >
               Login
             </button>
@@ -169,13 +155,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 >
                   <button
                     className="dropdown-item text-white"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      logout().then(() => {
-                        setLoggedInUser(null);
-                        setShowDropdown(false);
-                      });
-                    }}
+                    onClick={() => navigate("/member")}
+                  >
+                    My Profile
+                  </button>
+                  <button
+                    className="dropdown-item text-white"
+                    onClick={handleLogout}
                   >
                     Logout
                   </button>
@@ -220,13 +206,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             )}
             <button
               className="btn btn-primary w-100"
-              onClick={(e) => {
-                e.preventDefault();
-                logout().then(() => {
-                  setLoggedInUser(null);
-                  setOpen(false);
-                });
-              }}
+              onClick={() => navigate("/member")}
+            >
+              My Profile
+            </button>
+            <button
+              className="btn btn-danger w-100 mt-2"
+              onClick={handleLogout}
             >
               Logout
             </button>
