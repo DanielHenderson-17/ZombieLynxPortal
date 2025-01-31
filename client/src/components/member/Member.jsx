@@ -45,7 +45,7 @@ export default function Member({ loggedInUser }) {
 
   // Redirect to /tickets if the user lands on the root URL
   useEffect(() => {
-    if (location.pathname === "/") {
+    if (location.pathname === "/member") {
       navigate("tickets");
     }
   }, [location.pathname, navigate]);
