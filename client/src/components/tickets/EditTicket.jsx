@@ -40,7 +40,7 @@ export default function EditTicket({ loggedInUser }) {
 
         if (!isAssigned) {
           alert("You are not authorized to edit this ticket.");
-          navigate("/tickets/open-tickets");
+          navigate("/member/tickets/open-tickets");
           return;
         }
 
@@ -66,7 +66,7 @@ export default function EditTicket({ loggedInUser }) {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching ticket data:", error);
-        navigate("/tickets/open-tickets");
+        navigate("/member/tickets/open-tickets");
       }
     };
 
@@ -93,7 +93,7 @@ export default function EditTicket({ loggedInUser }) {
     try {
       await editTicket(ticketId, formData);
       alert("Ticket updated successfully!");
-      navigate("/tickets/open-tickets");
+      navigate("/member/tickets/open-tickets");
     } catch (error) {
       console.error("Error editing ticket:", error);
     }
