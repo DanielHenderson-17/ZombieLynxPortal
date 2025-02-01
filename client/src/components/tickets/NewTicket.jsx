@@ -96,7 +96,7 @@ export default function NewTicket({ loggedInUser }) {
         assignedUserIds: [],
       });
       alert("Ticket created. Redirecting...");
-      navigate("/tickets/open-tickets");
+      navigate("/member/tickets/open-tickets");
     } catch (error) {
       console.error("Error creating ticket:", error);
     }
