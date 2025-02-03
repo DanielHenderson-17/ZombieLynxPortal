@@ -52,7 +52,7 @@ export default function ServerListDisplay() {
       mainImg: "/src/assets/images/minecraft-main.png",
       category: "Sandbox",
       description:
-        "We host survival, creative, bedwars, parkour, and many other servers. Earn points and vote rewards, with an in-game shop.",
+        "We host Survival, Creative, BedWars, Parkour, and many other servers. Earn points and vote rewards, with an in-game shop.",
     },
     {
       id: 5,
@@ -68,7 +68,7 @@ export default function ServerListDisplay() {
   const [activeServer, setActiveServer] = useState(servers[0]);
 
   return (
-    <div className="my-3 pb-5 zlg-server-list">
+    <div className="my-5 pb-5 zlg-server-list">
       <h3 className="text-start text-danger server-status-title mb-3">
         ZLG <span className="text-white ms-2">Servers</span>
         <span className="server-status-line"></span>
@@ -91,11 +91,8 @@ export default function ServerListDisplay() {
                   className="img-fluid me-2 col-3 rounded-2 server-thumb"
                   style={{ width: "100px" }}
                 />
-                <div className="col-10">
-                  {/* Title: Always white and bold */}
-                  <p className="m-0 fw-bold text-white">{server.title}</p>
-
-                  {/* Description: Conditional color based on active status */}
+                <div className="col-10 my-auto">
+                  <p className="m-0 fw-bold text-white pt-1">{server.title}</p>
                   <p
                     className={`m-0 ${
                       activeServer.id === server.id
@@ -110,20 +107,19 @@ export default function ServerListDisplay() {
             ))}
           </ul>
         </div>
-
         {/* Server Details */}
-        <div className="col-6 active-server-details">
+        <div className="col-6 active-server-details rounded-end-2 rounded-start-0">
           <div className="text-center">
             <img
               src={activeServer.mainImg}
               alt={activeServer.title}
-              className="img-fluid mb-3 col-12"
+              className="img-fluid mb-3 col-12 rounded-end-2"
             />
             <div className="ps-3">
               <div className="d-flex justify-content-between">
-                <h3 className="text-white text-start col-8">
+                <h4 className="text-white text-start col-8">
                   {activeServer.title}
-                </h3>
+                </h4>
                 <span
                   className={`badge rounded-start-2 rounded-end-0 my-auto py-2 fs-6 ${getCategoryBadgeClass(
                     activeServer.category
@@ -133,7 +129,7 @@ export default function ServerListDisplay() {
                 </span>
               </div>
 
-              <p className="mt-3 text-secondary text-start">
+              <p className="mt-3 text-secondary text-start pe-2">
                 {activeServer.description}
               </p>
             </div>

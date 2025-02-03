@@ -2,4 +2,10 @@
   min-width: 100% !important;
   min-height: 100% !important;
   height: 100vh !important;
+  overflow-y: scroll;
+}
+
+body {
+  background-image: url(../../../public/background.png) !important;
+  background-color: black;
 }
