@@ -2,6 +2,21 @@ import { useState } from "react";
 import "../../assets/styles/ServerListDisplay.css";
 
 export default function ServerListDisplay() {
+  function getCategoryBadgeClass(category) {
+    switch (category) {
+      case "MMO Survival":
+        return "badge-mmo-survival";
+      case "Sandbox Simulation":
+        return "badge-sandbox-simulation";
+      case "Sandbox":
+        return "badge-sandbox";
+      case "Space Survival":
+        return "badge-space-survival";
+      default:
+        return "bg-secondary";
+    }
+  }
+
   const servers = [
     {
       id: 1,
@@ -53,14 +68,14 @@ export default function ServerListDisplay() {
   const [activeServer, setActiveServer] = useState(servers[0]);
 
   return (
-    <div className="mt-3">
-      <h1 className="text-start text-danger server-status-title mb-3">
-        Server <span className="text-white ms-2">Status</span>
+    <div className="my-3 pb-5 zlg-server-list">
+      <h3 className="text-start text-danger server-status-title mb-3">
+        ZLG <span className="text-white ms-2">Servers</span>
         <span className="server-status-line"></span>
-      </h1>
-      <div className="d-flex server-list">
+      </h3>
+      <div className="d-flex server-list h-100">
         {/* Server List */}
-        <div className="col-6">
+        <div className="col-6 h-100">
           <ul className="list-group text-start rounded-start-2 rounded-end-0">
             {servers.map((server) => (
               <li
@@ -97,16 +112,31 @@ export default function ServerListDisplay() {
         </div>
 
         {/* Server Details */}
-        <div className="col-6">
+        <div className="col-6 active-server-details">
           <div className="text-center">
             <img
               src={activeServer.mainImg}
               alt={activeServer.title}
-              className="img-fluid mb-3 w-100"
+              className="img-fluid mb-3 col-12"
             />
-            <h3>{activeServer.title}</h3>
-            <span className="badge bg-primary">{activeServer.category}</span>
-            <p className="mt-3">{activeServer.description}</p>
+            <div className="ps-3">
+              <div className="d-flex justify-content-between">
+                <h3 className="text-white text-start col-8">
+                  {activeServer.title}
+                </h3>
+                <span
+                  className={`badge rounded-start-2 rounded-end-0 my-auto py-2 fs-6 ${getCategoryBadgeClass(
+                    activeServer.category
+                  )}`}
+                >
+                  {activeServer.category}
+                </span>
+              </div>
+
+              <p className="mt-3 text-secondary text-start">
+                {activeServer.description}
+              </p>
+            </div>
           </div>
         </div>
       </div>

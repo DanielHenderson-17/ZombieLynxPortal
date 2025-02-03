@@ -1,3 +1,8 @@
+.zlg-server-list h3 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
 .server-list-item {
   cursor: pointer;
   display: flex;
@@ -58,4 +63,30 @@
   background-color: #292e38;
   cursor: pointer;
   border-bottom: 1px solid #2f3541 !important;
+  border-right: 1px solid #2f3541 !important;
+}
+
+.active-server-details {
+  background-color: #292e38;
+}
+
+.badge-mmo-survival {
+  background-color: #22a2b1;
+}
+
+.badge-sandbox-simulation {
+  background-color: #882adf;
+}
+
+.badge-sandbox {
+  background-color: #49ada3;
+}
+
+.badge-space-survival {
+  background-color: #1464d2;
+}
+
+.active-server-details .badge {
+  color: white;
+  font-weight: bold;
 }

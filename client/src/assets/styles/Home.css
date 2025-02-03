@@ -26,3 +26,11 @@
 .about-single {
   background-color: #292e38;
 }
+
+.zlg-about h4,
+.zlg-about h5 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  margin-bottom: 0;
+  text-transform: uppercase;
+}
