@@ -1,5 +1,6 @@
 import "../../assets/styles/Home.css";
 import ServerListDisplay from "../server/ServerListDisplay";
+import ServerStatusDisplay from "../server/ServerStatusDisplay";
 
 export default function Home() {
   return (
@@ -81,6 +82,7 @@ export default function Home() {
       {/* ZLG Servers */}
 
       <ServerListDisplay />
+      <ServerStatusDisplay />
     </div>
   );
 }
