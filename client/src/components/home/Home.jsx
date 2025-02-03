@@ -54,7 +54,7 @@ export default function Home() {
           </div>
           <div className="col-9">
             <h4 className="text-white text-start">Local Dedicated</h4>
-            <h5 className="text-start text-danger">Locally Ran Servers</h5>
+            <h5 className="text-start text-danger">Locally Ran Servers!</h5>
           </div>
         </div>
         <div className="d-flex custom-col-3-75 rounded-3 about-single p-3">
@@ -74,7 +74,7 @@ export default function Home() {
           </div>
           <div className="col-9">
             <h4 className="text-white text-start">Get Rewarded</h4>
-            <h5 className="text-start text-danger">In-Game rewards</h5>
+            <h5 className="text-start text-danger">In-Game rewards!</h5>
           </div>
         </div>
       </div>

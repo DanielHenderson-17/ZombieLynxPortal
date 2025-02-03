@@ -27,10 +27,13 @@
   background-color: #292e38;
 }
 
-.zlg-about h4,
-.zlg-about h5 {
+.zlg-about h4 {
   font-family: "Montserrat", sans-serif;
-  font-weight: 400;
+  font-weight: 700 !important;
   margin-bottom: 0;
+  text-transform: uppercase;
+}
+
+.zlg-about h5 {
   text-transform: uppercase;
 }
