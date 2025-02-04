@@ -40,10 +40,10 @@
   font-weight: bold;
 }
 
-.server-status-table tbody tr:nth-child(even) {
-  background-color: #343a40;
-}
-
 .server-status-table tbody tr:hover {
   background-color: #495057;
+}
+
+.vote-connect-button {
+  background-color: #dc3545;
 }

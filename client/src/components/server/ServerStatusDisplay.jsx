@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../assets/styles/ServerStatusDisplay.css";
+import { fetchServerData } from "../../managers/serverManager";
 
 export default function ServerStatusDisplay() {
-  // Define server tabs with table data references
   const servers = [
     { id: 1, name: "Ark:SE", tabId: "tabs-1-1", sectionId: "ArkSE" },
     { id: 2, name: "Ark:SA", tabId: "tabs-1-2", sectionId: "arkSA" },
@@ -11,8 +11,40 @@ export default function ServerStatusDisplay() {
     { id: 5, name: "Empyrion", tabId: "tabs-1-7", sectionId: "empyrions" },
   ];
 
-  // State to track active server tab
   const [activeServer, setActiveServer] = useState(servers[0]);
+  const [serverDataCache, setServerDataCache] = useState({});
+
+  useEffect(() => {
+    // Preload data for all servers in parallel
+    async function preloadServerData() {
+      const dataPromises = servers.map(async (server) => {
+        const data = await fetchServerData(server.name);
+        return { name: server.name, data };
+      });
+
+      const results = await Promise.all(dataPromises);
+
+      // Cache the data
+      const cache = {};
+      results.forEach((result) => {
+        cache[result.name] = result.data;
+      });
+
+      setServerDataCache(cache);
+    }
+
+    preloadServerData();
+  }, [servers]);
+
+  // Get the active server's data from the cache
+  const activeServerData = serverDataCache[activeServer.name] || [];
+
+  // Helper function to copy text to clipboard
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Copied to clipboard!");
+    });
+  };
 
   return (
     <div className="mb-5">
@@ -62,6 +94,7 @@ export default function ServerStatusDisplay() {
                   {server.name} Server Status
                 </h4>
               </div>
+
               <table className="server-status-table mx-auto text-white">
                 <thead>
                   <tr>
@@ -75,10 +108,53 @@ export default function ServerStatusDisplay() {
                     <th className="vertical-line">Connect</th>
                   </tr>
                 </thead>
-                <tbody
-                  id={`${server.name.toLowerCase()}List`}
-                  className="font-monospace"
-                ></tbody>
+                <tbody className="font-monospace">
+                  {activeServerData.map((server) => (
+                    <tr className="text-start" key={server.serverName}>
+                      <td>
+                        <img
+                          src={
+                            server.isOnline
+                              ? "/src/assets/images/online.png"
+                              : "/src/assets/images/offline.png"
+                          }
+                          alt={server.isOnline ? "Online" : "Offline"}
+                        />
+                      </td>
+                      <td className="text-start">{server.name}</td>
+                      <td>{server.version}</td>
+                      <td>{`${server.players} / ${server.maxPlayers}`}</td>
+                      <td>
+                        <a
+                          href={server.voteUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className=" vote-connect-button rounded-2 p-3"
+                        >
+                          Vote
+                        </a>
+                      </td>
+                      <td>
+                        {activeServer.name === "Minecraft" ? (
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => copyToClipboard(server.connectInfo)}
+                          >
+                            Copy
+                          </button>
+                        ) : (
+                          <a
+                            href={server.connectUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Join
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </section>
           </div>
