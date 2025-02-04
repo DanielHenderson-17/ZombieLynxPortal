@@ -12,12 +12,12 @@
 }
 
 .server-status-tab .nav-link {
-  background-color: #343a40;
+  background-color: #292e38;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .server-status-tab .nav-link:hover {
-  background-color: #495057;
+  background-color: #292e38;
 }
 
 .server-status-tab .nav-link.active {
@@ -40,10 +40,10 @@
   font-weight: bold;
 }
 
-.server-status-table tbody tr:hover {
-  background-color: #495057;
+.vote-connect-button {
+  background-color: #292e38;
 }
 
-.vote-connect-button {
+.vote-connect-button:hover {
   background-color: #dc3545;
 }
