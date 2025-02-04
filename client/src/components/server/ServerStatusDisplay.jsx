@@ -86,9 +86,12 @@ export default function ServerStatusDisplay() {
             <section id={server.sectionId} className="text-white mb-5 pb-3">
               <div className="d-flex mx-auto col-12 mb-2">
                 <img
-                  src={`./assets/images/${server.name.toLowerCase()}.png`}
+                  src={`/src/assets/images/${server.name
+                    .toLowerCase()
+                    .replace(/[:]/g, "")}.png`}
                   alt=""
                   className="my-auto"
+                  style={{ width: "30px" }}
                 />
                 <h4 className="text-start col-12 ms-2 my-auto">
                   {server.name} Server Status
@@ -98,14 +101,14 @@ export default function ServerStatusDisplay() {
               <table className="server-status-table mx-auto text-white">
                 <thead>
                   <tr>
-                    <th>Status</th>
-                    <th className="text-start vertical-line ps-4">
+                    <th className="col-1">Status</th>
+                    <th className="text-start vertical-line ps-4 col-7">
                       Server Name
                     </th>
-                    <th className="vertical-line">Version</th>
-                    <th className="vertical-line">Players</th>
-                    <th className="vertical-line">Vote</th>
-                    <th className="vertical-line">Connect</th>
+                    <th className="vertical-line col-1">Version</th>
+                    <th className="vertical-line col-1">Players</th>
+                    <th className="vertical-line col-1">Vote</th>
+                    <th className="vertical-line col-1">Connect</th>
                   </tr>
                 </thead>
                 <tbody className="font-monospace">
@@ -122,31 +125,32 @@ export default function ServerStatusDisplay() {
                         />
                       </td>
                       <td className="text-start">{server.name}</td>
-                      <td>{server.version}</td>
+                      <td className="font-monospace">{server.version}</td>
                       <td>{`${server.players} / ${server.maxPlayers}`}</td>
-                      <td>
+                      <td className="p-2">
                         <a
                           href={server.voteUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className=" vote-connect-button rounded-2 p-3"
+                          className="vote-connect-button border-0 rounded-2 m-3 py-2 px-3 text-white text-decoration-none"
                         >
                           Vote
                         </a>
                       </td>
                       <td>
                         {activeServer.name === "Minecraft" ? (
-                          <button
-                            className="btn btn-primary"
+                          <a
+                            className="vote-connect-button border-0 rounded-2 m-3 py-2 px-3 text-white text-decoration-none"
                             onClick={() => copyToClipboard(server.connectInfo)}
                           >
                             Copy
-                          </button>
+                          </a>
                         ) : (
                           <a
                             href={server.connectUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="vote-connect-button border-0 rounded-2 m-3 py-2 px-3 text-white text-decoration-none"
                           >
                             Join
                           </a>
