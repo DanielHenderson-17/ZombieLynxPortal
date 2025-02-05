@@ -73,7 +73,7 @@ export default function ServerStatusDisplay() {
       </ul>
 
       {/* Tab Content */}
-      <div className="tab-content mt-4">
+      <div className="tab-content mt-0 mx-1">
         {servers.map((server) => (
           <div
             key={server.id}
@@ -82,7 +82,10 @@ export default function ServerStatusDisplay() {
             }`}
             id={server.tabId}
           >
-            <section id={server.sectionId} className="text-white mb-5 pb-3">
+            <section
+              id={server.sectionId}
+              className="text-white mb-5 p-3 border-0 server-status-table-bg rounded-bottom-3"
+            >
               <div className="d-flex mx-auto col-12 mb-2">
                 <img
                   src={`/src/assets/images/${server.name
