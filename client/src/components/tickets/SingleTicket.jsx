@@ -117,7 +117,7 @@ export default function SingleTicket({ loggedInUser }) {
   const handleCloseTicket = async () => {
     try {
       await closeTicketAPI(ticketId);
-      navigate("/tickets/closed-tickets");
+      navigate("/member/tickets/closed-tickets");
     } catch (error) {
       console.error("Error closing ticket:", error);
       setError("Failed to close the ticket. Please try again.");
@@ -128,7 +128,7 @@ export default function SingleTicket({ loggedInUser }) {
   const handleRestoreTicket = async () => {
     try {
       await restoreTicketAPI(ticketId);
-      navigate("/tickets");
+      navigate("/member/tickets/open-tickets");
     } catch (error) {
       console.error("Error restoring ticket:", error);
       setError("Failed to restore the ticket. Please try again.");
@@ -235,7 +235,9 @@ export default function SingleTicket({ loggedInUser }) {
               <small>Description:</small>
               <button
                 className="btn btn-link p-0 ms-2"
-                onClick={() => navigate(`/tickets/ticket/${ticket.id}/edit`)}
+                onClick={() =>
+                  navigate(`/member/tickets/ticket/${ticket.id}/edit`)
+                }
               >
                 <small className="bi bi-pencil text-white me-2"></small>
               </button>

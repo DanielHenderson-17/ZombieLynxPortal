@@ -1,0 +1,39 @@
+.home-container {
+}
+
+.custom-col-3-75 {
+  flex: 0 0 31.25%; /* 3.75 out of 12 columns = 31.25% */
+  max-width: 31.25%;
+}
+
+.splash-container {
+  background-image: url("/src/assets/images/apoc-background.png");
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-size: cover; /* Stretches the image to cover the container */
+  background-position: center;
+  height: 500px;
+}
+
+.splash-logo img {
+  height: 300px;
+  width: 350px;
+}
+
+.splash-zlg-guy img {
+  height: 100%;
+}
+
+.about-single {
+  background-color: #292e38;
+}
+
+.zlg-about h4 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700 !important;
+  margin-bottom: 0;
+  text-transform: uppercase;
+}
+
+.zlg-about h5 {
+  text-transform: uppercase;
+}
