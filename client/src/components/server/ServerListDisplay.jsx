@@ -20,7 +20,7 @@ export default function ServerListDisplay() {
   const servers = [
     {
       id: 1,
-      title: "Ark: Survival Evolved",
+      title: "ARK: SURVIVAL EVOLVED",
       thumbImg: "/src/assets/images/ark-thumb.png",
       mainImg: "/src/assets/images/ark-main.png",
       category: "MMO Survival",
@@ -29,7 +29,7 @@ export default function ServerListDisplay() {
     },
     {
       id: 2,
-      title: "Ark: Survival Ascended",
+      title: "ARK: SURVIVAL ASCENDED",
       thumbImg: "/src/assets/images/arkSA-thumb.png",
       mainImg: "/src/assets/images/arkSA-main.png",
       category: "MMO Survival",
@@ -38,7 +38,7 @@ export default function ServerListDisplay() {
     },
     {
       id: 3,
-      title: "Eco: Global Survival",
+      title: "ECO: GLOBAL SURVIVAL",
       thumbImg: "/src/assets/images/eco-thumb.png",
       mainImg: "/src/assets/images/eco-main.png",
       category: "Sandbox Simulation",
@@ -47,7 +47,7 @@ export default function ServerListDisplay() {
     },
     {
       id: 4,
-      title: "Minecraft: Java Edition",
+      title: "MINECRAFT: JAVA EDITION",
       thumbImg: "/src/assets/images/minecraft-thumb.png",
       mainImg: "/src/assets/images/minecraft-main.png",
       category: "Sandbox",
@@ -56,7 +56,7 @@ export default function ServerListDisplay() {
     },
     {
       id: 5,
-      title: "Empyrion: Galactic Survival",
+      title: "EMPYRION: GALACTIC SURVIVAL",
       thumbImg: "/src/assets/images/empyrion-thumb.png",
       mainImg: "/src/assets/images/empyrion-main.png",
       category: "Space Survival",
@@ -70,7 +70,7 @@ export default function ServerListDisplay() {
   return (
     <div className="mt-5 mb-2 pb-5 zlg-server-list">
       <h3 className="text-start text-danger server-status-title mb-3">
-        ZLG <span className="text-white ms-2">Servers</span>
+        ZLG <span className="text-white ms-2">SERVERS</span>
         <span className="server-status-line"></span>
       </h3>
       <div className="d-flex server-list h-100">
@@ -91,13 +91,13 @@ export default function ServerListDisplay() {
                   className="img-fluid me-2 col-3 rounded-2 server-thumb"
                   style={{ width: "100px" }}
                 />
-                <div className="col-10 my-auto">
-                  <p className="m-0 fw-bold text-white pt-1">{server.title}</p>
+                <div className="col-10 my-auto mx-1 pe-1">
+                  <p className="m-0 fw-bold text-white pt-1 game-title">
+                    {server.title}
+                  </p>
                   <p
-                    className={`m-0 ${
-                      activeServer.id === server.id
-                        ? "text-white"
-                        : "text-secondary"
+                    className={`m-0 pe-3 server-description-text ${
+                      activeServer.id === server.id ? "text-white" : ""
                     }`}
                   >
                     {server.description}
@@ -117,7 +117,7 @@ export default function ServerListDisplay() {
             />
             <div className="ps-3">
               <div className="d-flex justify-content-between">
-                <h4 className="text-white text-start col-8">
+                <h4 className="text-white text-start col-8 game-title2 fw-bold my-auto">
                   {activeServer.title}
                 </h4>
                 <span
@@ -129,7 +129,7 @@ export default function ServerListDisplay() {
                 </span>
               </div>
 
-              <p className="mt-3 text-secondary text-start pe-2">
+              <p className="mt-3 server-description-text text-start pe-2">
                 {activeServer.description}
               </p>
             </div>
