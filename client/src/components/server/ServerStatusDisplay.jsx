@@ -49,7 +49,7 @@ export default function ServerStatusDisplay() {
     <div className="mb-5">
       {/* Server Status Header */}
       <h3 className="text-start text-danger server-status-title mb-3">
-        Server <span className="text-white ms-2">Status</span>
+        SERVER <span className="text-white ms-2">STATUS</span>
         <span className="server-status-line"></span>
       </h3>
 

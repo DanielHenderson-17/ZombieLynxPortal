@@ -1,6 +1,10 @@
 .home-container {
 }
 
+.mission-text {
+  font-size: 1.25rem;
+}
+
 .custom-col-3-75 {
   flex: 0 0 31.25%; /* 3.75 out of 12 columns = 31.25% */
   max-width: 31.25%;

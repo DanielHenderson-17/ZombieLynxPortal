@@ -5,7 +5,7 @@ export default function ServicesListDisplay() {
     <div>
       {/* Server Status Header */}
       <h3 className="text-start text-danger server-status-title mb-3">
-        ZLG <span className="text-white ms-2">Services</span>
+        ZLG <span className="text-white ms-2">SERVICES</span>
         <span className="server-status-line"></span>
       </h3>
       <div className="d-flex justify-content-center col-12">
