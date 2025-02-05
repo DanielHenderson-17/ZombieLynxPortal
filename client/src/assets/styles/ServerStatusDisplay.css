@@ -30,6 +30,10 @@
   border-collapse: collapse;
 }
 
+.server-status-table-bg {
+  background-color: #181c23;
+}
+
 .server-status-table th,
 .server-status-table td {
   padding: 10px;
