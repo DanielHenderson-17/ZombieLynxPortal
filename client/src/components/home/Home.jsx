@@ -1,6 +1,7 @@
 import "../../assets/styles/Home.css";
 import ServerListDisplay from "../server/ServerListDisplay";
 import ServerStatusDisplay from "../server/ServerStatusDisplay";
+import ServicesListDisplay from "../services/ServicesListDisplay";
 
 export default function Home() {
   return (
@@ -83,6 +84,7 @@ export default function Home() {
 
       <ServerListDisplay />
       <ServerStatusDisplay />
+      <ServicesListDisplay />
     </div>
   );
 }

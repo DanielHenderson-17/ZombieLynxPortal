@@ -1,0 +1,13 @@
+.extra-life {
+  height: 250px;
+}
+
+.extra-life-text {
+  background: repeating-linear-gradient(
+    -55deg,
+    rgba(13, 13, 13, 1),
+    rgba(13, 13, 13, 1) 2px,
+    rgba(7, 7, 7, 1) 2px,
+    rgba(7, 7, 7, 1) 5px
+  );
+}
