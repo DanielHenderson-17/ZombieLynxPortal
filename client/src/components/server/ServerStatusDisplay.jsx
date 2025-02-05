@@ -14,27 +14,26 @@ export default function ServerStatusDisplay() {
   const [activeServer, setActiveServer] = useState(servers[0]);
   const [serverDataCache, setServerDataCache] = useState({});
 
+  // Fetch the active server's data once on mount
   useEffect(() => {
-    // Preload data for all servers in parallel
-    async function preloadServerData() {
-      const dataPromises = servers.map(async (server) => {
-        const data = await fetchServerData(server.name);
-        return { name: server.name, data };
-      });
-
-      const results = await Promise.all(dataPromises);
-
-      // Cache the data
-      const cache = {};
-      results.forEach((result) => {
-        cache[result.name] = result.data;
-      });
-
-      setServerDataCache(cache);
+    async function fetchInitialData() {
+      const data = await fetchServerData(activeServer.name);
+      setServerDataCache((prev) => ({ ...prev, [activeServer.name]: data }));
     }
 
-    preloadServerData();
-  }, [servers]);
+    fetchInitialData();
+  }, [activeServer.name]); // Only run once on component mount
+
+  // Handle fetching data on tab click
+  const handleTabClick = async (server) => {
+    setActiveServer(server);
+
+    // Check if data is already cached
+    if (!serverDataCache[server.name]) {
+      const data = await fetchServerData(server.name);
+      setServerDataCache((prev) => ({ ...prev, [server.name]: data }));
+    }
+  };
 
   // Get the active server's data from the cache
   const activeServerData = serverDataCache[activeServer.name] || [];
@@ -65,7 +64,7 @@ export default function ServerStatusDisplay() {
               className={`nav-link server-status-link text-white col-12 border-0 ${
                 activeServer.id === server.id ? "active" : ""
               }`}
-              onClick={() => setActiveServer(server)}
+              onClick={() => handleTabClick(server)}
             >
               {server.name}
             </button>
