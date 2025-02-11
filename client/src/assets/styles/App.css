@@ -1,11 +1,31 @@
 #root {
   min-width: 100% !important;
-  min-height: 100% !important;
-  height: 100vh !important;
-  overflow-y: scroll;
+
+  /* min-height: 100% !important; */
+  /* height: 100vh !important; */
 }
 
 body {
-  background-image: url(../../../public/background.png) !important;
-  background-color: black;
+  /* background-image: url(../../../public/background.png) !important; */
+  background-color: rgba(11, 77, 192, 0);
+  position: relative;
+}
+
+.nk-page-background-top,
+.nk-page-background-bottom,
+.nk-page-background-fixed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: -1;
+}
+
+.nk-page-background-bottom {
+  top: 2650px;
 }
