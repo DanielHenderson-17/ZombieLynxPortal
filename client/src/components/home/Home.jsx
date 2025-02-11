@@ -1,6 +1,7 @@
 import "../../assets/styles/Home.css";
 import ServerListDisplay from "../server/ServerListDisplay";
 import ServerStatusDisplay from "../server/ServerStatusDisplay";
+import ServicesListDisplay from "../services/ServicesListDisplay";
 
 export default function Home() {
   return (
@@ -36,8 +37,12 @@ export default function Home() {
             </svg>
           </div>
           <div className="col-9">
-            <h4 className="text-white text-start">Active Admins</h4>
-            <h5 className="text-start text-danger">We&apos;re here to help!</h5>
+            <h4 className="text-white text-start mission-text">
+              Active Admins
+            </h4>
+            <h5 className="text-start text-danger mission-text">
+              We&apos;re here to help!
+            </h5>
           </div>
         </div>
         <div className="d-flex custom-col-3-75 rounded-3 about-single p-3 mx-0">
@@ -54,8 +59,12 @@ export default function Home() {
             </svg>
           </div>
           <div className="col-9">
-            <h4 className="text-white text-start">Local Dedicated</h4>
-            <h5 className="text-start text-danger">Locally Ran Servers!</h5>
+            <h4 className="text-white text-start mission-text">
+              Local Dedicated
+            </h4>
+            <h5 className="text-start text-danger mission-text">
+              Locally Ran Servers!
+            </h5>
           </div>
         </div>
         <div className="d-flex custom-col-3-75 rounded-3 about-single p-3">
@@ -74,8 +83,10 @@ export default function Home() {
             </svg>
           </div>
           <div className="col-9">
-            <h4 className="text-white text-start">Get Rewarded</h4>
-            <h5 className="text-start text-danger">In-Game rewards!</h5>
+            <h4 className="text-white text-start mission-text">Get Rewarded</h4>
+            <h5 className="text-start text-danger mission-text">
+              In-Game rewards!
+            </h5>
           </div>
         </div>
       </div>
@@ -83,6 +94,7 @@ export default function Home() {
 
       <ServerListDisplay />
       <ServerStatusDisplay />
+      <ServicesListDisplay />
     </div>
   );
 }
