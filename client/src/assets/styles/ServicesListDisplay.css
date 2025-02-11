@@ -2,7 +2,8 @@
   height: 250px;
 }
 
-.extra-life-text {
+.extra-life-text,
+.price-card {
   background: repeating-linear-gradient(
     -55deg,
     rgba(13, 13, 13, 1),
@@ -10,4 +11,13 @@
     rgba(7, 7, 7, 1) 2px,
     rgba(7, 7, 7, 1) 5px
   );
+}
+
+.price-card {
+  height: 431px;
+}
+
+.service-tab .nav-link.active {
+  background-color: #dc3545 !important;
+  color: white;
 }
