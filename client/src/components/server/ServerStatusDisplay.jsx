@@ -84,7 +84,7 @@ export default function ServerStatusDisplay() {
           >
             <section
               id={server.sectionId}
-              className="text-white mb-5 p-3 border-0 server-status-table-bg rounded-bottom-3"
+              className="text-white my-4 p-3 border-0 server-status-table-bg rounded-3"
             >
               <div className="d-flex mx-auto col-12 mb-2">
                 <img
@@ -102,7 +102,7 @@ export default function ServerStatusDisplay() {
 
               <table className="server-status-table mx-auto text-white">
                 <thead>
-                  <tr>
+                  <tr className="border-bottom border-secondary">
                     <th className="col-1">Status</th>
                     <th className="text-start vertical-line ps-4 col-7">
                       Server Name
@@ -129,7 +129,7 @@ export default function ServerStatusDisplay() {
                       <td className="text-start">{server.name}</td>
                       <td className="font-monospace">{server.version}</td>
                       <td>{`${server.players} / ${server.maxPlayers}`}</td>
-                      <td className="p-2">
+                      <td className="pt-3 px-2">
                         <a
                           href={server.voteUrl}
                           target="_blank"
@@ -139,7 +139,7 @@ export default function ServerStatusDisplay() {
                           Vote
                         </a>
                       </td>
-                      <td>
+                      <td className="pt-3 px-2">
                         {activeServer.name === "Minecraft" ? (
                           <a
                             className="vote-connect-button border-0 rounded-2 m-3 py-2 px-3 text-white text-decoration-none"
