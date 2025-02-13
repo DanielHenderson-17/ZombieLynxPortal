@@ -98,12 +98,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
         {/* Desktop Menu */}
         <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
           {!loggedInUser ? (
-            <button
-              className="btn btn-primary"
+            <div
+              className="p-0 d-flex justify-content-center align-items-center login-btn"
               onClick={() => navigate("/login")}
             >
-              Login
-            </button>
+              <p className="my-0 me-3 text-secondary">Login</p>{" "}
+              <i className="bi bi-person-circle fs-2 text-secondary"></i>
+            </div>
           ) : (
             <div className="d-flex justify-content-between align-items-center col-10">
               <div className="m-0 text-center col-8 ps-2 pe-4 my-2 border-end border-secondary">
@@ -163,7 +164,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                     className="dropdown-item text-white"
                     onClick={handleLogout}
                   >
-                    Logout
+                    Logout <i className="bi bi-box-arrow-right"></i>
                   </button>
                 </div>
               )}
