@@ -285,14 +285,12 @@ export default function Member({ loggedInUser }) {
                 </div>
               ) : (
                 <div className="d-none d-md-block col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2">
-                  {/* Optional: You can show a placeholder or keep it empty */}
                   <p className="text-white text-start">
                     Link your accounts for rewards!
                   </p>
                 </div>
               )}
 
-              {/* Add Accounts Section - Adjusted on mobile when no linked accounts */}
               <div
                 className={`add-accounts mb-3 mt-md-0 justify-content-md-start ms-md-0 ${
                   linkedAccounts.length === 0
@@ -303,7 +301,7 @@ export default function Member({ loggedInUser }) {
                     (acc) =>
                       !linkedAccounts.some((linked) => linked.name === acc.name)
                   ).length === 0
-                    ? "d-none" // Hides the section when all accounts are linked
+                    ? "d-none"
                     : ""
                 }`}
               >
