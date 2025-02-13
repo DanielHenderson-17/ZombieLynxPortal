@@ -285,14 +285,12 @@ export default function Member({ loggedInUser }) {
                 </div>
               ) : (
                 <div className="d-none d-md-block col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2">
-                  {/* Optional: You can show a placeholder or keep it empty */}
                   <p className="text-white text-start">
                     Link your accounts for rewards!
                   </p>
                 </div>
               )}
 
-              {/* Add Accounts Section - Adjusted on mobile when no linked accounts */}
               <div
                 className={`add-accounts mb-3 mt-md-0 justify-content-md-start ms-md-0 ${
                   linkedAccounts.length === 0
@@ -303,7 +301,7 @@ export default function Member({ loggedInUser }) {
                     (acc) =>
                       !linkedAccounts.some((linked) => linked.name === acc.name)
                   ).length === 0
-                    ? "d-none" // Hides the section when all accounts are linked
+                    ? "d-none"
                     : ""
                 }`}
               >
@@ -401,7 +399,7 @@ export default function Member({ loggedInUser }) {
         <nav className="d-flex justify-content-start member-nav">
           <div className="col-12 d-flex justify-content-center mt-0">
             <NavLink
-              to="stats"
+              to="/member/stats"
               className={({ isActive }) =>
                 `mx-4 text-white text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
@@ -411,7 +409,7 @@ export default function Member({ loggedInUser }) {
               <i className="bi bi-bar-chart-fill me-1"></i>Stats
             </NavLink>
             <NavLink
-              to="shop"
+              to="/member/shop"
               className={({ isActive }) =>
                 `me-4 text-white text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
@@ -421,7 +419,7 @@ export default function Member({ loggedInUser }) {
               <i className="bi bi-bag-plus-fill me-1"></i>Shop
             </NavLink>
             <NavLink
-              to="tickets"
+              to="/member/tickets"
               className={({ isActive }) =>
                 `text-white me-4 text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
@@ -431,7 +429,7 @@ export default function Member({ loggedInUser }) {
               <i className="bi bi-ticket-fill me-1"></i>Tickets
             </NavLink>
             <NavLink
-              to="notifications"
+              to="/member/notifications"
               className={({ isActive }) =>
                 `text-white me-4 text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
