@@ -401,7 +401,7 @@ export default function Member({ loggedInUser }) {
         <nav className="d-flex justify-content-start member-nav">
           <div className="col-12 d-flex justify-content-center mt-0">
             <NavLink
-              to="stats"
+              to="/member/stats"
               className={({ isActive }) =>
                 `mx-4 text-white text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
@@ -411,7 +411,7 @@ export default function Member({ loggedInUser }) {
               <i className="bi bi-bar-chart-fill me-1"></i>Stats
             </NavLink>
             <NavLink
-              to="shop"
+              to="/member/shop"
               className={({ isActive }) =>
                 `me-4 text-white text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
@@ -421,7 +421,7 @@ export default function Member({ loggedInUser }) {
               <i className="bi bi-bag-plus-fill me-1"></i>Shop
             </NavLink>
             <NavLink
-              to="tickets"
+              to="/member/tickets"
               className={({ isActive }) =>
                 `text-white me-4 text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
@@ -431,7 +431,7 @@ export default function Member({ loggedInUser }) {
               <i className="bi bi-ticket-fill me-1"></i>Tickets
             </NavLink>
             <NavLink
-              to="notifications"
+              to="/member/notifications"
               className={({ isActive }) =>
                 `text-white me-4 text-decoration-none ${
                   isActive ? "border-bottom border-danger border-5" : ""
