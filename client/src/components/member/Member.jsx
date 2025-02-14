@@ -12,6 +12,12 @@ import {
   getLinkedSteamAccount,
   getMainJwtToken,
 } from "../../managers/steamAuthManager";
+import {
+  linkDiscordAccount,
+  unlinkDiscordAccount,
+  getLinkedDiscordAccount,
+} from "../../managers/discordAuthManager";
+
 import "../../assets/styles/Member.css";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import tierOne from "../../assets/images/tierOne.png";
@@ -22,6 +28,7 @@ import buyPoints from "../../assets/images/buyPoints.png";
 
 export default function Member({ loggedInUser }) {
   const [steamAccount, setSteamAccount] = useState(null);
+  const [discordAccount, setDiscordAccount] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(false);
@@ -52,22 +59,33 @@ export default function Member({ loggedInUser }) {
 
   // Fetch Steam Account when user logs in or refreshTrigger changes
   useEffect(() => {
-    const fetchLinkedAccount = async () => {
+    const fetchLinkedAccounts = async () => {
       if (loggedInUser && getMainJwtToken()) {
         setUserLoading(true);
         setLoading(true);
         try {
-          const data = await getLinkedSteamAccount();
-          if (data?.steamId) {
-            setSteamAccount(data);
-            setLinkedAccounts([{ name: "Steam", ...data }]);
+          const steamData = await getLinkedSteamAccount();
+          const discordData = await getLinkedDiscordAccount();
+
+          const linked = [];
+          if (discordData?.discordId) {
+            setDiscordAccount(discordData);
+            linked.push({ name: "Discord", ...discordData });
+          } else {
+            setDiscordAccount(null);
+          }
+
+          if (steamData?.steamId) {
+            setSteamAccount(steamData);
+            linked.push({ name: "Steam", ...steamData });
           } else {
             setSteamAccount(null);
-            setLinkedAccounts([]);
           }
+
+          setLinkedAccounts(linked);
         } catch (err) {
-          console.error("Failed to load your Steam account.", err);
-          setError("Failed to load your Steam account.");
+          console.error("Failed to load linked accounts.", err);
+          setError("Failed to load linked accounts.");
         } finally {
           setLoading(false);
           setUserLoading(false);
@@ -77,7 +95,7 @@ export default function Member({ loggedInUser }) {
       }
     };
 
-    fetchLinkedAccount();
+    fetchLinkedAccounts();
   }, [loggedInUser, refreshTrigger]);
 
   const handleLinkAccount = (platform) => {
@@ -93,14 +111,11 @@ export default function Member({ loggedInUser }) {
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
-    }
-    // Mock link for other platforms
-    else {
-      setLinkedAccounts((prev) => [
-        ...prev,
-        { name: platform, platformName: platform, imgUrl: "/default-icon.png" },
-      ]);
-      setLoading(false);
+    } else if (platform === "Discord") {
+      linkDiscordAccount(() => {
+        setRefreshTrigger((prev) => !prev);
+        setLoading(false);
+      });
     }
   };
 
@@ -114,11 +129,15 @@ export default function Member({ loggedInUser }) {
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
-    }
-    // Mock unlink for other platforms
-    else {
-      setLinkedAccounts((prev) => prev.filter((acc) => acc.name !== platform));
-      setLoading(false);
+    } else if (platform === "Discord") {
+      unlinkDiscordAccount(() => {
+        setDiscordAccount(null);
+        setLinkedAccounts((prev) =>
+          prev.filter((acc) => acc.name !== "Discord")
+        );
+        setRefreshTrigger((prev) => !prev);
+        setLoading(false);
+      });
     }
   };
 
@@ -135,6 +154,7 @@ export default function Member({ loggedInUser }) {
                 <div className="hexagon mb-1 mt-md-0 mt-2 col-12">
                   <img
                     src={
+                      discordAccount?.discordImgUrl ||
                       steamAccount?.steamImgUrl ||
                       `https://picsum.photos/seed/${randomSeed}/100/100`
                     }
@@ -269,7 +289,10 @@ export default function Member({ loggedInUser }) {
                         />
                         <div>
                           <p className="mb-0 text-white text-start">
-                            {acc.steamName || acc.name}
+                            {acc.discordName
+                              ? acc.discordName.charAt(0).toUpperCase() +
+                                acc.discordName.slice(1).toLowerCase()
+                              : acc.steamName || acc.name}
                           </p>
                         </div>
                       </div>

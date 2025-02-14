@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Discord Authentication</title>
+  </head>
+  <body>
+    <script>
+      // ✅ Extract access token from the URL fragment
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get("access_token");
+
+      if (accessToken) {
+        // ✅ Fetch user details from Discord API
+        fetch("https://discord.com/api/users/@me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.id && window.opener) {
+              // ✅ Send user info back to main window
+              window.opener.postMessage(
+                {
+                  type: "DISCORD_AUTH_SUCCESS",
+                  discordId: data.id,
+                  discordName: data.username + "#" + data.discriminator,
+                  discordImgUrl: data.avatar
+                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`
+                    : null,
+                },
+                window.origin
+              );
+            }
+            window.close(); // ✅ Close the popup
+          })
+          .catch((err) => {
+            console.error("❌ Error fetching Discord user details:", err);
+            window.close();
+          });
+      } else {
+        window.close(); // 🚨 Close if no access token found
+      }
+    </script>
+    <p>Linking your Discord account... Please wait.</p>
+  </body>
+</html>
