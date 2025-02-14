@@ -5,6 +5,7 @@ import { getUserProfiles } from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
 import zlgLogo from "../assets/zlg-logo.png";
 import { getLinkedSteamAccount } from "../managers/steamAuthManager";
+import { getLinkedDiscordAccount } from "../managers/discordAuthManager";
 import zlgCoin from "../assets/images/zlgCoin.png";
 import buyPoints from "../assets/images/buyPoints.png";
 
@@ -12,6 +13,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   const [steamAccount, setSteamAccount] = useState(null);
+  const [discordAccount, setDiscordAccount] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [randomSeed, setRandomSeed] = useState(null);
   const dropdownRef = useRef(null);
@@ -41,23 +43,31 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     const generateRandomSeed = () => Math.floor(Math.random() * 1000);
     setRandomSeed(generateRandomSeed());
 
-    const fetchSteamAccount = async () => {
+    const fetchLinkedAccounts = async () => {
       try {
         const updatedSteamAccount = await getLinkedSteamAccount();
+        const updatedDiscordAccount = await getLinkedDiscordAccount();
+
         if (updatedSteamAccount?.steamImgUrl !== steamAccount?.steamImgUrl) {
           setSteamAccount(updatedSteamAccount);
         }
+
+        if (
+          updatedDiscordAccount?.discordImgUrl !== discordAccount?.discordImgUrl
+        ) {
+          setDiscordAccount(updatedDiscordAccount);
+        }
       } catch (error) {
-        console.error("Error fetching Steam account:", error);
+        console.error("Error fetching linked accounts:", error);
       }
     };
 
     if (loggedInUser) {
-      fetchSteamAccount();
-      const intervalId = setInterval(fetchSteamAccount, 60000);
+      fetchLinkedAccounts();
+      const intervalId = setInterval(fetchLinkedAccounts, 60000);
       return () => clearInterval(intervalId);
     }
-  }, [loggedInUser, steamAccount]);
+  }, [loggedInUser, steamAccount, discordAccount]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -128,6 +138,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
               <img
                 src={
+                  discordAccount?.discordImgUrl ||
                   steamAccount?.steamImgUrl ||
                   `https://picsum.photos/seed/${randomSeed}/40/40`
                 }
@@ -155,16 +166,28 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                   style={{ right: 0 }}
                 >
                   <button
-                    className="dropdown-item text-white"
+                    className="dropdown-item text-white d-flex justify-content-between"
                     onClick={() => navigate("/member")}
                   >
-                    My Profile
+                    <p className="m-0">My Profile</p>
+                    <i className="bi bi-person-circle text-white"></i>
+                  </button>
+
+                  <button
+                    className="dropdown-item text-white d-flex justify-content-between"
+                    onClick={() =>
+                      window.open("https://www.zlg.gg/discord", "_blank")
+                    }
+                  >
+                    <p className="m-0">Discord </p>
+                    <i className="bi bi-discord text-white"></i>
                   </button>
                   <button
-                    className="dropdown-item text-white"
+                    className="dropdown-item text-white d-flex justify-content-between"
                     onClick={handleLogout}
                   >
-                    Logout <i className="bi bi-box-arrow-right"></i>
+                    <p className="m-0">Logout </p>
+                    <i className="bi bi-box-arrow-right"></i>
                   </button>
                 </div>
               )}

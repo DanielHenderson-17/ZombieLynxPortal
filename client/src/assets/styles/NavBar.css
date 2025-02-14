@@ -38,11 +38,11 @@
 }
 
 .profile-menu {
-  margin-top: 100px;
+  margin-top: 170px;
 }
 
 .profile-menu .dropdown-item:hover {
-  background-color: rgb(122, 122, 122);
+  background-color: #dc3545;
 }
 
 @media (max-width: 768px) {
