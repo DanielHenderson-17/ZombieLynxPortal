@@ -142,8 +142,8 @@ export default function Member({ loggedInUser }) {
   };
 
   return (
-    <div className="member-layout mt-md-5 mt-2 pt-md-5 pt-0 px-0 col-md-9 col-12 mx-auto">
-      <div className="member-container rounded-top">
+    <div className="member-layout mt-md-4 mt-2 pt-md-5 pt-0 px-0 col-md-9 col-12 mx-auto">
+      <div className="member-container rounded-top mt-md-0 mt-5">
         <div className="member-header d-flex justify-content-between align-items-start">
           {/* LEFT SIDE - Profile Info */}
           <div className="profile-info col-md-5 col-12 d-md-flex justify-content-center h-100">
