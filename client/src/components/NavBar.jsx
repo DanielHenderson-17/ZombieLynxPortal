@@ -21,21 +21,28 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
   // Fetch user profile
   useEffect(() => {
-    if (loggedInUser) {
-      getUserProfiles()
-        .then((profiles) => {
-          let profile = profiles?.find(
-            (p) =>
-              p.email === loggedInUser.email ||
-              p.userId === loggedInUser.id ||
-              p.id === loggedInUser.id
-          );
-          if (profile) setUserProfile(profile);
-        })
-        .catch((error) =>
-          console.error("Failed to fetch user profile:", error)
-        );
+    if (!loggedInUser) {
+      console.log("No user is logged in");
+      return;
     }
+    getUserProfiles()
+      .then((profile) => {
+        if (!profile || typeof profile !== "object") {
+          console.error(
+            "Unexpected response type, expected an object:",
+            profile
+          );
+          return;
+        }
+        if (
+          profile.email === loggedInUser.email ||
+          profile.userId === loggedInUser.id ||
+          profile.id === loggedInUser.id
+        ) {
+          setUserProfile(profile);
+        }
+      })
+      .catch((error) => console.error("Failed to fetch user profile:", error));
   }, [loggedInUser]);
 
   // Fetch Steam account
