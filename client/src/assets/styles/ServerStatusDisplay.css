@@ -11,6 +11,10 @@
   font-weight: bold;
 }
 
+.server-item {
+  height: 50px !important;
+}
+
 .server-status-tab .nav-link {
   background-color: #292e38;
   transition: background-color 0.3s, color 0.3s;
