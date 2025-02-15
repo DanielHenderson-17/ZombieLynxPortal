@@ -22,15 +22,15 @@ export default function ServicesListDisplay() {
       </h3>
 
       {/* Extra Life */}
-      <div className="d-flex justify-content-center col-12">
-        <div className="col-5 justify-content-start d-flex">
+      <div className="d-md-flex d-block justify-content-center col-12">
+        <div className="col-md-5 col-12 justify-content-start d-flex">
           <img
             src="/src/assets/images/extra-life.png"
             alt=""
             className="extra-life rounded-3 text-start"
           />
         </div>
-        <div className="col-7 rounded-3 bg-dark text-white p-3 align-items-center d-flex extra-life-text">
+        <div className="col-md-7 col-12 rounded-3 bg-dark text-white p-3 align-items-center d-flex extra-life-text">
           <p className="my-auto align-middle">
             5% of all money earned via Zombie Lynx Gaming goes directly to the
             Monroe Carell Jr. Children&apos;s Hospital at Vanderbilt. If you
@@ -82,10 +82,18 @@ export default function ServicesListDisplay() {
             >
               <div className="services-grid row mx-0">
                 {servicesDataObject[service].subscriptions.map((sub) => (
-                  <div className="col-md-6 col-lg-3 p-2" key={sub.id}>
-                    <div className="text-center price-card rounded-3 mt-2 mb-4 p-3">
-                      <img className="w-50" src={sub.image} alt={sub.name} />
-                      <h4 className="text-center">
+                  <div className="col-md-6 col-lg-3 p-1" key={sub.id}>
+                    <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative">
+                      {/* Badge */}
+                      <span className={`subscription-badge ${sub.id}-badge`}>
+                        {sub.id === "single" && "Single Payment"}
+                        {sub.id === "golden" && "Golden Lynx"}
+                        {sub.id === "diamond" && "Diamond Lynx"}
+                        {sub.id === "vibranium" && "Vibranium Lynx"}
+                      </span>
+
+                      <img className="col-6" src={sub.image} alt={sub.name} />
+                      <h4 className="text-center fs-5 mt-2 mb-3">
                         {sub.price || "One Time Payment"}
                       </h4>
                       {sub.links.map((link) => (
@@ -100,12 +108,11 @@ export default function ServicesListDisplay() {
                         </a>
                       ))}
                       <h5>Additional Benefits</h5>
-                      {/* <h6 className="text-center mt-2">{sub.description}</h6> */}
                       <ul className="text-start align-items-center p-0">
                         {sub.benefits.map((benefit, index) => (
                           <li
                             key={index}
-                            className="d-flex align-items-center mb-2 "
+                            className="d-flex align-items-center mb-2 justify-content-md-start justify-content-start mx-auto col-md-12 col-9"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
