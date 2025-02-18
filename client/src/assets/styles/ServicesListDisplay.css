@@ -21,3 +21,43 @@
   background-color: #dc3545 !important;
   color: white;
 }
+
+.subscription-badge {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Color for each badge */
+.single-badge {
+  background-color: #dd163b;
+}
+
+.golden-badge {
+  background-color: #d8ba0e;
+  color: rgb(255, 255, 255);
+}
+
+.diamond-badge {
+  background-color: #22a2b1;
+}
+
+.vibranium-badge {
+  background-color: #882adf;
+}
+
+@media (max-width: 768px) {
+  .price-card {
+    height: 480px;
+  }
+  .extra-life {
+    height: 200px;
+    margin-bottom: 10px;
+  }
+}

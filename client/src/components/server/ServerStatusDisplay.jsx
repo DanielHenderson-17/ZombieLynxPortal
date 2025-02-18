@@ -58,7 +58,7 @@ export default function ServerStatusDisplay() {
         {servers.map((server) => (
           <li
             key={server.id}
-            className="nav-item col server-status-tab mx-1 rounded-2 text-center fw-bold"
+            className="nav-item col server-status-tab mx-1 rounded-2 text-center fw-bold my-md-0 my-1"
           >
             <button
               className={`nav-link server-status-link text-white col-12 border-0 ${
@@ -84,7 +84,7 @@ export default function ServerStatusDisplay() {
           >
             <section
               id={server.sectionId}
-              className="text-white my-4 p-3 border-0 server-status-table-bg rounded-3"
+              className="text-white my-4 p-md-3 p-1 border-0 server-status-table-bg rounded-3"
             >
               <div className="d-flex mx-auto col-12 mb-2">
                 <img
@@ -103,20 +103,24 @@ export default function ServerStatusDisplay() {
               <table className="server-status-table mx-auto text-white">
                 <thead>
                   <tr className="border-bottom border-secondary">
-                    <th className="col-1">Status</th>
-                    <th className="text-start vertical-line ps-4 col-7">
-                      Server Name
+                    <th className="col-1 text-start ps-0">Status</th>
+                    <th className="text-start vertical-line col-7 p-0">
+                      Server
                     </th>
-                    <th className="vertical-line col-1">Version</th>
-                    <th className="vertical-line col-1">Players</th>
+                    <th className="vertical-line col-1 d-none d-md-block">
+                      Version
+                    </th>
+                    <th className="vertical-line col-md-1 col-4">Players</th>
                     <th className="vertical-line col-1">Vote</th>
-                    <th className="vertical-line col-1">Connect</th>
+                    <th className="vertical-line col-1 d-none d-md-block">
+                      Connect
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="font-monospace">
                   {activeServerData.map((server) => (
                     <tr className="text-start" key={server.serverName}>
-                      <td>
+                      <td className="text-start">
                         <img
                           src={
                             server.isOnline
@@ -126,10 +130,20 @@ export default function ServerStatusDisplay() {
                           alt={server.isOnline ? "Online" : "Offline"}
                         />
                       </td>
-                      <td className="text-start">{server.name}</td>
-                      <td className="font-monospace">{server.version}</td>
-                      <td>{`${server.players} / ${server.maxPlayers}`}</td>
-                      <td className="pt-3 px-2">
+                      <td className="text-start p-0">
+                        <span className="d-none d-md-inline">
+                          {server.name}
+                        </span>
+                        <span className="d-md-none">
+                          {server.serverName || "N/A"}
+                        </span>
+                      </td>
+
+                      <td className="font-monospace d-none d-md-block">
+                        {server.version}
+                      </td>
+                      <td className=" col-md-1 col-4 p-md-1 p-0">{`${server.players} / ${server.maxPlayers}`}</td>
+                      <td className="pt-3 px-2 col-1">
                         <a
                           href={server.voteUrl}
                           target="_blank"
@@ -139,7 +153,7 @@ export default function ServerStatusDisplay() {
                           Vote
                         </a>
                       </td>
-                      <td className="pt-3 px-2">
+                      <td className="pt-3 px-2 d-none d-md-block">
                         {activeServer.name === "Minecraft" ? (
                           <a
                             className="vote-connect-button border-0 rounded-2 m-3 py-2 px-3 text-white text-decoration-none"

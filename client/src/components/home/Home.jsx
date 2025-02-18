@@ -5,24 +5,24 @@ import ServicesListDisplay from "../services/ServicesListDisplay";
 
 export default function Home() {
   return (
-    <div className="home-container col-8 mx-auto mt-5 pt-5">
+    <div className="home-container col-md-8 col-11 mx-auto mt-md-5 mt-4 pt-5">
       {/* Splash Container */}
       <div className="d-flex splash-container justify-content-center rounded-3 col-12">
-        <div className="splash-logo col-6 my-auto text-end">
+        <div className="splash-logo col-md-6 col-12 my-auto text-md-end text-center">
           <img src="/src/assets/images/zlg-logo2.png" alt="" />
-          <div className="d-flex justify-content-end">
-            <p className="text-white text-center col-7 mt-2">
+          <div className="d-md-flex d-block justify-content-end">
+            <p className="text-white text-center col-md-7 col-12 mt-2">
               Your ultimate destination for cutting edge game servers! Elevate
               your gaming experience today!
             </p>
           </div>
         </div>
-        <div className="splash-zlg-guy col-6 text-start">
+        <div className="splash-zlg-guy col-6 text-start d-none d-md-block">
           <img src="/src/assets/images/zlg-guy.png" alt="" />
         </div>
       </div>
       {/* About Us */}
-      <div className="d-flex justify-content-between col-12 mt-5 zlg-about">
+      <div className="d-md-flex d-block justify-content-between col-12 mt-md-5 mt-4 zlg-about">
         <div className="d-flex custom-col-3-75 rounded-3 about-single p-3">
           <div className="col-3 my-auto">
             <svg
@@ -45,7 +45,7 @@ export default function Home() {
             </h5>
           </div>
         </div>
-        <div className="d-flex custom-col-3-75 rounded-3 about-single p-3 mx-0">
+        <div className="d-flex custom-col-3-75 rounded-3 about-single p-3 mx-0 my-2 my-md-0">
           <div className="col-3 my-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"

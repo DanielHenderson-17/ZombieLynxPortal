@@ -104,3 +104,20 @@
   color: white;
   font-weight: bold;
 }
+
+.server-thumb {
+  width: 100px;
+}
+
+@media (max-width: 768px) {
+  .server-description-text {
+    font-size: 0.85rem !important;
+  }
+  .server-thumb {
+    width: 30px;
+    border-radius: 50% !important;
+  }
+  .game-title2 {
+    font-size: 0.85rem !important;
+  }
+}
