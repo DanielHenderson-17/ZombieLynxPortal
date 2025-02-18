@@ -11,6 +11,7 @@ import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "./NavBar";
+import PrivacyPolicy from "../components/legal/PrivacyPolicy";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
@@ -40,6 +41,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="login-success"
           element={<LoginSuccess setLoggedInUser={setLoggedInUser} />}
         />
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
 
         {/* Protected Routes */}
         <Route
