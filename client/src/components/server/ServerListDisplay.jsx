@@ -73,14 +73,16 @@ export default function ServerListDisplay() {
         ZLG <span className="text-white ms-2">SERVERS</span>
         <span className="server-status-line"></span>
       </h3>
-      <div className="d-flex server-list h-100">
+
+      {/* Flex direction is row by default, switches to column on small screens */}
+      <div className="d-flex flex-md-row flex-column server-list h-100">
         {/* Server List */}
-        <div className="col-6 h-100">
+        <div className="col-md-6 col-12">
           <ul className="list-group text-start rounded-start-2 rounded-end-0">
             {servers.map((server) => (
               <li
                 key={server.id}
-                className={`list-group-item d-flex p-1 text-white border-0 ${
+                className={`list-group-item d-flex p-1 text-white border-0 my-1 my-md-0 ${
                   activeServer.id === server.id ? "active bg-danger" : ""
                 }`}
                 onClick={() => setActiveServer(server)}
@@ -89,14 +91,13 @@ export default function ServerListDisplay() {
                   src={server.thumbImg}
                   alt={server.title}
                   className="img-fluid me-2 col-3 rounded-2 server-thumb"
-                  style={{ width: "100px" }}
                 />
                 <div className="col-10 my-auto mx-1 pe-1">
                   <p className="m-0 fw-bold text-white pt-1 game-title">
                     {server.title}
                   </p>
                   <p
-                    className={`m-0 pe-3 server-description-text ${
+                    className={`m-0 pe-md-3 pe-0 server-description-text col-10 col-md-12 d-none d-md-block ${
                       activeServer.id === server.id ? "text-white" : ""
                     }`}
                   >
@@ -107,8 +108,9 @@ export default function ServerListDisplay() {
             ))}
           </ul>
         </div>
+
         {/* Server Details */}
-        <div className="col-6 active-server-details rounded-end-2 rounded-start-0">
+        <div className="col-md-6 col-12 active-server-details rounded-end-2 rounded-start-0 mt-md-0 mt-3">
           <div className="text-center">
             <img
               src={activeServer.mainImg}
@@ -117,11 +119,11 @@ export default function ServerListDisplay() {
             />
             <div className="ps-3">
               <div className="d-flex justify-content-between">
-                <h4 className="text-white text-start col-8 game-title2 fw-bold my-auto">
+                <h4 className="text-white text-start col-md-8 col-6 game-title2 fw-bold my-auto">
                   {activeServer.title}
                 </h4>
                 <span
-                  className={`badge rounded-start-2 rounded-end-0 my-auto py-2 fs-6 ${getCategoryBadgeClass(
+                  className={`badge rounded-start-2 col-md-4 col-6 rounded-end-0 my-auto py-2 ${getCategoryBadgeClass(
                     activeServer.category
                   )}`}
                 >

@@ -52,7 +52,7 @@ export const fetchDiscordClientId = () => {
       return res.json();
     })
     .then((data) => {
-      return data.clientId; // Updated to return clientId, not apiKey
+      return data.clientId;
     })
     .catch((err) => {
       console.error("❌ Error fetching Discord Client ID:", err);
@@ -69,7 +69,7 @@ export const linkDiscordAccount = (onSuccess) => {
 
     // Open Discord login popup window and redirect to Discord OAuth page for authentication
     const discordLoginUrl =
-      `${DISCORD_AUTH_URL}?client_id=${clientId}` + // Updated to use Client ID
+      `${DISCORD_AUTH_URL}?client_id=${clientId}` +
       `&redirect_uri=${encodeURIComponent(REDIRECT_URL)}` +
       `&response_type=token` +
       `&scope=identify`;
