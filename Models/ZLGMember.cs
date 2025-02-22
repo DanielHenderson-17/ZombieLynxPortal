@@ -34,6 +34,9 @@ namespace ZombieLynxPortalAPI.Models
 
         [MaxLength(250)]
         public string? EpicImgUrl { get; set; }
+        public string? MicrosoftId { get; set; }
+        public string? MicrosoftName { get; set; }
+        public string? MicrosoftImgUrl { get; set; }
 
         [Required]
         public int UserProfileId { get; set; }
