@@ -12,6 +12,10 @@ namespace ZombieLynxPortalAPI.DTOs
         public string? EosId { get; set; }
         public string? EpicName { get; set; }
         public string? EpicImgUrl { get; set; }
+        public string? MicrosoftId { get; set; }
+        public string? MicrosoftName { get; set; }
+        public string? MicrosoftImgUrl { get; set; }
+
 
         public int? UserProfileId { get; set; }
         public UserProfileDTO? UserProfile { get; set; }
