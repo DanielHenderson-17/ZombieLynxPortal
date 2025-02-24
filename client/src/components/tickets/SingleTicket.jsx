@@ -12,10 +12,11 @@ import {
   sendMessage,
 } from "../../managers/messageManager";
 import { formatLongDateTime } from "../../utils/longDateTime";
-import { formatShortDate } from "../../utils/shortDateTime.js";
+import { formatShortDate } from "../../utils/shortDateTime";
+import { formatDiscordName } from "../../utils/formatDiscordName";
 import { categoryFormatter } from "../../utils/categoryFormater";
 import { getGameImage } from "../../utils/gameFormatter";
-import { getLinkedSteamAccount } from "../../managers/steamAuthManager";
+import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import { truncateText } from "../../utils/truncateText.js";
 
@@ -24,16 +25,18 @@ export default function SingleTicket({ loggedInUser }) {
   const [ticket, setTicket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
   const [allUsers, setAllUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(loggedInUser.role === "Admin");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [steamAccount, setSteamAccount] = useState(null);
+  const [discordAccount, setDiscordAccount] = useState(null);
   const [randomSeed, setRandomSeed] = useState(null);
 
   // Fetch ticket and messages, update state as message is sent for the ticket
+  // Fetch ticket, messages, and users
   useEffect(() => {
-    const fetchTicketAndMessages = async () => {
+    const fetchData = async () => {
       try {
         const ticketData = await getTicketById(ticketId);
         setTicket(ticketData);
@@ -46,40 +49,32 @@ export default function SingleTicket({ loggedInUser }) {
 
         setIsAdmin(loggedInUser.role === "Admin");
       } catch (error) {
-        if (error.message.includes("403")) {
-          console.warn(
-            "User is not an admin, admin-specific features disabled."
-          );
-        } else {
-          console.error("Error fetching data:", error);
-          setError("Failed to fetch ticket details or messages.");
-        }
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch ticket details or messages.");
       }
     };
 
-    fetchTicketAndMessages();
-  }, [ticketId, loggedInUser.role]);
+    fetchData();
+  }, [ticketId, loggedInUser.role, refreshKey]);
 
   // Fetch Steam account and update every minute
   useEffect(() => {
-    const fetchSteamAccount = async () => {
+    const fetchDiscordAccount = async () => {
       try {
-        const updatedSteamAccount = await getLinkedSteamAccount();
-        if (
-          updatedSteamAccount &&
-          updatedSteamAccount.steamImgUrl !== steamAccount?.steamImgUrl
-        ) {
-          setSteamAccount(updatedSteamAccount);
+        const updatedDiscordAccount = await getLinkedDiscordAccount();
+        if (updatedDiscordAccount) {
+          setDiscordAccount(updatedDiscordAccount);
         }
       } catch (error) {
-        console.error("Error fetching Steam account:", error);
+        console.error("❌ Error fetching Discord account:", error);
       }
     };
 
-    fetchSteamAccount();
-    const intervalId = setInterval(fetchSteamAccount, 60000);
+    fetchDiscordAccount();
+    const intervalId = setInterval(fetchDiscordAccount, 60000);
+
     return () => clearInterval(intervalId);
-  }, [steamAccount]);
+  }, [loggedInUser, refreshKey]);
 
   // Generate random seed for profile images
   useEffect(() => {
@@ -145,6 +140,10 @@ export default function SingleTicket({ loggedInUser }) {
       console.error("Error assigning user to ticket:", error);
       setError("Failed to assign user.");
     }
+  };
+
+  const handleRefreshMessages = () => {
+    setRefreshKey((prevKey) => prevKey + 1);
   };
 
   if (!ticket) {
@@ -269,55 +268,81 @@ export default function SingleTicket({ loggedInUser }) {
 
         {/* Right Column: Messages */}
         <div className="col-md-7 text-start mb-3 ps-md-0 ps-2 message-container">
-          <div className="shadow border-black rounded p-0 message-box">
-            <div className="d-flex flex-column">
-              {/* Messages Container */}
-              <div className="flex-grow-1 messages mb-0 p-md-3 p-1">
-                {messages.length > 0 ? (
-                  messages.map((msg) => (
-                    <div key={msg.id} className="mb-3 d-flex">
-                      <img
-                        src={
-                          msg.user.steamImgUrl ||
-                          `https://picsum.photos/seed/${randomSeed}/100/100`
-                        }
-                        alt="Profile"
-                        className="message-img me-2"
-                      />
-                      <div>
-                        <div className="d-flex align-items-center">
-                          <strong className="me-2">{msg.user.firstName}</strong>
-                          <small className="d-block text-secondary single-datetime">
-                            {formatShortDate(msg.createdAt)}
-                          </small>
-                        </div>
-                        <p className="mb-0">{msg.content}</p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>No messages yet.</p>
-                )}
-              </div>
-              {/* Input and Send Button */}
-              <div className="d-flex">
-                <input
-                  type="text"
-                  className="form-control me-2 message-input"
-                  placeholder="Type a message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
+          {!discordAccount?.discordName ? (
+            // If not logged in, show a grayed-out message box
+            <div className="text-muted p-3 bg-dark rounded text-center mt-5">
+              <p className="text-white">
+                You need to link your Discord account to send messages.
+              </p>
+              <p className="text-white">
+                Please login and then refresh messages.
+              </p>
+              {/* Refresh Button */}
+              <div className="d-flex justify-content-end p-2">
                 <button
-                  className="btn btn-primary message-button"
-                  onClick={handleSendMessage}
+                  className="btn btn-secondary"
+                  onClick={handleRefreshMessages}
                 >
-                  Send
+                  Refresh Messages 🔄
                 </button>
               </div>
             </div>
-          </div>
+          ) : (
+            // If logged in, show the normal message UI
+            <div className="shadow border-black rounded p-0 message-box">
+              <div className="d-flex flex-column">
+                {/* Messages Container */}
+                <div className="flex-grow-1 messages mb-0 p-md-3 p-1">
+                  {messages.length > 0 ? (
+                    messages.map((msg) => (
+                      <div key={msg.id} className="mb-3 d-flex">
+                        <img
+                          src={
+                            msg.user.discordImgUrl ||
+                            `https://picsum.photos/seed/${randomSeed}/100/100`
+                          }
+                          alt="Profile"
+                          className="message-img me-2"
+                        />
+                        <div>
+                          <div className="d-flex align-items-center">
+                            <strong className="me-2">
+                              {formatDiscordName(discordAccount.discordName)}
+                            </strong>
+                            <small className="text-secondary">
+                              {formatShortDate(msg.createdAt)}
+                            </small>
+                          </div>
+
+                          <p className="mb-0">{msg.content}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No messages yet.</p>
+                  )}
+                </div>
+
+                {/* Input and Send Button */}
+                <div className="d-flex">
+                  <input
+                    type="text"
+                    className="form-control me-2 message-input"
+                    placeholder="Type a message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                  />
+                  <button
+                    className="btn btn-primary message-button"
+                    onClick={handleSendMessage}
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {error && <p className="text-danger mt-3">{error}</p>}
