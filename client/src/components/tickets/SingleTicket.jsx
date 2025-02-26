@@ -278,7 +278,7 @@ export default function SingleTicket({ loggedInUser }) {
                 Please login and then refresh messages.
               </p>
               {/* Refresh Button */}
-              <div className="d-flex justify-content-end p-2">
+              <div className="d-flex justify-content-center p-2">
                 <button
                   className="btn btn-secondary"
                   onClick={handleRefreshMessages}
