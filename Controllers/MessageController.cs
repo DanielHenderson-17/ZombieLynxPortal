@@ -40,9 +40,9 @@ namespace ZombieLynxPortalAPI.Controllers
                     {
                         m.UserProfile.FirstName,
                         m.UserProfile.LastName,
-                        SteamImgUrl = _dbContext.ZLGMembers
+                        DiscordImgUrl = _dbContext.ZLGMembers
                             .Where(z => z.UserProfileId == m.UserProfile.Id)
-                            .Select(z => z.SteamImgUrl)
+                            .Select(z => z.DiscordImgUrl)
                             .FirstOrDefault()
                     }
                 })

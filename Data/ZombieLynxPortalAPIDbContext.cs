@@ -61,7 +61,10 @@ namespace ZombieLynxPortalAPI.Data
                 DiscordImgUrl = null,
                 EosId = "eos-admin-id",
                 EpicName = "AdminEpic",
-                EpicImgUrl = null
+                EpicImgUrl = null,
+                MicrosoftId = null,  // New fields for Microsoft
+                MicrosoftName = null,
+                MicrosoftImgUrl = null
             });
 
             // ✅ Seed Ticket
