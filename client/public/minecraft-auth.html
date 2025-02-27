@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link Minecraft Account</title>
+    <script
+      defer
+      src="/src/managers/minecraftAuthManager.js"
+      type="module"
+    ></script>
+    <!-- <script defer src="minecraft-auth.js"></script> -->
+    <!-- Loads the UI logic -->
+    <style>
+      body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+      button { padding: 10px 15px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+      img { margin-top: 10px; border-radius: 8px; }
+    </style>
+  </head>
+  <body>
+    <h2 id="status-title">Checking Status...</h2>
+    <p id="status-message"></p>
+    <div id="minecraft-link-container" style="display: none;">
+      <ol>
+        <li>Login to the ZLG Minecraft server.</li>
+        <li>Type <strong>/discord link</strong> in the in-game chat.</li>
+        <li>
+          Copy the code and send it to Lynx Chat Bot (<strong
+            >Lynx Chat Bot#2802</strong
+          >) on Discord.
+        </li>
+        <li><button id="link-minecraft-btn">Link Minecraft</button></li>
+      </ol>
+    </div>
+    <div id="minecraft-info-container" style="display: none;">
+      <h3>✅ Minecraft Linked Successfully</h3>
+      <p>Username: <strong id="mc-username"></strong></p>
+      <img id="mc-avatar" src="" alt="Minecraft Avatar" />
+    </div>
+    <script>
+        async function checkMinecraftStatus() {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              document.getElementById("status-title").innerText = "No Discord Linked";
+              document.getElementById("status-message").innerText = "Please link your Discord account to continue.";
+              return;
+          }
+
+          try {
+              const res = await fetch("https://localhost:5001/api/Minecraft/linked", {
+                  method: "GET",
+                  headers: { Authorization: "Bearer " + token }
+              });
+
+              const data = await res.json();
+              console.log("📡 API Response Status:", res.status);
+              console.log("📡 API Response Data:", data);
+
+              if (!data || !data.minecraftUuid) {
+                  document.getElementById("status-title").innerText = "To Link Your Minecraft Account";
+                  document.getElementById("minecraft-link-container").style.display = "block";
+                  document.getElementById("link-minecraft-btn").addEventListener("click", linkMinecraft);
+              } else {
+                  document.getElementById("status-title").innerText = "Minecraft Linked Successfully";
+                  document.getElementById("mc-username").innerText = data.minecraftUsername || "Unknown";  // ✅ Fix: Handle undefined
+                  document.getElementById("mc-avatar").src = data.minecraftAvatarUrl || "https://mc-heads.net/avatar/Steve.png"; // ✅ Fix: Default avatar
+
+                  document.getElementById("minecraft-info-container").style.display = "block";
+
+                  // Send data back to parent window and auto-close after 5 seconds
+                  window.opener.postMessage({
+                      type: "MINECRAFT_AUTH_SUCCESS",
+                      minecraftUuid: data.minecraftUuid,
+                      minecraftUsername: data.minecraftUsername,
+                      minecraftAvatarUrl: data.minecraftAvatarUrl
+                  }, window.location.origin);
+
+                  setTimeout(() => window.close(), 5000);
+              }
+          } catch (err) {
+              console.error("❌ Error checking Minecraft status:", err);
+              document.getElementById("status-title").innerText = "Error";
+              document.getElementById("status-message").innerText = "Something went wrong.";
+          }
+      }
+
+                  async function linkMinecraft() {
+                      try {
+                          const token = localStorage.getItem("authToken");
+                          const res = await fetch("https://localhost:5001/api/Minecraft/link-minecraft", {
+                              method: "PUT",
+                              headers: {
+                                  "Content-Type": "application/json",
+                                  Authorization: "Bearer " + token
+                              }
+                          });
+
+                          if (res.ok) {
+                              location.reload();
+                          } else {
+                              alert("Failed to link Minecraft.");
+                          }
+                      } catch (err) {
+                          console.error("❌ Error linking Minecraft:", err);
+                      }
+                  }
+
+                  checkMinecraftStatus();
+    </script>
+  </body>
+</html>

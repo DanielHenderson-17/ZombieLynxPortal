@@ -35,13 +35,16 @@ namespace ZombieLynxPortalAPI.Models
         [MaxLength(250)]
         public string? EpicImgUrl { get; set; }
 
-        [MaxLength(100)]
-        public string? MicrosoftId { get; set; }
+        // New properties for Minecraft integration
+        [MaxLength(36)]
+        public string? MinecraftUuid { get; set; }
 
         [MaxLength(100)]
-        public string? MicrosoftName { get; set; }
+        public string? MinecraftUsername { get; set; }
+
+        // Property to store the Minecraft avatar URL
         [MaxLength(250)]
-        public string? MicrosoftImgUrl { get; set; }
+        public string? MinecraftAvatarUrl { get; set; }
         [Required]
         public int UserProfileId { get; set; }
 
