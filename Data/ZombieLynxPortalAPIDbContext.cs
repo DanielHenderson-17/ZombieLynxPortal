@@ -62,9 +62,9 @@ namespace ZombieLynxPortalAPI.Data
                 EosId = "eos-admin-id",
                 EpicName = "AdminEpic",
                 EpicImgUrl = null,
-                MicrosoftId = null,  // New fields for Microsoft
-                MicrosoftName = null,
-                MicrosoftImgUrl = null
+                MinecraftUuid = "550e8400-e29b-41d4-a716-446655440000",
+                MinecraftUsername = "AdminMinecraft",
+                MinecraftAvatarUrl = "https://crafatar.com/avatars/550e8400-e29b-41d4-a716-446655440000"
             });
 
             // ✅ Seed Ticket

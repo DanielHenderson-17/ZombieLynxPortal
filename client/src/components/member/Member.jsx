@@ -17,7 +17,11 @@ import {
   unlinkDiscordAccount,
   getLinkedDiscordAccount,
 } from "../../managers/discordAuthManager";
-
+import {
+  getLinkedMinecraftAccount,
+  unlinkMinecraftAccount,
+  openMinecraftAuthWindow,
+} from "../../managers/minecraftAuthManager";
 import "../../assets/styles/Member.css";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import tierOne from "../../assets/images/tierOne.png";
@@ -29,6 +33,7 @@ import buyPoints from "../../assets/images/buyPoints.png";
 export default function Member({ loggedInUser }) {
   const [steamAccount, setSteamAccount] = useState(null);
   const [discordAccount, setDiscordAccount] = useState(null);
+  const [minecraftAccount, setMinecraftAccount] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(false);
@@ -40,9 +45,10 @@ export default function Member({ loggedInUser }) {
   // Mock for other accounts
   const [linkedAccounts, setLinkedAccounts] = useState([]);
   const availableAccounts = [
-    { name: "Epic", icon: "../../../../public/epicIcon.png" },
-    { name: "Discord", icon: "../../../../public/discordIcon.png" },
-    { name: "Steam", icon: "../../../../public/steamIcon.png" },
+    { name: "Epic", icon: "/epicIcon.png" },
+    { name: "Discord", icon: "/discordIcon.png" },
+    { name: "Steam", icon: "/steamIcon.png" },
+    { name: "Minecraft", icon: "/minecraftIcon.png" },
   ];
 
   // Generate a random seed once when the component mounts
@@ -66,6 +72,11 @@ export default function Member({ loggedInUser }) {
         try {
           const steamData = await getLinkedSteamAccount();
           const discordData = await getLinkedDiscordAccount();
+          const minecraftData = await getLinkedMinecraftAccount();
+
+          console.log("🔹 Steam Data:", steamData);
+          console.log("🔹 Discord Data:", discordData);
+          console.log("🔹 Minecraft Data:", minecraftData);
 
           const linked = [];
           if (discordData?.discordId) {
@@ -82,7 +93,16 @@ export default function Member({ loggedInUser }) {
             setSteamAccount(null);
           }
 
+          if (minecraftData?.minecraftUuid) {
+            // ✅ Make sure it's checking the correct property
+            setMinecraftAccount(minecraftData);
+            linked.push({ name: "Minecraft", ...minecraftData });
+          } else {
+            setMinecraftAccount(null);
+          }
+
           setLinkedAccounts(linked);
+          console.log("🔗 Linked Accounts (Final):", linked); // ✅ Check if Minecraft is inside
         } catch (err) {
           console.error("Failed to load linked accounts.", err);
           setError("Failed to load linked accounts.");
@@ -116,6 +136,10 @@ export default function Member({ loggedInUser }) {
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
+    } else if (platform === "Minecraft") {
+      openMinecraftAuthWindow();
+      setTimeout(() => setRefreshTrigger((prev) => !prev), 5000);
+      setLoading(false);
     }
   };
 
@@ -138,6 +162,15 @@ export default function Member({ loggedInUser }) {
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
+    } else if (platform === "Minecraft") {
+      unlinkMinecraftAccount(() => {
+        setMinecraftAccount(null);
+        setLinkedAccounts((prev) =>
+          prev.filter((acc) => acc.name !== "Minecraft")
+        );
+        setRefreshTrigger((prev) => !prev);
+        setLoading(false);
+      });
     }
   };
 
@@ -156,6 +189,7 @@ export default function Member({ loggedInUser }) {
                     src={
                       discordAccount?.discordImgUrl ||
                       steamAccount?.steamImgUrl ||
+                      minecraftAccount?.MinecraftAvatarUrl ||
                       `https://picsum.photos/seed/${randomSeed}/100/100`
                     }
                     alt="Profile"
@@ -254,18 +288,7 @@ export default function Member({ loggedInUser }) {
             <div className="d-md-flex d-none flex-md-column flex-row ms-2 justify-content-start account-section mt-2 ms-md-4 ms-0 col-md-5 col-12 mx-auto">
               {/* Linked Accounts Section - Hidden on mobile if no linked accounts */}
               {linkedAccounts.length > 0 ? (
-                <div
-                  className={`linked-accounts col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2 ${
-                    availableAccounts.filter(
-                      (acc) =>
-                        !linkedAccounts.some(
-                          (linked) => linked.name === acc.name
-                        )
-                    ).length === 0
-                      ? "pt-4"
-                      : ""
-                  }`}
-                >
+                <div className="linked-accounts col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2">
                   <div className="text-white text-start mb-1 align-items-center">
                     <i className="bi bi-link-45deg"></i> Linked Accounts
                   </div>
@@ -289,10 +312,9 @@ export default function Member({ loggedInUser }) {
                         />
                         <div>
                           <p className="mb-0 text-white text-start">
-                            {acc.discordName
-                              ? acc.discordName.charAt(0).toUpperCase() +
-                                acc.discordName.slice(1).toLowerCase()
-                              : acc.steamName || acc.name}
+                            {acc.name === "Minecraft"
+                              ? acc.minecraftUsername
+                              : acc.discordName || acc.steamName || acc.name}
                           </p>
                         </div>
                       </div>
