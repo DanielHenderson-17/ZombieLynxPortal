@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Link Minecraft Account</title>
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet" />
 
     <!-- Bootstrap CSS CDN -->
     <link
@@ -22,59 +23,76 @@
     <style>
       html, body {
         height: 100vh;
+        overflow: hidden;
       }
       .container {
         margin: 0!important;
+        font-family: 'Minecraft';
       }
       body {
-        background-image: url("bg-top.png");
+        background-image: url("minecraft-bg.png");
         background-color: black;
       }
       .card {
-        background-color: #292e38;
+        background-color: #303030;
+      }
+      .minecraft-text {
+        font-family: 'Minecraft';
       }
     </style>
   </head>
 
-  <body
-    class="d-flex align-items-center justify-content-center text-white w-100"
-  >
-    <div class="container text-center p-0">
-      <div class="card text-white pt-3 shadow border-0">
-        <h2 id="status-title">Checking Status...</h2>
-        <p id="status-message"></p>
+  <body>
+    <img
+      src="minecraft-java-logo.png"
+      alt=""
+      class="mx-auto text-center d-flex justify-content-center my-5 col-8"
+    />
+    <div
+      class="d-flex align-items-center justify-content-center text-white w-100"
+    >
+      <div class="container text-center p-0">
+        <div class="card text-white pt-3 shadow border-0 mt-5 shadow-lg">
+          <h2 id="status-title">Checking Status...</h2>
+          <p id="status-message"></p>
 
-        <div id="minecraft-link-container" class="d-none">
-          <ol class="text-start">
-            <li class="my-2">Connect your Discord account.</li>
-            <li>Connect to ZLG Minecraft.</li>
-            <li class="my-2">
-              Type <strong>"/discord link"</strong> in the in-game chat.
-            </li>
-            <li>
-              Copy the code and send it to Discord Bot (<strong
-                >Lynx Chat Bot#2802</strong
-              >).
-            </li>
-            <li class="my-2">
-              <button id="link-minecraft-btn" class="btn btn-primary mt-2">
-                Link Minecraft
-              </button>
-            </li>
-          </ol>
-        </div>
+          <div id="minecraft-link-container" class="d-none">
+            <ol class="text-start minecraft-text fw-lighter ms-2">
+              <li class="mb-4">Connect your Discord account.</li>
+              <li>Connect to ZLG Minecraft.</li>
+              <li class="mb-2 mt-4">
+                Type <img class="rounded-3" src="discord-link.png" alt="" /> in
+                the in-game chat
+              </li>
+              <li>
+                Copy the code and send it to
+                <img
+                  src="lynx-bot.png"
+                  alt=""
+                  class="ms-2 border border-dark rounded-3"
+                />
+              </li>
+            </ol>
+            <button
+              id="link-minecraft-btn"
+              class="btn btn-primary my-3 mx-auto"
+            >
+              Link Minecraft
+            </button>
+          </div>
 
-        <div id="minecraft-info-container" class="d-none">
-          <h3 class="text-success">✅ Minecraft Linked Successfully</h3>
-          <p>Username: <strong id="mc-username"></strong></p>
-          <img
-            id="mc-avatar"
-            class="rounded mt-2"
-            src=""
-            alt="Minecraft Avatar"
-            width="80"
-            height="80"
-          />
+          <div id="minecraft-info-container" class="d-none">
+            <h3 class="text-success">✅ Minecraft Linked Successfully</h3>
+            <p class="mb-3">Username: <strong id="mc-username"></strong></p>
+            <img
+              id="mc-avatar"
+              class="rounded mt-2"
+              src=""
+              alt="Minecraft Avatar"
+              width="80"
+              height="80"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -99,7 +117,7 @@
           console.log("📡 API Response Data:", data);
 
           if (!data || !data.minecraftUuid) {
-            document.getElementById("status-title").innerText = "To Link Your Minecraft Account";
+            document.getElementById("status-title").innerText = "Link Your Minecraft Account";
             document.getElementById("minecraft-link-container").classList.remove("d-none");
             document.getElementById("link-minecraft-btn").addEventListener("click", linkMinecraft);
           } else {
