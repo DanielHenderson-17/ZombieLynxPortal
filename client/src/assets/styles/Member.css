@@ -72,7 +72,9 @@
 
 .available-accounts {
   background: linear-gradient(145deg, #1a1d20, #292e38);
-  width: 140px;
+  display: flex !important;
+  align-items: center !important;
+  min-width: fit-content !important;
 }
 
 .add-btn {
