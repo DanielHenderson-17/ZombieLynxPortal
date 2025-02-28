@@ -24,6 +24,7 @@ import {
 } from "../../managers/minecraftAuthManager";
 import "../../assets/styles/Member.css";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 import tierOne from "../../assets/images/tierOne.png";
 import tierTwo from "../../assets/images/tierTwo.png";
 import tierThree from "../../assets/images/tierThree.png";
@@ -313,8 +314,10 @@ export default function Member({ loggedInUser }) {
                         <div>
                           <p className="mb-0 text-white text-start">
                             {acc.name === "Minecraft"
-                              ? acc.minecraftUsername
-                              : acc.discordName || acc.steamName || acc.name}
+                              ? capitalizeFirstLetter(acc.minecraftUsername)
+                              : capitalizeFirstLetter(
+                                  acc.discordName || acc.steamName || acc.name
+                                )}
                           </p>
                         </div>
                       </div>
@@ -339,7 +342,7 @@ export default function Member({ loggedInUser }) {
               <div
                 className={`add-accounts mb-3 mt-md-0 justify-content-md-start ms-md-0 ${
                   linkedAccounts.length === 0
-                    ? "col-6 mx-auto justify-content-center order-2 order-md-1"
+                    ? "col-9 mx-auto justify-content-center order-2 order-md-1"
                     : "col-4 col-md-6 order-2 order-md-1"
                 } ${
                   availableAccounts.filter(
@@ -355,7 +358,7 @@ export default function Member({ loggedInUser }) {
                   <i className="bi bi-plus fs-6 my-0"></i> Add Accounts
                 </div>
 
-                <div className="d-flex gap-2 rounded px-2 py-1 available-accounts d-flex mx-auto mx-0 mt-0">
+                <div className="d-flex gap-2 rounded px-2 py-1 available-accounts ms-auto mt-0 justify-content-start">
                   {availableAccounts
                     .filter(
                       (acc) =>
@@ -441,7 +444,7 @@ export default function Member({ loggedInUser }) {
         {error && <p className="text-danger text-center">{error}</p>}
 
         {/* Navigation */}
-        <nav className="d-flex justify-content-start member-nav">
+        <nav className="d-flex justify-content-start member-nav pt-3">
           <div className="col-12 d-flex justify-content-center mt-0">
             <NavLink
               to="/member/stats"
