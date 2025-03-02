@@ -95,6 +95,7 @@ export default function Home() {
       <ServerListDisplay />
       <ServerStatusDisplay />
       <ServicesListDisplay />
+      <a href="/privacy-policy">ZLG Privacy Policy</a>
     </div>
   );
 }
