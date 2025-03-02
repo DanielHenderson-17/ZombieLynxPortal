@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link Epic Account</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- External Script -->
+    <script defer src="/src/managers/epicAuthManager.js" type="module"></script>
+
+    <style>
+      html, body {
+        height: 100vh;
+        overflow: hidden;
+      }
+      .container {
+        margin: 0!important;
+        font-family: 'Jockey One', sans-serif;
+      }
+      body {
+        background-image: url("epic-bg.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        background-color: black;
+      }
+      .card {
+        background-color: #303030;
+      }
+      .epic-text {
+        font-family: 'Jockey One', sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <img
+      src="epic-logo.png"
+      alt=""
+      class="mx-auto text-center d-flex justify-content-center mt-5 mb-3 col-3"
+    />
+    <div
+      class="d-flex align-items-center justify-content-center text-white w-100"
+    >
+      <div class="container text-center p-0">
+        <div class="card text-white pt-3 shadow border-0 mt-5 shadow-lg">
+          <h2 id="status-title">Checking Status...</h2>
+          <p id="status-message"></p>
+
+          <div id="epic-link-container" class="d-none">
+            <ol class="text-start epic-text fw-lighter ms-2">
+              <li class="mb-4">Connect your Discord account.</li>
+              <li>Play Zombie Lynx Ark Ascended or an Epic-supported game.</li>
+              <li class="mb-4 mt-4">
+                Type <strong>/link-asa</strong> in in-game chat.
+              </li>
+              <li>
+                Type <strong>!link-asa &lt;code&gt;</strong> in the
+                "🔗︱asa-link" Discord channel
+              </li>
+            </ol>
+            <button id="link-epic-btn" class="btn btn-primary my-3 mx-auto">
+              Link Epic Account
+            </button>
+          </div>
+
+          <div id="epic-info-container" class="d-none">
+            <h3 class="text-success">✅ Epic Account Linked Successfully</h3>
+            <p class="mb-3">Username: <strong id="epic-username"></strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+                  async function checkEpicStatus() {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          document.getElementById("status-title").innerText = "No Discord Linked";
+          document.getElementById("status-message").innerText =
+            "Please link your Discord account to continue.";
+          return;
+        }
+
+        try {
+          const res = await fetch("https://localhost:5001/api/Epic/linked", {
+            method: "GET",
+            headers: { Authorization: "Bearer " + token },
+          });
+
+          const data = await res.json();
+          console.log("📡 API Response Status:", res.status);
+          console.log("📡 API Response Data:", data);
+
+          if (!data || !data.eosId) {
+            console.warn(
+              "⚠️ No Epic account linked - Checking if Discord is linked..."
+            );
+
+            // ✅ Auto-link if Discord is linked
+            const discordRes = await fetch("https://localhost:5001/api/Discord/linked", {
+              method: "GET",
+              headers: { Authorization: "Bearer " + token },
+            });
+            const discordData = await discordRes.json();
+
+            if (discordData?.discordId) {
+              console.log("🔗 Discord found, attempting to auto-link Epic...");
+
+              // Call link-epic if Discord exists
+              const linkRes = await fetch("https://localhost:5001/api/Epic/link-epic", {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + token,
+                },
+              });
+
+              if (linkRes.ok) {
+                console.log("✅ Epic account successfully linked. Reloading...");
+                location.reload();
+              } else {
+                console.error("❌ Auto-link failed, showing manual instructions.");
+                document.getElementById("status-title").innerText = "Link Your Epic Account";
+                document.getElementById("epic-link-container").classList.remove("d-none");
+                document.getElementById("link-epic-btn").addEventListener("click", openEpicAuthWindow);
+              }
+            } else {
+              console.log("⚠️ No Discord linked - Showing instructions.");
+              document.getElementById("status-title").innerText = "Link Your Epic Account";
+              document.getElementById("epic-link-container").classList.remove("d-none");
+              document.getElementById("link-epic-btn").addEventListener("click", openEpicAuthWindow);
+            }
+          } else {
+            document.getElementById("status-title").innerText =
+              "Epic Linked Successfully";
+            document.getElementById("epic-username").innerText =
+              data.epicName || "Unknown";
+
+            document.getElementById("epic-info-container").classList.remove("d-none");
+
+            window.opener.postMessage(
+              {
+                type: "EPIC_AUTH_SUCCESS",
+                eosId: data.eosId,
+                epicName: data.epicName,
+              },
+              window.location.origin
+            );
+
+            setTimeout(() => window.close(), 5000);
+          }
+        } catch (err) {
+          console.error("❌ Error checking Epic status:", err);
+          document.getElementById("status-title").innerText = "Error";
+          document.getElementById("status-message").innerText =
+            "Something went wrong.";
+        }
+      }
+
+      // ✅ Run status check on page load
+      checkEpicStatus();
+    </script>
+  </body>
+</html>

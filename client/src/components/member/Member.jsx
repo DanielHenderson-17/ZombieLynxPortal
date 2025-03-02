@@ -17,9 +17,19 @@ import {
   unlinkDiscordAccount,
   getLinkedDiscordAccount,
 } from "../../managers/discordAuthManager";
-
+import {
+  getLinkedMinecraftAccount,
+  unlinkMinecraftAccount,
+  openMinecraftAuthWindow,
+} from "../../managers/minecraftAuthManager";
+import {
+  getLinkedEpicAccount,
+  unlinkEpicAccount,
+  openEpicAuthWindow,
+} from "../../managers/epicAuthManager";
 import "../../assets/styles/Member.css";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 import tierOne from "../../assets/images/tierOne.png";
 import tierTwo from "../../assets/images/tierTwo.png";
 import tierThree from "../../assets/images/tierThree.png";
@@ -29,6 +39,8 @@ import buyPoints from "../../assets/images/buyPoints.png";
 export default function Member({ loggedInUser }) {
   const [steamAccount, setSteamAccount] = useState(null);
   const [discordAccount, setDiscordAccount] = useState(null);
+  const [minecraftAccount, setMinecraftAccount] = useState(null);
+  const [epicAccount, setEpicAccount] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(false);
@@ -40,9 +52,10 @@ export default function Member({ loggedInUser }) {
   // Mock for other accounts
   const [linkedAccounts, setLinkedAccounts] = useState([]);
   const availableAccounts = [
-    { name: "Epic", icon: "../../../../public/epicIcon.png" },
-    { name: "Discord", icon: "../../../../public/discordIcon.png" },
-    { name: "Steam", icon: "../../../../public/steamIcon.png" },
+    { name: "Epic", icon: "/epicIcon.png" },
+    { name: "Discord", icon: "/discordIcon.png" },
+    { name: "Steam", icon: "/steamIcon.png" },
+    { name: "Minecraft", icon: "/minecraftIcon.png" },
   ];
 
   // Generate a random seed once when the component mounts
@@ -66,6 +79,8 @@ export default function Member({ loggedInUser }) {
         try {
           const steamData = await getLinkedSteamAccount();
           const discordData = await getLinkedDiscordAccount();
+          const minecraftData = await getLinkedMinecraftAccount();
+          const epicData = await getLinkedEpicAccount(); // ✅ Fetch Epic
 
           const linked = [];
           if (discordData?.discordId) {
@@ -80,6 +95,21 @@ export default function Member({ loggedInUser }) {
             linked.push({ name: "Steam", ...steamData });
           } else {
             setSteamAccount(null);
+          }
+
+          if (minecraftData?.minecraftUuid) {
+            setMinecraftAccount(minecraftData);
+            linked.push({ name: "Minecraft", ...minecraftData });
+          } else {
+            setMinecraftAccount(null);
+          }
+
+          if (epicData?.eosId) {
+            // ✅ Check if Epic is linked
+            setEpicAccount(epicData);
+            linked.push({ name: "Epic", ...epicData });
+          } else {
+            setEpicAccount(null);
           }
 
           setLinkedAccounts(linked);
@@ -116,6 +146,15 @@ export default function Member({ loggedInUser }) {
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
+    } else if (platform === "Minecraft") {
+      openMinecraftAuthWindow();
+      setTimeout(() => setRefreshTrigger((prev) => !prev), 5000);
+      setLoading(false);
+    } else if (platform === "Epic") {
+      // ✅ Open Epic Popup
+      openEpicAuthWindow();
+      setTimeout(() => setRefreshTrigger((prev) => !prev), 5000);
+      setLoading(false);
     }
   };
 
@@ -138,6 +177,23 @@ export default function Member({ loggedInUser }) {
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
+    } else if (platform === "Minecraft") {
+      unlinkMinecraftAccount(() => {
+        setMinecraftAccount(null);
+        setLinkedAccounts((prev) =>
+          prev.filter((acc) => acc.name !== "Minecraft")
+        );
+        setRefreshTrigger((prev) => !prev);
+        setLoading(false);
+      });
+    } else if (platform === "Epic") {
+      // ✅ Handle Epic Unlinking
+      unlinkEpicAccount(() => {
+        setEpicAccount(null);
+        setLinkedAccounts((prev) => prev.filter((acc) => acc.name !== "Epic"));
+        setRefreshTrigger((prev) => !prev);
+        setLoading(false);
+      });
     }
   };
 
@@ -156,6 +212,8 @@ export default function Member({ loggedInUser }) {
                     src={
                       discordAccount?.discordImgUrl ||
                       steamAccount?.steamImgUrl ||
+                      minecraftAccount?.MinecraftAvatarUrl ||
+                      epicAccount?.avatarUrl ||
                       `https://picsum.photos/seed/${randomSeed}/100/100`
                     }
                     alt="Profile"
@@ -254,21 +312,22 @@ export default function Member({ loggedInUser }) {
             <div className="d-md-flex d-none flex-md-column flex-row ms-2 justify-content-start account-section mt-2 ms-md-4 ms-0 col-md-5 col-12 mx-auto">
               {/* Linked Accounts Section - Hidden on mobile if no linked accounts */}
               {linkedAccounts.length > 0 ? (
-                <div
-                  className={`linked-accounts col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2 ${
-                    availableAccounts.filter(
-                      (acc) =>
-                        !linkedAccounts.some(
-                          (linked) => linked.name === acc.name
-                        )
-                    ).length === 0
-                      ? "pt-4"
-                      : ""
-                  }`}
-                >
-                  <div className="text-white text-start mb-1 align-items-center">
+                <div className="linked-accounts col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2">
+                  <div
+                    className={`text-white text-start mb-1 align-items-center ${
+                      availableAccounts.filter(
+                        (acc) =>
+                          !linkedAccounts.some(
+                            (linked) => linked.name === acc.name
+                          )
+                      ).length === 0
+                        ? "mt-4"
+                        : ""
+                    }`}
+                  >
                     <i className="bi bi-link-45deg"></i> Linked Accounts
                   </div>
+
                   {linkedAccounts.map((acc) => (
                     <div
                       key={acc.name}
@@ -289,10 +348,13 @@ export default function Member({ loggedInUser }) {
                         />
                         <div>
                           <p className="mb-0 text-white text-start">
-                            {acc.discordName
-                              ? acc.discordName.charAt(0).toUpperCase() +
-                                acc.discordName.slice(1).toLowerCase()
-                              : acc.steamName || acc.name}
+                            {acc.name === "Minecraft"
+                              ? capitalizeFirstLetter(acc.minecraftUsername)
+                              : acc.name === "Epic"
+                              ? capitalizeFirstLetter(acc.epicName)
+                              : capitalizeFirstLetter(
+                                  acc.discordName || acc.steamName || acc.name
+                                )}
                           </p>
                         </div>
                       </div>
@@ -317,7 +379,7 @@ export default function Member({ loggedInUser }) {
               <div
                 className={`add-accounts mb-3 mt-md-0 justify-content-md-start ms-md-0 ${
                   linkedAccounts.length === 0
-                    ? "col-6 mx-auto justify-content-center order-2 order-md-1"
+                    ? "col-9 mx-auto justify-content-center order-2 order-md-1"
                     : "col-4 col-md-6 order-2 order-md-1"
                 } ${
                   availableAccounts.filter(
@@ -333,7 +395,7 @@ export default function Member({ loggedInUser }) {
                   <i className="bi bi-plus fs-6 my-0"></i> Add Accounts
                 </div>
 
-                <div className="d-flex gap-2 rounded px-2 py-1 available-accounts d-flex mx-auto mx-0 mt-0">
+                <div className="d-flex gap-2 rounded px-2 py-1 available-accounts ms-auto mt-0 justify-content-start">
                   {availableAccounts
                     .filter(
                       (acc) =>
@@ -361,7 +423,7 @@ export default function Member({ loggedInUser }) {
           </div>
 
           {/* RIGHT SIDE - Shop */}
-          <div className="shop-popular col-7 d-none d-md-flex justify-content-center align-items-center mt-3">
+          <div className="shop-popular col-7 d-none d-md-flex justify-content-center align-items-center mt-4">
             <div className="card p-1 border-0">
               <div className="card-body p-1">
                 <img src={tierOne} alt="" />
@@ -419,7 +481,7 @@ export default function Member({ loggedInUser }) {
         {error && <p className="text-danger text-center">{error}</p>}
 
         {/* Navigation */}
-        <nav className="d-flex justify-content-start member-nav">
+        <nav className="d-flex justify-content-start member-nav pt-3">
           <div className="col-12 d-flex justify-content-center mt-0">
             <NavLink
               to="/member/stats"
