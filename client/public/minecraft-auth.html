@@ -119,7 +119,10 @@
           if (!data || !data.minecraftUuid) {
             document.getElementById("status-title").innerText = "Link Your Minecraft Account";
             document.getElementById("minecraft-link-container").classList.remove("d-none");
-            document.getElementById("link-minecraft-btn").addEventListener("click", linkMinecraft);
+            const linkBtn = document.getElementById("link-minecraft-btn");
+            linkBtn.removeEventListener("click", linkMinecraft); // Ensure no duplicate event bindings
+            linkBtn.addEventListener("click", linkMinecraft);
+
           } else {
             document.getElementById("status-title").innerText = "Minecraft Linked Successfully";
             document.getElementById("mc-username").innerText = data.minecraftUsername || "Unknown";
