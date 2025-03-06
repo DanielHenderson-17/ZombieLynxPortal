@@ -23,5 +23,7 @@ namespace ZombieLynxPortalAPI.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public string? ImgUrl { get; set; }
+        public ulong? DiscordUserId { get; set; }
+        public string? DiscordUserName { get; set; }
     }
 }

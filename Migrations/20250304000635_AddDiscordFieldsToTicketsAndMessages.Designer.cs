@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ZombieLynxPortalAPI.Data;
@@ -11,9 +12,11 @@ using ZombieLynxPortalAPI.Data;
 namespace ZombieLynxPortalAPI.Migrations
 {
     [DbContext(typeof(ZombieLynxPortalAPIDbContext))]
-    partial class ZombieLynxPortalAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304000635_AddDiscordFieldsToTicketsAndMessages")]
+    partial class AddDiscordFieldsToTicketsAndMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@zombielynx.com",
-                            PasswordHash = "$2a$11$7SGPvmg26l8BP.eD2FB/5eL65owwOmnGA4.89BHNwJSGuVeiVydUC",
+                            PasswordHash = "$2a$11$3FGXawHnniMLyt2xMmPLtuXfqLVk49b17UP7TmNiGXCF7J.Zuc/dq",
                             Role = "Admin"
                         });
                 });
@@ -77,7 +80,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             AdminId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 3, 6, 2, 40, 41, 44, DateTimeKind.Utc).AddTicks(8636)
+                            AssignedAt = new DateTime(2025, 3, 4, 0, 6, 34, 796, DateTimeKind.Utc).AddTicks(9976)
                         });
                 });
 
@@ -124,7 +127,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Content = "This is the first message in the ticket conversation.",
-                            CreatedAt = new DateTime(2025, 3, 6, 2, 40, 41, 45, DateTimeKind.Utc).AddTicks(716),
+                            CreatedAt = new DateTime(2025, 3, 4, 0, 6, 34, 797, DateTimeKind.Utc).AddTicks(3699),
                             MessageGroupId = 1,
                             UserProfileId = 1
                         },
@@ -132,7 +135,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 2,
                             Content = "Following up on the issue. Any updates?",
-                            CreatedAt = new DateTime(2025, 3, 6, 2, 50, 41, 45, DateTimeKind.Utc).AddTicks(872),
+                            CreatedAt = new DateTime(2025, 3, 4, 0, 16, 34, 797, DateTimeKind.Utc).AddTicks(3985),
                             MessageGroupId = 1,
                             UserProfileId = 1
                         },
@@ -140,7 +143,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 3,
                             Content = "Please let me know if you need more details.",
-                            CreatedAt = new DateTime(2025, 3, 6, 3, 0, 41, 45, DateTimeKind.Utc).AddTicks(886),
+                            CreatedAt = new DateTime(2025, 3, 4, 0, 26, 34, 797, DateTimeKind.Utc).AddTicks(4022),
                             MessageGroupId = 1,
                             UserProfileId = 1
                         });
@@ -176,14 +179,14 @@ namespace ZombieLynxPortalAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 6, 2, 40, 41, 44, DateTimeKind.Utc).AddTicks(9165),
+                            CreatedAt = new DateTime(2025, 3, 4, 0, 6, 34, 797, DateTimeKind.Utc).AddTicks(1218),
                             IsGlobal = true,
                             Message = "Welcome to Zombie Lynx Portal!"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 5, 2, 40, 41, 44, DateTimeKind.Utc).AddTicks(9427),
+                            CreatedAt = new DateTime(2025, 3, 3, 0, 6, 34, 797, DateTimeKind.Utc).AddTicks(1705),
                             IsGlobal = false,
                             Message = "New server update available."
                         });
@@ -212,9 +215,6 @@ namespace ZombieLynxPortalAPI.Migrations
                     b.Property<decimal?>("DiscordChannelId")
                         .HasColumnType("numeric(20,0)");
 
-                    b.Property<decimal?>("DiscordUserId")
-                        .HasColumnType("numeric(20,0)");
-
                     b.Property<string>("Game")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -222,8 +222,8 @@ namespace ZombieLynxPortalAPI.Migrations
 
                     b.Property<string>("Server")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -252,13 +252,13 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Category = "Bug",
-                            CreatedAt = new DateTime(2025, 3, 6, 2, 40, 41, 44, DateTimeKind.Utc).AddTicks(7350),
+                            CreatedAt = new DateTime(2025, 3, 4, 0, 6, 34, 796, DateTimeKind.Utc).AddTicks(8674),
                             Description = "Initial test ticket for the system.",
                             Game = "Ark:SA",
                             Server = "NA-East",
                             Status = "Open",
                             Subject = "Test Ticket",
-                            UpdatedAt = new DateTime(2025, 3, 6, 2, 40, 41, 44, DateTimeKind.Utc).AddTicks(7439),
+                            UpdatedAt = new DateTime(2025, 3, 4, 0, 6, 34, 796, DateTimeKind.Utc).AddTicks(8761),
                             UserProfileId = 1
                         });
                 });
@@ -360,7 +360,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             UserProfileId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 3, 6, 2, 40, 41, 44, DateTimeKind.Utc).AddTicks(8117)
+                            AssignedAt = new DateTime(2025, 3, 4, 0, 6, 34, 796, DateTimeKind.Utc).AddTicks(9453)
                         });
                 });
 

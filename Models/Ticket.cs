@@ -19,7 +19,7 @@ namespace ZombieLynxPortalAPI.Models
         [Required, MaxLength(50)]
         public string Game { get; set; }
 
-        [Required, MaxLength(50)]
+        [Required, MaxLength(100)]
         public string Server { get; set; }
 
         [Required]
@@ -39,5 +39,8 @@ namespace ZombieLynxPortalAPI.Models
         public ICollection<AdminTicket> AdminTickets { get; set; }
 
         public ICollection<Message> Messages { get; set; }
+        public ulong? DiscordChannelId { get; set; }
+        public ulong? DiscordUserId { get; set; }
+
     }
 }
