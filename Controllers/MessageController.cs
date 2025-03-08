@@ -83,17 +83,30 @@ namespace ZombieLynxPortalAPI.Controllers
                 return NotFound($"Ticket with ID {messageDto.MessageGroupId} not found.");
             }
 
+            // 🔍 Find the Discord ID from ZLGMembers (if linked)
+            // 🔍 Find the Discord ID & Username from ZLGMembers (if linked)
+            var zlgMember = _dbContext.ZLGMembers.FirstOrDefault(z => z.UserProfileId == userProfile.Id);
+            ulong? discordUserId = zlgMember != null && ulong.TryParse(zlgMember.DiscordId, out ulong parsedDiscordId)
+                ? parsedDiscordId
+                : null;
+
+            string discordUserName = zlgMember?.DiscordName ?? $"{userProfile.FirstName} {userProfile.LastName}";
+
             var message = new Message
             {
                 MessageGroupId = messageDto.MessageGroupId,
                 UserProfileId = userProfile.Id,
                 Content = messageDto.Content,
                 CreatedAt = DateTime.UtcNow,
-                ImgUrl = messageDto.ImgUrl
+                ImgUrl = messageDto.ImgUrl,
+                SentToDiscord = false,
+                DiscordUserId = discordUserId,
+                DiscordUserName = discordUserName // ✅ Store Discord username
             };
 
             _dbContext.Messages.Add(message);
             _dbContext.SaveChanges();
+
 
             return Ok(new
             {
@@ -104,7 +117,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 User = new
                 {
                     userProfile.FirstName,
-                    userProfile.LastName
+                    userProfile.LastName,
+                    DiscordUserId = discordUserId,
                 }
             });
         }

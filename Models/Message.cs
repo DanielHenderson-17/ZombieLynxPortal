@@ -11,6 +11,7 @@ namespace ZombieLynxPortalAPI.Models
 
         [ForeignKey("Ticket")]
         public int MessageGroupId { get; set; }
+
         public Ticket Ticket { get; set; }
 
         [ForeignKey("UserProfile")]
@@ -25,5 +26,8 @@ namespace ZombieLynxPortalAPI.Models
         public string? ImgUrl { get; set; }
         public ulong? DiscordUserId { get; set; }
         public string? DiscordUserName { get; set; }
+        public ulong? DiscordMessageId { get; set; }
+        public bool SentToDiscord { get; set; } = false;
+
     }
 }

@@ -12,6 +12,7 @@ import {
   sendMessage,
 } from "../../managers/messageManager";
 import { formatLongDateTime } from "../../utils/longDateTime";
+import { renderMessageContent } from "../../utils/renderMessageContent.js";
 import { formatShortDate } from "../../utils/shortDateTime";
 import { formatDiscordName } from "../../utils/formatDiscordName";
 import { categoryFormatter } from "../../utils/categoryFormater";
@@ -314,7 +315,32 @@ export default function SingleTicket({ loggedInUser }) {
                             </small>
                           </div>
 
-                          <p className="mb-0">{msg.content}</p>
+                          {/* Detect and Format the Content */}
+                          <div className="mb-0">
+                            {renderMessageContent(msg.content)}
+                          </div>
+
+                          {/* Display Image if imgUrl exists */}
+                          {msg.imgUrl && (
+                            <div className="mt-2">
+                              <a
+                                href={msg.imgUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <img
+                                  src={msg.imgUrl}
+                                  alt="Attached Media"
+                                  className="message-img-preview"
+                                  style={{
+                                    maxWidth: "200px",
+                                    borderRadius: "5px",
+                                    marginTop: "5px",
+                                  }}
+                                />
+                              </a>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))

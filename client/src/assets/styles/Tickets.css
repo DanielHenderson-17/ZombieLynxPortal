@@ -137,6 +137,12 @@ hr {
   border-radius: 50%;
 }
 
+.discord-image {
+  display: block;
+  width: 100px;
+  border-radius: 50%;
+}
+
 @media (max-width: 767.98px) {
   .subject-font {
     font-size: 1.25rem;
