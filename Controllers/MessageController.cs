@@ -90,7 +90,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 ? parsedDiscordId
                 : null;
 
-            string discordUserName = zlgMember?.DiscordName ?? $"{userProfile.FirstName} {userProfile.LastName}";
+            string discordUserName = zlgMember?.DiscordName?.Split('#')[0] ?? $"{userProfile.FirstName} {userProfile.LastName}";
 
             var message = new Message
             {
@@ -101,7 +101,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 ImgUrl = messageDto.ImgUrl,
                 SentToDiscord = false,
                 DiscordUserId = discordUserId,
-                DiscordUserName = discordUserName // ✅ Store Discord username
+                DiscordUserName = discordUserName
             };
 
             _dbContext.Messages.Add(message);

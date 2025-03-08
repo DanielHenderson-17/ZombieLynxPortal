@@ -11,7 +11,7 @@ export const renderMessageContent = (content) => {
 
   if (match) {
     const videoId = match[1];
-    const truncatedLink = truncateText(content, 50);
+    const truncatedLink = truncateText(content, 40);
 
     return React.createElement(
       "div",
@@ -63,7 +63,7 @@ export const renderMessageContent = (content) => {
   return React.createElement("p", {
     dangerouslySetInnerHTML: {
       __html: content.replace(urlRegex, (url) => {
-        const truncated = truncateText(url, 50);
+        const truncated = truncateText(url, 40);
         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${truncated}</a>`;
       }),
     },
