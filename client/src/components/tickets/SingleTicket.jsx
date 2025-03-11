@@ -18,7 +18,7 @@ import { formatDiscordName } from "../../utils/formatDiscordName";
 import { categoryFormatter } from "../../utils/categoryFormater";
 import { getGameImage } from "../../utils/gameFormatter";
 import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
-import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
+// import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import { truncateText } from "../../utils/truncateText.js";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 
@@ -33,7 +33,7 @@ export default function SingleTicket({ loggedInUser }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [discordAccount, setDiscordAccount] = useState(null);
-  const [randomSeed, setRandomSeed] = useState(null);
+  // const [randomSeed, setRandomSeed] = useState(null);
 
   // Fetch ticket and messages, update state as message is sent for the ticket
   // Fetch ticket, messages, and users
@@ -78,10 +78,10 @@ export default function SingleTicket({ loggedInUser }) {
     return () => clearInterval(intervalId);
   }, [loggedInUser, refreshKey]);
 
-  // Generate random seed for profile images
-  useEffect(() => {
-    setRandomSeed(generateRandomSeed());
-  }, []);
+  // // Generate random seed for profile images
+  // useEffect(() => {
+  //   setRandomSeed(generateRandomSeed());
+  // }, []);
 
   // Send message
   const handleSendMessage = async () => {
@@ -156,17 +156,28 @@ export default function SingleTicket({ loggedInUser }) {
     <div className="text-white container-fluid mt-0 pt-3 h-100">
       <div className="row single-row h-100 pb-3">
         {/* Left Column: Ticket Details */}
-        <div className="col-md-5 single-details h-100 mb-3">
+        <div className="col-md-4 single-details h-100 mb-3">
           <div className="d-flex pt-2">
             {/* Game Image */}
-            <img
-              className="img-fluid single-img rounded mb-3 col-4"
-              src={getGameImage(ticket.game)}
-              alt={ticket.game}
-            />
+            <div className="col-4">
+              <img
+                className="img-fluid single-img rounded col-12"
+                src={getGameImage(ticket.game)}
+                alt={ticket.game}
+              />
+              <div className="d-flex justify-content-end">
+                <small className="text-secondary fst-italic">
+                  Ticket #{ticket.id}
+                </small>
+              </div>
+            </div>
+
             <div className="ms-3">
+              <h5 className="text-start mt-0">
+                {truncateText(ticket.subject, 40)}
+              </h5>
               {/* Server Name */}
-              <h6 className="text-start">{truncateText(ticket.server, 30)}</h6>
+              <h6 className="text-start">{truncateText(ticket.server, 20)}</h6>
 
               {/* Category */}
               <div className="d-flex align-items-center">
@@ -182,7 +193,7 @@ export default function SingleTicket({ loggedInUser }) {
               </div>
 
               {/* Updated At */}
-              <small className="text-secondary text-start d-block">
+              <small className="text-secondary text-start d-block mt-2 mb-2">
                 <i className="bi bi-calendar-date me-2"></i>
                 {formatLongDateTime(ticket.updatedAt)}
               </small>
@@ -220,18 +231,12 @@ export default function SingleTicket({ loggedInUser }) {
               </div>
             </div>
           </div>
-          <div className="d-flex justify-content-between">
-            <h6 className="text-start my-0">Ticket</h6>
-            <small className="text-secondary fst-italic">
-              Ticket #{ticket.id}
-            </small>
-          </div>
 
-          <h6 className="text-start mt-0">
+          {/* <h6 className="text-start mt-0">
             {truncateText(ticket.subject, 40)}
-          </h6>
+          </h6> */}
           {/* Description */}
-          <div className="text-start mt-md-4 mt-3">
+          <div className="text-start mt-md-2 mt-3">
             <div className="d-flex justify-content-between align-items-center">
               <small>Description:</small>
               <button
@@ -269,7 +274,7 @@ export default function SingleTicket({ loggedInUser }) {
         </div>
 
         {/* Right Column: Messages */}
-        <div className="col-md-7 text-start mb-3 ps-md-0 ps-2 message-container">
+        <div className="col-md-8 text-start mb-3 ps-md-0 ps-2 message-container">
           {!discordAccount?.discordName ? (
             // If not logged in, show a grayed-out message box
             <div className="text-muted p-3 bg-dark rounded text-center mt-5">
@@ -310,8 +315,9 @@ export default function SingleTicket({ loggedInUser }) {
                         <div>
                           <div className="d-flex align-items-center">
                             <strong className="me-2">
-                              {capitalizeFirstLetter(msg.discordUserName) ||
-                                "Unknown User"}
+                              {capitalizeFirstLetter(
+                                formatDiscordName(msg.discordUserName)
+                              ) || "Unknown User"}
                             </strong>
                             <small className="text-secondary">
                               {formatShortDate(msg.createdAt)}

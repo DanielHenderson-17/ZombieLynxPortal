@@ -94,7 +94,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 UserProfileId = userProfile.Id,
                 Content = messageDto.Content,
                 CreatedAt = DateTime.UtcNow,
-                ImgUrlsJson = JsonConvert.SerializeObject(messageDto.ImgUrlsJson ?? new List<string>()), // ✅ Convert to JSON string
+                ImgUrlsJson = JsonConvert.SerializeObject(messageDto.ImgUrlsJson ?? new List<string>()),
                 SentToDiscord = false,
                 DiscordUserId = discordUserId,
                 DiscordUserName = discordUserName,
@@ -109,7 +109,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 message.Id,
                 message.Content,
                 message.CreatedAt,
-                ImgUrlsJson = message.ImgUrlsJson, // ✅ Send JSON string
+                ImgUrlsJson = message.ImgUrlsJson,
                 User = new
                 {
                     DiscordUserId = discordUserId,

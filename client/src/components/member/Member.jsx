@@ -30,6 +30,7 @@ import {
 import "../../assets/styles/Member.css";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
+import { formatDiscordName } from "../../utils/formatDiscordName.js";
 import tierOne from "../../assets/images/tierOne.png";
 import tierTwo from "../../assets/images/tierTwo.png";
 import tierThree from "../../assets/images/tierThree.png";
@@ -352,9 +353,11 @@ export default function Member({ loggedInUser }) {
                               ? capitalizeFirstLetter(acc.minecraftUsername)
                               : acc.name === "Epic"
                               ? capitalizeFirstLetter(acc.epicName)
-                              : capitalizeFirstLetter(
-                                  acc.discordName || acc.steamName || acc.name
-                                )}
+                              : acc.discordName
+                              ? formatDiscordName(acc.discordName)
+                              : acc.steamName
+                              ? capitalizeFirstLetter(acc.steamName)
+                              : capitalizeFirstLetter(acc.name)}
                           </p>
                         </div>
                       </div>

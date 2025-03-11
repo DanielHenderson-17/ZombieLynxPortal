@@ -32,8 +32,9 @@
 
 .description {
   color: white;
-  min-height: 105px !important;
-  overflow-y: scroll;
+  min-height: 192px !important;
+  max-height: 192px !important;
+  overflow-y: hidden;
   background-color: #13151a;
   border-radius: 5px;
 }
