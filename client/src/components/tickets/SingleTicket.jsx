@@ -20,6 +20,7 @@ import { getGameImage } from "../../utils/gameFormatter";
 import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import { truncateText } from "../../utils/truncateText.js";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 
 export default function SingleTicket({ loggedInUser }) {
   const { ticketId } = useParams();
@@ -299,8 +300,9 @@ export default function SingleTicket({ loggedInUser }) {
                       <div key={msg.id} className="mb-3 d-flex">
                         <img
                           src={
-                            msg.user.discordImgUrl ||
-                            `https://picsum.photos/seed/${randomSeed}/100/100`
+                            msg.discordImgUrl
+                              ? msg.discordImgUrl
+                              : "https://cdn.discordapp.com/embed/avatars/0.png" // Fallback avatar
                           }
                           alt="Profile"
                           className="message-img me-2"
@@ -308,39 +310,42 @@ export default function SingleTicket({ loggedInUser }) {
                         <div>
                           <div className="d-flex align-items-center">
                             <strong className="me-2">
-                              {formatDiscordName(discordAccount.discordName)}
+                              {capitalizeFirstLetter(msg.discordUserName) ||
+                                "Unknown User"}
                             </strong>
                             <small className="text-secondary">
                               {formatShortDate(msg.createdAt)}
                             </small>
                           </div>
 
-                          {/* Detect and Format the Content */}
                           <div className="mb-0">
                             {renderMessageContent(msg.content)}
-                          </div>
 
-                          {/* Display Image if imgUrl exists */}
-                          {msg.imgUrl && (
-                            <div className="mt-2">
-                              <a
-                                href={msg.imgUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <img
-                                  src={msg.imgUrl}
-                                  alt="Attached Media"
-                                  className="message-img-preview"
-                                  style={{
-                                    maxWidth: "200px",
-                                    borderRadius: "5px",
-                                    marginTop: "5px",
-                                  }}
-                                />
-                              </a>
-                            </div>
-                          )}
+                            {/* ✅ Render Images if Present */}
+                            {msg.imgUrlsJson &&
+                              (typeof msg.imgUrlsJson === "string"
+                                ? JSON.parse(msg.imgUrlsJson)
+                                : msg.imgUrlsJson
+                              )?.length > 0 && (
+                                <div className="mt-2">
+                                  {(typeof msg.imgUrlsJson === "string"
+                                    ? JSON.parse(msg.imgUrlsJson)
+                                    : msg.imgUrlsJson
+                                  ).map((imageUrl, index) => (
+                                    <img
+                                      key={index}
+                                      src={imageUrl}
+                                      alt={`Attachment ${index + 1}`}
+                                      className="img-fluid rounded mt-1 mx-1"
+                                      style={{
+                                        maxWidth: "100%",
+                                        maxHeight: "300px",
+                                      }}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                          </div>
                         </div>
                       </div>
                     ))

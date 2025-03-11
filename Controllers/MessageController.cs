@@ -5,6 +5,7 @@ using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.DTOs;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -28,23 +29,17 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var messages = _dbContext.Messages
                 .Where(m => m.MessageGroupId == ticketId)
-                .Include(m => m.UserProfile)
                 .OrderBy(m => m.CreatedAt)
+                .ToList() // ✅ Fetch from DB first to allow C# processing
                 .Select(m => new
                 {
                     m.Id,
                     m.Content,
                     m.CreatedAt,
-                    m.ImgUrl,
-                    User = new
-                    {
-                        m.UserProfile.FirstName,
-                        m.UserProfile.LastName,
-                        DiscordImgUrl = _dbContext.ZLGMembers
-                            .Where(z => z.UserProfileId == m.UserProfile.Id)
-                            .Select(z => z.DiscordImgUrl)
-                            .FirstOrDefault()
-                    }
+                    ImgUrlsJson = string.IsNullOrEmpty(m.ImgUrlsJson) ? new List<string>() : JsonConvert.DeserializeObject<List<string>>(m.ImgUrlsJson),
+                    DiscordUserId = m.DiscordUserId,
+                    DiscordUserName = m.DiscordUserName,
+                    DiscordImgUrl = m.DiscordImgUrl
                 })
                 .ToList();
 
@@ -56,7 +51,6 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(messages);
         }
-
 
         // ✅ Post a new message to a ticket
         [HttpPost]
@@ -70,6 +64,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             Console.WriteLine($"User ID from token: {userId}");
+
             var userProfile = _dbContext.UserProfiles.FirstOrDefault(up => up.UserId.ToString() == userId);
 
             if (userProfile == null)
@@ -83,42 +78,43 @@ namespace ZombieLynxPortalAPI.Controllers
                 return NotFound($"Ticket with ID {messageDto.MessageGroupId} not found.");
             }
 
-            // 🔍 Find the Discord ID from ZLGMembers (if linked)
-            // 🔍 Find the Discord ID & Username from ZLGMembers (if linked)
+            // 🔍 Get Discord details
             var zlgMember = _dbContext.ZLGMembers.FirstOrDefault(z => z.UserProfileId == userProfile.Id);
             ulong? discordUserId = zlgMember != null && ulong.TryParse(zlgMember.DiscordId, out ulong parsedDiscordId)
                 ? parsedDiscordId
                 : null;
 
             string discordUserName = zlgMember?.DiscordName?.Split('#')[0] ?? $"{userProfile.FirstName} {userProfile.LastName}";
+            string discordImgUrl = zlgMember?.DiscordImgUrl ?? null;
 
+            // ✅ Ensure ImgUrlsJson is stored as a string
             var message = new Message
             {
                 MessageGroupId = messageDto.MessageGroupId,
                 UserProfileId = userProfile.Id,
                 Content = messageDto.Content,
                 CreatedAt = DateTime.UtcNow,
-                ImgUrl = messageDto.ImgUrl,
+                ImgUrlsJson = JsonConvert.SerializeObject(messageDto.ImgUrlsJson ?? new List<string>()), // ✅ Convert to JSON string
                 SentToDiscord = false,
                 DiscordUserId = discordUserId,
-                DiscordUserName = discordUserName
+                DiscordUserName = discordUserName,
+                DiscordImgUrl = discordImgUrl
             };
 
             _dbContext.Messages.Add(message);
             _dbContext.SaveChanges();
-
 
             return Ok(new
             {
                 message.Id,
                 message.Content,
                 message.CreatedAt,
-                message.ImgUrl,
+                ImgUrlsJson = message.ImgUrlsJson, // ✅ Send JSON string
                 User = new
                 {
-                    userProfile.FirstName,
-                    userProfile.LastName,
                     DiscordUserId = discordUserId,
+                    DiscordUserName = discordUserName,
+                    DiscordImgUrl = discordImgUrl
                 }
             });
         }

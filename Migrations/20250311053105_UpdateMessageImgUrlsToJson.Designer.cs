@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ZombieLynxPortalAPI.Data;
@@ -11,9 +12,11 @@ using ZombieLynxPortalAPI.Data;
 namespace ZombieLynxPortalAPI.Migrations
 {
     [DbContext(typeof(ZombieLynxPortalAPIDbContext))]
-    partial class ZombieLynxPortalAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250311053105_UpdateMessageImgUrlsToJson")]
+    partial class UpdateMessageImgUrlsToJson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@zombielynx.com",
-                            PasswordHash = "$2a$11$Joyvp8plW/OhnWd3g.2ETOCZEnVU/CNhq1e7Yp60F7ingGcjjpfmy",
+                            PasswordHash = "$2a$11$k/b3MOrjTUjVnka4f5C/QuFh/ZTNZlUeXPSr.ho.SFOOgFO8AJGaC",
                             Role = "Admin"
                         });
                 });
@@ -77,7 +80,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             AdminId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 3, 11, 6, 1, 29, 496, DateTimeKind.Utc).AddTicks(7847)
+                            AssignedAt = new DateTime(2025, 3, 11, 5, 31, 5, 463, DateTimeKind.Utc).AddTicks(8358)
                         });
                 });
 
@@ -134,7 +137,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Content = "This is the first message in the ticket conversation.",
-                            CreatedAt = new DateTime(2025, 3, 11, 6, 1, 29, 496, DateTimeKind.Utc).AddTicks(9774),
+                            CreatedAt = new DateTime(2025, 3, 11, 5, 31, 5, 464, DateTimeKind.Utc).AddTicks(366),
                             ImgUrlsJson = "[]",
                             MessageGroupId = 1,
                             SentToDiscord = false,
@@ -144,7 +147,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 2,
                             Content = "Following up on the issue. Any updates?",
-                            CreatedAt = new DateTime(2025, 3, 11, 6, 11, 29, 496, DateTimeKind.Utc).AddTicks(9926),
+                            CreatedAt = new DateTime(2025, 3, 11, 5, 41, 5, 472, DateTimeKind.Utc).AddTicks(6972),
                             ImgUrlsJson = "[]",
                             MessageGroupId = 1,
                             SentToDiscord = false,
@@ -154,7 +157,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 3,
                             Content = "Please let me know if you need more details.",
-                            CreatedAt = new DateTime(2025, 3, 11, 6, 21, 29, 496, DateTimeKind.Utc).AddTicks(9937),
+                            CreatedAt = new DateTime(2025, 3, 11, 5, 51, 5, 472, DateTimeKind.Utc).AddTicks(7272),
                             ImgUrlsJson = "[]",
                             MessageGroupId = 1,
                             SentToDiscord = false,
@@ -192,14 +195,14 @@ namespace ZombieLynxPortalAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 11, 6, 1, 29, 496, DateTimeKind.Utc).AddTicks(8353),
+                            CreatedAt = new DateTime(2025, 3, 11, 5, 31, 5, 463, DateTimeKind.Utc).AddTicks(8878),
                             IsGlobal = true,
                             Message = "Welcome to Zombie Lynx Portal!"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 10, 6, 1, 29, 496, DateTimeKind.Utc).AddTicks(8602),
+                            CreatedAt = new DateTime(2025, 3, 10, 5, 31, 5, 463, DateTimeKind.Utc).AddTicks(9137),
                             IsGlobal = false,
                             Message = "New server update available."
                         });
@@ -268,13 +271,13 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Category = "Bug",
-                            CreatedAt = new DateTime(2025, 3, 11, 6, 1, 29, 496, DateTimeKind.Utc).AddTicks(6637),
+                            CreatedAt = new DateTime(2025, 3, 11, 5, 31, 5, 463, DateTimeKind.Utc).AddTicks(7155),
                             Description = "Initial test ticket for the system.",
                             Game = "Ark:SA",
                             Server = "NA-East",
                             Status = "Open",
                             Subject = "Test Ticket",
-                            UpdatedAt = new DateTime(2025, 3, 11, 6, 1, 29, 496, DateTimeKind.Utc).AddTicks(6721),
+                            UpdatedAt = new DateTime(2025, 3, 11, 5, 31, 5, 463, DateTimeKind.Utc).AddTicks(7239),
                             UserProfileId = 1
                         });
                 });
@@ -376,7 +379,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             UserProfileId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 3, 11, 6, 1, 29, 496, DateTimeKind.Utc).AddTicks(7353)
+                            AssignedAt = new DateTime(2025, 3, 11, 5, 31, 5, 463, DateTimeKind.Utc).AddTicks(7861)
                         });
                 });
 
