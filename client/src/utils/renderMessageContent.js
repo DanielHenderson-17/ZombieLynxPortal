@@ -4,7 +4,7 @@ import { truncateText } from "./truncateText";
 export const renderMessageContent = (content) => {
   if (!content) return null;
 
-  // Check for YouTube links and embed them
+  // **Check for YouTube links and embed them**
   const youtubeRegex =
     /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/;
   const match = content.match(youtubeRegex);
@@ -39,33 +39,28 @@ export const renderMessageContent = (content) => {
     );
   }
 
-  // Check for image links and display them
-  const imageRegex = /\.(jpeg|jpg|gif|png|webp)$/i;
-  if (imageRegex.test(content)) {
-    return React.createElement(
-      "div",
-      { className: "mt-2" },
-      React.createElement(
-        "a",
-        { href: content, target: "_blank", rel: "noopener noreferrer" },
-        React.createElement("img", {
-          src: content,
-          alt: "Embedded Media",
-          className: "message-img-preview",
-          style: { maxWidth: "200px", borderRadius: "5px", marginTop: "5px" },
-        })
-      )
-    );
-  }
+  // **Fixing Discord Custom Emoji Handling (Prevents <a> wrapping)**
+  const discordEmojiRegex = /<a?:(\w+):(\d+)>/g;
+  content = content.replace(discordEmojiRegex, (match, name, id) => {
+    const isAnimated = match.startsWith("<a:");
+    const emojiUrl = `https://cdn.discordapp.com/emojis/${id}.${
+      isAnimated ? "gif" : "png"
+    }`;
 
-  // Convert general links to truncated hyperlinks
+    // ✅ Return ONLY the `<img>` tag (NO `<a>` wrapper)
+    return `<img src="${emojiUrl}" alt="${name}" class="discord-emoji" 
+             style="height: 32px; width: 32px; vertical-align: middle; display: inline-block;">`;
+  });
+
+  // **Convert general links AFTER fixing emojis**
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return React.createElement("p", {
-    dangerouslySetInnerHTML: {
-      __html: content.replace(urlRegex, (url) => {
-        const truncated = truncateText(url, 40);
-        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${truncated}</a>`;
-      }),
-    },
+  content = content.replace(urlRegex, (url) => {
+    const truncated = truncateText(url, 40);
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${truncated}</a>`;
+  });
+
+  // **Wrap content in a div to prevent escaping issues**
+  return React.createElement("div", {
+    dangerouslySetInnerHTML: { __html: content },
   });
 };
