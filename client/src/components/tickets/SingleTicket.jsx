@@ -231,10 +231,6 @@ export default function SingleTicket({ loggedInUser }) {
               </div>
             </div>
           </div>
-
-          {/* <h6 className="text-start mt-0">
-            {truncateText(ticket.subject, 40)}
-          </h6> */}
           {/* Description */}
           <div className="text-start mt-md-2 mt-3">
             <div className="d-flex justify-content-between align-items-center">
@@ -274,7 +270,7 @@ export default function SingleTicket({ loggedInUser }) {
         </div>
 
         {/* Right Column: Messages */}
-        <div className="col-md-8 text-start mb-3 ps-md-0 ps-2 message-container">
+        <div className="col-md-8 text-start mb-3 ps-md-0 ps-2 message-container mt-md-0 mt-3">
           {!discordAccount?.discordName ? (
             // If not logged in, show a grayed-out message box
             <div className="text-muted p-3 bg-dark rounded text-center mt-5">
