@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace ZombieLynxPortalAPI.Models
 {
@@ -11,6 +12,7 @@ namespace ZombieLynxPortalAPI.Models
 
         [ForeignKey("Ticket")]
         public int MessageGroupId { get; set; }
+
         public Ticket Ticket { get; set; }
 
         [ForeignKey("UserProfile")]
@@ -22,8 +24,21 @@ namespace ZombieLynxPortalAPI.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public string? ImgUrl { get; set; }
+        [Column(TypeName = "jsonb")]
+        public string ImgUrlsJson { get; set; } = "[]";
+
+        [NotMapped]
+        public List<string> ImgUrls
+        {
+            get => string.IsNullOrEmpty(ImgUrlsJson) ? new List<string>() : JsonConvert.DeserializeObject<List<string>>(ImgUrlsJson);
+            set => ImgUrlsJson = JsonConvert.SerializeObject(value ?? new List<string>());
+        }
+
+
         public ulong? DiscordUserId { get; set; }
         public string? DiscordUserName { get; set; }
+        public string? DiscordImgUrl { get; set; }
+        public ulong? DiscordMessageId { get; set; }
+        public bool SentToDiscord { get; set; } = false;
     }
 }

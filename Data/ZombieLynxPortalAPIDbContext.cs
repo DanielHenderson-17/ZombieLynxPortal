@@ -56,9 +56,9 @@ namespace ZombieLynxPortalAPI.Data
                 SteamId = "76561198021051513",
                 SteamName = "AdminSteam",
                 SteamImgUrl = null,
-                DiscordId = "123456789012345678",
-                DiscordName = "AdminDiscord",
-                DiscordImgUrl = null,
+                DiscordId = "1167715864339030016",
+                DiscordName = "zombielynxgaming",
+                DiscordImgUrl = "https://cdn.discordapp.com/avatars/1167715864339030016/a9e52c811d7724ba08fbba1c4e30154d.png",
                 EosId = "eos-admin-id",
                 EpicName = "AdminEpic",
                 EpicImgUrl = null,
@@ -144,7 +144,7 @@ namespace ZombieLynxPortalAPI.Data
                     UserProfileId = 1,
                     Content = "This is the first message in the ticket conversation.",
                     CreatedAt = DateTime.UtcNow,
-                    ImgUrl = null
+                    ImgUrlsJson = "[]"
                 },
                 new Message
                 {
@@ -153,7 +153,7 @@ namespace ZombieLynxPortalAPI.Data
                     UserProfileId = 1,
                     Content = "Following up on the issue. Any updates?",
                     CreatedAt = DateTime.UtcNow.AddMinutes(10),
-                    ImgUrl = null
+                    ImgUrlsJson = "[]"
                 },
                 new Message
                 {
@@ -162,7 +162,7 @@ namespace ZombieLynxPortalAPI.Data
                     UserProfileId = 1,
                     Content = "Please let me know if you need more details.",
                     CreatedAt = DateTime.UtcNow.AddMinutes(20),
-                    ImgUrl = null
+                    ImgUrlsJson = "[]"
                 }
             );
 

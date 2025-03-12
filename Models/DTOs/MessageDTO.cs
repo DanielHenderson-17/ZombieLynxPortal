@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ZombieLynxPortalAPI.DTOs
 {
@@ -14,6 +16,8 @@ namespace ZombieLynxPortalAPI.DTOs
 
         public DateTime CreatedAt { get; set; }
 
-        public string? ImgUrl { get; set; }
+        // ✅ Ensure JSON string storage and conversion
+        [JsonProperty("ImgUrlsJson")]
+        public List<string> ImgUrlsJson { get; set; } = new List<string>();
     }
 }
