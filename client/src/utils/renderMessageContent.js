@@ -1,8 +1,22 @@
 import React from "react";
 import { truncateText } from "./truncateText";
 
-export const renderMessageContent = (content) => {
+export const renderMessageContent = (content, messages) => {
   if (!content) return null;
+
+  // ✅ Build a map of Discord IDs to Names (convert IDs to strings for accurate lookup)
+  const userMap = messages.reduce((acc, msg) => {
+    acc[String(msg.discordUserId)] = msg.discordUserName; // Ensure keys are strings
+    return acc;
+  }, {});
+
+  console.log("User Map:", userMap); // Debugging - Ensure the mapping is correct
+
+  // ✅ Replace <@UserID> mentions with actual usernames
+  content = content.replace(/<@(\d+)>/g, (match, userId) => {
+    console.log(`Replacing mention: ${match} -> ${userMap[userId]}`); // Debugging
+    return userMap[userId] ? `@${userMap[userId]}` : match; // Replace if found, else keep original
+  });
 
   // **Check for YouTube links and embed them**
   const youtubeRegex =
@@ -47,7 +61,6 @@ export const renderMessageContent = (content) => {
       isAnimated ? "gif" : "png"
     }`;
 
-    // ✅ Return ONLY the `<img>` tag (NO `<a>` wrapper)
     return `<img src="${emojiUrl}" alt="${name}" class="discord-emoji" 
              style="height: 32px; width: 32px; vertical-align: middle; display: inline-block;">`;
   });

@@ -321,8 +321,7 @@ export default function SingleTicket({ loggedInUser }) {
                           </div>
 
                           <div className="mb-0">
-                            {renderMessageContent(msg.content)}
-
+                            {renderMessageContent(msg.content, messages)}
                             {/* ✅ Render Images if Present */}
                             {msg.imgUrlsJson &&
                               (typeof msg.imgUrlsJson === "string"
