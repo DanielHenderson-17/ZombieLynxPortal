@@ -2,6 +2,7 @@ import "../../assets/styles/Home.css";
 import ServerListDisplay from "../server/ServerListDisplay";
 import ServerStatusDisplay from "../server/ServerStatusDisplay";
 import ServicesListDisplay from "../services/ServicesListDisplay";
+import Footer from "../Footer";
 
 export default function Home() {
   return (
@@ -95,7 +96,8 @@ export default function Home() {
       <ServerListDisplay />
       <ServerStatusDisplay />
       <ServicesListDisplay />
-      <a href="/privacy-policy">ZLG Privacy Policy</a>
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
