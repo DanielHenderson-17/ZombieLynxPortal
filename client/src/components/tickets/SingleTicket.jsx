@@ -15,10 +15,9 @@ import { formatLongDateTime } from "../../utils/longDateTime";
 import { renderMessageContent } from "../../utils/renderMessageContent.js";
 import { formatShortDate } from "../../utils/shortDateTime";
 import { formatDiscordName } from "../../utils/formatDiscordName";
-import { categoryFormatter } from "../../utils/categoryFormater";
+import { categoryFormatter } from "../../utils/categoryFormatter.js";
 import { getGameImage } from "../../utils/gameFormatter";
 import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
-// import { generateRandomSeed } from "../../utils/generateRandomSeed.js";
 import { truncateText } from "../../utils/truncateText.js";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 
@@ -33,9 +32,7 @@ export default function SingleTicket({ loggedInUser }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [discordAccount, setDiscordAccount] = useState(null);
-  // const [randomSeed, setRandomSeed] = useState(null);
 
-  // Fetch ticket and messages, update state as message is sent for the ticket
   // Fetch ticket, messages, and users
   useEffect(() => {
     const fetchData = async () => {
