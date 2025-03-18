@@ -12,6 +12,7 @@ import CreateNotification from "../components/notifications/CreateNotification";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "./NavBar";
 import PrivacyPolicy from "../components/legal/PrivacyPolicy";
+import Rules from "../components/legal/Rules";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
@@ -42,6 +43,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           element={<LoginSuccess setLoggedInUser={setLoggedInUser} />}
         />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="zlg-rules" element={<Rules />} />
 
         {/* Protected Routes */}
         <Route
