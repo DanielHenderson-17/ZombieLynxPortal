@@ -30,16 +30,17 @@ namespace ZombieLynxPortalAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
-            Console.WriteLine("Incoming registration data: ");
-            Console.WriteLine($"Email: {dto.Email}, FirstName: {dto.FirstName}, LastName: {dto.LastName}");
-            Console.WriteLine($"DTO: {System.Text.Json.JsonSerializer.Serialize(dto)}");
-
+            Console.WriteLine("Incoming registration data:");
+            Console.WriteLine($"Email: {dto.Email}, FirstName: {dto.FirstName}, LastName: {dto.LastName}, DiscordId: {dto.DiscordId}");
 
             if (dto.Password != dto.ConfirmPassword)
                 return BadRequest("Passwords do not match.");
 
             if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
                 return BadRequest("Email is already in use.");
+
+            if (await _context.ZLGMembers.AnyAsync(m => m.DiscordId == dto.DiscordId))
+                return BadRequest("This Discord account is already linked to another user.");
 
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
@@ -58,15 +59,35 @@ namespace ZombieLynxPortalAPI.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(up => up.UserId == user.Id);
+
+            if (userProfile == null)
+            {
+                return BadRequest("UserProfile creation failed.");
+            }
+
+            var zlgMember = new ZLGMember
+            {
+                DiscordId = dto.DiscordId,
+                DiscordName = dto.DiscordName,
+                DiscordImgUrl = dto.DiscordImgUrl,
+                UserProfileId = user.Profile.Id
+            };
+
+            _context.ZLGMembers.Add(zlgMember);
+            await _context.SaveChangesAsync();
+
             return Ok(new
             {
                 user.Id,
                 user.Email,
                 user.Role,
                 user.Profile.FirstName,
-                user.Profile.LastName
+                user.Profile.LastName,
+                zlgMember.DiscordId,
+                zlgMember.DiscordName,
+                zlgMember.DiscordImgUrl
             });
-
         }
 
 

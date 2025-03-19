@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { register } from "../../managers/authManager";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
 import zlglogo from "../../assets/images/zlglogo.png";
+import { fetchDiscordClientId } from "../../managers/discordAuthManager";
 import "../../assets/styles/Login.css";
 
 export default function Register({ setLoggedInUser }) {
@@ -13,8 +14,45 @@ export default function Register({ setLoggedInUser }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState();
   const [registrationFailure, setRegistrationFailure] = useState(false);
+  const [discordId, setDiscordId] = useState("");
+  const [discordName, setDiscordName] = useState("");
+  const [discordImgUrl, setDiscordImgUrl] = useState("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchDiscordClientId().then((clientId) => {
+      if (!clientId) {
+        console.error("Discord Client ID not found");
+        return;
+      }
+
+      const discordLoginUrl =
+        `https://discord.com/oauth2/authorize?client_id=${clientId}` +
+        `&redirect_uri=${encodeURIComponent(
+          window.location.origin + "/discord-callback.html"
+        )}` +
+        `&response_type=token&scope=identify`;
+
+      window.open(discordLoginUrl, "DiscordLogin", "width=600,height=800");
+    });
+  }, []);
+
+  useEffect(() => {
+    const handleDiscordMessage = (event) => {
+      if (event.origin !== window.location.origin) return;
+      const { type, discordId, discordName, discordImgUrl } = event.data;
+      if (type === "DISCORD_AUTH_SUCCESS") {
+        setDiscordId(discordId);
+        setDiscordName(discordName);
+        setDiscordImgUrl(discordImgUrl);
+      }
+    };
+
+    window.addEventListener("message", handleDiscordMessage);
+
+    return () => window.removeEventListener("message", handleDiscordMessage);
+  }, []);
 
   // Handle form submission and register user
   const handleSubmit = (e) => {
@@ -29,11 +67,14 @@ export default function Register({ setLoggedInUser }) {
         email,
         password,
         confirmPassword,
+        discordId,
+        discordName,
+        discordImgUrl,
       };
       register(newUser).then((user) => {
         if (user) {
           setLoggedInUser(user);
-          navigate("/");
+          navigate("/member");
         } else {
           setRegistrationFailure(true);
         }
@@ -47,7 +88,16 @@ export default function Register({ setLoggedInUser }) {
       style={{ maxWidth: "500px" }}
     >
       <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
-      <h4>Create a new account</h4>
+      <h4>Create a new account for</h4>
+      <div className="d-flex justify-content-center">
+        <img
+          src={discordImgUrl}
+          alt={discordName}
+          className="rounded-circle mb-2"
+          width="80"
+        />
+        <h4>{discordName}</h4>
+      </div>
       <hr />
 
       {/* Desktop: Side-by-side inputs for First Name and Last Name */}

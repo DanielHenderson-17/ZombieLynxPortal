@@ -18,6 +18,14 @@ namespace ZombieLynxPortalAPI.DTOs
 
         [Required]
         public string LastName { get; set; }
+        [Required]
+        public string DiscordId { get; set; }
+
+        [Required]
+        public string DiscordName { get; set; }
+
+        [Required]
+        public string DiscordImgUrl { get; set; }
         public string? Role { get; set; }
     }
 }
