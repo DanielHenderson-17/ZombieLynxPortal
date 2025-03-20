@@ -178,7 +178,8 @@ namespace ZombieLynxPortalAPI.Data
                 .HasOne(t => t.UserProfile)
                 .WithMany()
                 .HasForeignKey(t => t.UserProfileId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // ✅ Relationships for UserTickets
             modelBuilder.Entity<UserTicket>()

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { register } from "../../managers/authManager";
+import { register, tryGetLoggedInUser } from "../../managers/authManager";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
 import zlglogo from "../../assets/images/zlglogo.png";
 import { fetchDiscordClientId } from "../../managers/discordAuthManager";
 import "../../assets/styles/Login.css";
+import { formatDiscordName } from "../../utils/formatDiscordName";
 
 export default function Register({ setLoggedInUser }) {
   const [firstName, setFirstName] = useState("");
@@ -14,9 +15,10 @@ export default function Register({ setLoggedInUser }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState();
   const [registrationFailure, setRegistrationFailure] = useState(false);
-  const [discordId, setDiscordId] = useState("");
-  const [discordName, setDiscordName] = useState("");
-  const [discordImgUrl, setDiscordImgUrl] = useState("");
+  const [discordId, setDiscordId] = useState(null);
+  const [discordName, setDiscordName] = useState(null);
+  const [discordImgUrl, setDiscordImgUrl] = useState(null);
+  const [discordLinked, setDiscordLinked] = useState(false);
 
   const navigate = useNavigate();
 
@@ -34,9 +36,25 @@ export default function Register({ setLoggedInUser }) {
         )}` +
         `&response_type=token&scope=identify`;
 
-      window.open(discordLoginUrl, "DiscordLogin", "width=600,height=800");
+      const discordWindow = window.open(
+        discordLoginUrl,
+        "DiscordLogin",
+        "width=600,height=800"
+      );
+
+      const windowCheckInterval = setInterval(() => {
+        if (discordWindow.closed) {
+          clearInterval(windowCheckInterval);
+          setTimeout(() => {
+            setDiscordLinked((linked) => {
+              if (!linked) navigate("/login"); // ✅ Redirect if Discord auth incomplete
+              return linked;
+            });
+          }, 500);
+        }
+      }, 1000);
     });
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const handleDiscordMessage = (event) => {
@@ -46,6 +64,7 @@ export default function Register({ setLoggedInUser }) {
         setDiscordId(discordId);
         setDiscordName(discordName);
         setDiscordImgUrl(discordImgUrl);
+        setDiscordLinked(true);
       }
     };
 
@@ -71,16 +90,42 @@ export default function Register({ setLoggedInUser }) {
         discordName,
         discordImgUrl,
       };
-      register(newUser).then((user) => {
-        if (user) {
-          setLoggedInUser(user);
-          navigate("/member");
-        } else {
+
+      register(newUser)
+        .then((data) => {
+          if (data.token) {
+            localStorage.setItem("authToken", data.token);
+            tryGetLoggedInUser().then((user) => {
+              if (user) {
+                setLoggedInUser(user);
+                navigate("/member");
+              } else {
+                setRegistrationFailure(true);
+              }
+            });
+          } else {
+            setRegistrationFailure(true);
+          }
+        })
+        .catch((error) => {
+          console.error("Registration error:", error);
           setRegistrationFailure(true);
-        }
-      });
+        });
     }
   };
+
+  if (!discordId) {
+    return (
+      <div
+        className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 text-center"
+        style={{ maxWidth: "500px", opacity: 0.6 }}
+      >
+        <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
+        <h5 className="mt-4">Waiting for Discord authentication...</h5>
+        <p>Please complete linking your Discord account to proceed.</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -89,14 +134,14 @@ export default function Register({ setLoggedInUser }) {
     >
       <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
       <h4>Create a new account for</h4>
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center align-items-center mb-2">
         <img
           src={discordImgUrl}
           alt={discordName}
-          className="rounded-circle mb-2"
-          width="80"
+          className="rounded-circle mb-2 me-2"
+          width="30"
         />
-        <h4>{discordName}</h4>
+        <h4>{formatDiscordName(discordName)}</h4>
       </div>
       <hr />
 

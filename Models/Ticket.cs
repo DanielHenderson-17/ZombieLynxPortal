@@ -32,7 +32,7 @@ namespace ZombieLynxPortalAPI.Models
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("UserProfile")]
-        public int UserProfileId { get; set; }
+        public int? UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
 
         public ICollection<UserTicket> UserTickets { get; set; }

@@ -71,11 +71,45 @@ namespace ZombieLynxPortalAPI.Controllers
                 DiscordId = dto.DiscordId,
                 DiscordName = dto.DiscordName,
                 DiscordImgUrl = dto.DiscordImgUrl,
-                UserProfileId = user.Profile.Id
+                UserProfileId = userProfile.Id
             };
 
             _context.ZLGMembers.Add(zlgMember);
             await _context.SaveChangesAsync();
+
+            // ✅ Convert DiscordId from string to ulong for comparison
+            var discordIdAsUlong = ulong.TryParse(dto.DiscordId, out var parsedId) ? parsedId : (ulong?)null;
+
+            if (discordIdAsUlong != null)
+            {
+                // ✅ Find existing tickets with this Discord ID
+                var existingTickets = await _context.Tickets
+                    .Where(t => t.DiscordUserId == discordIdAsUlong)
+                    .ToListAsync();
+
+                if (existingTickets.Any())
+                {
+                    foreach (var ticket in existingTickets)
+                    {
+                        ticket.UserProfileId = userProfile.Id; // Link to new user
+
+                        // ✅ Also create a UserTicket entry
+                        var userTicket = new UserTicket
+                        {
+                            UserProfileId = userProfile.Id,
+                            TicketId = ticket.Id,
+                            AssignedAt = DateTime.UtcNow
+                        };
+
+                        _context.UserTickets.Add(userTicket);
+                    }
+
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine($"✅ Updated {existingTickets.Count} tickets and created UserTickets.");
+                }
+            }
+
+            var token = GenerateJwtToken(user);
 
             return Ok(new
             {
@@ -86,10 +120,10 @@ namespace ZombieLynxPortalAPI.Controllers
                 user.Profile.LastName,
                 zlgMember.DiscordId,
                 zlgMember.DiscordName,
-                zlgMember.DiscordImgUrl
+                zlgMember.DiscordImgUrl,
+                Token = token
             });
         }
-
 
         // POST: api/Auth/Login
         [HttpPost("login")]
