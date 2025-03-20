@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import {
   getTicketById,
   closeTicketAPI,
@@ -20,6 +20,8 @@ import { getGameImage } from "../../utils/gameFormatter";
 import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import { truncateText } from "../../utils/truncateText.js";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
+import { pollMessages } from "../../utils/pollMessages.js";
+import { scrollToBottom } from "../../utils/scrollToBottom";
 
 export default function SingleTicket({ loggedInUser }) {
   const { ticketId } = useParams();
@@ -32,6 +34,7 @@ export default function SingleTicket({ loggedInUser }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [discordAccount, setDiscordAccount] = useState(null);
+  const messagesEndRef = useRef(null);
 
   // Fetch ticket, messages, and users
   useEffect(() => {
@@ -75,10 +78,16 @@ export default function SingleTicket({ loggedInUser }) {
     return () => clearInterval(intervalId);
   }, [loggedInUser, refreshKey]);
 
-  // // Generate random seed for profile images
-  // useEffect(() => {
-  //   setRandomSeed(generateRandomSeed());
-  // }, []);
+  // Poll messages
+  useEffect(() => {
+    const stopPolling = pollMessages(ticketId, setMessages, messagesEndRef);
+
+    return () => stopPolling();
+  }, [ticketId]);
+
+  useEffect(() => {
+    scrollToBottom(messagesEndRef);
+  }, [messages]);
 
   // Send message
   const handleSendMessage = async () => {
@@ -292,7 +301,10 @@ export default function SingleTicket({ loggedInUser }) {
             <div className="shadow border-black rounded p-0 message-box">
               <div className="d-flex flex-column">
                 {/* Messages Container */}
-                <div className="flex-grow-1 messages mb-0 p-md-3 p-1">
+                <div
+                  ref={messagesEndRef}
+                  className="flex-grow-1 messages mb-0 p-md-3 p-1"
+                >
                   {messages.length > 0 ? (
                     messages.map((msg) => (
                       <div key={msg.id} className="mb-3 d-flex">

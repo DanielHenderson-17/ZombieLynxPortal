@@ -16,7 +16,7 @@ namespace ZombieLynxPortalAPI.Models
         public Ticket Ticket { get; set; }
 
         [ForeignKey("UserProfile")]
-        public int UserProfileId { get; set; }
+        public int? UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
 
         [Required]
