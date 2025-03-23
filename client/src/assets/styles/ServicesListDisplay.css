@@ -1,3 +1,7 @@
+.zlg-services {
+  height: 100vh;
+}
+
 .extra-life {
   height: 250px;
 }
@@ -14,7 +18,7 @@
 }
 
 .price-card {
-  height: 431px;
+  height: 560px;
 }
 
 .service-tab .nav-link.active {

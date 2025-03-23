@@ -80,7 +80,9 @@ export default function SingleTicket({ loggedInUser }) {
 
   // Poll messages
   useEffect(() => {
-    const stopPolling = pollMessages(ticketId, setMessages, messagesEndRef);
+    if (!ticketId) return;
+
+    const stopPolling = pollMessages(ticketId, setMessages, 10000);
 
     return () => stopPolling();
   }, [ticketId]);

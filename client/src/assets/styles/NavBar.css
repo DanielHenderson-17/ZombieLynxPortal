@@ -7,7 +7,7 @@
 }
 
 .zlg-nav-bar {
-  background-color: rgba(0, 0, 0, 0.788) !important;
+  background: linear-gradient(rgb(32, 32, 32), rgb(29, 29, 29)) !important;
   height: 80px;
 }
 

@@ -6,16 +6,13 @@ export const renderMessageContent = (content, messages) => {
 
   // ✅ Build a map of Discord IDs to Names (convert IDs to strings for accurate lookup)
   const userMap = messages.reduce((acc, msg) => {
-    acc[String(msg.discordUserId)] = msg.discordUserName; // Ensure keys are strings
+    acc[String(msg.discordUserId)] = msg.discordUserName;
     return acc;
   }, {});
 
-  console.log("User Map:", userMap); // Debugging - Ensure the mapping is correct
-
   // ✅ Replace <@UserID> mentions with actual usernames
   content = content.replace(/<@(\d+)>/g, (match, userId) => {
-    console.log(`Replacing mention: ${match} -> ${userMap[userId]}`); // Debugging
-    return userMap[userId] ? `@${userMap[userId]}` : match; // Replace if found, else keep original
+    return userMap[userId] ? `@${userMap[userId]}` : match;
   });
 
   // **Check for YouTube links and embed them**

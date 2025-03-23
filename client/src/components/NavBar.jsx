@@ -114,13 +114,20 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
         {/* Desktop Menu */}
         <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
+          <Link>
+            <i className="fa-brands fa-discord text-white fs-3 me-4"></i>
+          </Link>
+          <Link>
+            <i className="fa-solid fa-gamepad text-white fs-3"></i>
+          </Link>
+          <div className="border-end border-secondary mx-4">``</div>
           {!loggedInUser ? (
             <div
               className="p-0 d-flex justify-content-center align-items-center login-btn"
               onClick={() => navigate("/login")}
             >
-              <p className="my-0 me-3 text-secondary">Login</p>{" "}
-              <i className="bi bi-person-circle fs-2 text-secondary"></i>
+              <p className="my-0 me-3 text-white">Login</p>{" "}
+              <i className="bi bi-person-circle fs-2 text-white"></i>
             </div>
           ) : (
             <div className="d-flex justify-content-between align-items-center col-10">

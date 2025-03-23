@@ -1,0 +1,11 @@
+.explanation-img {
+  border-radius: 20%;
+  position: relative;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  width: 350px;
+  margin-top: 20px;
+}
+
+.about-container {
+  height: 100vh;
+}

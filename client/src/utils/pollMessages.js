@@ -19,18 +19,20 @@ export const pollMessages = (ticketId, setMessages, intervalMs = 5000) => {
 
       if (!lastMessageId || latestMessage.id > lastMessageId) {
         lastMessageId = latestMessage.id;
-        setMessages(newMessages); // ✅ No scrolling here, only updating messages
+        setMessages(newMessages);
       }
     } catch (error) {
       console.error("Error polling messages:", error);
     }
-
-    setTimeout(fetchMessages, intervalMs);
   };
 
+  // ✅ Start polling using setInterval
+  const intervalId = setInterval(fetchMessages, intervalMs);
   fetchMessages();
 
+  // ✅ Stop polling on unmount
   return () => {
     pollingActive = false;
+    clearInterval(intervalId);
   };
 };
