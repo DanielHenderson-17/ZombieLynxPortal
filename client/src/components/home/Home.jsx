@@ -31,7 +31,7 @@ export default function Home() {
               />
               <div className="us">
                 <div className="d-md-flex d-block justify-content-start pt-3 pb-md-4 pb-0 mt-3 ms-md-3 m-0 mission-statement">
-                  <h4 className="text-white text-md-start text-center mx-auto mx-md-0 col-10 col-md-11 mt-md-2 p-md-0 p-2 text-shadow2">
+                  <h4 className="text-white text-md-start text-center fw-normal mx-auto mx-md-0 col-10 col-md-11 mt-md-2 p-md-0 p-2 text-shadow2">
                     Your ultimate destination for cutting edge game servers!
                     Elevate your gaming experience today!
                   </h4>
@@ -45,10 +45,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="d-md-flex d-none justify-content-around col-11 mx-auto zlg-about">
+        <div className="d-flex justify-content-md-around justify-content-center col-11 mx-auto zlg-about">
           {/* Active Admins */}
-          <div className="d-flex justify-content-center custom-col-3-75 rounded-3 p-3">
-            <div className="me-5 my-auto">
+          <div className="d-md-flex d-block justify-content-center custom-col-3-75 rounded-3 p-md-3 p-0">
+            <div className="me-md-3 me-0 d-flex justify-content-center align-items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -61,17 +61,17 @@ export default function Home() {
               </svg>
             </div>
             <div>
-              <h4 className="text-white text-start mission-text">
+              <h4 className="d-md-block d-none text-white text-start mission-text">
                 Active Admins
               </h4>
-              <h5 className="text-start text-danger mission-text">
+              <h5 className="text-md-start text-center text-danger mission-text">
                 We&apos;re here to help!
               </h5>
             </div>
           </div>
           {/* Local Dedicated */}
-          <div className="d-flex justify-content-center custom-col-3-75 rounded-3 p-3 mx-0 my-2 my-md-0">
-            <div className="me-5 my-auto">
+          <div className="d-md-flex d-block justify-content-center custom-col-3-75 rounded-3 p-md-3 p-0 mx-md-0 mx-3 my-md-0">
+            <div className="me-md-3 me-0 d-flex justify-content-center align-items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -84,17 +84,17 @@ export default function Home() {
               </svg>
             </div>
             <div>
-              <h4 className="text-white text-start mission-text">
+              <h4 className="d-md-block d-none text-white text-start mission-text">
                 Local Dedicated
               </h4>
-              <h5 className="text-start text-danger mission-text">
+              <h5 className="text-md-start text-center text-danger mission-text">
                 Locally Ran Servers!
               </h5>
             </div>
           </div>
           {/* Get Rewards */}
-          <div className="d-flex justify-content-center custom-col-3-75 rounded-3 p-3">
-            <div className="me-5 my-auto">
+          <div className="d-md-flex d-block justify-content-center custom-col-3-75 rounded-3 p-md-3 p-0">
+            <div className="me-md-3 me-0 d-flex justify-content-center align-items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -109,10 +109,10 @@ export default function Home() {
               </svg>
             </div>
             <div>
-              <h4 className="text-white text-start mission-text">
+              <h4 className="d-md-block d-none text-white text-start mission-text">
                 Get Rewarded
               </h4>
-              <h5 className="text-start text-danger mission-text">
+              <h5 className="text-md-start text-center text-danger mission-text">
                 In-Game rewards!
               </h5>
             </div>
@@ -120,10 +120,10 @@ export default function Home() {
         </div>
       </div>
       <div className="main-content">
-        {/* <About />
+        <About />
         <ServicesListDisplay />
         <ServerListDisplay />
-        <ServerStatusDisplay /> */}
+        {/* <ServerStatusDisplay /> */}
       </div>
       <Footer />
     </div>

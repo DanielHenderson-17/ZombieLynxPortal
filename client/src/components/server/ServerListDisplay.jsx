@@ -68,7 +68,7 @@ export default function ServerListDisplay() {
   const [activeServer, setActiveServer] = useState(servers[0]);
 
   return (
-    <div className="zlg-servers">
+    <div className="zlg-servers" id="ServerListDisplay">
       <div className="mt-3 mb-5 pb-5 zlg-server-list col-11 mx-auto">
         <h3 className="text-start text-danger server-status-title mb-3">
           ZLG <span className="text-white ms-2">SERVERS</span>

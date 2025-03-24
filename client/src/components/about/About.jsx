@@ -2,7 +2,7 @@ import "../../assets/styles/About.css";
 
 export default function About() {
   return (
-    <div className="col-12 pt-1 about-container pt-5">
+    <div className="col-12 pt-1 about-container pt-md-5 pt-2">
       <div className="col-11 mx-auto mt-4">
         <h3 className="text-start text-danger server-status-title mb-3">
           IT PAYS <span className="text-white ms-2">TO PLAY</span>
@@ -10,32 +10,36 @@ export default function About() {
         </h3>
       </div>
       {/* How it Works */}
-      <div className="d-flex mt-5 justify-content-center align-items-center col-10 mx-auto py-5">
+      <div className="d-md-flex d-block mt-md-5 mt-0 justify-content-center align-items-center col-10 mx-auto py-md-5 py-2">
         <div className="col ">
           <h4 className="text-white mb-3">
             <span className="text-danger me-2 fw-bold">1.</span>Play Our ZLG
             Games!
           </h4>
-          <img src="/temp1.png" alt="" className="explanation-img" />
+          <img src="/temp1.png" alt="" className="explanation-img mb-5" />
         </div>
-        <i className="bi bi-arrow-right-circle text-white fs-1 mx-2"></i>
+        <i className="d-md-block d-none bi bi-arrow-right-circle text-white fs-1 mx-2"></i>
         <div className="col ">
           <h4 className="text-white mb-3">
             <span className="text-danger me-2 fw-bold">2.</span>Earn or Purchase
             ZLG Points!
           </h4>
-          <img src="/temp2.png" alt="" className="explanation-img" />
+          <img src="/temp2.png" alt="" className="explanation-img mb-5" />
         </div>
-        <i className="bi bi-arrow-right-circle text-white fs-1 mx-2"></i>
+        <i className="d-md-block d-none bi bi-arrow-right-circle text-white fs-1 mx-2"></i>
         <div className="col ">
           <h4 className="text-white mb-3">
             <span className="text-danger me-2 fw-bold">3.</span>Spend Points in
             Any Game!*
           </h4>
-          <img src="/temp3.png" alt="" className="explanation-img" />
+          <img
+            src="/temp3.png"
+            alt=""
+            className="explanation-img mb-md-5 mb-4"
+          />
         </div>
       </div>
-      <h1 className="text-white mt-5 pt-1">
+      <h1 className="text-white mt-md-5 mt-1 pt-1">
         <i>
           <span className="text-danger">Play</span> Anywhere,{" "}
           <span className="text-danger">Earn</span> Anywhere,{" "}

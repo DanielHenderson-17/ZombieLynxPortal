@@ -60,10 +60,22 @@
 }
 
 @media (max-width: 768px) {
+  .splash-main-container {
+    height: 89vh;
+  }
+
+  .zlg-about {
+    margin-top: 190px;
+  }
+
   .custom-col-3-75 {
-    margin: 0 auto;
-    flex: 0 0 100%;
-    max-width: 100%;
+    flex: 0 0 33%;
+    max-width: 31.25%;
+  }
+
+  .mission-text {
+    font-size: 0.8rem;
+    margin-top: 10px;
   }
 
   .splash-container {

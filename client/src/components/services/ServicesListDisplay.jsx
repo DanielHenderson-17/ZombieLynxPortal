@@ -10,7 +10,7 @@ export default function ServicesListDisplay() {
       </h3>
 
       {/* Subscription Cards */}
-      <div className="row mx-0 text-white py-3 border-0 services-table-bg rounded-3">
+      <div className="row mx-0 text-white py-md-3 py-0 border-0 services-table-bg rounded-3">
         {/* Single Payment */}
         <div className="col-md-6 col-lg-3 p-1">
           <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative">
@@ -41,7 +41,7 @@ export default function ServicesListDisplay() {
             </a>
             <h5>Additional Benefits</h5>
             <ul className="text-start align-items-center p-0">
-              <li className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-9">
+              <li className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-11">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -54,7 +54,7 @@ export default function ServicesListDisplay() {
                 </svg>
                 This is a one-time donation
               </li>
-              <li className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-9">
+              <li className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-11">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -100,7 +100,7 @@ export default function ServicesListDisplay() {
               ].map((benefit, index) => (
                 <li
                   key={index}
-                  className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-9"
+                  className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-11"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +151,7 @@ export default function ServicesListDisplay() {
               ].map((benefit, index) => (
                 <li
                   key={index}
-                  className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-9"
+                  className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-11"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +172,7 @@ export default function ServicesListDisplay() {
 
         {/* Vibranium Lynx */}
         <div className="col-md-6 col-lg-3 p-1">
-          <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative">
+          <div className="text-center price-card rounded-3 mt-2 mb-md-4 mb-2 p-3 position-relative">
             <span className="subscription-badge vibranium-badge">
               Vibranium Lynx
             </span>
@@ -202,7 +202,7 @@ export default function ServicesListDisplay() {
               ].map((benefit, index) => (
                 <li
                   key={index}
-                  className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-9"
+                  className="d-flex align-items-center mb-2 justify-content-start col-md-12 col-11"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +221,7 @@ export default function ServicesListDisplay() {
           </div>
         </div>
       </div>
-      <h6 className="text-white">
+      <h6 className="text-secondary fs-6 pb-md-0 pb-3">
         Prices are for an active 1 month subscription for Ark:SE, Ark:SA, Rust,
         and Minecraft only. A subscription earns you
       </h6>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
 import { logout } from "../managers/authManager";
 import { getUserProfiles } from "../managers/userProfileManager";
@@ -88,6 +89,23 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const location = useLocation();
+
+  // Scroll to hash
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        const yOffset = -200;
+        const y =
+          element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
   const handleLogout = () => {
     logout().then(() => {
       setLoggedInUser(null);
@@ -114,10 +132,10 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
         {/* Desktop Menu */}
         <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
-          <Link>
+          <Link to={`https://www.zlg.gg/discord`}>
             <i className="fa-brands fa-discord text-white fs-3 me-4"></i>
           </Link>
-          <Link>
+          <Link to="/#ServerListDisplay">
             <i className="fa-solid fa-gamepad text-white fs-3"></i>
           </Link>
           <div className="border-end border-secondary mx-4">``</div>
@@ -208,19 +226,28 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             </div>
           )}
         </div>
-
         {/* Mobile Hamburger Menu */}
         <div className="d-flex d-lg-none align-items-center">
-          {loggedInUser && (
-            <button
-              className="btn btn-dark navbar-toggler border-0"
-              type="button"
-              aria-expanded={open}
-              onClick={() => setOpen(!open)}
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-          )}
+          <Link
+            className="d-flex align-items-center text-decoration-none"
+            to={`https://www.zlg.gg/discord`}
+          >
+            <i className="fa-brands fa-discord text-white fs-5 me-3"></i>
+          </Link>
+          <Link
+            className="d-flex align-items-center text-decoration-none"
+            to="/#ServerListDisplay"
+          >
+            <i className="fa-solid fa-gamepad text-white fs-5 me-1"></i>
+          </Link>
+          <button
+            className="btn btn-dark navbar-toggler border-0"
+            type="button"
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+          >
+            <span className="navbar-toggler-icon fs-6"></span>
+          </button>
         </div>
       </div>
 
@@ -237,23 +264,45 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             ></button>
           </div>
           <div className="p-4">
-            {userProfile ? (
-              <div className="mb-4">{userProfile.firstName}</div>
+            {loggedInUser ? (
+              <>
+                {userProfile ? (
+                  <div className="mb-4">{userProfile.firstName}</div>
+                ) : (
+                  <div className="mb-4">Loading...</div>
+                )}
+                <button
+                  className="btn btn-primary w-100"
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/member");
+                  }}
+                >
+                  My Profile
+                </button>
+                <button
+                  className="btn btn-danger w-100 mt-2"
+                  onClick={() => {
+                    handleLogout();
+                    setOpen(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </>
             ) : (
-              <div className="mb-4">Loading...</div>
+              <div
+                className="text-center text-white"
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/login");
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                <i className="bi bi-person-circle fs-1 mb-2"></i>
+                <div className="fs-5">Login</div>
+              </div>
             )}
-            <button
-              className="btn btn-primary w-100"
-              onClick={() => navigate("/member")}
-            >
-              My Profile
-            </button>
-            <button
-              className="btn btn-danger w-100 mt-2"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
           </div>
         </div>
       )}

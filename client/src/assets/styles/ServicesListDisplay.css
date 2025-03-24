@@ -57,8 +57,11 @@
 }
 
 @media (max-width: 768px) {
+  .zlg-services {
+    height: 100%;
+  }
   .price-card {
-    height: 480px;
+    height: 510px;
   }
   .extra-life {
     height: 200px;
