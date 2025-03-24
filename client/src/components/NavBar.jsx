@@ -9,6 +9,7 @@ import { getLinkedSteamAccount } from "../managers/steamAuthManager";
 import { getLinkedDiscordAccount } from "../managers/discordAuthManager";
 import zlgCoin from "../assets/images/zlgCoin.png";
 import buyPoints from "../assets/images/buyPoints.png";
+import * as bootstrap from "bootstrap";
 
 export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [open, setOpen] = useState(false);
@@ -19,6 +20,15 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [randomSeed, setRandomSeed] = useState(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const tooltipTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]'
+    );
+    tooltipTriggerList.forEach((tooltipTriggerEl) => {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }, []);
 
   // Fetch user profile
   useEffect(() => {
@@ -117,7 +127,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark">
       <div className="container-fluid px-md-5 px-2">
         {/* Logo */}
-        <RRNavLink className="navbar-brand" to="/">
+        <RRNavLink className="navbar-brand" to="/#home">
           <img
             className="zlg-logo"
             src={zlgLogo}
@@ -132,10 +142,20 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
         {/* Desktop Menu */}
         <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
-          <Link to={`https://www.zlg.gg/discord`}>
+          <Link
+            to={`https://www.zlg.gg/discord`}
+            data-bs-toggle="tooltip"
+            title="Discord"
+            data-bs-placement="bottom"
+          >
             <i className="fa-brands fa-discord text-white fs-3 me-4"></i>
           </Link>
-          <Link to="/#ServerListDisplay">
+          <Link
+            to="/#ServerListDisplay"
+            data-bs-toggle="tooltip"
+            title="Go to Servers"
+            data-bs-placement="bottom"
+          >
             <i className="fa-solid fa-gamepad text-white fs-3"></i>
           </Link>
           <div className="border-end border-secondary mx-4">``</div>
@@ -231,12 +251,18 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           <Link
             className="d-flex align-items-center text-decoration-none"
             to={`https://www.zlg.gg/discord`}
+            data-bs-toggle="tooltip"
+            title="Discord"
+            data-bs-placement="bottom"
           >
             <i className="fa-brands fa-discord text-white fs-5 me-3"></i>
           </Link>
           <Link
             className="d-flex align-items-center text-decoration-none"
             to="/#ServerListDisplay"
+            data-bs-toggle="tooltip"
+            title="Go to Servers"
+            data-bs-placement="bottom"
           >
             <i className="fa-solid fa-gamepad text-white fs-5 me-1"></i>
           </Link>
