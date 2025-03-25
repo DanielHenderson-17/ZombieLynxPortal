@@ -68,3 +68,31 @@
     margin-bottom: 10px;
   }
 }
+
+@media (min-width: 1921px) {
+  .subscription-badge {
+    margin-top: 50px;
+    font-size: 3rem;
+  }
+  .price-card {
+    height: 1220px;
+  }
+  .price-card h4 {
+    font-size: 4rem !important;
+  }
+  .price-card a {
+    margin-top: 20px;
+    font-size: 2.5rem !important;
+  }
+  .price-card h5 {
+    margin: 30px 0;
+    font-size: 3rem !important;
+  }
+  .price-card ul {
+    margin-left: 20px;
+    font-size: 2.5rem !important;
+  }
+  .services-legal i {
+    font-size: 2.5rem;
+  }
+}

@@ -46,7 +46,7 @@ export default function ServerStatusDisplay() {
   };
 
   return (
-    <div className="mb-5 col-11 mx-auto">
+    <div className="col-11 mx-auto">
       {/* Server Status Header */}
       <h3 className="text-start text-danger server-status-title mb-3">
         SERVER <span className="text-white ms-2">STATUS</span>
@@ -84,35 +84,38 @@ export default function ServerStatusDisplay() {
           >
             <section
               id={server.sectionId}
-              className="text-white my-4 p-md-3 p-1 border-0 server-status-table-bg rounded-3"
+              className="text-white mt-md-4 mb-2 mt-3 mb-0 p-md-3 p-1 border-0 server-status-table-bg rounded-3"
             >
-              <div className="d-flex mx-auto col-12 mb-2">
+              <div className="d-flex mx-auto col-md-12 col-11 mb-2 justify-content-center align-items-center server-status-header">
                 <img
                   src={`/src/assets/images/${server.name
                     .toLowerCase()
                     .replace(/[:]/g, "")}.png`}
                   alt=""
                   className="my-auto"
-                  style={{ width: "30px" }}
                 />
                 <h4 className="text-start col-12 ms-2 my-auto">
                   {server.name} Server Status
                 </h4>
               </div>
 
-              <table className="server-status-table mx-auto text-white">
+              <table className="server-status-table mx-auto text-white col-12">
                 <thead>
                   <tr className="border-bottom border-secondary">
-                    <th className="col-1 text-start ps-0">Status</th>
-                    <th className="text-start vertical-line col-7 p-0">
+                    <th className="col-1 text-start ps-0 status-title">
+                      Status
+                    </th>
+                    <th className="text-start vertical-line col-7 p-0 status-title">
                       Server
                     </th>
-                    <th className="vertical-line col-1 d-none d-md-block">
+                    <th className="vertical-line col-1 d-none d-md-table-cell status-title">
                       Version
                     </th>
-                    <th className="vertical-line col-md-1 col-4">Players</th>
-                    <th className="vertical-line col-1">Vote</th>
-                    <th className="vertical-line col-1 d-none d-md-block">
+                    <th className="vertical-line col-md-1 col-4 status-title">
+                      Players
+                    </th>
+                    <th className="vertical-line col-1 status-title">Vote</th>
+                    <th className="vertical-line col-1 d-none d-md-table-cell status-title ">
                       Connect
                     </th>
                   </tr>
@@ -128,9 +131,10 @@ export default function ServerStatusDisplay() {
                               : "/src/assets/images/offline.png"
                           }
                           alt={server.isOnline ? "Online" : "Offline"}
+                          className="status-icon"
                         />
                       </td>
-                      <td className="text-start p-0">
+                      <td className="text-start p-0 status-title">
                         <span className="d-none d-md-inline">
                           {server.name}
                         </span>
@@ -139,11 +143,11 @@ export default function ServerStatusDisplay() {
                         </span>
                       </td>
 
-                      <td className="font-monospace d-none d-md-block">
+                      <td className="font-monospace d-none d-md-block status-title">
                         {server.version}
                       </td>
-                      <td className=" col-md-1 col-4 p-md-1 p-0">{`${server.players} / ${server.maxPlayers}`}</td>
-                      <td className="pt-3 px-2 col-1">
+                      <td className=" col-md-1 col-4 p-md-1 p-0 status-title">{`${server.players} / ${server.maxPlayers}`}</td>
+                      <td className="pt-3 px-2 col-1 status-title">
                         <a
                           href={server.voteUrl}
                           target="_blank"
@@ -153,7 +157,7 @@ export default function ServerStatusDisplay() {
                           Vote
                         </a>
                       </td>
-                      <td className="pt-3 px-2 d-none d-md-block">
+                      <td className="pt-3 px-2 d-none d-md-block status-title">
                         {activeServer.name === "Minecraft" ? (
                           <a
                             className="vote-connect-button border-0 rounded-2 m-3 py-2 px-3 text-white text-decoration-none"

@@ -158,7 +158,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           >
             <i className="fa-solid fa-gamepad text-white fs-3"></i>
           </Link>
-          <div className="border-end border-secondary mx-4">``</div>
+          <div className="border-end border-secondary mx-4 navbar-line">``</div>
           {!loggedInUser ? (
             <div
               className="p-0 d-flex justify-content-center align-items-center login-btn"
@@ -170,13 +170,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           ) : (
             <div className="d-flex justify-content-between align-items-center col-10">
               <div className="m-0 text-center col-8 ps-2 pe-4 my-2 border-end border-secondary">
-                <h5 className="text-white text-center mb-1">
+                <h5 className="text-white text-center mb-1 navbar-first-name">
                   {loggedInUser.firstName}
                 </h5>
 
                 <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
                   <img src={zlgCoin} alt="" className="zlg-coin3" />
-                  <div className="text-container">
+                  <div className="text-container points-container">
                     <p className="mb-0">1455</p>
                   </div>
                   <Link
@@ -196,12 +196,6 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 }
                 alt="Profile"
                 className="profile-img rounded-circle mx-3"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  cursor: "pointer",
-                  transition: "transform 0.3s",
-                }}
                 onClick={() => setShowDropdown(!showDropdown)}
                 onMouseOver={(e) =>
                   (e.currentTarget.style.transform = "scale(1.1)")

@@ -221,9 +221,11 @@ export default function ServicesListDisplay() {
           </div>
         </div>
       </div>
-      <h6 className="text-secondary fs-6 pb-md-0 pb-3">
-        Prices are for an active 1 month subscription for Ark:SE, Ark:SA, Rust,
-        and Minecraft only. A subscription earns you
+      <h6 className="text-secondary fs-6 pb-md-0 pb-3 services-legal">
+        <i>
+          Prices are for an active 1 month subscription for Ark:SE, Ark:SA,
+          Rust, and Minecraft only. A subscription earns you
+        </i>
       </h6>
     </div>
   );

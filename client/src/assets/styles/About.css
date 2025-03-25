@@ -20,3 +20,25 @@
     margin-top: 0px;
   }
 }
+
+@media (min-width: 1921px) {
+  .server-status-title {
+    font-size: 5rem !important;
+    margin-bottom: 200px !important;
+  }
+  .explanation-img {
+    width: 800px;
+    margin-top: 40px;
+  }
+  .explanation-text,
+  .explanation-text span,
+  .bi-arrow-right-circle {
+    font-size: 4rem !important;
+  }
+  .play-anywhere {
+    font-size: 5rem !important;
+  }
+  .play-disclaimer {
+    font-size: 4rem !important;
+  }
+}

@@ -1,10 +1,12 @@
+import "../assets/styles/Footer.css";
+
 export default function Footer() {
   return (
-    <div className="d-flex justify-content-center text-white p-3 ">
-      <a href="/privacy-policy" className="mx-2">
+    <div className="d-flex justify-content-center text-white p-3 footer">
+      <a href="/privacy-policy" className="mx-2 text-decoration-none">
         Privacy Policy
       </a>
-      <a href="/zlg-rules" className="mx-2">
+      <a href="/zlg-rules" className="mx-5 text-decoration-none">
         Rules
       </a>
     </div>

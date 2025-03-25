@@ -59,6 +59,10 @@
   text-transform: uppercase;
 }
 
+.headset-icon {
+  width: 40px;
+}
+
 @media (max-width: 768px) {
   .splash-main-container {
     height: 89vh;
@@ -109,5 +113,38 @@
 
   .us button {
     font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 1921px) {
+  .home-container {
+    margin-top: 110px !important;
+  }
+  .splash-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .splash-logo img {
+    width: 95%;
+    height: 95%;
+  }
+  .text-shadow2 {
+    font-size: 4rem;
+  }
+  .play-now {
+    font-size: 2.3rem;
+  }
+  .headset-icon {
+    width: 150px;
+  }
+  .mission-text {
+    font-size: 4rem !important;
+  }
+  .splash-container {
+    height: 1600px;
+  }
+  .splash-main-container {
+    height: 94vh;
   }
 }

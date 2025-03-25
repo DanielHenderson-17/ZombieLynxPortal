@@ -11,6 +11,10 @@
   font-weight: bold;
 }
 
+.server-status-img {
+  width: 30px;
+}
+
 .server-item {
   height: 50px !important;
 }
@@ -30,7 +34,6 @@
 }
 
 .server-status-table {
-  width: 100%;
   border-collapse: collapse;
 }
 
@@ -50,4 +53,37 @@
 
 .vote-connect-button:hover {
   background-color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .server-status-table th,
+  .server-status-table td {
+    padding: 9px;
+  }
+
+  .status-title {
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 1921px) {
+  .server-status-tab {
+    margin: 0 10px !important;
+    font-size: 3rem;
+  }
+  .server-status-header img {
+    width: 200px !important;
+    margin-left: 40px !important;
+  }
+  .server-status-header h4 {
+    font-size: 4rem;
+    padding-left: 40px !important;
+  }
+  .status-title {
+    font-size: 3rem;
+  }
+  .status-icon {
+    width: 60px;
+    margin-left: 30px;
+  }
 }
