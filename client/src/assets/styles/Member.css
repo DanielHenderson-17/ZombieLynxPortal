@@ -13,8 +13,9 @@
   );
 }
 
-.member-header {
-  height: 230px !important;
+.linked-icon-img {
+  width: 25px;
+  height: 25px;
 }
 
 .member-header {
@@ -75,6 +76,11 @@
   display: flex !important;
   align-items: center !important;
   min-width: fit-content !important;
+}
+
+.available-accounts button img {
+  width: 25px;
+  height: 25px;
 }
 
 .add-btn {
@@ -212,5 +218,110 @@
     object-fit: cover;
     clip-path: inherit;
     display: block;
+  }
+}
+
+@media (min-width: 2900px) {
+  .member-layout {
+    margin-top: 280px !important;
+    height: 80vh !important;
+  }
+
+  .add-accounts {
+    margin-top: 40px;
+  }
+  .add-accounts,
+  .add-accounts i {
+    font-size: 2rem !important;
+  }
+  .member-header {
+    height: 470px !important;
+  }
+  .hexagon {
+    margin-top: 200px;
+    width: 400px;
+    height: 430px;
+    background: linear-gradient(to top, rgb(150, 6, 6), black);
+    clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .hexagon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    clip-path: inherit;
+    display: block;
+  }
+  .member-name {
+    font-size: 4rem !important;
+  }
+  .member-links i,
+  .member-links p {
+    font-size: 3rem !important;
+  }
+  .shop-popular .card {
+    margin-top: 30px;
+    border: 1px solid gray;
+    background: linear-gradient(145deg, #1a1d20, #272b2f);
+    color: white;
+    font-size: 4rem !important;
+    width: 400px;
+  }
+  .card-body img {
+    height: 190px;
+  }
+  .card-text {
+    font-size: 3rem !important;
+  }
+  .card-text img {
+    width: 70px;
+    height: 70px !important;
+  }
+  .card-body button {
+    font-size: 2.2rem !important;
+    margin-bottom: 20px;
+  }
+  .zlg-coin {
+    top: -5px;
+    left: -10px;
+    width: 80px;
+    height: 80px;
+  }
+  .buy-points {
+    position: absolute;
+    top: -7px;
+    right: -20px;
+  }
+
+  .buy-points img {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+  }
+  .points2 {
+    font-size: 2.5rem !important;
+    padding-bottom: 10px !important;
+  }
+  .available-accounts button img {
+    width: 80px;
+    height: 80px;
+  }
+  .linked-accounts {
+    margin-top: 15px !important;
+    font-size: 2.5rem !important;
+  }
+  .linked-back {
+    margin-bottom: 15px !important;
+  }
+  .linked-icon-img {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+  }
+  .unlink-btn i {
+    font-size: 1.8rem;
+    margin-right: 10px;
   }
 }

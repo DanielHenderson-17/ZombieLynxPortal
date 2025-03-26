@@ -76,10 +76,12 @@ export default function ClosedTickets({ onTicketChange }) {
         <p className="mt-5 text-white">You have no tickets yet!</p>
       ) : (
         <table className="table table-dark table-striped align-middle">
-          <thead className="thead-dark">
+          <thead className="thead-dark ticket-header">
             <tr>
               <th className="text-center col-1 d-none d-lg-table-cell">Game</th>
-              <th className="text-start col-md-4 col-8">Topic</th>
+              <th className="text-start col-md-4 col-8 ticket-topic-title">
+                Topic
+              </th>
 
               <th className="text-start col-5 d-none d-lg-table-cell">
                 Server
@@ -97,7 +99,7 @@ export default function ClosedTickets({ onTicketChange }) {
                   onClick={() => handleTicketClick(ticket.id)}
                   style={{ cursor: "pointer" }}
                 >
-                  <td className="text-start col-1 d-none d-lg-table-cell">
+                  <td className="text-start col-1 d-none d-lg-table-cell single-ticket">
                     <span className="text-warning fw-bold mx-auto">
                       <img
                         className="gameImg ms-1"
@@ -107,7 +109,7 @@ export default function ClosedTickets({ onTicketChange }) {
                     </span>
                   </td>
                   <td className="text-start col-4">
-                    <div>
+                    <div className="ticket-topic">
                       <strong className="text-white">
                         {truncateText(ticket.subject, 35)}
                       </strong>
@@ -136,7 +138,7 @@ export default function ClosedTickets({ onTicketChange }) {
                     </div>
                   </td>
 
-                  <td className="text-start col-2 d-none d-lg-table-cell">
+                  <td className="text-start col-2 d-none d-lg-table-cell ticket-server">
                     <span className="text-white fw-bold">
                       {truncateText(ticket.server, 50)}
                     </span>

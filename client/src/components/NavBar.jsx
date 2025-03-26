@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
 import { logout } from "../managers/authManager";
 import { getUserProfiles } from "../managers/userProfileManager";
@@ -8,6 +9,7 @@ import { getLinkedSteamAccount } from "../managers/steamAuthManager";
 import { getLinkedDiscordAccount } from "../managers/discordAuthManager";
 import zlgCoin from "../assets/images/zlgCoin.png";
 import buyPoints from "../assets/images/buyPoints.png";
+import * as bootstrap from "bootstrap";
 
 export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [open, setOpen] = useState(false);
@@ -18,6 +20,15 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [randomSeed, setRandomSeed] = useState(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const tooltipTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]'
+    );
+    tooltipTriggerList.forEach((tooltipTriggerEl) => {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }, []);
 
   // Fetch user profile
   useEffect(() => {
@@ -88,6 +99,23 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const location = useLocation();
+
+  // Scroll to hash
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        const yOffset = -200;
+        const y =
+          element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
   const handleLogout = () => {
     logout().then(() => {
       setLoggedInUser(null);
@@ -99,7 +127,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark">
       <div className="container-fluid px-md-5 px-2">
         {/* Logo */}
-        <RRNavLink className="navbar-brand" to="/">
+        <RRNavLink className="navbar-brand" to="/#home">
           <img
             className="zlg-logo"
             src={zlgLogo}
@@ -114,24 +142,41 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
         {/* Desktop Menu */}
         <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
+          <Link
+            to={`https://www.zlg.gg/discord`}
+            data-bs-toggle="tooltip"
+            title="Discord"
+            data-bs-placement="bottom"
+          >
+            <i className="fa-brands fa-discord text-white fs-3 me-4"></i>
+          </Link>
+          <Link
+            to="/#ServerListDisplay"
+            data-bs-toggle="tooltip"
+            title="Go to Servers"
+            data-bs-placement="bottom"
+          >
+            <i className="fa-solid fa-gamepad text-white fs-3"></i>
+          </Link>
+          <div className="border-end border-secondary mx-4 navbar-line">``</div>
           {!loggedInUser ? (
             <div
               className="p-0 d-flex justify-content-center align-items-center login-btn"
               onClick={() => navigate("/login")}
             >
-              <p className="my-0 me-3 text-secondary">Login</p>{" "}
-              <i className="bi bi-person-circle fs-2 text-secondary"></i>
+              <p className="my-0 me-3 text-white">Login</p>{" "}
+              <i className="bi bi-person-circle fs-2 text-white"></i>
             </div>
           ) : (
             <div className="d-flex justify-content-between align-items-center col-10">
               <div className="m-0 text-center col-8 ps-2 pe-4 my-2 border-end border-secondary">
-                <h5 className="text-white text-center mb-1">
+                <h5 className="text-white text-center mb-1 navbar-first-name">
                   {loggedInUser.firstName}
                 </h5>
 
                 <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
                   <img src={zlgCoin} alt="" className="zlg-coin3" />
-                  <div className="text-container">
+                  <div className="text-container points-container">
                     <p className="mb-0">1455</p>
                   </div>
                   <Link
@@ -151,12 +196,6 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 }
                 alt="Profile"
                 className="profile-img rounded-circle mx-3"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  cursor: "pointer",
-                  transition: "transform 0.3s",
-                }}
                 onClick={() => setShowDropdown(!showDropdown)}
                 onMouseOver={(e) =>
                   (e.currentTarget.style.transform = "scale(1.1)")
@@ -201,19 +240,34 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             </div>
           )}
         </div>
-
         {/* Mobile Hamburger Menu */}
         <div className="d-flex d-lg-none align-items-center">
-          {loggedInUser && (
-            <button
-              className="btn btn-dark navbar-toggler border-0"
-              type="button"
-              aria-expanded={open}
-              onClick={() => setOpen(!open)}
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-          )}
+          <Link
+            className="d-flex align-items-center text-decoration-none"
+            to={`https://www.zlg.gg/discord`}
+            data-bs-toggle="tooltip"
+            title="Discord"
+            data-bs-placement="bottom"
+          >
+            <i className="fa-brands fa-discord text-white fs-5 me-3"></i>
+          </Link>
+          <Link
+            className="d-flex align-items-center text-decoration-none"
+            to="/#ServerListDisplay"
+            data-bs-toggle="tooltip"
+            title="Go to Servers"
+            data-bs-placement="bottom"
+          >
+            <i className="fa-solid fa-gamepad text-white fs-5 me-1"></i>
+          </Link>
+          <button
+            className="btn btn-dark navbar-toggler border-0"
+            type="button"
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+          >
+            <span className="navbar-toggler-icon fs-6"></span>
+          </button>
         </div>
       </div>
 
@@ -230,23 +284,45 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             ></button>
           </div>
           <div className="p-4">
-            {userProfile ? (
-              <div className="mb-4">{userProfile.firstName}</div>
+            {loggedInUser ? (
+              <>
+                {userProfile ? (
+                  <div className="mb-4">{userProfile.firstName}</div>
+                ) : (
+                  <div className="mb-4">Loading...</div>
+                )}
+                <button
+                  className="btn btn-primary w-100"
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/member");
+                  }}
+                >
+                  My Profile
+                </button>
+                <button
+                  className="btn btn-danger w-100 mt-2"
+                  onClick={() => {
+                    handleLogout();
+                    setOpen(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </>
             ) : (
-              <div className="mb-4">Loading...</div>
+              <div
+                className="text-center text-white"
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/login");
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                <i className="bi bi-person-circle fs-1 mb-2"></i>
+                <div className="fs-5">Login</div>
+              </div>
             )}
-            <button
-              className="btn btn-primary w-100"
-              onClick={() => navigate("/member")}
-            >
-              My Profile
-            </button>
-            <button
-              className="btn btn-danger w-100 mt-2"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
           </div>
         </div>
       )}

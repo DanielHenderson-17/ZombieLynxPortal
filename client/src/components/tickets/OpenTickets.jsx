@@ -69,13 +69,17 @@ export default function OpenTickets({ onTicketChange }) {
   return (
     <div className="col-12 h-100 ticket-body1 border border-0">
       {tickets.length === 0 ? (
-        <p className="mt-5 pt-4 text-white">You have no open tickets.</p>
+        <p className="mt-5 pt-4 text-white no-tickets">
+          You have no open tickets.
+        </p>
       ) : (
         <table className="table table-dark table-striped align-middle">
-          <thead className="thead-dark">
+          <thead className="thead-dark ticket-header">
             <tr>
               <th className="text-center col-1 d-none d-lg-table-cell">Game</th>
-              <th className="text-start col-md-4 col-8">Topic</th>
+              <th className="text-start col-md-4 col-8 ticket-topic-title">
+                Topic
+              </th>
 
               <th className="text-start col-5 d-none d-lg-table-cell">
                 Server
@@ -93,7 +97,7 @@ export default function OpenTickets({ onTicketChange }) {
                   onClick={() => handleTicketClick(ticket.id)}
                   style={{ cursor: "pointer" }}
                 >
-                  <td className="text-start col-1 d-none d-lg-table-cell p-0">
+                  <td className="text-start col-1 d-none d-lg-table-cell p-0 single-ticket">
                     <span className="text-warning fw-bold mx-auto">
                       <img
                         className="gameImg3 ms-1"
@@ -103,7 +107,7 @@ export default function OpenTickets({ onTicketChange }) {
                     </span>
                   </td>
                   <td className="text-start col-4">
-                    <div>
+                    <div className="ticket-topic">
                       <strong className="text-white">
                         {truncateText(ticket.subject, 35)}
                       </strong>
@@ -132,7 +136,7 @@ export default function OpenTickets({ onTicketChange }) {
                     </div>
                   </td>
 
-                  <td className="text-start col-2 d-none d-lg-table-cell">
+                  <td className="text-start col-2 d-none d-lg-table-cell ticket-server">
                     <span className="text-white fw-bold">
                       {truncateText(ticket.server, 50)}
                     </span>

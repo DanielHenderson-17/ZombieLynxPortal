@@ -7,7 +7,7 @@
 }
 
 .zlg-nav-bar {
-  background-color: rgba(0, 0, 0, 0.788) !important;
+  background: linear-gradient(rgb(32, 32, 32), rgb(29, 29, 29)) !important;
   height: 80px;
 }
 
@@ -45,9 +45,88 @@
   background-color: #dc3545;
 }
 
+.profile-img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+/* Small Display */
 @media (max-width: 768px) {
   body {
     background-image: none !important;
     background-color: rgb(0, 0, 0);
+  }
+  .zlg-logo {
+    height: 35px;
+  }
+}
+
+/* 4k Display */
+@media (min-width: 2900px) {
+  .zlg-nav-bar {
+    height: 150px;
+  }
+  .zlg-logo {
+    height: 100px;
+  }
+  .fa-discord,
+  .fa-gamepad {
+    font-size: 4rem !important;
+    margin: 0 50px;
+  }
+  .navbar-line {
+    height: 70px;
+  }
+  .login-btn {
+    margin-left: 20px;
+    font-size: 2.5rem;
+  }
+  .login-btn i {
+    margin-left: 20px;
+    font-size: 4rem !important;
+  }
+  .navbar-first-name {
+    font-size: 2.5rem;
+  }
+  .zlg-coin3 {
+    width: 70px !important;
+    height: 70px !important;
+    top: --2px;
+  }
+  .points-container p {
+    height: 60px !important;
+    font-size: 2.5rem;
+    padding-bottom: 5px !important;
+  }
+
+  .buy-points3 {
+    right: -15px;
+  }
+
+  .buy-points3 img {
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+  }
+
+  .profile-img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .profile-menu {
+    margin-top: 530px;
+    font-size: 3rem;
+  }
+  .profile-menu p {
+    padding: 20px;
+    margin-right: 50px !important;
+  }
+
+  .profile-menu i {
+    padding: 20px;
   }
 }

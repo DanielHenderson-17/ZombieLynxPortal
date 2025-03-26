@@ -37,8 +37,9 @@ export default function Tickets({ loggedInUser }) {
               location.pathname === "/member/tickets/new-ticket" ? "active" : ""
             }`}
           >
-            <button className="btn d-block col-6 text-start mb-3 btn-success">
-              <i className="bi bi-plus-circle me-2"></i>Create
+            <button className="btn d-block d-flex align-items-center col-6 text-start mb-3 btn-success create-ticket">
+              <i className="bi bi-plus-circle me-2"></i>
+              <p className="m-0 p-0">Create</p>
             </button>
           </Link>
 
@@ -52,11 +53,14 @@ export default function Tickets({ loggedInUser }) {
             }`}
           >
             <button className="btn d-block w-100 text-start mb-2 text-white d-flex justify-content-between align-items-center">
-              <div>
-                <i className="bi bi-inbox me-3 text-white"></i>Open Tickets
+              <div className="d-flex align-items-center open-tickets">
+                <i className="bi bi-inbox me-3 text-white"></i>
+                <p className="m-0 p-0">Open</p>
               </div>
               {openTicketCount > 0 && (
-                <span className="badge bg-primary ms-2">{openTicketCount}</span>
+                <span className="badge bg-primary ms-2 open-ticket-count">
+                  {openTicketCount}
+                </span>
               )}
             </button>
           </Link>
@@ -73,7 +77,10 @@ export default function Tickets({ loggedInUser }) {
             }`}
           >
             <button className="btn d-block w-100 text-start text-white">
-              <i className="bi bi-trash3 me-3"></i>Trash
+              <div className="d-flex align-items-center closed-tickets">
+                <i className="bi bi-trash3 me-3 text-white"></i>
+                <p className="m-0 p-0">Trash</p>
+              </div>
             </button>
           </Link>
         </div>
