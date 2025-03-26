@@ -1,6 +1,7 @@
 .member-layout {
   margin-top: 85px !important;
   height: 85vh;
+  background-image: url("https://cdn.discordapp.com/attachments/773073799864051722/773073831366062858/unknown.png");
 }
 
 .member-container {
@@ -223,7 +224,7 @@
 
 @media (min-width: 2900px) {
   .member-layout {
-    margin-top: 280px !important;
+    margin-top: 250px !important;
     height: 80vh !important;
   }
 
@@ -323,5 +324,61 @@
   .unlink-btn i {
     font-size: 1.8rem;
     margin-right: 10px;
+  }
+  .new-ticket-form {
+    margin-top: 100px !important;
+  }
+  .new-ticket-form form div label {
+    font-size: 3rem !important;
+  }
+  .new-ticket-form form div input,
+  .new-ticket-form form div select {
+    font-size: 2.5rem !important;
+  }
+  .new-ticket-form form div textarea {
+    font-size: 2.5rem !important;
+    height: 450px;
+  }
+  .create-ticket-submit {
+    font-size: 2.5rem !important;
+  }
+  .single-ticket-id {
+    font-size: 2rem !important;
+  }
+  .single-ticket-details,
+  .single-ticket-server-name,
+  .single-ticket-details h5,
+  .single-ticket-description,
+  .single-ticket-description-edit,
+  .single-ticket-description-text {
+    font-size: 2rem !important;
+  }
+  .single-ticket-users,
+  .single-ticket-user-select {
+    font-size: 2rem !important;
+    margin-bottom: 20px;
+  }
+  .description {
+    height: 900px !important;
+  }
+  .messages,
+  .message-box-inner {
+    height: 100% !important;
+  }
+  .messages,
+  .messages-no-discord {
+    font-size: 2.5rem !important;
+  }
+  .messages img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px !important;
+  }
+  .messages-username {
+    margin-right: 30px !important;
+  }
+  .message-input,
+  .message-button {
+    font-size: 2.5rem !important;
   }
 }

@@ -38,3 +38,23 @@
     height: 69vh;
   }
 }
+
+@media (min-width: 2900px) {
+  .notifications-container {
+    height: 57vh;
+  }
+  .no-notifications {
+    font-size: 3rem;
+  }
+  .create-notification-btn {
+    font-size: 2.5rem;
+    margin-right: 20px;
+  }
+  .create-notification-container {
+    font-size: 3rem;
+    height: 57vh;
+  }
+  .search-users {
+    font-size: 2.5rem;
+  }
+}

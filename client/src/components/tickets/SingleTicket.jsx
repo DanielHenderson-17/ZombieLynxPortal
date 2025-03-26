@@ -174,24 +174,26 @@ export default function SingleTicket({ loggedInUser }) {
                 alt={ticket.game}
               />
               <div className="d-flex justify-content-end">
-                <small className="text-secondary fst-italic">
+                <small className="text-secondary fst-italic single-ticket-id">
                   Ticket #{ticket.id}
                 </small>
               </div>
             </div>
 
-            <div className="ms-3">
+            <div className="ms-3 single-ticket-details">
               <h5 className="text-start mt-0">
                 {truncateText(ticket.subject, 40)}
               </h5>
               {/* Server Name */}
-              <h6 className="text-start">{truncateText(ticket.server, 20)}</h6>
+              <h6 className="text-start single-ticket-server-name">
+                {truncateText(ticket.server, 20)}
+              </h6>
 
               {/* Category */}
               <div className="d-flex align-items-center">
                 <div className="d-flex align-items-center col-10">
                   <div
-                    className="text-start me-1"
+                    className="text-start me-1 single-ticket-category"
                     dangerouslySetInnerHTML={{
                       __html: categoryFormatter(ticket.category),
                     }}
@@ -209,7 +211,10 @@ export default function SingleTicket({ loggedInUser }) {
               {/* Assigned Users */}
               <div className="mt-1 text-start h-100">
                 {ticket.assignedUsers.map((user, index) => (
-                  <span key={index} className="badge bg-secondary me-2">
+                  <span
+                    key={index}
+                    className="badge bg-secondary me-2 single-ticket-users"
+                  >
                     {user.firstName}
                   </span>
                 ))}
@@ -218,7 +223,7 @@ export default function SingleTicket({ loggedInUser }) {
                   <div className="mt-2">
                     <select
                       onChange={(e) => handleAssignUser(e.target.value)}
-                      className="form-select form-select-sm"
+                      className="form-select form-select-sm single-ticket-user-select"
                     >
                       <option value="">Add User</option>
                       {allUsers
@@ -242,18 +247,18 @@ export default function SingleTicket({ loggedInUser }) {
           {/* Description */}
           <div className="text-start mt-md-2 mt-3">
             <div className="d-flex justify-content-between align-items-center">
-              <small>Description:</small>
+              <small className="single-ticket-description">Description:</small>
               <button
                 className="btn btn-link p-0 ms-2"
                 onClick={() =>
                   navigate(`/member/tickets/ticket/${ticket.id}/edit`)
                 }
               >
-                <small className="bi bi-pencil text-white me-2"></small>
+                <small className="bi bi-pencil text-white me-2 single-ticket-description-edit"></small>
               </button>
             </div>
 
-            <p className="p-2 mb-0 mt-md-1 mt-0 description shadow">
+            <p className="p-2 mb-0 mt-md-1 mt-0 description single-ticket-description-text shadow">
               {ticket.description}
             </p>
           </div>
@@ -281,7 +286,7 @@ export default function SingleTicket({ loggedInUser }) {
         <div className="col-md-8 text-start mb-3 ps-md-0 ps-2 message-container mt-md-0 mt-3">
           {!discordAccount?.discordName ? (
             // If not logged in, show a grayed-out message box
-            <div className="text-muted p-3 bg-dark rounded text-center mt-5">
+            <div className="text-muted p-3 bg-dark rounded text-center mt-5 messages-no-discord">
               <p className="text-white">
                 You need to link your Discord account to send messages.
               </p>
@@ -301,7 +306,7 @@ export default function SingleTicket({ loggedInUser }) {
           ) : (
             // If logged in, show the normal message UI
             <div className="shadow border-black rounded p-0 message-box">
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-column message-box-inner">
                 {/* Messages Container */}
                 <div
                   ref={messagesEndRef}
@@ -321,7 +326,7 @@ export default function SingleTicket({ loggedInUser }) {
                         />
                         <div>
                           <div className="d-flex align-items-center">
-                            <strong className="me-2">
+                            <strong className="me-2 messages-username">
                               {capitalizeFirstLetter(
                                 formatDiscordName(msg.discordUserName)
                               ) || "Unknown User"}

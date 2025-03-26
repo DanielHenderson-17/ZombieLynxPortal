@@ -2,8 +2,47 @@
 .register-container {
   color: white;
   background-color: #13151a;
+  max-width: 500px;
 }
 
 hr {
   margin-bottom: 50px !important;
+}
+
+@media (min-width: 2900px) {
+  .login-container,
+  .register-container {
+    margin-top: 400px !important;
+    max-width: 1000px !important;
+  }
+  .login-container h4 {
+    font-size: 4rem !important;
+  }
+  .login-container input,
+  .register-container input {
+    font-size: 3rem !important;
+    margin: 40px 0 !important;
+  }
+  .login-container button,
+  .register-container button {
+    font-size: 2.5rem !important;
+  }
+  .login-container p,
+  .register-container p {
+    font-size: 2.5rem !important;
+  }
+  .waiting-text {
+    font-size: 4rem !important;
+  }
+  .register-title {
+    font-size: 3rem !important;
+  }
+  .register-user img {
+    width: 100px !important;
+    height: 100px;
+  }
+  .register-user h4 {
+    font-size: 3rem !important;
+    margin-left: 20px !important;
+  }
 }

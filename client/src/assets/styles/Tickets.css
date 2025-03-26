@@ -192,14 +192,15 @@ hr {
     font-size: 3rem;
   }
   .create-ticket {
-    padding: 5px;
-    font-size: 2.5rem;
+    margin-top: 10px;
+    padding: 2px;
+    font-size: 2rem;
   }
   .create-ticket i {
-    margin-left: 10px;
+    margin-left: 25px;
   }
   .create-ticket p {
-    margin: 10px !important;
+    margin: 5px !important;
   }
   .no-tickets {
     font-size: 3rem;

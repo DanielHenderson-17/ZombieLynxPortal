@@ -47,7 +47,7 @@ export default function Register({ setLoggedInUser }) {
           clearInterval(windowCheckInterval);
           setTimeout(() => {
             setDiscordLinked((linked) => {
-              if (!linked) navigate("/login"); // ✅ Redirect if Discord auth incomplete
+              if (!linked) navigate("/login");
               return linked;
             });
           }, 500);
@@ -121,20 +121,19 @@ export default function Register({ setLoggedInUser }) {
         style={{ maxWidth: "500px", opacity: 0.6 }}
       >
         <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
-        <h5 className="mt-4">Waiting for Discord authentication...</h5>
+        <h5 className="mt-4 waiting-text">
+          Waiting for Discord authentication...
+        </h5>
         <p>Please complete linking your Discord account to proceed.</p>
       </div>
     );
   }
 
   return (
-    <div
-      className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
-      style={{ maxWidth: "500px" }}
-    >
+    <div className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11">
       <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
-      <h4>Create a new account for</h4>
-      <div className="d-flex justify-content-center align-items-center mb-2">
+      <h4 className="register-title">Create a new account for</h4>
+      <div className="d-flex justify-content-center align-items-center mb-2 register-user">
         <img
           src={discordImgUrl}
           alt={discordName}

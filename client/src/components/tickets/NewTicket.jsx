@@ -200,7 +200,10 @@ export default function NewTicket({ loggedInUser }) {
           />
         </div>
         <div className="text-end">
-          <button type="submit" className="btn btn-success">
+          <button
+            type="submit"
+            className="btn btn-success create-ticket-submit"
+          >
             Create Ticket
           </button>
         </div>

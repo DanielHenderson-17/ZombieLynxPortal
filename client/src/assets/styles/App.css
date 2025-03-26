@@ -13,4 +13,9 @@
 }
 
 body {
+  background-image: url("/src/assets/images/bg-top.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: rgb(27, 26, 26);
 }

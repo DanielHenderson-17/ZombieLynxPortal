@@ -122,7 +122,7 @@ export default function CreateNotification() {
           <div className="mt-2 text-start col-md-8 col-11 mx-auto ">
             <input
               type="text"
-              className="form-control my-2"
+              className="form-control my-2 search-users"
               placeholder="Type to search users by name or email"
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
@@ -150,8 +150,12 @@ export default function CreateNotification() {
           </div>
         )}
         <div className="d-flex justify-content-end col-md-8 col-11 mx-auto">
-          <button type="submit" className="btn btn-success mb-3 me-0 mt-3">
-            <i className="bi bi-plus"></i> Create Notification
+          <button
+            type="submit"
+            className="d-flex align-items-center btn btn-success mb-3 me-0 mt-3 create-notification-btn"
+          >
+            <i className="bi bi-plus"></i>
+            <p className="m-0 p-0">Create Notification</p>
           </button>
         </div>
       </form>

@@ -60,19 +60,18 @@ export default function Notification({ loggedInUser }) {
       {loggedInUser?.role === "Admin" && (
         <div className="d-flex justify-content-end">
           <button
-            className="create-notification-btn mb-4 p-2 rounded-2 border-0 btn btn-success"
-            onClick={() => navigate("/notifications/create")}
-            style={{}}
+            className="create-notification-btn d-flex align-items-center mb-4 p-2 rounded-2 border-0 btn btn-success"
+            onClick={() => navigate("/member/notifications/create")}
           >
             <i className="bi bi-plus"></i>
-            Create Notification
+            <p className="m-0 p-0">Create Notification</p>
           </button>
         </div>
       )}
       {loading ? (
         <p>Loading...</p>
       ) : notifications.length === 0 ? (
-        <p className="pt-5 text-white">
+        <p className="pt-5 text-white no-notifications">
           You currently do not have any notifications.
         </p>
       ) : (
