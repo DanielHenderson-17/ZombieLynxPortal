@@ -64,7 +64,7 @@
 }
 
 /* 4k Display */
-@media (min-width: 1921px) {
+@media (min-width: 2900px) {
   .zlg-nav-bar {
     height: 150px;
   }

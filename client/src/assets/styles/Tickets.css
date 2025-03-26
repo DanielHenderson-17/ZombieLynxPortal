@@ -181,3 +181,56 @@ hr {
     height: 65vh;
   }
 }
+
+@media (min-width: 2900px) {
+  .ticket-container {
+    height: 57vh;
+  }
+
+  .open-tickets,
+  .closed-tickets {
+    font-size: 3rem;
+  }
+  .create-ticket {
+    padding: 5px;
+    font-size: 2.5rem;
+  }
+  .create-ticket i {
+    margin-left: 10px;
+  }
+  .create-ticket p {
+    margin: 10px !important;
+  }
+  .no-tickets {
+    font-size: 3rem;
+  }
+  .ticket-header,
+  .ticket-server {
+    font-size: 2.5rem;
+  }
+  .ticket-topic {
+    margin-left: 20px;
+    font-size: 2.5rem;
+  }
+  .ticket-topic-title {
+    padding-left: 20px !important;
+  }
+  .single-ticket span img {
+    height: 250px !important;
+  }
+  .ticket-id {
+    bottom: 5px;
+    right: -5px;
+    width: 220px;
+    font-size: 2rem;
+  }
+  .ticket-button {
+    padding: 0 20px;
+    margin-right: 30px;
+    font-size: 3rem;
+  }
+  .open-ticket-count {
+    font-size: 2rem !important;
+    margin: 0 !important;
+  }
+}

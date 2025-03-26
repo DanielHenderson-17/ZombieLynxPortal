@@ -223,7 +223,7 @@ export default function Member({ loggedInUser }) {
                 </div>
 
                 {/* Username */}
-                <h3 className="text-white d-none d-md-block mb-0">
+                <h3 className="text-white d-none d-md-block mb-0 member-name">
                   {userLoading
                     ? "Loading..."
                     : loggedInUser?.firstName || "Guest"}
@@ -265,7 +265,7 @@ export default function Member({ loggedInUser }) {
                   <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-1 text-white fw-bold fs-6 col-md-9 col-12 mx-md-auto ms-0 position-relative mb-md-4 mb-1 mt-3 points-container">
                     <img src={zlgCoin} alt="" className="zlg-coin" />
                     <div className="text-container">
-                      <p className="mb-0">1455</p>
+                      <p className="mb-0 points2">1455</p>
                     </div>
                     <Link
                       to="https://zlg.gg/aseshop"
@@ -315,7 +315,7 @@ export default function Member({ loggedInUser }) {
               {linkedAccounts.length > 0 ? (
                 <div className="linked-accounts col-md-12 col-7 mt-1 mt-md-0 order-1 order-md-2">
                   <div
-                    className={`text-white text-start mb-1 align-items-center ${
+                    className={`text-white text-start d-flex mb-1 align-items-center ${
                       availableAccounts.filter(
                         (acc) =>
                           !linkedAccounts.some(
@@ -326,7 +326,8 @@ export default function Member({ loggedInUser }) {
                         : ""
                     }`}
                   >
-                    <i className="bi bi-link-45deg"></i> Linked Accounts
+                    <i className="bi bi-link-45deg"></i>{" "}
+                    <p className="p-0 m-0 linked-accounts">Linked Accounts</p>
                   </div>
 
                   {linkedAccounts.map((acc) => (
@@ -341,11 +342,7 @@ export default function Member({ loggedInUser }) {
                               ?.icon
                           }
                           alt={`${acc.name} Icon`}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            marginLeft: "12px",
-                          }}
+                          className="linked-icon-img"
                         />
                         <div>
                           <p className="mb-0 text-white text-start">
@@ -394,7 +391,7 @@ export default function Member({ loggedInUser }) {
                 }`}
               >
                 {/* Hide "+ Add Accounts" on mobile */}
-                <div className="text-white text-md-start text-center align-items-center mb-1 d-flex justify-content-center justify-content-md-start">
+                <div className="text-white text-md-start text-center align-items-center mb-1 d-flex justify-content-center justify-content-md-start add-accounts">
                   <i className="bi bi-plus fs-6 my-0"></i> Add Accounts
                 </div>
 
@@ -413,11 +410,7 @@ export default function Member({ loggedInUser }) {
                         onClick={() => handleLinkAccount(acc.name)}
                         disabled={loading}
                       >
-                        <img
-                          src={acc.icon}
-                          alt={`${acc.name} Icon`}
-                          style={{ width: "25px", height: "25px" }}
-                        />
+                        <img src={acc.icon} alt={`${acc.name} Icon`} />
                       </button>
                     ))}
                 </div>
@@ -485,46 +478,50 @@ export default function Member({ loggedInUser }) {
 
         {/* Navigation */}
         <nav className="d-flex justify-content-start member-nav pt-3">
-          <div className="col-12 d-flex justify-content-center mt-0">
+          <div className="col-12 d-flex justify-content-center mt-0 member-links">
             <NavLink
               to="/member/stats"
               className={({ isActive }) =>
-                `mx-4 text-white text-decoration-none ${
+                `mx-4 text-white text-decoration-none d-flex align-items-center ${
                   isActive ? "border-bottom border-danger border-5" : ""
                 }`
               }
             >
-              <i className="bi bi-bar-chart-fill me-1"></i>Stats
+              <i className="bi bi-bar-chart-fill me-1"></i>
+              <p className="ps-2 m-0">Stats</p>
             </NavLink>
             <NavLink
               to="/member/shop"
               className={({ isActive }) =>
-                `me-4 text-white text-decoration-none ${
+                `me-4 text-white text-decoration-none d-flex align-items-center ${
                   isActive ? "border-bottom border-danger border-5" : ""
                 }`
               }
             >
-              <i className="bi bi-bag-plus-fill me-1"></i>Shop
+              <i className="bi bi-bag-plus-fill me-1"></i>
+              <p className="ps-2 m-0">Shop</p>
             </NavLink>
             <NavLink
               to="/member/tickets"
               className={({ isActive }) =>
-                `text-white me-4 text-decoration-none ${
+                `text-white me-4 text-decoration-none d-flex align-items-center ${
                   isActive ? "border-bottom border-danger border-5" : ""
                 }`
               }
             >
-              <i className="bi bi-ticket-fill me-1"></i>Tickets
+              <i className="bi bi-ticket-fill me-1"></i>
+              <p className="ps-2 m-0">Tickets</p>
             </NavLink>
             <NavLink
               to="/member/notifications"
               className={({ isActive }) =>
-                `text-white me-4 text-decoration-none ${
+                `text-white me-4 text-decoration-none d-flex align-items-center ${
                   isActive ? "border-bottom border-danger border-5" : ""
                 }`
               }
             >
-              <i className="bi bi-envelope-fill me-1"></i>Notifications
+              <i className="bi bi-envelope-fill me-1"></i>
+              <p className="ps-2 m-0">Notifications</p>
             </NavLink>
           </div>
         </nav>
