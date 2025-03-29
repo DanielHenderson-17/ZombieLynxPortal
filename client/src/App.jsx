@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
+import {
+  getToken,
+  isJwtExpired,
+  logout,
+  tryGetLoggedInUser,
+} from "./managers/authManager";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { tryGetLoggedInUser } from "./managers/authManager";
 import { Spinner } from "reactstrap";
-// import NavBar from "./components/NavBar";
 import ApplicationViews from "./components/ApplicationViews";
 import "../src/assets/styles/App.css";
 
 function App() {
-  const [loggedInUser, setLoggedInUser] = useState(undefined); // Start as undefined
+  const [loggedInUser, setLoggedInUser] = useState(undefined);
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  // ✅ Try to restore the user session on page load
   useEffect(() => {
-    // ✅ Try to restore the user session on page load
     tryGetLoggedInUser()
       .then((user) => {
         setLoggedInUser(user);
@@ -19,6 +26,38 @@ function App() {
       .catch(() => {
         setLoggedInUser(null);
       });
+  }, []);
+
+  // ✅ Check for token expiration on route change
+  useEffect(() => {
+    const token = getToken();
+    if (token && isJwtExpired(token)) {
+      logout().then(() => {
+        setLoggedInUser(null);
+        alert(
+          "You have been logged out due to inactivity. Please log in again."
+        );
+        navigate("/login");
+      });
+    }
+  }, [location]);
+
+  // ✅ Periodic check every 60 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const token = getToken();
+      if (token && isJwtExpired(token)) {
+        logout().then(() => {
+          setLoggedInUser(null);
+          alert(
+            "You have been logged out due to inactivity. Please log in again."
+          );
+          navigate("/login");
+        });
+      }
+    }, 60000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // ✅ Show a spinner while checking for the logged-in user
@@ -32,7 +71,6 @@ function App() {
 
   return (
     <>
-      {/* <NavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} /> */}
       <ApplicationViews
         loggedInUser={loggedInUser}
         setLoggedInUser={setLoggedInUser}

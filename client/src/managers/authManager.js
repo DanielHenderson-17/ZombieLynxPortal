@@ -115,3 +115,20 @@ export const logout = () => {
   localStorage.removeItem("authToken");
   return Promise.resolve();
 };
+
+/**
+ * ✅ Check if the JWT is expired
+ * @param {string} token
+ * @returns {boolean}
+ */
+export const isJwtExpired = (token) => {
+  try {
+    const decoded = parseJwt(token);
+    if (!decoded?.exp) return true;
+    const now = Math.floor(Date.now() / 1000);
+    return decoded.exp < now;
+  } catch (err) {
+    console.error("Error checking token expiration:", err);
+    return true;
+  }
+};
