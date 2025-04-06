@@ -50,6 +50,7 @@ export default function Rules() {
       {/* Tab Content */}
       <div className="rules-content mt-4">
         <h3 className="text-white">{activeTab} Rules</h3>
+        <h4>Below Are the rules of the server and the games we host!</h4>
       </div>
     </div>
   );
