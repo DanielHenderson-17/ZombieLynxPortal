@@ -491,7 +491,7 @@ export default function Member({ loggedInUser }) {
               <p className="ps-2 m-0">Stats</p>
             </NavLink>
             <NavLink
-              to="/member/shop"
+              to="/shop"
               className={({ isActive }) =>
                 `me-4 text-white text-decoration-none d-flex align-items-center ${
                   isActive ? "border-bottom border-danger border-5" : ""

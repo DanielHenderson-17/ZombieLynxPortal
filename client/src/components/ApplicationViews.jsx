@@ -60,7 +60,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<Tickets loggedInUser={loggedInUser} />}
           />
           <Route path="stats" element={<Stats />} />
-          <Route path="shop" element={<Shop />} />
+          {/* <Route path="shop" element={<Shop />} /> */}
           <Route
             path="notifications"
             element={<Notifications loggedInUser={loggedInUser} />}
@@ -74,6 +74,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<p>Select a module from the navigation above.</p>}
           />
         </Route>
+        <Route
+          path="shop"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Shop />
+            </AuthorizedRoute>
+          }
+        />
 
         {/* Catch-all for invalid routes */}
         <Route path="*" element={<p>Whoops, nothing here...</p>} />

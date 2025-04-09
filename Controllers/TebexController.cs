@@ -31,17 +31,14 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetPackages()
         {
-            var projectId = _configuration["TebexWebstore:ProjectId"];
-            var privateKey = _configuration["TebexWebstore:PrivateKey"];
+            var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];
 
-            if (string.IsNullOrEmpty(projectId) || string.IsNullOrEmpty(privateKey))
-                return BadRequest("Tebex Webstore API credentials are not configured.");
+            if (string.IsNullOrEmpty(webstoreIdentifier))
+                return BadRequest("Tebex Webstore Identifier is not configured.");
 
             var client = _httpClientFactory.CreateClient();
-            var byteArray = System.Text.Encoding.ASCII.GetBytes($"{projectId}:{privateKey}");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            var response = await client.GetAsync($"https://headless.tebex.io/api/accounts/{webstoreIdentifier}/packages");
 
-            var response = await client.GetAsync("https://developers.tebex.io/packages");
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, "Failed to fetch packages from Tebex Webstore API.");
 
@@ -50,6 +47,5 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(packages);
         }
-
     }
 }
