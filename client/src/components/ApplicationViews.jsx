@@ -7,6 +7,7 @@ import Member from "../components/member/Member";
 import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
 import Shop from "../components/shop/Shop";
+import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
 import LoginSuccess from "./auth/LoginSuccess";
@@ -79,6 +80,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
               <Shop />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="shop/cart"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Cart />
             </AuthorizedRoute>
           }
         />
