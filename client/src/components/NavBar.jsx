@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
+import { useCart } from "../contexts/CartContext";
 import { logout } from "../managers/authManager";
 import { getUserProfiles } from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
@@ -20,6 +21,11 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [randomSeed, setRandomSeed] = useState(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const { cartItems } = useCart();
+
+  const cartCount =
+    (cartItems.subscription ? 1 : 0) +
+    cartItems.single.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
@@ -124,7 +130,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark px-2">
+    <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark ps-2 pe-4">
       <div className="container-fluid px-md-5 px-2">
         {/* Logo */}
         <RRNavLink className="navbar-brand" to="/#home">
@@ -147,6 +153,11 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             data-bs-toggle="tooltip"
             title="Discord"
             data-bs-placement="bottom"
+            style={{ transition: "transform 0.3s" }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
             <i className="fa-brands fa-discord text-white fs-3 me-4"></i>
           </Link>
@@ -156,10 +167,14 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             title="Go to Servers"
             data-bs-placement="bottom"
             className="me-3"
+            style={{ transition: "transform 0.3s" }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
             <i className="fa-solid fa-gamepad text-white fs-3"></i>
           </Link>
-          {/* <div className="border-end border-secondary mx-4 navbar-line">``</div> */}
           {!loggedInUser ? (
             <div
               className="p-0 d-flex justify-content-center align-items-center login-btn"
@@ -172,10 +187,25 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             <div className="d-flex justify-content-between align-items-center col-10 ms-2">
               <Link
                 to="/shop/cart"
-                className="nav-link pe-2 ps-3 border-end border-start border-secondary"
+                className="nav-link pe-2 ps-3 border-end border-start border-secondary position-relative"
               >
-                <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
+                <i
+                  className="fa-solid fa-cart-shopping text-white fs-6 me-2"
+                  style={{ transition: "transform 0.3s" }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.1)")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                ></i>
+                {cartCount > 0 && (
+                  <span className="cart-badge rounded-circle text-white bg-danger">
+                    {cartCount}
+                  </span>
+                )}
               </Link>
+
               <div className="m-0 text-center col-8 my-2 ps-3">
                 <h5 className="text-white text-center mb-1 navbar-first-name">
                   {loggedInUser.firstName}
@@ -189,6 +219,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                   <Link
                     to="https://zlg.gg/shop"
                     className="text-secondary buy-points3"
+                    style={{ transition: "transform 0.3s" }}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.transform = "scale(1.1)")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
                   >
                     <img src={buyPoints} alt="" />
                   </Link>

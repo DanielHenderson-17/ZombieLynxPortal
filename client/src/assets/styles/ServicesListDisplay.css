@@ -8,13 +8,8 @@
 
 .extra-life-text,
 .price-card {
-  background: repeating-linear-gradient(
-    -55deg,
-    rgba(13, 13, 13, 1),
-    rgba(13, 13, 13, 1) 2px,
-    rgba(7, 7, 7, 1) 2px,
-    rgba(7, 7, 7, 1) 5px
-  );
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #000000;
 }
 
 .price-card {
@@ -43,17 +38,37 @@
   background-color: #dd163b;
 }
 
+.single-border {
+  box-shadow: 0px 0px 20px 5px #dd163ba9;
+  margin-left: 30px;
+}
+
 .golden-badge {
   background-color: #d8ba0e;
   color: rgb(255, 255, 255);
+}
+
+.golden-border {
+  box-shadow: 0px 0px 20px 5px #d8ba0ea4;
+  margin-left: 30px;
 }
 
 .diamond-badge {
   background-color: #22a2b1;
 }
 
+.diamond-border {
+  box-shadow: 0px 0px 20px 5px #22a2b1a4;
+  margin-left: 30px;
+}
+
 .vibranium-badge {
   background-color: #882adf;
+}
+
+.vibranium-border {
+  box-shadow: 0px 0px 20px 7px #882adfa4;
+  margin-left: 30px;
 }
 
 @media (max-width: 768px) {

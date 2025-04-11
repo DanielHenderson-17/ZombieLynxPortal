@@ -13,7 +13,7 @@ export default function ServicesListDisplay() {
       <div className="row mx-0 text-white py-md-3 py-0 border-0 services-table-bg rounded-3">
         {/* Single Payment */}
         <div className="col-md-6 col-lg-3 p-1">
-          <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative">
+          <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative single-border">
             <span className="subscription-badge single-badge">
               Single Payment
             </span>
@@ -46,7 +46,7 @@ export default function ServicesListDisplay() {
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
-                  fill="#999999"
+                  fill="#dd163b"
                   className="me-2"
                   viewBox="0 0 16 16"
                 >
@@ -59,7 +59,7 @@ export default function ServicesListDisplay() {
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
-                  fill="#999999"
+                  fill="#dd163b"
                   className="me-2"
                   viewBox="0 0 16 16"
                 >
@@ -72,7 +72,7 @@ export default function ServicesListDisplay() {
         </div>
         {/* Golden Lynx */}
         <div className="col-md-6 col-lg-3 p-1">
-          <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative">
+          <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative golden-border">
             <span className="subscription-badge golden-badge">Golden Lynx</span>
             <img
               className="col-6"
@@ -121,7 +121,7 @@ export default function ServicesListDisplay() {
 
         {/* Diamond Lynx */}
         <div className="col-md-6 col-lg-3 p-1">
-          <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative">
+          <div className="text-center price-card rounded-3 mt-2 mb-4 p-3 position-relative diamond-border">
             <span className="subscription-badge diamond-badge">
               Diamond Lynx
             </span>
@@ -172,7 +172,7 @@ export default function ServicesListDisplay() {
 
         {/* Vibranium Lynx */}
         <div className="col-md-6 col-lg-3 p-1">
-          <div className="text-center price-card rounded-3 mt-2 mb-md-4 mb-2 p-3 position-relative">
+          <div className="text-center price-card rounded-3 mt-2 mb-md-4 mb-2 p-3 position-relative vibranium-border">
             <span className="subscription-badge vibranium-badge">
               Vibranium Lynx
             </span>

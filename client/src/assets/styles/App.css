@@ -5,11 +5,17 @@
 }
 
 .main-content {
-  background-image: url("/src/assets/images/bg-top.png");
+  /* background-image: url("/src/assets/images/bg-top.png"); */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-color: rgb(27, 26, 26);
+  background: repeating-linear-gradient(
+    -55deg,
+    rgba(13, 13, 13, 1),
+    rgba(13, 13, 13, 1) 2px,
+    rgb(0, 0, 0) 2px,
+    rgb(0, 0, 0) 5px
+  );
 }
 
 body {

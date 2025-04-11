@@ -79,12 +79,14 @@ export default function ServerListDisplay() {
         <div className="d-flex flex-md-row flex-column server-list h-100">
           {/* Server List */}
           <div className="col-md-6 col-12 server-list-selections">
-            <ul className="list-group text-start rounded-start-2 rounded-end-0">
+            <ul className="list-group text-start rounded-start-2 rounded-end-0 border-start border-danger border-5">
               {servers.map((server) => (
                 <li
                   key={server.id}
                   className={`list-group-item flex-grow-1 d-flex p-1 text-white border-0 my-1 my-md-0 ${
-                    activeServer.id === server.id ? "active bg-danger" : ""
+                    activeServer.id === server.id
+                      ? "active bg-danger list-group-item-active"
+                      : ""
                   }`}
                   onClick={() => setActiveServer(server)}
                 >
@@ -116,7 +118,7 @@ export default function ServerListDisplay() {
               <img
                 src={activeServer.mainImg}
                 alt={activeServer.title}
-                className="img-fluid mb-3 col-12 rounded-end-2"
+                className="img-fluid mb-4 col-12 rounded-end-2"
               />
               <div className="ps-3">
                 <div className="d-flex justify-content-between">
