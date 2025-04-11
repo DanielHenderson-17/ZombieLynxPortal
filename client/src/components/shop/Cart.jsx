@@ -18,16 +18,30 @@ export default function Cart() {
 
       {/* Subscription */}
       {subscription && (
-        <div className="mb-4 p-3 border border-secondary rounded">
-          <h5>Subscription</h5>
-          <div className="d-flex justify-content-between align-items-center">
+        <div className="row align-items-center mb-2 p-3 border border-secondary rounded">
+          {/* Image + Name */}
+          <div className="col-md-7 d-flex align-items-center">
+            <img
+              src={subscription.image}
+              alt={subscription.name}
+              className="cart-item-img me-3"
+            />
             <span>{subscription.name}</span>
-            <span>${subscription.total_price.toFixed(2)}</span>
+          </div>
+          <div className="col-md-3"></div>
+
+          {/* Price */}
+          <div className="col-md-1 text-center">
+            ${subscription.total_price.toFixed(2)}
+          </div>
+
+          {/* Remove */}
+          <div className="col-md-1 text-center">
             <button
-              className="btn btn-sm btn-outline-danger ms-3"
+              className="btn btn-sm btn-outline-danger"
               onClick={() => removeItem(subscription.id, "subscription")}
             >
-              Remove
+              <i className="bi bi-trash-fill fs-5"></i>
             </button>
           </div>
         </div>
@@ -36,14 +50,23 @@ export default function Cart() {
       {/* Single Items */}
       {singleItems.length > 0 && (
         <div className="mb-4">
-          <h5>Point Packs</h5>
           {singleItems.map((item) => (
             <div
               key={item.package.id}
-              className="d-flex justify-content-between align-items-center mb-2 p-3 border border-secondary rounded"
+              className="row align-items-center mb-2 p-3 border border-secondary rounded"
             >
-              <span>{item.package.name}</span>
-              <div className="d-flex align-items-center">
+              {/* Image + Name */}
+              <div className="col-md-7 d-flex align-items-center">
+                <img
+                  src={item.package.image}
+                  alt={item.package.name}
+                  className="cart-item-img me-3"
+                />
+                <span>{item.package.name}</span>
+              </div>
+
+              {/* Quantity Controls */}
+              <div className="col-md-3 d-flex justify-content-end align-items-center">
                 <button
                   className="btn btn-sm btn-outline-secondary"
                   onClick={() => {
@@ -57,8 +80,7 @@ export default function Cart() {
                 <input
                   type="number"
                   min="1"
-                  className="form-control mx-2 text-center"
-                  style={{ width: "60px" }}
+                  className="form-control mx-2 text-center cart-qty-input"
                   value={item.quantity}
                   onChange={(e) =>
                     updateQuantity(
@@ -75,14 +97,20 @@ export default function Cart() {
                 >
                   +
                 </button>
-                <span className="ms-3">
-                  ${(item.package.total_price * item.quantity).toFixed(2)}
-                </span>
+              </div>
+
+              {/* Price */}
+              <div className="col-md-1 text-center">
+                ${(item.package.total_price * item.quantity).toFixed(2)}
+              </div>
+
+              {/* Remove */}
+              <div className="col-md-1 text-center">
                 <button
-                  className="btn btn-sm btn-outline-danger ms-3"
+                  className="btn btn-sm btn-outline-danger"
                   onClick={() => removeItem(item.package.id)}
                 >
-                  Remove
+                  <i className="bi bi-trash-fill fs-5"></i>
                 </button>
               </div>
             </div>
@@ -91,8 +119,8 @@ export default function Cart() {
       )}
 
       {/* Total + Actions */}
-      <div className="d-flex justify-content-between align-items-center border-top pt-3 mt-4">
-        <h4>Total: ${total.toFixed(2)}</h4>
+      <div className="d-flex justify-content-end align-items-center border-top pt-3 mt-4">
+        <h4 className="me-3">Total: ${total.toFixed(2)}</h4>
         <div>
           <button className="btn btn-outline-light me-2" onClick={clearCart}>
             Clear Cart
