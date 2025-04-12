@@ -267,10 +267,7 @@ export default function Member({ loggedInUser }) {
                     <div className="text-container">
                       <p className="mb-0 points2">1455</p>
                     </div>
-                    <Link
-                      to="https://zlg.gg/aseshop"
-                      className="text-secondary buy-points"
-                    >
+                    <Link to="/shop" className="text-secondary buy-points">
                       <img src={buyPoints} alt="" />
                     </Link>
                   </div>

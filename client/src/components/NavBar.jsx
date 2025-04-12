@@ -217,7 +217,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                     <p className="mb-0">1455</p>
                   </div>
                   <Link
-                    to="https://zlg.gg/shop"
+                    to="/shop"
                     className="text-secondary buy-points3"
                     style={{ transition: "transform 0.3s" }}
                     onMouseOver={(e) =>

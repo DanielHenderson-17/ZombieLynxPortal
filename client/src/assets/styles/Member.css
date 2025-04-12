@@ -4,13 +4,8 @@
 }
 
 .member-container {
-  background: repeating-linear-gradient(
-    -55deg,
-    rgba(13, 13, 13, 1),
-    rgba(13, 13, 13, 1) 2px,
-    rgba(7, 7, 7, 1) 2px,
-    rgba(7, 7, 7, 1) 5px
-  );
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #000000;
 }
 
 .linked-icon-img {
