@@ -33,13 +33,17 @@
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.btn-dark:hover {
+  background-color: #dc3545 !important;
+}
+
 /* Color for each badge */
 .single-badge {
   background-color: #dd163b;
 }
 
 .single-border {
-  box-shadow: 0px 0px 20px 5px #dd163ba9;
+  box-shadow: 0px 0px 20px 5px #aa0221e5;
   margin-left: 30px;
 }
 
@@ -81,6 +85,12 @@
   .extra-life {
     height: 200px;
     margin-bottom: 10px;
+  }
+  .single-border,
+  .golden-border,
+  .diamond-border,
+  .vibranium-border {
+    margin-left: 0px;
   }
 }
 
