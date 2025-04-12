@@ -1,17 +1,11 @@
 .member-layout {
   margin-top: 85px !important;
   height: 85vh;
-  background-image: url("https://cdn.discordapp.com/attachments/773073799864051722/773073831366062858/unknown.png");
 }
 
 .member-container {
-  background: repeating-linear-gradient(
-    -55deg,
-    rgba(13, 13, 13, 1),
-    rgba(13, 13, 13, 1) 2px,
-    rgba(7, 7, 7, 1) 2px,
-    rgba(7, 7, 7, 1) 5px
-  );
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #000000;
 }
 
 .linked-icon-img {

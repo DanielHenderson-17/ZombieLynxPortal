@@ -5,17 +5,22 @@
 }
 
 .main-content {
-  background-image: url("/src/assets/images/bg-top.png");
+  background-image: url("/src/assets/images/Main-bg.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-color: rgb(27, 26, 26);
 }
 
 body {
-  background-image: url("/src/assets/images/bg-top.png");
+  background-image: url("/src/assets/images/Main-bg.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-color: rgb(27, 26, 26);
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    background-image: url("/src/assets/images/Main-bg.png") !important;
+    background-size: fill !important;
+  }
 }

@@ -267,10 +267,7 @@ export default function Member({ loggedInUser }) {
                     <div className="text-container">
                       <p className="mb-0 points2">1455</p>
                     </div>
-                    <Link
-                      to="https://zlg.gg/aseshop"
-                      className="text-secondary buy-points"
-                    >
+                    <Link to="/shop" className="text-secondary buy-points">
                       <img src={buyPoints} alt="" />
                     </Link>
                   </div>
@@ -491,7 +488,7 @@ export default function Member({ loggedInUser }) {
               <p className="ps-2 m-0">Stats</p>
             </NavLink>
             <NavLink
-              to="/member/shop"
+              to="/shop"
               className={({ isActive }) =>
                 `me-4 text-white text-decoration-none d-flex align-items-center ${
                   isActive ? "border-bottom border-danger border-5" : ""

@@ -8,13 +8,8 @@
 
 .extra-life-text,
 .price-card {
-  background: repeating-linear-gradient(
-    -55deg,
-    rgba(13, 13, 13, 1),
-    rgba(13, 13, 13, 1) 2px,
-    rgba(7, 7, 7, 1) 2px,
-    rgba(7, 7, 7, 1) 5px
-  );
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #000000;
 }
 
 .price-card {
@@ -38,9 +33,18 @@
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.btn-dark:hover {
+  background-color: #dc3545 !important;
+}
+
 /* Color for each badge */
 .single-badge {
   background-color: #dd163b;
+}
+
+.single-border {
+  box-shadow: 0px 0px 20px 5px #aa0221e5;
+  margin-left: 30px;
 }
 
 .golden-badge {
@@ -48,12 +52,27 @@
   color: rgb(255, 255, 255);
 }
 
+.golden-border {
+  box-shadow: 0px 0px 20px 5px #d8ba0ea4;
+  margin-left: 30px;
+}
+
 .diamond-badge {
   background-color: #22a2b1;
 }
 
+.diamond-border {
+  box-shadow: 0px 0px 20px 5px #22a2b1a4;
+  margin-left: 30px;
+}
+
 .vibranium-badge {
   background-color: #882adf;
+}
+
+.vibranium-border {
+  box-shadow: 0px 0px 20px 7px #882adfa4;
+  margin-left: 30px;
 }
 
 @media (max-width: 768px) {
@@ -66,6 +85,14 @@
   .extra-life {
     height: 200px;
     margin-bottom: 10px;
+  }
+  .single-border,
+  .golden-border,
+  .diamond-border,
+  .vibranium-border {
+    margin-left: 0px;
+  }
+  .vibranium-border {
   }
 }
 

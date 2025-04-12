@@ -10,6 +10,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Spinner } from "reactstrap";
 import ApplicationViews from "./components/ApplicationViews";
+import { CartProvider } from "./contexts/CartContext";
 import "../src/assets/styles/App.css";
 
 function App() {
@@ -70,12 +71,12 @@ function App() {
   }
 
   return (
-    <>
+    <CartProvider>
       <ApplicationViews
         loggedInUser={loggedInUser}
         setLoggedInUser={setLoggedInUser}
       />
-    </>
+    </CartProvider>
   );
 }
 

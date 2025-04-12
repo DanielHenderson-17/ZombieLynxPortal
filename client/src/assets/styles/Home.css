@@ -22,7 +22,7 @@
 
 .splash-main-container {
   height: 92vh;
-  background: linear-gradient(rgb(32, 32, 32), rgb(29, 29, 29)) !important;
+  background: linear-gradient(145deg, #121214, #1a1a1d);
 }
 
 .splash-background {

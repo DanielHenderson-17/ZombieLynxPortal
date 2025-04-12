@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 export const AuthorizedRoute = ({
   children,
@@ -6,14 +6,15 @@ export const AuthorizedRoute = ({
   roles = [],
   all = false,
 }) => {
-  // If user isn't logged in, navigate to login
+  const location = useLocation();
+
+  // If user isn't logged in, redirect to login with original location saved
   if (!loggedInUser) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  // Ensure roles exist and are in array format
+
   const userRoles = Array.isArray(loggedInUser.roles) ? loggedInUser.roles : [];
 
-  // Authorization check
   const authed = roles.length
     ? all
       ? roles.every((r) => userRoles.includes(r))

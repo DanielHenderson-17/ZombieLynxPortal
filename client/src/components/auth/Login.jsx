@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../managers/authManager";
 import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
 import zlglogo from "../../assets/images/zlglogo.png";
@@ -10,6 +10,8 @@ export default function Login({ setLoggedInUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [failedLogin, setFailedLogin] = useState(false);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/member";
 
   // Handle form submission and login user
   const handleSubmit = (e) => {
@@ -19,7 +21,7 @@ export default function Login({ setLoggedInUser }) {
         setFailedLogin(true);
       } else {
         setLoggedInUser(user);
-        navigate("/member");
+        navigate(from, { replace: true });
       }
     });
   };

@@ -14,6 +14,7 @@ builder.Logging.AddDebug();
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>

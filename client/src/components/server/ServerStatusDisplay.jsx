@@ -54,7 +54,7 @@ export default function ServerStatusDisplay() {
       </h3>
 
       {/* Tab Navigation */}
-      <ul className="nav nav-tabs mt-3 d-flex justify-content-between col-12 border-0">
+      <ul className="nav nav-tabs mt-3 d-flex justify-content-between col-12 border-0 mb-0 p-0">
         {servers.map((server) => (
           <li
             key={server.id}
@@ -84,25 +84,12 @@ export default function ServerStatusDisplay() {
           >
             <section
               id={server.sectionId}
-              className="text-white mt-md-4 mb-2 mt-3 mb-0 p-md-3 p-1 border-0 server-status-table-bg rounded-3"
+              className="text-white mt-0 mb-2 mb-0 p-0 border-0 server-status-table-bg rounded-3"
             >
-              <div className="d-flex mx-auto col-md-12 col-11 mb-2 justify-content-center align-items-center server-status-header">
-                <img
-                  src={`/src/assets/images/${server.name
-                    .toLowerCase()
-                    .replace(/[:]/g, "")}.png`}
-                  alt=""
-                  className="my-auto"
-                />
-                <h4 className="text-start col-12 ms-2 my-auto">
-                  {server.name} Server Status
-                </h4>
-              </div>
-
-              <table className="server-status-table mx-auto text-white col-12">
+              <table className="server-status-table mx-auto text-white col-12 pb-3 server-status-bg rounded-bottom-3">
                 <thead>
-                  <tr className="border-bottom border-secondary">
-                    <th className="col-1 text-start ps-0 status-title">
+                  <tr className="border-bottom border-secondary col-12">
+                    <th className="col-1 text-start ps-2 status-title">
                       Status
                     </th>
                     <th className="text-start vertical-line col-7 p-0 status-title">

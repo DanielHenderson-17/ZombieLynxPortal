@@ -7,6 +7,7 @@ import Member from "../components/member/Member";
 import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
 import Shop from "../components/shop/Shop";
+import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
 import LoginSuccess from "./auth/LoginSuccess";
@@ -60,7 +61,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<Tickets loggedInUser={loggedInUser} />}
           />
           <Route path="stats" element={<Stats />} />
-          <Route path="shop" element={<Shop />} />
+          {/* <Route path="shop" element={<Shop />} /> */}
           <Route
             path="notifications"
             element={<Notifications loggedInUser={loggedInUser} />}
@@ -74,6 +75,22 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<p>Select a module from the navigation above.</p>}
           />
         </Route>
+        <Route
+          path="shop"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Shop />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="shop/cart"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Cart />
+            </AuthorizedRoute>
+          }
+        />
 
         {/* Catch-all for invalid routes */}
         <Route path="*" element={<p>Whoops, nothing here...</p>} />
