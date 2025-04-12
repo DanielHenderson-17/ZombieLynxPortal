@@ -5,15 +5,20 @@
 }
 
 .cart-item {
-  background-color: #292e38;
+  background: #282a2d !important;
 }
 
 .cart {
-  background-color: #13151a;
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #000000;
+}
+
+.border-top {
+  border-top: 1px solid #29292e !important;
 }
 
 .cart-qty-input {
-  width: 60px;
+  width: 40px;
 }
 
 .cart-badge {

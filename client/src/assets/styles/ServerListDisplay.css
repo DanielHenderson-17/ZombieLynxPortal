@@ -82,6 +82,7 @@
 
 .list-group-item {
   background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #202020;
   cursor: pointer;
   border-color: #1d1d1d;
   border-bottom: 1px solid #1c1c1f !important;

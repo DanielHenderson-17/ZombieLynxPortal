@@ -130,7 +130,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark ps-2 pe-4">
+    <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark ps-2 pe-md-4 pe-2">
       <div className="container-fluid px-md-5 px-2">
         {/* Logo */}
         <RRNavLink className="navbar-brand" to="/#home">

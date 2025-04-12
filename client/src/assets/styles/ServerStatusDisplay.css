@@ -20,12 +20,16 @@
 }
 
 .server-status-tab .nav-link {
-  background-color: #292e38;
-  transition: background-color 0.3s, color 0.3s;
+  background-color: #282a2d;
+}
+
+.server-status-bg {
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  border-radius: 5px;
 }
 
 .server-status-tab .nav-link:hover {
-  background-color: #292e38;
+  background-color: #dc3545;
 }
 
 .server-status-tab .nav-link.active {
