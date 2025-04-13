@@ -11,6 +11,10 @@
   height: 80px;
 }
 
+.addPoints {
+  width: 30px;
+}
+
 .dropdown-menu {
   background-color: rgba(0, 0, 0, 0.856);
   right: 0;

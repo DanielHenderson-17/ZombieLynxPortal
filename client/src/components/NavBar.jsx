@@ -10,6 +10,7 @@ import { getLinkedSteamAccount } from "../managers/steamAuthManager";
 import { getLinkedDiscordAccount } from "../managers/discordAuthManager";
 import zlgCoin from "../assets/images/zlgCoin.png";
 import buyPoints from "../assets/images/buyPoints.png";
+import addPoints from "../assets/images/addPoints.png";
 import * as bootstrap from "bootstrap";
 
 export default function NavBar({ loggedInUser, setLoggedInUser }) {
@@ -148,6 +149,20 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
         {/* Desktop Menu */}
         <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
+          <Link
+            to={`/shop`}
+            className="mb-1"
+            data-bs-toggle="tooltip"
+            title="Shop"
+            data-bs-placement="bottom"
+            style={{ transition: "transform 0.3s" }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <img src={addPoints} alt="" className="me-4 addPoints" />
+          </Link>
           <Link
             to={`https://www.zlg.gg/discord`}
             data-bs-toggle="tooltip"

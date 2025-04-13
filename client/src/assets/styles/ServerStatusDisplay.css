@@ -1,3 +1,7 @@
+.server-status-display {
+  height: 80vh;
+}
+
 .server-status-tab {
   background-color: #292e38;
 }

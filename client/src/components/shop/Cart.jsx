@@ -2,7 +2,7 @@ import { useCart } from "../../contexts/CartContext";
 import "../../assets/styles/Cart.css";
 
 export default function Cart() {
-  const { cartItems, updateQuantity, removeItem, clearCart } = useCart();
+  const { cartItems, updateQuantity, removeItem } = useCart();
 
   const singleItems = cartItems.single;
   const subscription = cartItems.subscription;
@@ -20,118 +20,127 @@ export default function Cart() {
       </h3>
 
       <div className="cart p-5 rounded mt-5">
-        {/* Subscription */}
-        {subscription && (
-          <div className="row align-items-center mb-2 p-3 rounded cart-item">
-            {/* Image + Name */}
-            <div className="col-md-7 d-flex align-items-center">
-              <img
-                src={subscription.image}
-                alt={subscription.name}
-                className="cart-item-img me-3"
-              />
-              <span>{subscription.name}</span>
-            </div>
-            <div className="col-md-3"></div>
-
-            {/* Price */}
-            <div className="col-md-1 text-center">
-              ${subscription.total_price.toFixed(2)}
-            </div>
-
-            {/* Remove */}
-            <div className="col-md-1 text-center">
-              <button
-                className="btn btn-sm btn-outline-danger"
-                onClick={() => removeItem(subscription.id, "subscription")}
-              >
-                <i className="bi bi-trash-fill fs-5"></i>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Single Items */}
-        {singleItems.length > 0 && (
-          <div className="mb-4">
-            {singleItems.map((item) => (
-              <div
-                key={item.package.id}
-                className="row align-items-center mb-2 p-3 rounded cart-item"
-              >
-                {/* Image + Name */}
+        {singleItems.length === 0 && !subscription ? (
+          <h5 className="text-start text-white">
+            Your cart is empty{" "}
+            <a
+              href="/shop"
+              className="d-block text-teal fs-6 text-decoration-none"
+            >
+              Continue Shopping...
+            </a>
+          </h5>
+        ) : (
+          <>
+            {/* Subscription */}
+            {subscription && (
+              <div className="row align-items-center mb-2 p-3 rounded cart-item">
                 <div className="col-md-7 d-flex align-items-center">
                   <img
-                    src={item.package.image}
-                    alt={item.package.name}
+                    src={subscription.image}
+                    alt={subscription.name}
                     className="cart-item-img me-3"
                   />
-                  <span>{item.package.name}</span>
+                  <span>{subscription.name}</span>
                 </div>
-
-                {/* Quantity Controls */}
-                <div className="col-md-3 d-flex justify-content-end align-items-center">
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    onClick={() => {
-                      const newQty = item.quantity - 1;
-                      if (newQty <= 0) removeItem(item.package.id);
-                      else updateQuantity(item.package.id, newQty);
-                    }}
-                  >
-                    −
-                  </button>
-                  <input
-                    type="number"
-                    min="1"
-                    className="form-control mx-2 text-center cart-qty-input"
-                    value={item.quantity}
-                    onChange={(e) =>
-                      updateQuantity(
-                        item.package.id,
-                        Math.max(1, parseInt(e.target.value))
-                      )
-                    }
-                  />
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    onClick={() =>
-                      updateQuantity(item.package.id, item.quantity + 1)
-                    }
-                  >
-                    +
-                  </button>
-                </div>
-
-                {/* Price */}
+                <div className="col-md-3"></div>
                 <div className="col-md-1 text-center">
-                  ${(item.package.total_price * item.quantity).toFixed(2)}
+                  ${subscription.total_price.toFixed(2)}
                 </div>
-
-                {/* Remove */}
                 <div className="col-md-1 text-center">
                   <button
                     className="btn btn-sm btn-outline-danger"
-                    onClick={() => removeItem(item.package.id)}
+                    onClick={() => removeItem(subscription.id, "subscription")}
                   >
                     <i className="bi bi-trash-fill fs-5"></i>
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {/* Total + Actions */}
-        <div className="d-flex justify-content-end align-items-center border-top pt-3 mt-4">
-          <h4 className="me-3">Total: ${total.toFixed(2)}</h4>
-          <div>
-            <button className="btn btn-outline-light me-2" onClick={clearCart}>
-              Clear Cart
-            </button>
-            <button className="btn btn-success">Checkout</button>
-          </div>
-        </div>
+            {/* Single Items */}
+            {singleItems.length > 0 && (
+              <div className="mb-4">
+                {singleItems.map((item) => (
+                  <div
+                    key={item.package.id}
+                    className="row align-items-center mb-2 p-3 rounded cart-item"
+                  >
+                    <div className="col-md-7 d-flex align-items-center">
+                      <img
+                        src={item.package.image}
+                        alt={item.package.name}
+                        className="cart-item-img me-3"
+                      />
+                      <span>{item.package.name}</span>
+                    </div>
+                    <div className="col-md-3 d-flex justify-content-end align-items-center">
+                      <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={() => {
+                          const newQty = item.quantity - 1;
+                          if (newQty <= 0) removeItem(item.package.id);
+                          else updateQuantity(item.package.id, newQty);
+                        }}
+                      >
+                        −
+                      </button>
+                      <input
+                        type="number"
+                        min="1"
+                        className="form-control mx-2 text-center cart-qty-input"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateQuantity(
+                            item.package.id,
+                            Math.max(1, parseInt(e.target.value))
+                          )
+                        }
+                      />
+                      <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={() =>
+                          updateQuantity(item.package.id, item.quantity + 1)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div className="col-md-1 text-center">
+                      ${(item.package.total_price * item.quantity).toFixed(2)}
+                    </div>
+                    <div className="col-md-1 text-center">
+                      <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => removeItem(item.package.id)}
+                      >
+                        <i className="bi bi-trash-fill fs-5"></i>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <h5 className="text-end mt-3 mb-0">
+              Subtotal: ${total.toFixed(2)}
+            </h5>
+
+            {/* Total + Actions */}
+            <div className="d-flex justify-content-end align-items-center border-top pt-3 mt-4">
+              <div>
+                <button className="btn btn-primary me-2">
+                  <a
+                    href="/shop"
+                    className="d-block text-white fs-6 text-decoration-none"
+                  >
+                    Continue Shopping
+                  </a>
+                </button>
+                <button className="btn btn-success">Checkout</button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

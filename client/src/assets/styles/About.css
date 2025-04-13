@@ -6,6 +6,10 @@
   margin-top: 20px;
 }
 
+.aboutArrow {
+  width: 75px;
+}
+
 .about-container {
   height: 100vh;
 }
