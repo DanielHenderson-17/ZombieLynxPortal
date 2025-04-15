@@ -44,18 +44,17 @@ export default function Cart() {
 
       // Step 2: Authenticate basket
       const authOptions = await authenticateBasket(ident, token);
-      toast.info("Please continue Steam signin to continue...");
+      toast.info("Please signin to Steam to continue...");
 
       // Wait 3 seconds for the toast to be visible
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
       // Then open the popup and notify we're waiting
-      // Open the popup after the 3-second info toast
       const popup = window.open(authOptions[0].url, "_blank");
 
       // Show persistent toast while waiting
       const waitingToastId = toast.info(
-        "Please continue Steam signin to continue...",
+        "Please signin to Steam to continue...",
         {
           autoClose: false,
         }
