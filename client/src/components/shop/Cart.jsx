@@ -1,4 +1,6 @@
 import Tebex from "@tebexio/tebex.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getToken } from "../../managers/authManager";
 import {
   createBasket,
@@ -42,11 +44,36 @@ export default function Cart() {
 
       // Step 2: Authenticate basket
       const authOptions = await authenticateBasket(ident, token);
-      window.open(authOptions[0].url, "_blank");
+      toast.info("Please continue Steam signin to continue...");
 
-      alert(
-        "Please complete Steam authentication in the new window, then click OK to continue."
+      // Wait 3 seconds for the toast to be visible
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      // Then open the popup and notify we're waiting
+      // Open the popup after the 3-second info toast
+      const popup = window.open(authOptions[0].url, "_blank");
+
+      // Show persistent toast while waiting
+      const waitingToastId = toast.info(
+        "Please continue Steam signin to continue...",
+        {
+          autoClose: false,
+        }
       );
+
+      // Wait until popup is closed
+      await new Promise((resolve) => {
+        const checkClosed = setInterval(() => {
+          if (popup.closed) {
+            clearInterval(checkClosed);
+            resolve();
+          }
+        }, 500);
+      });
+
+      // Dismiss the waiting toast
+      toast.dismiss(waitingToastId);
+      toast.success("You are now signed in to Steam!");
 
       // Step 3: Add packages
       for (const item of items) {
@@ -202,6 +229,7 @@ export default function Cart() {
           </>
         )}
       </div>
+      <ToastContainer position="top-center" autoClose={2000} theme="dark" />
     </div>
   );
 }
