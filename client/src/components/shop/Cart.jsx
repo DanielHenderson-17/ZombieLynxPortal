@@ -1,3 +1,6 @@
+import Tebex from "@tebexio/tebex.js";
+import { getToken } from "../../managers/authManager";
+import { createBasket } from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
 import "../../assets/styles/Cart.css";
 
@@ -11,6 +14,36 @@ export default function Cart() {
     (sum, item) => sum + item.package.total_price * item.quantity,
     subscription ? subscription.total_price : 0
   );
+
+  const handleCheckout = async () => {
+    const items = [];
+
+    if (subscription) {
+      items.push({ packageId: subscription.id.toString(), quantity: 1 });
+    }
+
+    for (const item of singleItems) {
+      items.push({
+        packageId: item.package.id.toString(),
+        quantity: item.quantity,
+      });
+    }
+
+    try {
+      const token = getToken();
+      const { data } = await createBasket(items, token);
+
+      Tebex.checkout.init({ ident: data.ident });
+      Tebex.checkout.launch();
+    } catch (err) {
+      console.error("Checkout failed:", err);
+      alert("There was a problem creating your checkout. Please try again.");
+    }
+    console.log(
+      "🛒 Final payload to backend:",
+      JSON.stringify({ items }, null, 2)
+    );
+  };
 
   return (
     <div className="container text-white rounded">
@@ -136,7 +169,9 @@ export default function Cart() {
                     Continue Shopping
                   </a>
                 </button>
-                <button className="btn btn-success">Checkout</button>
+                <button className="btn btn-success" onClick={handleCheckout}>
+                  Checkout
+                </button>
               </div>
             </div>
           </>
