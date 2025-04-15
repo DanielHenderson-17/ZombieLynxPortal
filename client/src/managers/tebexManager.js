@@ -34,3 +34,31 @@ export const createBasket = (items, token) => {
     return res.json();
   });
 };
+
+export const authenticateBasket = (ident, token) => {
+  return fetch("/api/tebex/authenticate-basket", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(ident),
+  }).then((res) => {
+    if (!res.ok) throw new Error("Failed to authenticate basket");
+    return res.json();
+  });
+};
+
+export const addPackageToBasket = (ident, item, token) => {
+  return fetch(`/api/tebex/add-package/${ident}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(item),
+  }).then((res) => {
+    if (!res.ok) throw new Error("Failed to add package");
+    return res.json();
+  });
+};

@@ -1,6 +1,10 @@
 import Tebex from "@tebexio/tebex.js";
 import { getToken } from "../../managers/authManager";
-import { createBasket } from "../../managers/tebexManager";
+import {
+  createBasket,
+  authenticateBasket,
+  addPackageToBasket,
+} from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
 import "../../assets/styles/Cart.css";
 
@@ -31,9 +35,30 @@ export default function Cart() {
 
     try {
       const token = getToken();
-      const { data } = await createBasket(items, token);
 
-      Tebex.checkout.init({ ident: data.ident });
+      // Step 1: Create basket
+      const { data } = await createBasket(items, token);
+      const ident = data.ident;
+
+      // Step 2: Authenticate basket
+      const authOptions = await authenticateBasket(ident, token);
+      window.open(authOptions[0].url, "_blank");
+
+      alert(
+        "Please complete Steam authentication in the new window, then click OK to continue."
+      );
+
+      // Step 3: Add packages
+      for (const item of items) {
+        await addPackageToBasket(ident, item, token);
+        console.log("📦 Package added:", item);
+      }
+
+      // Step 4: Launch checkout
+      Tebex.checkout.init({
+        ident,
+        theme: "dark",
+      });
       Tebex.checkout.launch();
     } catch (err) {
       console.error("Checkout failed:", err);

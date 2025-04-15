@@ -104,7 +104,7 @@ namespace ZombieLynxPortalAPI.Controllers
         public async Task<IActionResult> AuthenticateBasket([FromBody] string ident)
         {
             var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];
-            var returnUrl = "https://localhost:5174/shop/cart";
+            var returnUrl = "https://google.com";
 
             var authUrl = $"https://headless.tebex.io/api/accounts/{webstoreIdentifier}/baskets/{ident}/auth?returnUrl={Uri.EscapeDataString(returnUrl)}";
 
