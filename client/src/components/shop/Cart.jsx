@@ -227,6 +227,12 @@ export default function Cart() {
             </div>
           </>
         )}
+        <div className="pt-5">
+          <i className="fs-6 text-secondary">
+            Zombie Lynx Gaming does not collect any of your personal information
+            during checout or purchases. All purchases are handled by Tebex.
+          </i>
+        </div>
       </div>
       <ToastContainer position="top-center" autoClose={2000} theme="dark" />
     </div>
