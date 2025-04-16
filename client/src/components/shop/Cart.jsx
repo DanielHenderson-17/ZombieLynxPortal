@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import Tebex from "@tebexio/tebex.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getToken } from "../../managers/authManager";
+import { checkBasketComplete } from "../../utils/checkBasketComplete";
 import {
   createBasket,
   authenticateBasket,
@@ -11,7 +13,9 @@ import { useCart } from "../../contexts/CartContext";
 import "../../assets/styles/Cart.css";
 
 export default function Cart() {
-  const { cartItems, updateQuantity, removeItem } = useCart();
+  const { cartItems, updateQuantity, removeItem, clearCart } = useCart();
+  const [basketIdent, setBasketIdent] = useState(null);
+  const [checkoutStarted, setCheckoutStarted] = useState(false);
 
   const singleItems = cartItems.single;
   const subscription = cartItems.subscription;
@@ -20,6 +24,33 @@ export default function Cart() {
     (sum, item) => sum + item.package.total_price * item.quantity,
     subscription ? subscription.total_price : 0
   );
+
+  useEffect(() => {
+    const pollForCompletion = async () => {
+      try {
+        const token = getToken();
+        const confirmed = await checkBasketComplete(basketIdent, token);
+
+        if (confirmed) {
+          toast.success("Thanks for your purchase!", { autoClose: 3000 });
+          clearCart();
+          setBasketIdent(null);
+          setCheckoutStarted(false);
+        }
+      } catch (err) {
+        console.error("Polling failed or timed out:", err);
+        toast.error(
+          "Unable to confirm your purchase. Please check your receipt."
+        );
+        setBasketIdent(null);
+        setCheckoutStarted(false);
+      }
+    };
+
+    if (checkoutStarted && basketIdent) {
+      pollForCompletion();
+    }
+  }, [checkoutStarted, basketIdent]);
 
   const handleCheckout = async () => {
     const items = [];
@@ -38,29 +69,23 @@ export default function Cart() {
     try {
       const token = getToken();
 
-      // Step 1: Create basket
       const { data } = await createBasket(items, token);
       const ident = data.ident;
 
-      // Step 2: Authenticate basket
       const authOptions = await authenticateBasket(ident, token);
-      toast.info("Please signin to Steam to continue...");
+      toast.info("Please Sign in to Steam to continue...");
 
-      // Wait 3 seconds for the toast to be visible
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((res) => setTimeout(res, 3000));
 
-      // Then open the popup and notify we're waiting
       const popup = window.open(authOptions[0].url, "_blank");
 
-      // Show persistent toast while waiting
       const waitingToastId = toast.info(
-        "Please signin to Steam to continue...",
+        "Please Sign in to Steam to continue...",
         {
           autoClose: false,
         }
       );
 
-      // Wait until popup is closed
       await new Promise((resolve) => {
         const checkClosed = setInterval(() => {
           if (popup.closed) {
@@ -70,28 +95,31 @@ export default function Cart() {
         }, 500);
       });
 
-      // Dismiss the waiting toast
       toast.dismiss(waitingToastId);
       toast.success("You are now signed in to Steam!");
 
-      // Step 3: Add packages
       for (const item of items) {
         await addPackageToBasket(ident, item, token);
         console.log("📦 Package added:", item);
       }
 
-      // Step 4: Launch checkout
       Tebex.checkout.init({
         ident,
         theme: "dark",
       });
+
       Tebex.checkout.launch();
+
+      // 🔁 Set state for polling
+      setBasketIdent(ident);
+      setCheckoutStarted(true);
     } catch (err) {
       console.error("Checkout failed:", err);
-      alert("There was a problem creating your checkout. Please try again.");
+      toast.error("There was a problem creating your checkout.");
     }
+
     console.log(
-      "🛒 Final payload to backend:",
+      "🛒 Sent items to backend:",
       JSON.stringify({ items }, null, 2)
     );
   };
@@ -109,7 +137,7 @@ export default function Cart() {
             Your cart is empty{" "}
             <a
               href="/shop"
-              className="d-block text-teal fs-6 text-decoration-none"
+              className="d-block text-teal fs-6 text-decoration-none pt-2"
             >
               Continue Shopping...
             </a>
