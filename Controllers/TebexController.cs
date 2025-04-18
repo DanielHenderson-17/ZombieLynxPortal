@@ -171,6 +171,25 @@ namespace ZombieLynxPortalAPI.Controllers
                 return BadRequest("User profile not found.");
             }
 
+            // 🧾 Load Tebex Webstore Identifier (reused below)
+            var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];
+
+            // 🛑 Prevent abuse: Free packages cannot be added more than once
+            if (item.Quantity > 1)
+            {
+                var packageResp = await client.GetAsync($"https://headless.tebex.io/api/accounts/{webstoreIdentifier}/packages/{item.PackageId}");
+                var packageJson = await packageResp.Content.ReadAsStringAsync();
+
+                using var doc = JsonDocument.Parse(packageJson);
+                decimal price = doc.RootElement.GetProperty("data").GetProperty("price").GetDecimal();
+
+                if (price == 0)
+                {
+                    Console.WriteLine("🚫 Attempted to add more than one of a free package.");
+                    return BadRequest("Free packages can only be added once.");
+                }
+            }
+
             // 1️⃣ Add package to basket with custom data
             var postUrl = $"https://headless.tebex.io/api/baskets/{ident}/packages";
 
@@ -201,7 +220,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 return StatusCode((int)response.StatusCode, $"Failed to add package: {resultJson}");
 
             // 2️⃣ Fetch basket to return links for frontend (tebex.js)
-            var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];
             var getUrl = $"https://headless.tebex.io/api/accounts/{webstoreIdentifier}/baskets/{ident}";
 
             var basketResponse = await client.GetAsync(getUrl);

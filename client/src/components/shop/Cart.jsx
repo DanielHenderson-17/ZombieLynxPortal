@@ -16,6 +16,7 @@ export default function Cart() {
   const { cartItems, updateQuantity, removeItem, clearCart } = useCart();
   const [basketIdent, setBasketIdent] = useState(null);
   const [checkoutStarted, setCheckoutStarted] = useState(false);
+  const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
 
   const singleItems = cartItems.single;
   const subscription = cartItems.subscription;
@@ -202,18 +203,24 @@ export default function Cart() {
                         min="1"
                         className="form-control mx-2 text-center cart-qty-input"
                         value={item.quantity}
-                        onChange={(e) =>
-                          updateQuantity(
-                            item.package.id,
-                            Math.max(1, parseInt(e.target.value))
-                          )
-                        }
+                        onChange={(e) => {
+                          const newQty = Math.max(1, parseInt(e.target.value));
+                          if (isFree(item.package) && newQty > 1) {
+                            toast.error("You can only add one of a free item.");
+                            return;
+                          }
+                          updateQuantity(item.package.id, newQty);
+                        }}
                       />
                       <button
                         className="btn btn-sm btn-outline-secondary"
-                        onClick={() =>
-                          updateQuantity(item.package.id, item.quantity + 1)
-                        }
+                        onClick={() => {
+                          if (isFree(item.package) && item.quantity >= 1) {
+                            toast.error("You can only add one of a free item.");
+                            return;
+                          }
+                          updateQuantity(item.package.id, item.quantity + 1);
+                        }}
                       >
                         +
                       </button>

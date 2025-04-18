@@ -8,6 +8,7 @@ import "../../assets/styles/Shop.css";
 export default function Shop() {
   const [allPackages, setAllPackages] = useState([]);
   const { cartItems, addItem, updateQuantity, removeItem } = useCart();
+  const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
 
   useEffect(() => {
     getPackages()
@@ -264,21 +265,29 @@ export default function Shop() {
                           cartItems.single.find((i) => i.package.id === pkg.id)
                             ?.quantity || 1
                         }
-                        onChange={(e) =>
-                          updateQuantity(
-                            pkg.id,
-                            Math.max(1, parseInt(e.target.value))
-                          )
-                        }
+                        onChange={(e) => {
+                          const newQty = Math.max(1, parseInt(e.target.value));
+                          if (isFree(pkg) && newQty > 1) {
+                            toast.error("You can only add one of a free item.");
+                            return;
+                          }
+                          updateQuantity(pkg.id, newQty);
+                        }}
                       />
 
                       <button
                         className="btn btn-outline-secondary"
                         onClick={() => {
-                          const currentQty =
-                            cartItems.single.find(
-                              (i) => i.package.id === pkg.id
-                            )?.quantity || 0;
+                          const currentItem = cartItems.single.find(
+                            (i) => i.package.id === pkg.id
+                          );
+                          const currentQty = currentItem?.quantity || 0;
+
+                          if (isFree(pkg) && currentQty >= 1) {
+                            toast.error("You can only add one of a free item.");
+                            return;
+                          }
+
                           updateQuantity(pkg.id, currentQty + 1);
                         }}
                       >
