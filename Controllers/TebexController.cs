@@ -160,9 +160,6 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var client = _httpClientFactory.CreateClient();
 
-            // 🔐 Secure Key (static for now, could be generated)
-            const string secureKey = "f70669712467426a8d2451ecc7b05c58";
-
             // 👤 Get current user
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfile = await _dbContext.UserProfiles
@@ -184,12 +181,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 variable_data = new
                 {
                     server = 1671867,
-                    epic_id = (string?)null
-                },
-                custom = new
-                {
-                    key = secureKey,
-                    userProfileId = userProfile.Id
+                    epic_id = (string?)null,
+                    user_id = userProfile.Id,
                 }
             };
 
@@ -239,17 +232,17 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Content(resultJson, "application/json");
         }
+
         [HttpPost("payment-complete")]
         [AllowAnonymous]
         public async Task<IActionResult> PaymentComplete()
         {
             using var reader = new StreamReader(Request.Body);
             string rawJson = await reader.ReadToEndAsync();
-
             Console.WriteLine("📦 Raw JSON Payload:");
             Console.WriteLine(rawJson);
 
-            // Deserialize the payload
+            // Deserialize manually
             var payload = JsonSerializer.Deserialize<TebexBaseWebhookDTO>(rawJson, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
@@ -288,55 +281,33 @@ namespace ZombieLynxPortalAPI.Controllers
 
                         Console.WriteLine($"📦 Package ID: {packageId}, Quantity: {quantity}");
 
-                        if (product.TryGetProperty("custom", out var custom))
+                        if (product.TryGetProperty("variables", out var variables))
                         {
-                            if (custom.ValueKind == JsonValueKind.Object)
+                            foreach (var variable in variables.EnumerateArray())
                             {
-                                if (custom.TryGetProperty("userProfileId", out var profileProp))
+                                if (variable.TryGetProperty("identifier", out var idProp) &&
+                                    idProp.GetString() == "user_id" &&
+                                    variable.TryGetProperty("option", out var optionProp) &&
+                                    optionProp.ValueKind == JsonValueKind.String &&
+                                    int.TryParse(optionProp.GetString(), out var parsedId))
                                 {
-                                    userProfileIdFromCustom = profileProp.GetInt32();
-                                    Console.WriteLine($"👤 Custom UserProfileId: {userProfileIdFromCustom}");
+                                    userProfileIdFromCustom = parsedId;
+                                    Console.WriteLine($"👤 Extracted user_id from variable_data: {userProfileIdFromCustom}");
                                 }
+                            }
+                        }
 
-                                if (custom.TryGetProperty("key", out var keyProp))
-                                {
-                                    secureKeyFromCustom = keyProp.GetString();
-                                    Console.WriteLine($"🔐 Custom Secure Key: {secureKeyFromCustom}");
-                                }
-                            }
-                            else if (custom.ValueKind == JsonValueKind.String)
-                            {
-                                string customCommand = custom.GetString();
-                                Console.WriteLine($"📜 Tebex Custom Data (string): {customCommand}");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("⚠️ Custom field was null or not present.");
-                        }
                     }
                 }
 
-                // 🔒 Verify secure key
-                const string expectedSecureKey = "f70669712467426a8d2451ecc7b05c58";
-                if (secureKeyFromCustom != expectedSecureKey)
-                {
-                    Console.WriteLine("❌ Secure key mismatch or missing.");
-                    return Unauthorized("Invalid secure key.");
-                }
-
                 // 🧠 Extract ident from order ID
-                var ident = subject.TryGetProperty("products", out var productArray)
-                    && productArray.GetArrayLength() > 0
-                    && productArray[0].TryGetProperty("custom", out var customObj)
-                    && customObj.TryGetProperty("key", out var key)
-                    && customObj.TryGetProperty("userProfileId", out var userIdJson)
-                        ? await _dbContext.TebexBaskets
-                              .Where(b => b.UserProfileId == userIdJson.GetInt32())
-                              .OrderByDescending(b => b.CreatedAt)
-                              .Select(b => b.Ident)
-                              .FirstOrDefaultAsync()
-                        : null;
+                var ident = userProfileIdFromCustom.HasValue
+                    ? await _dbContext.TebexBaskets
+                        .Where(b => b.UserProfileId == userProfileIdFromCustom.Value)
+                        .OrderByDescending(b => b.CreatedAt)
+                        .Select(b => b.Ident)
+                        .FirstOrDefaultAsync()
+                    : null;
 
                 if (!string.IsNullOrEmpty(ident))
                 {
@@ -373,130 +344,6 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok();
         }
-
-
-        // [HttpPost("payment-complete")]
-        // [AllowAnonymous]
-        // public async Task<IActionResult> PaymentComplete([FromBody] TebexBaseWebhookDTO payload)
-        // {
-        //     Console.WriteLine($"✅ Webhook received! Type: {payload.Type}, ID: {payload.Id}");
-
-        //     if (payload.Type == "validation.webhook")
-        //     {
-        //         return Ok(new { id = payload.Id });
-        //     }
-
-        //     if (payload.Type == "payment.completed")
-        //     {
-        //         var subject = payload.Subject;
-
-        //         string orderId = subject.GetProperty("transaction_id").GetString();
-        //         var price = subject.GetProperty("price");
-        //         decimal amount = price.GetProperty("amount").GetDecimal();
-        //         string currency = price.GetProperty("currency").GetString();
-
-        //         Console.WriteLine($"💸 Order ID: {orderId}");
-        //         Console.WriteLine($"💰 Amount: {amount} {currency}");
-
-        //         string message = $"✅ Order ID: {orderId}\n - Amount: ${amount}";
-
-        //         int? userProfileIdFromCustom = null;
-        //         string secureKeyFromCustom = null;
-
-        //         if (subject.TryGetProperty("products", out var products))
-        //         {
-        //             foreach (var product in products.EnumerateArray())
-        //             {
-        //                 int packageId = product.GetProperty("id").GetInt32();
-        //                 int quantity = product.GetProperty("quantity").GetInt32();
-
-        //                 Console.WriteLine($"📦 Package ID: {packageId}, Quantity: {quantity}");
-
-        //                 if (product.TryGetProperty("custom", out var custom))
-        //                 {
-        //                     if (custom.ValueKind == JsonValueKind.Object)
-        //                     {
-        //                         if (custom.TryGetProperty("userProfileId", out var profileProp))
-        //                         {
-        //                             userProfileIdFromCustom = profileProp.GetInt32();
-        //                             Console.WriteLine($"👤 Custom UserProfileId: {userProfileIdFromCustom}");
-        //                         }
-
-        //                         if (custom.TryGetProperty("key", out var keyProp))
-        //                         {
-        //                             secureKeyFromCustom = keyProp.GetString();
-        //                             Console.WriteLine($"🔐 Custom Secure Key: {secureKeyFromCustom}");
-        //                         }
-        //                     }
-        //                     else if (custom.ValueKind == JsonValueKind.String)
-        //                     {
-        //                         string customCommand = custom.GetString();
-        //                         Console.WriteLine($"📜 Tebex Custom Data (string): {customCommand}");
-        //                     }
-        //                 }
-        //                 else
-        //                 {
-        //                     Console.WriteLine("⚠️ Custom field was null or not present.");
-        //                 }
-        //             }
-        //         }
-
-        //         // 🔒 Verify secure key
-        //         const string expectedSecureKey = "f70669712467426a8d2451ecc7b05c58";
-        //         if (secureKeyFromCustom != expectedSecureKey)
-        //         {
-        //             Console.WriteLine("❌ Secure key mismatch or missing.");
-        //             return Unauthorized("Invalid secure key.");
-        //         }
-
-        //         // 🧠 Extract ident from order ID
-        //         var ident = subject.TryGetProperty("products", out var productArray)
-        //             && productArray.GetArrayLength() > 0
-        //             && productArray[0].TryGetProperty("custom", out var customObj)
-        //             && customObj.TryGetProperty("key", out var key)
-        //             && customObj.TryGetProperty("userProfileId", out var userIdJson)
-        //                 ? await _dbContext.TebexBaskets
-        //                       .Where(b => b.UserProfileId == userIdJson.GetInt32())
-        //                       .OrderByDescending(b => b.CreatedAt)
-        //                       .Select(b => b.Ident)
-        //                       .FirstOrDefaultAsync()
-        //                 : null;
-
-        //         if (!string.IsNullOrEmpty(ident))
-        //         {
-        //             var basket = await _dbContext.TebexBaskets
-        //                 .FirstOrDefaultAsync(b => b.Ident == ident);
-
-        //             if (basket != null)
-        //             {
-        //                 var notifyPayload = new
-        //                 {
-        //                     message,
-        //                     userProfileId = basket.UserProfileId
-        //                 };
-
-        //                 var content = new StringContent(JsonSerializer.Serialize(notifyPayload), Encoding.UTF8, "application/json");
-        //                 string baseUrl = _configuration["BaseApiUrl"];
-        //                 var notifyResponse = await _httpClient.PostAsync($"{baseUrl}/api/notification/tebex-payment-notify", content);
-
-        //                 if (notifyResponse.IsSuccessStatusCode)
-        //                 {
-        //                     Console.WriteLine("✅ Notification successfully sent to user.");
-        //                 }
-        //                 else
-        //                 {
-        //                     Console.WriteLine($"❌ Failed to send notification. Status: {notifyResponse.StatusCode}");
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 Console.WriteLine($"❌ No TebexBasket found for ident: {ident}");
-        //             }
-        //         }
-        //     }
-
-        //     return Ok();
-        // }
 
     }
 }
