@@ -35,7 +35,7 @@
   color: #5591b9 !important;
 }
 
-@keyframes pulse-border {
+/* @keyframes pulse-border {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
   }
@@ -45,9 +45,9 @@
   100% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
   }
-}
+} */
 
-.cart-item.pulse {
+/* .cart-item.pulse {
   animation: pulse-border 1s ease-out;
   animation-iteration-count: 3;
-}
+} */

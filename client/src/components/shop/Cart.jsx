@@ -18,6 +18,7 @@ export default function Cart() {
   const [checkoutStarted, setCheckoutStarted] = useState(false);
   const [highlightItemId, setHighlightItemId] = useState(null);
   const [pulsingItemId, setPulsingItemId] = useState(null);
+  const [checkoutErrorMessage, setCheckoutErrorMessage] = useState(null);
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
 
   const singleItems = cartItems.single;
@@ -55,8 +56,20 @@ export default function Cart() {
     }
   }, [checkoutStarted, basketIdent]);
 
+  useEffect(() => {
+    const stillExists = singleItems.some(
+      (item) => item.package.id === highlightItemId
+    );
+
+    if (!stillExists && highlightItemId !== null) {
+      setHighlightItemId(null);
+      setCheckoutErrorMessage(null);
+    }
+  }, [singleItems, highlightItemId]);
+
   const handleCheckout = async () => {
     const items = [];
+    setCheckoutErrorMessage(null);
 
     if (subscription) {
       items.push({ packageId: subscription.id.toString(), quantity: 1 });
@@ -107,10 +120,9 @@ export default function Cart() {
           console.log("📦 Package added:", item);
         } catch (err) {
           if (err.data?.error === "limit_reached") {
-            toast.error(`Limit reached: ${err.data.message}`, {
-              autoClose: 4000,
-            });
-
+            setCheckoutErrorMessage(
+              err.data?.message || "An error occurred during checkout."
+            );
             console.error("🚫 Package limit hit:", item);
 
             setHighlightItemId(parseInt(item.packageId));
@@ -290,9 +302,12 @@ export default function Cart() {
           </>
         )}
         <div className="pt-5">
+          {checkoutErrorMessage && (
+            <i className="text-danger d-block mb-2">{checkoutErrorMessage}</i>
+          )}
           <i className="fs-6 text-secondary">
             Zombie Lynx Gaming does not collect any of your personal information
-            during checout or purchases. All purchases are handled by Tebex.
+            during checkout or purchases. All purchases are handled by Tebex.
           </i>
         </div>
       </div>
