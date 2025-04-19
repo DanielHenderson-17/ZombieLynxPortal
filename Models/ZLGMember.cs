@@ -50,5 +50,14 @@ namespace ZombieLynxPortalAPI.Models
 
         [ForeignKey("UserProfileId")]
         public UserProfile UserProfile { get; set; }
+
+        [MaxLength(250)]
+        public string? PermissionGroups { get; set; }
+
+        [MaxLength(250)]
+        public string? TimedPermissionGroups { get; set; }
+
+        public int Points { get; set; } = 0;
+
     }
 }

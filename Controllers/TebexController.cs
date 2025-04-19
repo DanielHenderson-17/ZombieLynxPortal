@@ -9,6 +9,7 @@ using System.Security.Claims;
 using ZombieLynxPortalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Models;
+using ZombieLynxPortalAPI.Services.Tebex;
 
 
 
@@ -21,15 +22,18 @@ namespace ZombieLynxPortalAPI.Controllers
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClient;
+        private readonly TebexOrderProcessor _orderProcessor;
+
 
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
 
-        public TebexController(HttpClient httpClient, IConfiguration configuration, IHttpClientFactory httpClientFactory, ZombieLynxPortalAPIDbContext dbContext)
+        public TebexController(HttpClient httpClient, IConfiguration configuration, IHttpClientFactory httpClientFactory, ZombieLynxPortalAPIDbContext dbContext, TebexOrderProcessor orderProcessor)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
             _dbContext = dbContext;
+            _orderProcessor = orderProcessor;
         }
 
         // ✅ Ping to check controller is active
@@ -327,6 +331,14 @@ namespace ZombieLynxPortalAPI.Controllers
                                 {
                                     userProfileIdFromCustom = parsedId;
                                     Console.WriteLine($"👤 Extracted user_id from variable_data: {userProfileIdFromCustom}");
+                                    await _orderProcessor.ProcessOrderAsync(new TebexOrderActionDTO
+                                    {
+                                        UserProfileId = userProfileIdFromCustom.Value,
+                                        PackageId = packageId,
+                                        Quantity = quantity,
+                                        Custom = product.GetProperty("custom").GetString() ?? ""
+                                    });
+
                                 }
                             }
                         }

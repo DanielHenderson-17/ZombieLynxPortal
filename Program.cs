@@ -5,6 +5,7 @@ using System.Text;
 using ZombieLynxPortalAPI.Data;
 using AspNet.Security.OpenId.Steam;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using ZombieLynxPortalAPI.Services.Tebex;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Logging.AddDebug();
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<TebexOrderProcessor>();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
@@ -144,7 +146,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZombieLynxPortal API V1");
-        c.RoutePrefix = string.Empty;
+        // c.RoutePrefix = string.Empty;
     });
 }
 
@@ -183,7 +185,7 @@ app.Use(async (context, next) =>
 });
 
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -191,7 +193,7 @@ app.MapControllers();
 
 // ✅ Bind to all network interfaces
 app.Urls.Add("http://0.0.0.0:5000");
-app.Urls.Add("https://0.0.0.0:5001");
+app.Urls.Add("https://localhost:5001");
 
 app.Run();
 
