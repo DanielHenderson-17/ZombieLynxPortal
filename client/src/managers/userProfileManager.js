@@ -65,3 +65,12 @@ export const demoteUser = (userId) => {
     if (!res.ok) throw new Error("Failed to demote user");
   });
 };
+
+// 🔍 Get membership info (points and sub)
+export const getUserMembership = () => {
+  return fetch(`${_apiUrl}/membership`, {
+    headers: getAuthHeaders(),
+  }).then((res) =>
+    res.ok ? res.json() : Promise.reject("Failed to fetch membership info")
+  );
+};

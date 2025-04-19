@@ -3,7 +3,10 @@ import { useLocation } from "react-router-dom";
 import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { logout } from "../managers/authManager";
-import { getUserProfiles } from "../managers/userProfileManager";
+import {
+  getUserProfiles,
+  getUserMembership,
+} from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
 import zlgLogo from "../assets/zlg-logo.png";
 import { getLinkedSteamAccount } from "../managers/steamAuthManager";
@@ -23,6 +26,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const { cartItems } = useCart();
+  const [userPoints, setUserPoints] = useState(0);
 
   const cartCount =
     (cartItems.subscription ? 1 : 0) +
@@ -58,6 +62,15 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           profile.id === loggedInUser.id
         ) {
           setUserProfile(profile);
+          getUserMembership()
+            .then((membership) => {
+              if (membership?.points != null) {
+                setUserPoints(membership.points);
+              }
+            })
+            .catch((error) =>
+              console.error("Failed to fetch membership info:", error)
+            );
         }
       })
       .catch((error) => console.error("Failed to fetch user profile:", error));
@@ -229,7 +242,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
                   <img src={zlgCoin} alt="" className="zlg-coin3" />
                   <div className="text-container points-container">
-                    <p className="mb-0">1455</p>
+                    <p className="mb-0">{userPoints}</p>
                   </div>
                   <Link
                     to="/shop"

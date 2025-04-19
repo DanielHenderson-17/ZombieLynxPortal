@@ -71,7 +71,10 @@ namespace ZombieLynxPortalAPI.Controllers
                 DiscordId = dto.DiscordId,
                 DiscordName = dto.DiscordName,
                 DiscordImgUrl = dto.DiscordImgUrl,
-                UserProfileId = userProfile.Id
+                UserProfileId = userProfile.Id,
+                PermissionGroups = "Default",
+                TimedPermissionGroups = null,
+                Points = 0
             };
 
             _context.ZLGMembers.Add(zlgMember);

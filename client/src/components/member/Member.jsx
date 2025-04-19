@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { getUserMembership } from "../../managers/userProfileManager";
 import {
   linkSteamAccount,
   unlinkSteamAccount,
@@ -47,6 +48,7 @@ export default function Member({ loggedInUser }) {
   const [refreshTrigger, setRefreshTrigger] = useState(false);
   const [randomSeed, setRandomSeed] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
+  const [userPoints, setUserPoints] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -120,6 +122,15 @@ export default function Member({ loggedInUser }) {
         } finally {
           setLoading(false);
           setUserLoading(false);
+          getUserMembership()
+            .then((membership) => {
+              if (membership?.points != null) {
+                setUserPoints(membership.points);
+              }
+            })
+            .catch((err) =>
+              console.error("Failed to fetch membership points:", err)
+            );
         }
       } else {
         setUserLoading(false);
@@ -265,7 +276,7 @@ export default function Member({ loggedInUser }) {
                   <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-1 text-white fw-bold fs-6 col-md-9 col-12 mx-md-auto ms-0 position-relative mb-md-4 mb-1 mt-3 points-container">
                     <img src={zlgCoin} alt="" className="zlg-coin" />
                     <div className="text-container">
-                      <p className="mb-0 points2">1455</p>
+                      <p className="mb-0 points2">{userPoints}</p>
                     </div>
                     <Link to="/shop" className="text-secondary buy-points">
                       <img src={buyPoints} alt="" />

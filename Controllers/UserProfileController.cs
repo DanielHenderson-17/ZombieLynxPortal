@@ -118,5 +118,28 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok("User demoted to User.");
         }
+
+        [HttpGet("membership")]
+        [Authorize]
+        public async Task<IActionResult> GetMembershipDetails()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+                return Unauthorized();
+
+            var member = await _context.ZLGMembers
+                .FirstOrDefaultAsync(m => m.UserProfile.UserId.ToString() == userId);
+
+            if (member == null)
+                return NotFound("Membership record not found.");
+
+            return Ok(new
+            {
+                member.Points,
+                Sub = member.TimedPermissionGroups
+            });
+        }
+
     }
 }

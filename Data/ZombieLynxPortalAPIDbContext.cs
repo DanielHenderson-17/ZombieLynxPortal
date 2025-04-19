@@ -66,7 +66,11 @@ namespace ZombieLynxPortalAPI.Data
                 EpicImgUrl = null,
                 MinecraftUuid = "550e8400-e29b-41d4-a716-446655440000",
                 MinecraftUsername = "AdminMinecraft",
-                MinecraftAvatarUrl = "https://crafatar.com/avatars/550e8400-e29b-41d4-a716-446655440000"
+                MinecraftAvatarUrl = "https://crafatar.com/avatars/550e8400-e29b-41d4-a716-446655440000",
+                PermissionGroups = "Default,Admins",
+                TimedPermissionGroups = null,
+                Points = 0,
+
             });
 
             // ✅ Seed Ticket
