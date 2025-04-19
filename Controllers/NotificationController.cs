@@ -34,7 +34,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 Message = dto.Message,
                 IsGlobal = dto.IsGlobal,
                 CreatedAt = DateTime.UtcNow,
-                Expiration = null // Optional, for future use
+                Expiration = null
             };
 
             await _dbContext.Notifications.AddAsync(notification);
@@ -174,6 +174,43 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok(users);
         }
 
+        [HttpPost("tebex-payment-notify")]
+        [AllowAnonymous]
+        public async Task<IActionResult> TebexPaymentNotify([FromBody] TebexPaymentNotificationDTO dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Message) || dto.UserProfileId <= 0)
+                return BadRequest("Missing or invalid notification data.");
+
+            var userProfile = await _dbContext.UserProfiles
+                .FirstOrDefaultAsync(up => up.Id == dto.UserProfileId);
+
+            if (userProfile == null)
+                return NotFound("User profile not found.");
+
+            var notification = new Notification
+            {
+                Message = dto.Message,
+                IsGlobal = false,
+                CreatedAt = DateTime.UtcNow,
+                Expiration = null
+            };
+
+            await _dbContext.Notifications.AddAsync(notification);
+            await _dbContext.SaveChangesAsync();
+
+            await _dbContext.UserNotifications.AddAsync(new UserNotification
+            {
+                NotificationId = notification.Id,
+                UserProfileId = userProfile.Id,
+                IsRead = false
+            });
+
+            await _dbContext.SaveChangesAsync();
+
+            Console.WriteLine($"📨 Notification sent to UserProfileId {userProfile.Id} with message:\n{dto.Message}");
+
+            return Ok(new { notification.Id, notification.Message });
+        }
 
     }
 }

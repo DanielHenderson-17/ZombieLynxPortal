@@ -18,7 +18,11 @@ export default function About() {
           </h4>
           <img src="/temp1.png" alt="" className="explanation-img mb-5" />
         </div>
-        <i className="d-md-block d-none bi bi-arrow-right-circle text-white fs-1 mx-2"></i>
+        <img
+          src="/src/assets/images/aboutArrow.png"
+          className="aboutArrow"
+          alt=""
+        />
         <div className="col ">
           <h4 className="text-white mb-3 explanation-text">
             <span className="text-danger me-2 fw-bold">2.</span>
@@ -26,7 +30,11 @@ export default function About() {
           </h4>
           <img src="/temp2.png" alt="" className="explanation-img mb-5" />
         </div>
-        <i className="d-md-block d-none bi bi-arrow-right-circle text-white fs-1 mx-2"></i>
+        <img
+          src="/src/assets/images/aboutArrow.png"
+          className="aboutArrow"
+          alt=""
+        />
         <div className="col ">
           <h4 className="text-white mb-3 explanation-text">
             <span className="text-danger me-2 fw-bold">3.</span>

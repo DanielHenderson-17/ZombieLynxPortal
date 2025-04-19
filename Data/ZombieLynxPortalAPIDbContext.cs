@@ -22,6 +22,8 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<TebexBasket> TebexBaskets { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -256,6 +258,13 @@ namespace ZombieLynxPortalAPI.Data
                 .WithMany()
                 .HasForeignKey(un => un.NotificationId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TebexBasket>()
+                .HasOne(tb => tb.UserProfile)
+                .WithMany()
+                .HasForeignKey(tb => tb.UserProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

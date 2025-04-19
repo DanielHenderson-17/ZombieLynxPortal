@@ -9,3 +9,26 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.sub-card,
+.buy-card {
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #000000;
+  color: white;
+  padding: 20px 0px 0px 0px !important;
+}
+
+.sub-card img {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.buy-card img {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.cart-text {
+  height: 100px !important;
+}

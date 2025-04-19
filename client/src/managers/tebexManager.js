@@ -20,3 +20,53 @@ export const getPackages = () => {
       throw error;
     });
 };
+
+export const createBasket = (items, token) => {
+  return fetch("/api/tebex/create-basket", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ items }),
+  }).then((res) => {
+    if (!res.ok) throw new Error("Failed to create basket");
+    return res.json();
+  });
+};
+
+export const authenticateBasket = (ident, token) => {
+  return fetch("/api/tebex/authenticate-basket", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(ident),
+  }).then((res) => {
+    if (!res.ok) throw new Error("Failed to authenticate basket");
+    return res.json();
+  });
+};
+
+export const addPackageToBasket = async (ident, item, token) => {
+  const response = await fetch(`/api/tebex/add-package/${ident}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(item),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    // Structured error like { error: "limit_reached", message: "..." }
+    const error = new Error(result.message || "Failed to add package");
+    error.data = result; // attach structured response to the error
+    throw error;
+  }
+
+  return result;
+};
