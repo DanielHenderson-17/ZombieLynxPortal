@@ -216,6 +216,22 @@ namespace ZombieLynxPortalAPI.Controllers
 
             Console.WriteLine($"✅ Package Added Response ({response.StatusCode}):\n{resultJson}");
 
+            if ((int)response.StatusCode == 400)
+            {
+                using var doc = JsonDocument.Parse(resultJson);
+                var detail = doc.RootElement.GetProperty("detail").GetString();
+
+                if (detail != null && detail.Contains("purchased too many times"))
+                {
+                    Console.WriteLine("🚫 Package has been purchased too many times. Rejecting.");
+                    return BadRequest(new
+                    {
+                        error = "limit_reached",
+                        message = detail
+                    });
+                }
+            }
+
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, $"Failed to add package: {resultJson}");
 

@@ -16,6 +16,8 @@ export default function Cart() {
   const { cartItems, updateQuantity, removeItem, clearCart } = useCart();
   const [basketIdent, setBasketIdent] = useState(null);
   const [checkoutStarted, setCheckoutStarted] = useState(false);
+  const [highlightItemId, setHighlightItemId] = useState(null);
+  const [pulsingItemId, setPulsingItemId] = useState(null);
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
 
   const singleItems = cartItems.single;
@@ -100,8 +102,29 @@ export default function Cart() {
       toast.success("You are now signed in to Steam!");
 
       for (const item of items) {
-        await addPackageToBasket(ident, item, token);
-        console.log("📦 Package added:", item);
+        try {
+          await addPackageToBasket(ident, item, token);
+          console.log("📦 Package added:", item);
+        } catch (err) {
+          if (err.data?.error === "limit_reached") {
+            toast.error(`Limit reached: ${err.data.message}`, {
+              autoClose: 4000,
+            });
+
+            console.error("🚫 Package limit hit:", item);
+
+            setHighlightItemId(parseInt(item.packageId));
+
+            setPulsingItemId(parseInt(item.packageId));
+            setTimeout(() => setPulsingItemId(null), 3000);
+
+            return;
+          }
+
+          console.error("❌ Unexpected error adding package:", err);
+          toast.error("There was a problem adding items to your checkout.");
+          return;
+        }
       }
 
       Tebex.checkout.init({
@@ -177,7 +200,11 @@ export default function Cart() {
                 {singleItems.map((item) => (
                   <div
                     key={item.package.id}
-                    className="row align-items-center mb-2 p-3 rounded cart-item"
+                    className={`row align-items-center mb-2 p-3 rounded cart-item ${
+                      highlightItemId === item.package.id
+                        ? "border border-danger border-1"
+                        : ""
+                    } ${pulsingItemId === item.package.id ? "pulse" : ""}`}
                   >
                     <div className="col-md-7 d-flex align-items-center">
                       <img

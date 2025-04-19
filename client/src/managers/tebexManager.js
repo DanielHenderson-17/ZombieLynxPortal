@@ -49,16 +49,24 @@ export const authenticateBasket = (ident, token) => {
   });
 };
 
-export const addPackageToBasket = (ident, item, token) => {
-  return fetch(`/api/tebex/add-package/${ident}`, {
+export const addPackageToBasket = async (ident, item, token) => {
+  const response = await fetch(`/api/tebex/add-package/${ident}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(item),
-  }).then((res) => {
-    if (!res.ok) throw new Error("Failed to add package");
-    return res.json();
   });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    // Structured error like { error: "limit_reached", message: "..." }
+    const error = new Error(result.message || "Failed to add package");
+    error.data = result; // attach structured response to the error
+    throw error;
+  }
+
+  return result;
 };
