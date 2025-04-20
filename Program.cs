@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MySql.EntityFrameworkCore.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -6,6 +7,9 @@ using ZombieLynxPortalAPI.Data;
 using AspNet.Security.OpenId.Steam;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ZombieLynxPortalAPI.Services.Tebex;
+using ZombieLynxPortalAPI.Models;
+using ZombieLynxPortalAPI.Services;
+using ZombieLynxPortalAPI.Services.Ark;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +26,12 @@ builder.Logging.AddDebug();
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.Configure<PointsDatabaseOptions>(
+    builder.Configuration.GetSection("PointsDatabaseOptions"));
+builder.Services.AddSingleton<PointsDbConnectionService>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<TebexOrderProcessor>();
+builder.Services.AddScoped<ArkPointsSyncService>();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
@@ -31,6 +39,16 @@ builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
            .ConfigureWarnings(warnings =>
                warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning))
 );
+
+// Configure MySQL for ArkShop
+builder.Services.AddDbContext<ArkShopDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("ArkShop");
+
+    options.UseMySQL(connectionString);
+});
+
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -194,6 +212,14 @@ app.MapControllers();
 // ✅ Bind to all network interfaces
 app.Urls.Add("http://0.0.0.0:5000");
 app.Urls.Add("https://localhost:5001");
+
+
+// ✅ Start ArkPointsSyncService after app startup
+using (var scope = app.Services.CreateScope())
+{
+    var syncService = scope.ServiceProvider.GetRequiredService<ArkPointsSyncService>();
+    await syncService.SyncPendingPointsAsync();
+}
 
 app.Run();
 

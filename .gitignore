@@ -502,9 +502,3 @@ client/.env
 
 appsettings.json
 appsettings.Development.json
-GameSyncConfig.json
-/Configs/GameSyncConfig.json
-/Configs/ASE.json
-/Configs/ASA.json
-/Configs/Minecraft.json
-/Configs/Rust.json
