@@ -27,7 +27,13 @@ namespace ZombieLynxPortalAPI.Services.Ark
             optionsBuilder.UseMySQL(connString);
 
             using var arkContext = new ArkShopDbContext(optionsBuilder.Options);
-            var pendingRows = await arkContext.PointsSyncQueue.ToListAsync();
+            var allRows = await arkContext.PointsSyncQueue.ToListAsync();
+
+            var pendingRows = allRows
+                .GroupBy(row => row.SteamId)
+                .Select(g => g.OrderByDescending(r => r.CreatedAt).First())
+                .ToList();
+
 
             Console.WriteLine($"🔎 Found {pendingRows.Count} pending rows in ArkShop PointsSyncQueue.");
 
@@ -38,19 +44,22 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
                 if (member == null)
                 {
-                    Console.WriteLine($"⚠️ No matching ZLGMember for SteamId: {row.SteamId}");
+                    // Console.WriteLine($"⚠️ No matching ZLGMember for SteamId: {row.SteamId}");
                     continue;
                 }
 
-                // Update points
+                // Update points with the most recent entry
                 member.Points = row.Points;
 
+                // Remove all rows for this SteamId
+                var allForThisSteamId = arkContext.PointsSyncQueue
+                    .Where(r => r.SteamId == row.SteamId);
 
-                // Remove row after processing
-                arkContext.PointsSyncQueue.Remove(row);
+                arkContext.PointsSyncQueue.RemoveRange(allForThisSteamId);
 
-                Console.WriteLine($"✅ Synced SteamId {row.SteamId} → Points: {row.NewPoints}");
+                Console.WriteLine($"✅ Synced SteamId {row.SteamId} → Points: {row.NewPoints} (and cleared all queue rows)");
             }
+
 
             await _mainDbContext.SaveChangesAsync();
             await arkContext.SaveChangesAsync();

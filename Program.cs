@@ -32,6 +32,7 @@ builder.Services.AddSingleton<PointsDbConnectionService>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<TebexOrderProcessor>();
 builder.Services.AddScoped<ArkPointsSyncService>();
+builder.Services.AddHostedService<ArkPointsSyncWorker>();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
