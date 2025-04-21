@@ -33,7 +33,7 @@ export default function Tickets({ loggedInUser }) {
           {/* New Ticket Button */}
           <Link
             to="/member/tickets/new-ticket"
-            className={`d-flex justify-content-end text-decoration-none ${
+            className={`d-flex justify-content-start text-decoration-none ${
               location.pathname === "/member/tickets/new-ticket" ? "active" : ""
             }`}
           >
@@ -42,7 +42,7 @@ export default function Tickets({ loggedInUser }) {
               <p className="m-0 p-0">Create</p>
             </button>
           </Link>
-
+          <hr className="mb-4" />
           {/* Open Tickets Button */}
           <Link
             to="/member/tickets/open-tickets"
@@ -64,8 +64,6 @@ export default function Tickets({ loggedInUser }) {
               )}
             </button>
           </Link>
-
-          <hr />
 
           {/* Closed Tickets Button */}
           <Link
