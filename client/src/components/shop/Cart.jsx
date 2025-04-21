@@ -37,6 +37,19 @@ export default function Cart() {
 
         if (confirmed) {
           toast.success("Thanks for your purchase!", { autoClose: 3000 });
+
+          // 🔁 Trigger UI update in NavBar or other components
+          setTimeout(() => {
+            const now = Date.now().toString();
+            localStorage.setItem("zlg-points-updated", now);
+            window.dispatchEvent(
+              new StorageEvent("storage", {
+                key: "zlg-points-updated",
+                newValue: now,
+              })
+            );
+          }, 5000);
+
           clearCart();
           setBasketIdent(null);
           setCheckoutStarted(false);
@@ -117,7 +130,6 @@ export default function Cart() {
       for (const item of items) {
         try {
           await addPackageToBasket(ident, item, token);
-          console.log("📦 Package added:", item);
         } catch (err) {
           if (err.data?.error === "limit_reached") {
             setCheckoutErrorMessage(
@@ -153,11 +165,6 @@ export default function Cart() {
       console.error("Checkout failed:", err);
       toast.error("There was a problem creating your checkout.");
     }
-
-    console.log(
-      "🛒 Sent items to backend:",
-      JSON.stringify({ items }, null, 2)
-    );
   };
 
   return (

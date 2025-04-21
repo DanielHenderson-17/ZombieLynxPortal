@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
+import { usePointsRefresher } from "../hooks/usePointsRefresher";
 import { logout } from "../managers/authManager";
 import {
   getUserProfiles,
@@ -27,6 +28,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const navigate = useNavigate();
   const { cartItems } = useCart();
   const [userPoints, setUserPoints] = useState(0);
+  usePointsRefresher(setUserPoints, loggedInUser);
 
   const cartCount =
     (cartItems.subscription ? 1 : 0) +
@@ -44,7 +46,6 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   // Fetch user profile
   useEffect(() => {
     if (!loggedInUser) {
-      console.log("No user is logged in");
       return;
     }
     getUserProfiles()

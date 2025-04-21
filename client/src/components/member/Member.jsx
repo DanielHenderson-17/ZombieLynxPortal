@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getUserMembership } from "../../managers/userProfileManager";
+import { usePointsRefresher } from "../../hooks/usePointsRefresher";
 import {
   linkSteamAccount,
   unlinkSteamAccount,
@@ -51,6 +52,7 @@ export default function Member({ loggedInUser }) {
   const [userPoints, setUserPoints] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+  usePointsRefresher(setUserPoints, loggedInUser);
 
   // Mock for other accounts
   const [linkedAccounts, setLinkedAccounts] = useState([]);

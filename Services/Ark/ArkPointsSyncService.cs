@@ -44,7 +44,6 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
                 if (member == null)
                 {
-                    // Console.WriteLine($"⚠️ No matching ZLGMember for SteamId: {row.SteamId}");
                     continue;
                 }
 
