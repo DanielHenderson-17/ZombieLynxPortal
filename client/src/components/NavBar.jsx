@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { usePointsRefresher } from "../hooks/usePointsRefresher";
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+import { formatDiscordName } from "../utils/formatDiscordName";
 import { logout } from "../managers/authManager";
 import {
   getUserProfiles,
@@ -28,7 +30,21 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const navigate = useNavigate();
   const { cartItems } = useCart();
   const [userPoints, setUserPoints] = useState(0);
+  const [membership, setMembership] = useState(null);
   usePointsRefresher(setUserPoints, loggedInUser);
+
+  const rawTier = membership?.sub?.split(":")[0];
+  const tier = ["Gold", "Diamond", "Vibranium"].includes(rawTier)
+    ? rawTier
+    : "Default";
+
+  const tierGradient =
+    {
+      Gold: "linear-gradient(to top, #fad346, black)",
+      Diamond: "linear-gradient(to top, #22a2b1, black)",
+      Vibranium: "linear-gradient(to top, #cd70fd, black)",
+      Default: "linear-gradient(to top, rgb(150, 6, 6), black)",
+    }[tier] || "linear-gradient(to top, rgb(150, 6, 6), black)";
 
   const cartCount =
     (cartItems.subscription ? 1 : 0) +
@@ -68,6 +84,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
               if (membership?.points != null) {
                 setUserPoints(membership.points);
               }
+              setMembership(membership);
             })
             .catch((error) =>
               console.error("Failed to fetch membership info:", error)
@@ -237,7 +254,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
               <div className="m-0 text-center col-8 my-2 ps-3">
                 <h5 className="text-white text-center mb-1 navbar-first-name">
-                  {loggedInUser.firstName}
+                  <h5 className="text-white text-center mb-1 navbar-first-name">
+                    {discordAccount?.discordName
+                      ? capitalizeFirstLetter(
+                          formatDiscordName(discordAccount.discordName)
+                        )
+                      : loggedInUser?.firstName || "Guest"}
+                  </h5>
                 </h5>
 
                 <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
@@ -261,22 +284,38 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 </div>
               </div>
 
-              <img
-                src={
-                  discordAccount?.discordImgUrl ||
-                  steamAccount?.steamImgUrl ||
-                  `https://picsum.photos/seed/${randomSeed}/40/40`
-                }
-                alt="Profile"
-                className="profile-img rounded-circle mx-3"
-                onClick={() => setShowDropdown(!showDropdown)}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.1)")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
-              />
+              <div
+                className="rounded-circle mx-3"
+                style={{
+                  background: tierGradient,
+                  padding: "2px",
+                  borderRadius: "50%",
+                  display: "inline-block",
+                }}
+              >
+                <img
+                  src={
+                    discordAccount?.discordImgUrl ||
+                    steamAccount?.steamImgUrl ||
+                    `https://picsum.photos/seed/${randomSeed}/40/40`
+                  }
+                  alt="Profile"
+                  className="profile-img rounded-circle"
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.1)")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                />
+              </div>
 
               {showDropdown && (
                 <div
