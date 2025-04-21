@@ -321,6 +321,12 @@ namespace ZombieLynxPortalAPI.Controllers
 
                         if (product.TryGetProperty("variables", out var variables))
                         {
+                            if (!userProfileIdFromCustom.HasValue)
+                            {
+                                Console.WriteLine("❌ No user_id found in payment webhook. Skipping processing.");
+                                return BadRequest("Missing user_id");
+                            }
+
                             foreach (var variable in variables.EnumerateArray())
                             {
                                 if (variable.TryGetProperty("identifier", out var idProp) &&
