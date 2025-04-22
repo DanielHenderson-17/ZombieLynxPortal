@@ -308,7 +308,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 string message = $"✅ Order ID: {orderId}\n - Amount: ${amount}";
 
                 int? userProfileIdFromCustom = null;
-                string secureKeyFromCustom = null;
 
                 if (subject.TryGetProperty("products", out var products))
                 {
@@ -321,12 +320,6 @@ namespace ZombieLynxPortalAPI.Controllers
 
                         if (product.TryGetProperty("variables", out var variables))
                         {
-                            if (!userProfileIdFromCustom.HasValue)
-                            {
-                                Console.WriteLine("❌ No user_id found in payment webhook. Skipping processing.");
-                                return BadRequest("Missing user_id");
-                            }
-
                             foreach (var variable in variables.EnumerateArray())
                             {
                                 if (variable.TryGetProperty("identifier", out var idProp) &&
@@ -337,18 +330,23 @@ namespace ZombieLynxPortalAPI.Controllers
                                 {
                                     userProfileIdFromCustom = parsedId;
                                     Console.WriteLine($"👤 Extracted user_id from variable_data: {userProfileIdFromCustom}");
-                                    await _orderProcessor.ProcessOrderAsync(new TebexOrderActionDTO
-                                    {
-                                        UserProfileId = userProfileIdFromCustom.Value,
-                                        PackageId = packageId,
-                                        Quantity = quantity,
-                                        Custom = product.GetProperty("custom").GetString() ?? ""
-                                    });
-
                                 }
                             }
-                        }
 
+                            if (!userProfileIdFromCustom.HasValue)
+                            {
+                                Console.WriteLine("❌ No user_id found in payment webhook. Skipping processing.");
+                                return BadRequest("Missing user_id");
+                            }
+
+                            await _orderProcessor.ProcessOrderAsync(new TebexOrderActionDTO
+                            {
+                                UserProfileId = userProfileIdFromCustom.Value,
+                                PackageId = packageId,
+                                Quantity = quantity,
+                                Custom = product.GetProperty("custom").GetString() ?? ""
+                            });
+                        }
                     }
                 }
 
@@ -396,6 +394,36 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok();
         }
+
+        //Webhook validation Tebex
+        // [HttpPost("payment-complete")]
+        // [AllowAnonymous]
+        // public async Task<IActionResult> PaymentComplete()
+        // {
+        //     using var reader = new StreamReader(Request.Body);
+        //     var rawJson = await reader.ReadToEndAsync();
+
+        //     Console.WriteLine("📦 Raw JSON Payload:");
+        //     Console.WriteLine(rawJson);
+
+        //     using var doc = JsonDocument.Parse(rawJson);
+        //     var root = doc.RootElement;
+
+        //     if (root.TryGetProperty("type", out var typeProp) &&
+        //         typeProp.GetString() == "validation.webhook" &&
+        //         root.TryGetProperty("id", out var idProp))
+        //     {
+        //         var id = idProp.GetString();
+        //         Console.WriteLine($"✅ Validation webhook received. ID: {id}");
+
+        //         var result = new { id = id };
+        //         return new JsonResult(result);
+        //     }
+
+        //     Console.WriteLine("✅ Received non-validation webhook or invalid payload.");
+        //     return Ok();
+        // }
+
 
     }
 }
