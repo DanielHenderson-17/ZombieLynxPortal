@@ -103,13 +103,11 @@ namespace ZombieLynxPortalAPI.Services.Ark
                 Console.WriteLine("✅ Minecraft coins sync complete.");
             }
 
-
-
             await _mainDbContext.SaveChangesAsync();
             await arkContext.SaveChangesAsync();
 
             Console.WriteLine("💾 Sync complete and changes saved.");
         }
-
     }
 }
+
