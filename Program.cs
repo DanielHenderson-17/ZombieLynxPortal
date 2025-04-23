@@ -33,6 +33,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<TebexOrderProcessor>();
 builder.Services.AddScoped<ArkPointsSyncService>();
 builder.Services.AddHostedService<ArkPointsSyncWorker>();
+builder.Services.AddScoped<AsaPointsSyncService>();
+builder.Services.AddHostedService<AsaPointsSyncWorker>();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
@@ -49,7 +51,14 @@ builder.Services.AddDbContext<ArkShopDbContext>((serviceProvider, options) =>
 
     options.UseMySQL(connectionString);
 });
+// Configure MySQL for AsaShop
+builder.Services.AddDbContext<AsaShopDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("AsaShop");
 
+    options.UseMySQL(connectionString);
+});
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -215,12 +224,16 @@ app.Urls.Add("http://0.0.0.0:5000");
 app.Urls.Add("https://localhost:5001");
 
 
-// ✅ Start ArkPointsSyncService after app startup
+// ✅ Start <GameName>PointsSyncService after app startup
 using (var scope = app.Services.CreateScope())
 {
-    var syncService = scope.ServiceProvider.GetRequiredService<ArkPointsSyncService>();
-    await syncService.SyncPendingPointsAsync();
+    var arkSync = scope.ServiceProvider.GetRequiredService<ArkPointsSyncService>();
+    await arkSync.SyncPendingPointsAsync();
+
+    var asaSync = scope.ServiceProvider.GetRequiredService<AsaPointsSyncService>();
+    await asaSync.SyncPendingPointsAsync();
 }
+
 
 app.Run();
 

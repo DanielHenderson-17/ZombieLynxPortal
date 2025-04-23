@@ -5,10 +5,9 @@ namespace ZombieLynxPortalAPI.Data
 {
     public class ArkShopDbContext : DbContext
     {
-        public ArkShopDbContext(DbContextOptions<ArkShopDbContext> options)
-            : base(options)
-        {
-        }
+        public ArkShopDbContext(DbContextOptions<ArkShopDbContext> options) : base(options) { }
+
+        public DbSet<ArkShopPlayer> ArkShopPlayers { get; set; }
 
         public DbSet<ArkPointsSyncEntry> PointsSyncQueue { get; set; }
 
