@@ -34,8 +34,10 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<TebexOrderProcessor>();
 builder.Services.AddScoped<ArkPointsSyncService>();
 builder.Services.AddHostedService<ArkPointsSyncWorker>();
+builder.Services.AddScoped<ArkSubscriptionSyncService>();
 builder.Services.AddScoped<AsaPointsSyncService>();
 builder.Services.AddHostedService<AsaPointsSyncWorker>();
+builder.Services.AddScoped<AsaSubscriptionSyncService>();
 builder.Services.AddScoped<MinecraftPointsSyncService>();
 builder.Services.AddHostedService<MinecraftPointsSyncWorker>();
 

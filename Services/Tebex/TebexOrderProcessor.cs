@@ -1,6 +1,7 @@
 using ZombieLynxPortalAPI.DTOs;
 using ZombieLynxPortalAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using ZombieLynxPortalAPI.Services.Ark;
 
 namespace ZombieLynxPortalAPI.Services.Tebex
 {
@@ -8,9 +9,14 @@ namespace ZombieLynxPortalAPI.Services.Tebex
     {
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
 
-        public TebexOrderProcessor(ZombieLynxPortalAPIDbContext dbContext)
+        private readonly ArkSubscriptionSyncService _arkSubSync;
+        private readonly AsaSubscriptionSyncService _asaSubSync;
+
+        public TebexOrderProcessor(ZombieLynxPortalAPIDbContext dbContext, ArkSubscriptionSyncService arkSubSync, AsaSubscriptionSyncService asaSubSync)
         {
             _dbContext = dbContext;
+            _arkSubSync = arkSubSync;
+            _asaSubSync = asaSubSync;
         }
 
         public async Task ProcessOrderAsync(TebexOrderActionDTO dto)
@@ -57,6 +63,8 @@ namespace ZombieLynxPortalAPI.Services.Tebex
                 var expiration = DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-dd");
                 member.TimedPermissionGroups = $"{group}:{expiration}";
                 Console.WriteLine($"✅ Applied timed permission group: {group} (expires {expiration})");
+                await _arkSubSync.ApplyTimedSubscriptionAsync(dto.UserProfileId, group, DateTime.UtcNow.AddDays(30));
+                await _asaSubSync.ApplyTimedSubscriptionAsync(dto.UserProfileId, group, DateTime.UtcNow.AddDays(30));
             }
 
 
