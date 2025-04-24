@@ -10,6 +10,7 @@ using ZombieLynxPortalAPI.Services.Tebex;
 using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.Services;
 using ZombieLynxPortalAPI.Services.Ark;
+using ZombieLynxPortalAPI.Services.Minecraft;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ builder.Services.AddScoped<ArkPointsSyncService>();
 builder.Services.AddHostedService<ArkPointsSyncWorker>();
 builder.Services.AddScoped<AsaPointsSyncService>();
 builder.Services.AddHostedService<AsaPointsSyncWorker>();
+builder.Services.AddScoped<MinecraftPointsSyncService>();
+builder.Services.AddHostedService<MinecraftPointsSyncWorker>();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
@@ -59,7 +62,14 @@ builder.Services.AddDbContext<AsaShopDbContext>((serviceProvider, options) =>
 
     options.UseMySQL(connectionString);
 });
+// Configure MySQL for MinecraftPoints
+builder.Services.AddDbContext<MinecraftPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("MinecraftPoints");
 
+    options.UseMySQL(connectionString);
+});
 // Configure CORS
 builder.Services.AddCors(options =>
 {
@@ -232,6 +242,9 @@ using (var scope = app.Services.CreateScope())
 
     var asaSync = scope.ServiceProvider.GetRequiredService<AsaPointsSyncService>();
     await asaSync.SyncPendingPointsAsync();
+
+    var minecraftSync = scope.ServiceProvider.GetRequiredService<MinecraftPointsSyncService>();
+    await minecraftSync.SyncPendingPointsAsync();
 }
 
 
