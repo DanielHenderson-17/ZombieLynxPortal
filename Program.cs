@@ -54,24 +54,50 @@ builder.Services.AddDbContext<ArkShopDbContext>((serviceProvider, options) =>
     var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
     var connectionString = connService.GetConnectionString("ArkShop");
 
-    options.UseMySQL(connectionString);
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
 });
+
 // Configure MySQL for AsaShop
 builder.Services.AddDbContext<AsaShopDbContext>((serviceProvider, options) =>
 {
     var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
     var connectionString = connService.GetConnectionString("AsaShop");
 
-    options.UseMySQL(connectionString);
+    options.UseMySQL(connectionString, mySqlOptions =>
+{
+    mySqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(10),
+        errorNumbersToAdd: null
+    );
 });
+
+});
+
 // Configure MySQL for MinecraftPoints
 builder.Services.AddDbContext<MinecraftPointsDbContext>((serviceProvider, options) =>
 {
     var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
     var connectionString = connService.GetConnectionString("MinecraftPoints");
 
-    options.UseMySQL(connectionString);
+    options.UseMySQL(connectionString, mySqlOptions =>
+{
+    mySqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(10),
+        errorNumbersToAdd: null
+    );
 });
+
+});
+
 // Configure CORS
 builder.Services.AddCors(options =>
 {

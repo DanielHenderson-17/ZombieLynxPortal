@@ -1,10 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MySql.EntityFrameworkCore.Extensions;
-using ZombieLynxPortalAPI.Services;
-using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.Data;
+using ZombieLynxPortalAPI.Models;
 
 namespace ZombieLynxPortalAPI.Services.Ark
 {
@@ -21,8 +20,17 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
         public async Task SyncPendingPointsAsync()
         {
-            var connString = _connectionService.GetConnectionString("AsaShop");
+            await SyncASAAsync();
+            await SyncASEAsync();
+            await SyncMinecraftAsync();
 
+            await _mainDbContext.SaveChangesAsync();
+            Console.WriteLine("💾 ASA sync complete and changes saved.");
+        }
+
+        private async Task SyncASAAsync()
+        {
+            var connString = _connectionService.GetConnectionString("AsaShop");
             var optionsBuilder = new DbContextOptionsBuilder<AsaShopDbContext>();
             optionsBuilder.UseMySQL(connString);
 
@@ -42,9 +50,7 @@ namespace ZombieLynxPortalAPI.Services.Ark
                     .FirstOrDefaultAsync(m => m.EosId == row.EosId);
 
                 if (member == null)
-                {
                     continue;
-                }
 
                 member.Points = row.Points;
 
@@ -53,59 +59,66 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
                 asaContext.PointsSyncQueue.RemoveRange(allForThisEosId);
 
-                Console.WriteLine($"✅ Synced EosId {row.EosId} → Points: {row.NewPoints} (and cleared all queue rows)");
+                Console.WriteLine($"✅ Synced EosId {row.EosId} → Points: {row.Points} (cleared queue rows)");
             }
 
-            // 🟦 Sync ZLGMember points to ASE (by SteamId)
-            var aseConnString = _connectionService.GetConnectionString("ArkShop");
-            var aseOptionsBuilder = new DbContextOptionsBuilder<ArkShopDbContext>();
-            aseOptionsBuilder.UseMySQL(aseConnString);
-
-            using (var aseContext = new ArkShopDbContext(aseOptionsBuilder.Options))
-            {
-                foreach (var member in _mainDbContext.ZLGMembers.Where(m => m.SteamId != null))
-                {
-                    var arkPlayer = await aseContext.ArkShopPlayers
-                        .FirstOrDefaultAsync(p => p.SteamId == ulong.Parse(member.SteamId));
-
-                    if (arkPlayer != null)
-                    {
-                        arkPlayer.Points = member.Points;
-                        Console.WriteLine($"🔁 Synced ASE → SteamId: {member.SteamId} → Points: {member.Points}");
-                    }
-                }
-
-                await aseContext.SaveChangesAsync();
-                Console.WriteLine("✅ ASE points sync complete.");
-            }
-
-            // 🟫 Sync ZLGMember points to Minecraft (by MinecraftUuid)
-            var mcConnString = _connectionService.GetConnectionString("MinecraftPoints");
-            var mcOptionsBuilder = new DbContextOptionsBuilder<MinecraftPointsDbContext>();
-            mcOptionsBuilder.UseMySQL(mcConnString);
-
-            using (var mcContext = new MinecraftPointsDbContext(mcOptionsBuilder.Options))
-            {
-                foreach (var member in _mainDbContext.ZLGMembers.Where(m => m.MinecraftUuid != null))
-                {
-                    var mcUser = await mcContext.CoinsEngineUsers
-                        .FirstOrDefaultAsync(u => u.uuid == member.MinecraftUuid);
-
-                    if (mcUser != null)
-                    {
-                        mcUser.coins = member.Points;
-                        Console.WriteLine($"🟫 Synced Minecraft → UUID: {member.MinecraftUuid} → Coins: {member.Points}");
-                    }
-                }
-
-                await mcContext.SaveChangesAsync();
-                Console.WriteLine("✅ Minecraft coins sync complete.");
-            }
-
-            await _mainDbContext.SaveChangesAsync();
             await asaContext.SaveChangesAsync();
+        }
 
-            Console.WriteLine("💾 ASA sync complete and changes saved.");
+        private async Task SyncASEAsync()
+        {
+            var connString = _connectionService.GetConnectionString("ArkShop");
+            var optionsBuilder = new DbContextOptionsBuilder<ArkShopDbContext>();
+            optionsBuilder.UseMySQL(connString);
+
+            using var aseContext = new ArkShopDbContext(optionsBuilder.Options);
+
+            var steamMembers = await _mainDbContext.ZLGMembers
+                .Where(m => m.SteamId != null)
+                .ToListAsync();
+
+            foreach (var member in steamMembers)
+            {
+                var arkPlayer = await aseContext.ArkShopPlayers
+                    .FirstOrDefaultAsync(p => p.SteamId == ulong.Parse(member.SteamId));
+
+                if (arkPlayer != null)
+                {
+                    arkPlayer.Points = member.Points;
+                    Console.WriteLine($"🔁 Synced ASE → SteamId: {member.SteamId} → Points: {member.Points}");
+                }
+            }
+
+            await aseContext.SaveChangesAsync();
+            Console.WriteLine("✅ ASE points sync complete.");
+        }
+
+        private async Task SyncMinecraftAsync()
+        {
+            var connString = _connectionService.GetConnectionString("MinecraftPoints");
+            var optionsBuilder = new DbContextOptionsBuilder<MinecraftPointsDbContext>();
+            optionsBuilder.UseMySQL(connString);
+
+            using var mcContext = new MinecraftPointsDbContext(optionsBuilder.Options);
+
+            var mcMembers = await _mainDbContext.ZLGMembers
+                .Where(m => m.MinecraftUuid != null)
+                .ToListAsync();
+
+            foreach (var member in mcMembers)
+            {
+                var mcUser = await mcContext.CoinsEngineUsers
+                    .FirstOrDefaultAsync(u => u.uuid == member.MinecraftUuid);
+
+                if (mcUser != null)
+                {
+                    mcUser.coins = member.Points;
+                    Console.WriteLine($"🟫 Synced Minecraft → UUID: {member.MinecraftUuid} → Coins: {member.Points}");
+                }
+            }
+
+            await mcContext.SaveChangesAsync();
+            Console.WriteLine("✅ Minecraft coins sync complete.");
         }
     }
 }
