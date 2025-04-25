@@ -40,6 +40,7 @@ builder.Services.AddHostedService<AsaPointsSyncWorker>();
 builder.Services.AddScoped<AsaSubscriptionSyncService>();
 builder.Services.AddScoped<MinecraftPointsSyncService>();
 builder.Services.AddHostedService<MinecraftPointsSyncWorker>();
+builder.Services.AddScoped<MinecraftSubscriptionSyncService>();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
