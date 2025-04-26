@@ -187,6 +187,23 @@ namespace ZombieLynxPortalAPI.Data
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // ✅ Relationships for ZLGMembers
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.MinecraftLinked)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.ASELinked)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.ASALinked)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.RustLinked)
+                .HasDefaultValue(false);
+
             // ✅ Relationships for UserTickets
             modelBuilder.Entity<UserTicket>()
                 .HasOne(ut => ut.UserProfile)

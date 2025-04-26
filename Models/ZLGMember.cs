@@ -58,6 +58,12 @@ namespace ZombieLynxPortalAPI.Models
         public string? TimedPermissionGroups { get; set; }
 
         public int Points { get; set; } = 0;
+        // New linked account flags
+        public bool MinecraftLinked { get; set; } = false;
+        public bool ASELinked { get; set; } = false;
+        public bool ASALinked { get; set; } = false;
+        public bool RustLinked { get; set; } = false;
+
 
     }
 }

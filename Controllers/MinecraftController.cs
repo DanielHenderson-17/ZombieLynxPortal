@@ -78,6 +78,14 @@ namespace ZombieLynxPortalAPI.Controllers
             zlgMember.MinecraftAvatarUrl = mcAvatarUrl;
 
             await _dbContext.SaveChangesAsync();
+
+            //get the coins stuff from uuid user and add to zlgmember with column = true "MinecraftLinked"
+
+            //if != true
+            {
+
+            }
+
             return Ok("Minecraft account linked successfully.");
         }
 
