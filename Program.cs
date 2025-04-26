@@ -99,6 +99,23 @@ builder.Services.AddDbContext<MinecraftPointsDbContext>((serviceProvider, option
 
 });
 
+// Configure MySQL for MinecraftLink
+builder.Services.AddDbContext<MinecraftLinkPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("MinecraftPoints");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
+});
+
+
 // Configure CORS
 builder.Services.AddCors(options =>
 {
