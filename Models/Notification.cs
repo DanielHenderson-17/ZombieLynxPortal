@@ -9,6 +9,10 @@ namespace ZombieLynxPortalAPI.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(100)]
+        public string Subject { get; set; }
+
+        [Required]
         [MaxLength(200)]
         public string Message { get; set; }
 

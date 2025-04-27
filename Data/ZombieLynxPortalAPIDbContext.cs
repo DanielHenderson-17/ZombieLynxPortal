@@ -109,6 +109,7 @@ namespace ZombieLynxPortalAPI.Data
                 new Notification
                 {
                     Id = 1,
+                    Subject = "Welcome!",
                     Message = "Welcome to Zombie Lynx Portal!",
                     CreatedAt = DateTime.UtcNow,
                     IsGlobal = true,
@@ -117,6 +118,7 @@ namespace ZombieLynxPortalAPI.Data
                 new Notification
                 {
                     Id = 2,
+                    Subject = "Server Update",
                     Message = "New server update available.",
                     CreatedAt = DateTime.UtcNow.AddDays(-1),
                     IsGlobal = false
