@@ -197,29 +197,6 @@ export default function SingleTicket({ loggedInUser }) {
                     {user.firstName}
                   </span>
                 ))}
-
-                {/* {isAdmin && (
-                  <div className="mt-2">
-                    <select
-                      onChange={(e) => handleAssignUser(e.target.value)}
-                      className="form-select form-select-sm single-ticket-user-select"
-                    >
-                      <option value="">Add User</option>
-                      {allUsers
-                        .filter(
-                          (user) =>
-                            !ticket.assignedUsers.some(
-                              (assignedUser) => assignedUser.id === user.id
-                            )
-                        )
-                        .map((user) => (
-                          <option key={user.id} value={user.id}>
-                            {user.firstName} {user.lastName}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                )} */}
               </div>
             </div>
           </div>
