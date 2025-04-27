@@ -20,7 +20,7 @@ export default function About() {
         </div>
         <img
           src="/src/assets/images/aboutArrow.png"
-          className="aboutArrow"
+          className="aboutArrow d-none d-md-block"
           alt=""
         />
         <div className="col ">
@@ -32,7 +32,7 @@ export default function About() {
         </div>
         <img
           src="/src/assets/images/aboutArrow.png"
-          className="aboutArrow"
+          className="aboutArrow d-none d-md-block"
           alt=""
         />
         <div className="col ">

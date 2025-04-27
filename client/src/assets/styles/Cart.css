@@ -35,6 +35,12 @@
   color: #5591b9 !important;
 }
 
+.cart-item-img-small {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
 /* @keyframes pulse-border {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);

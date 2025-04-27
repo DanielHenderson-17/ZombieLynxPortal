@@ -341,9 +341,18 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           >
             <i className="fa-solid fa-gamepad text-white fs-5 me-1"></i>
           </Link>
-          <Link to="/shop/cart" className="nav-link pe-2 ps-3">
+          <Link
+            to="/shop/cart"
+            className="nav-link pe-2 ps-3 position-relative"
+          >
             <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
+            {cartCount > 0 && (
+              <span className="cart-badge rounded-circle text-white bg-danger">
+                {cartCount}
+              </span>
+            )}
           </Link>
+
           <button
             className="btn btn-dark navbar-toggler border-0"
             type="button"
