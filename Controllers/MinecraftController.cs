@@ -96,7 +96,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 await _dbContext.SaveChangesAsync();
             }
 
-
             return Ok("Minecraft account linked successfully.");
         }
 

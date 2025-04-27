@@ -11,6 +11,7 @@ using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.Services;
 using ZombieLynxPortalAPI.Services.Ark;
 using ZombieLynxPortalAPI.Services.Minecraft;
+using ZombieLynxPortalAPI.Data.Ark;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,23 @@ builder.Services.AddDbContext<ArkShopDbContext>((serviceProvider, options) =>
     });
 });
 
+// Configure MySQL for ArkLink
+builder.Services.AddDbContext<ArkLinkPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("ArkShop");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
+});
+
+
 // Configure MySQL for AsaShop
 builder.Services.AddDbContext<AsaShopDbContext>((serviceProvider, options) =>
 {
@@ -79,7 +97,22 @@ builder.Services.AddDbContext<AsaShopDbContext>((serviceProvider, options) =>
         errorNumbersToAdd: null
     );
 });
+});
 
+// Configure MySQL for AsaLink
+builder.Services.AddDbContext<AsaLinkPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("AsaShop");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
 });
 
 // Configure MySQL for MinecraftPoints
