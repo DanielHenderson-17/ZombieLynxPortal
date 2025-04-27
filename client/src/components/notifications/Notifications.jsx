@@ -83,7 +83,7 @@ export default function Notification({ loggedInUser }) {
                 notification.isRead ? "isRead" : ""
               }`}
             >
-              <div className="text-start ms-md-3 ms-1 p-1 col-10">
+              <div className="text-start ms-md-3 ms-1 p-1 col-md-10 col-8">
                 {notification.subject && (
                   <strong className="mb-0">{notification.subject}</strong>
                 )}
