@@ -4,8 +4,6 @@ import {
   getTicketById,
   closeTicketAPI,
   restoreTicketAPI,
-  assignUserToTicket,
-  getAllUsers,
 } from "../../managers/ticketManager";
 import {
   getMessagesByTicketId,
@@ -29,8 +27,6 @@ export default function SingleTicket({ loggedInUser }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
-  const [allUsers, setAllUsers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(loggedInUser.role === "Admin");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [discordAccount, setDiscordAccount] = useState(null);
@@ -45,11 +41,6 @@ export default function SingleTicket({ loggedInUser }) {
 
         const messageData = await getMessagesByTicketId(ticketId);
         setMessages(messageData);
-
-        const users = await getAllUsers();
-        setAllUsers(users);
-
-        setIsAdmin(loggedInUser.role === "Admin");
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to fetch ticket details or messages.");
@@ -140,18 +131,6 @@ export default function SingleTicket({ loggedInUser }) {
     }
   };
 
-  // Assign user to ticket
-  const handleAssignUser = async (userId) => {
-    try {
-      await assignUserToTicket(ticketId, userId);
-      const updatedTicket = await getTicketById(ticketId);
-      setTicket(updatedTicket);
-    } catch (error) {
-      console.error("Error assigning user to ticket:", error);
-      setError("Failed to assign user.");
-    }
-  };
-
   const handleRefreshMessages = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
@@ -219,7 +198,7 @@ export default function SingleTicket({ loggedInUser }) {
                   </span>
                 ))}
 
-                {isAdmin && (
+                {/* {isAdmin && (
                   <div className="mt-2">
                     <select
                       onChange={(e) => handleAssignUser(e.target.value)}
@@ -240,7 +219,7 @@ export default function SingleTicket({ loggedInUser }) {
                         ))}
                     </select>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>
