@@ -239,13 +239,13 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
               <div className="m-0 text-center col-8 my-2 ps-3">
                 <h5 className="text-white text-center mb-1 navbar-first-name">
-                  <h5 className="text-white text-center mb-1 navbar-first-name">
+                  <div className="text-white text-center mb-1 navbar-first-name">
                     {discordAccount?.discordName
                       ? capitalizeFirstLetter(
                           formatDiscordName(discordAccount.discordName)
                         )
                       : loggedInUser?.firstName || "Guest"}
-                  </h5>
+                  </div>
                 </h5>
 
                 <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">

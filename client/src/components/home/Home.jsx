@@ -2,6 +2,7 @@ import "../../assets/styles/Home.css";
 import ServerListDisplay from "../server/ServerListDisplay";
 import ServerStatusDisplay from "../server/ServerStatusDisplay";
 import ServicesListDisplay from "../services/ServicesListDisplay";
+import { Link } from "react-router-dom";
 import Footer from "../Footer";
 import About from "../about/About";
 
@@ -40,9 +41,12 @@ export default function Home() {
                   </h4>
                 </div>
                 <div className="d-flex justify-content-md-start justify-content-center">
-                  <button className="btn btn-success ms-md-3 m-0 fw-bold mt-md-3 mt-0 play-now">
+                  <Link
+                    to="/#ServerStatusDisplay"
+                    className="btn btn-success ms-md-3 m-0 fw-bold mt-md-3 mt-0 play-now"
+                  >
                     PLAY NOW <i className="bi bi-caret-right-fill"></i>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
