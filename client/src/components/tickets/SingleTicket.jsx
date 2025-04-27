@@ -328,22 +328,34 @@ export default function SingleTicket({ loggedInUser }) {
                 </div>
 
                 {/* Input and Send Button */}
-                <div className="d-flex">
-                  <input
-                    type="text"
-                    className="form-control me-2 message-input"
-                    placeholder="Type a message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <button
-                    className="btn btn-primary message-button"
-                    onClick={handleSendMessage}
-                  >
-                    Send
-                  </button>
-                </div>
+                {ticket.status === "Open" && (
+                  <div className="d-flex">
+                    <input
+                      type="text"
+                      className="form-control me-2 message-input"
+                      placeholder={
+                        ticket.status === "Open"
+                          ? "Type a message..."
+                          : "Ticket is closed"
+                      }
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (ticket.status === "Open") {
+                          handleKeyPress(e);
+                        }
+                      }}
+                      disabled={ticket.status !== "Open"}
+                    />
+                    <button
+                      className="btn btn-primary message-button"
+                      onClick={handleSendMessage}
+                      disabled={ticket.status !== "Open"}
+                    >
+                      Send
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -262,7 +262,7 @@ export default function Member({ loggedInUser }) {
             isMobile ? "rounded-start" : "rounded-end"
           }`}
           style={{
-            top: isMobile ? 15 : 20,
+            top: isMobile ? 30 : 20,
             left: isMobile ? "auto" : 0,
             right: isMobile ? 0 : "auto",
             fontWeight: "bold",
@@ -279,7 +279,7 @@ export default function Member({ loggedInUser }) {
             <div className="profile-info col-md-5 col-12 d-md-flex justify-content-center h-100">
               {/* Profile Container: Image -> Name -> Points */}
               <div className="d-flex justify-content-md-end justify-content-center align-items-end img-name-points col-md-6 col-12 mb-md-0 mb-2">
-                <div className="d-flex d-md-block col-12 col-md-8 ms-md-0 ps-2 justify-content-center align-items-center">
+                <div className="d-flex d-md-block col-12 col-md-8 ms-md-0 ps-2 justify-content-center align-items-center mt-4">
                   {/* Profile Image */}
                   <div
                     className="hexagon mb-1 mt-md-0 mt-2 col-12"
