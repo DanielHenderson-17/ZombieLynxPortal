@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function CreateNotification() {
   const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
   const [isGlobal, setIsGlobal] = useState(true);
   const [targetUserIds, setTargetUserIds] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
@@ -69,9 +70,11 @@ export default function CreateNotification() {
         message,
         isGlobal,
         targetUserIds,
+        subject,
       });
       window.alert("Notification created successfully!");
-      navigate("/notifications");
+      navigate("/member/notifications", { replace: true });
+      window.location.reload();
     } catch (err) {
       console.error("Error creating notification:", err);
       setError("Failed to create notification.");
@@ -82,6 +85,21 @@ export default function CreateNotification() {
     <div className="create-notification-container">
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form className="col-12" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className="text-start col-md-8 col-11 pt-2 mt-4">
+            Subject:
+            <textarea
+              className="col-md-8 col-11 p-2"
+              placeholder="Enter the subject of your notification"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              rows="2"
+              style={{ width: "100%", margin: "10px 0" }}
+              required
+            ></textarea>
+          </label>
+        </div>
+
         <div className="form-group">
           <label className="text-start col-md-8 col-11 pt-2 mt-4">
             Message:

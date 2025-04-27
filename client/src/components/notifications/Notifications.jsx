@@ -83,17 +83,19 @@ export default function Notification({ loggedInUser }) {
                 notification.isRead ? "isRead" : ""
               }`}
             >
-              <div className="text-start ms-md-3 ms-1 p-1">
-                <p className="mb-0">
-                  <strong>{notification.message}</strong>
+              <div className="text-start ms-md-3 ms-1 p-1 col-10">
+                {notification.subject && (
+                  <strong className="mb-0">{notification.subject}</strong>
+                )}
+                <p className="my-1">
+                  <small>{notification.message}</small>
                 </p>
                 <small>
-                  <p className="my-0">
+                  <i className="mt-2 mb-0">
                     {new Date(notification.createdAt).toLocaleString()}
-                  </p>
+                  </i>
                 </small>
               </div>
-
               <div className="my-auto">
                 {!notification.isRead && (
                   <button
