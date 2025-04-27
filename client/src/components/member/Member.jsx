@@ -517,9 +517,7 @@ export default function Member({ loggedInUser }) {
                   </p>
                   <button
                     className="btn btn-success w-50"
-                    onClick={() =>
-                      (window.location.href = "https://zlg.gg/aseshop")
-                    }
+                    onClick={() => navigate("/shop")}
                   >
                     Buy
                   </button>
@@ -534,9 +532,7 @@ export default function Member({ loggedInUser }) {
                   </p>
                   <button
                     className="btn btn-success w-50"
-                    onClick={() =>
-                      (window.location.href = "https://zlg.gg/aseshop")
-                    }
+                    onClick={() => navigate("/shop")}
                   >
                     Buy
                   </button>
@@ -551,9 +547,7 @@ export default function Member({ loggedInUser }) {
                   </p>
                   <button
                     className="btn btn-success w-50"
-                    onClick={() =>
-                      (window.location.href = "https://zlg.gg/aseshop")
-                    }
+                    onClick={() => navigate("/shop")}
                   >
                     Buy
                   </button>
