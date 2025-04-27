@@ -94,8 +94,20 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     };
 
     fetchUnreadNotifications();
-    const intervalId = setInterval(fetchUnreadNotifications, 60000); // refresh every minute
-    return () => clearInterval(intervalId);
+    const intervalId = setInterval(fetchUnreadNotifications, 60000);
+
+    const handleStorageChange = (e) => {
+      if (e.key === "zlg-notifications-updated") {
+        fetchUnreadNotifications();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, [loggedInUser]);
 
   // Fetch Steam account

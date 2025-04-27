@@ -37,6 +37,14 @@ export default function Notification({ loggedInUser }) {
     try {
       await markNotificationAsRead(id);
       fetchNotifications();
+      // 👇 Notify NavBar to refresh
+      localStorage.setItem("zlg-notifications-updated", Date.now().toString());
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "zlg-notifications-updated",
+          newValue: Date.now().toString(),
+        })
+      );
     } catch (error) {
       console.error("Error marking notification as read:", error);
     }
