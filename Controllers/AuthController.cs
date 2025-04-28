@@ -9,6 +9,7 @@ using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.DTOs;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Authorization;
+using ZombieLynxPortalAPI.Services.Email;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -18,11 +19,15 @@ namespace ZombieLynxPortalAPI.Controllers
     {
         private readonly ZombieLynxPortalAPIDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly string _frontendBaseUrl;
+        private readonly IEmailSender _emailSender;
 
-        public AuthController(ZombieLynxPortalAPIDbContext context, IConfiguration configuration)
+        public AuthController(ZombieLynxPortalAPIDbContext context, IConfiguration configuration, IEmailSender emailSender)
         {
             _context = context;
             _configuration = configuration;
+            _frontendBaseUrl = _configuration["Frontend:BaseUrl"];
+            _emailSender = emailSender;
         }
 
         // POST: api/Auth/Register
@@ -59,6 +64,28 @@ namespace ZombieLynxPortalAPI.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            // ✅ Create a verification code
+            var verificationCode = Guid.NewGuid().ToString();
+
+            // ✅ Create EmailVerification record
+            var emailVerification = new EmailVerification
+            {
+                UserId = user.Id,
+                VerificationCode = verificationCode,
+                ExpiresAt = DateTime.UtcNow.AddHours(1),
+                IsUsed = false
+            };
+
+            _context.EmailVerifications.Add(emailVerification);
+            await _context.SaveChangesAsync();
+
+            // ✅ Build the verification link (temporary logging for now)
+            var verificationLink = $"{_frontendBaseUrl}/verify-email?code={verificationCode}";
+            var subject = "Confirm your email for Zombie Lynx Portal";
+            var body = $"<p>Thank you for registering!</p><p>Please confirm your email by clicking the link below:</p><p><a href='{verificationLink}'>Verify Email</a></p>";
+
+            await _emailSender.SendEmailAsync(user.Email, subject, body);
+
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(up => up.UserId == user.Id);
 
             if (userProfile == null)
@@ -94,7 +121,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 {
                     foreach (var ticket in existingTickets)
                     {
-                        ticket.UserProfileId = userProfile.Id; // Link to new user
+                        ticket.UserProfileId = userProfile.Id;
 
                         // ✅ Also create a UserTicket entry
                         var userTicket = new UserTicket
@@ -137,6 +164,9 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return Unauthorized("Invalid email or password.");
+
+            if (!user.Verified)
+                return Unauthorized("Please verify your email before logging in.");
 
             var token = GenerateJwtToken(user);
 
@@ -227,5 +257,88 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok("You are an Admin.");
         }
 
+        // POST: api/Auth/verify-email?code=xyz
+        [HttpPost("verify-email")]
+        [AllowAnonymous]
+        public async Task<IActionResult> VerifyEmail([FromQuery] string code)
+        {
+            if (string.IsNullOrEmpty(code))
+                return BadRequest("Verification code is required.");
+
+            var verification = await _context.EmailVerifications
+                .Include(ev => ev.User)
+                .FirstOrDefaultAsync(ev => ev.VerificationCode == code);
+
+            if (verification == null)
+                return BadRequest("Invalid or expired verification code.");
+
+            if (verification.ExpiresAt < DateTime.UtcNow)
+                return BadRequest("Verification code has expired.");
+
+            if (verification.IsUsed)
+                return BadRequest("Verification code has already been used.");
+
+            // ✅ Mark user as verified
+            verification.User.Verified = true;
+            verification.IsUsed = true;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Email verified successfully. You can now log in.");
+        }
+        // POST: api/Auth/resend-verification
+        [HttpPost("resend-verification")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResendVerification([FromBody] ResendVerificationDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.Email))
+                return BadRequest("Email is required.");
+
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
+
+            if (user == null)
+            {
+                // ✅ Don't leak info whether user exists or not
+                return Ok("If your email exists in our system, a verification email has been sent.");
+            }
+
+            if (user.Verified)
+            {
+                return Ok("Account is already verified.");
+            }
+
+            // ✅ Invalidate previous verification codes if you want (optional)
+            var existingVerifications = _context.EmailVerifications
+                .Where(ev => ev.UserId == user.Id && !ev.IsUsed);
+
+            _context.EmailVerifications.RemoveRange(existingVerifications);
+
+            // ✅ Create new verification code
+            var verificationCode = Guid.NewGuid().ToString();
+
+            var emailVerification = new EmailVerification
+            {
+                UserId = user.Id,
+                VerificationCode = verificationCode,
+                ExpiresAt = DateTime.UtcNow.AddHours(1),
+                IsUsed = false
+            };
+
+            _context.EmailVerifications.Add(emailVerification);
+            await _context.SaveChangesAsync();
+
+            // ✅ Build new link
+            var frontendUrl = _configuration["Frontend:BaseUrl"];
+            var verificationLink = $"{frontendUrl}/verify-email?code={verificationCode}";
+
+            var subject = "Resend: Confirm your email for Zombie Lynx Portal";
+            var body = $"<p>Please confirm your email by clicking the link below:</p><p><a href='{verificationLink}'>Verify Email</a></p>";
+
+            await _emailSender.SendEmailAsync(user.Email, subject, body);
+
+            return Ok("Verification email resent successfully.");
+        }
     }
 }

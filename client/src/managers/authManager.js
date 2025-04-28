@@ -132,3 +132,26 @@ export const isJwtExpired = (token) => {
     return true;
   }
 };
+
+/**
+ * 🔥 Resend email verification link
+ * @param {string} email - User's email
+ * @returns {Promise<string>} - Success message
+ */
+export const resendVerificationEmail = (email) => {
+  return fetch(`${apiUrl}/resend-verification`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  })
+    .then((res) => {
+      if (res.ok) return res.text();
+      throw new Error("Failed to resend verification email.");
+    })
+    .catch((error) => {
+      console.error("Resend verification error:", error);
+      throw error;
+    });
+};

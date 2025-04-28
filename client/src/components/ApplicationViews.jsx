@@ -3,6 +3,8 @@ import { AuthorizedRoute } from "./auth/AuthorizedRoute";
 import Home from "../components/home/Home";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import Verify from "./auth/Verify";
+import VerifyEmail from "./auth/VerifyEmail";
 import Member from "../components/member/Member";
 import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
@@ -45,6 +47,8 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
         />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route path="zlg-rules" element={<Rules />} />
+        <Route path="verify" element={<Verify />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
 
         {/* Protected Routes */}
         <Route

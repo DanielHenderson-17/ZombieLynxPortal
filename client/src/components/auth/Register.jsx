@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { register, tryGetLoggedInUser } from "../../managers/authManager";
+import { register } from "../../managers/authManager";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
 import zlglogo from "../../assets/images/zlglogo.png";
@@ -7,7 +7,7 @@ import { fetchDiscordClientId } from "../../managers/discordAuthManager";
 import "../../assets/styles/Login.css";
 import { formatDiscordName } from "../../utils/formatDiscordName";
 
-export default function Register({ setLoggedInUser }) {
+export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -94,15 +94,7 @@ export default function Register({ setLoggedInUser }) {
       register(newUser)
         .then((data) => {
           if (data.token) {
-            localStorage.setItem("authToken", data.token);
-            tryGetLoggedInUser().then((user) => {
-              if (user) {
-                setLoggedInUser(user);
-                navigate("/member");
-              } else {
-                setRegistrationFailure(true);
-              }
-            });
+            navigate("/verify");
           } else {
             setRegistrationFailure(true);
           }
