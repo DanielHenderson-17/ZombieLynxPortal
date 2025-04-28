@@ -75,7 +75,7 @@ export default function Shop() {
                 "Private Discord Channel",
                 "650 ZP Every Month!",
                 "7 ZP Every 15 Minutes",
-                "10x Ingots, 5x Pearls/Diamonds",
+                // "10x Ingots, 5x Pearls/Diamonds",
               ].map((benefit, index) => (
                 <li
                   key={index}
@@ -130,7 +130,7 @@ export default function Shop() {
                 "Private Discord Channel",
                 "1300 ZP Every Month!",
                 "10 ZP Every 15 Minutes",
-                "15x Ingots, 7x Pearls/Diamonds",
+                // "15x Ingots, 7x Pearls/Diamonds",
               ].map((benefit, index) => (
                 <li
                   key={index}
@@ -185,7 +185,7 @@ export default function Shop() {
                 "Private Discord Channel",
                 "1950 ZP Every Month!",
                 "15 ZP Every 15 Minutes",
-                "20x Ingots, 10x Pearls/Diamonds",
+                // "20x Ingots, 10x Pearls/Diamonds",
               ].map((benefit, index) => (
                 <li
                   key={index}

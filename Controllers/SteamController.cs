@@ -16,11 +16,14 @@ namespace ZombieLynxPortalAPI.Controllers
     {
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
         private readonly IConfiguration _configuration;
+        private readonly ArkLinkPointsDbContext _arkLinkPointsDbContext;
 
-        public SteamController(ZombieLynxPortalAPIDbContext dbContext, IConfiguration configuration)
+
+        public SteamController(ZombieLynxPortalAPIDbContext dbContext, IConfiguration configuration, ArkLinkPointsDbContext arkLinkPointsDbContext)
         {
             _dbContext = dbContext;
             _configuration = configuration;
+            _arkLinkPointsDbContext = arkLinkPointsDbContext;
         }
 
         // Ping API
@@ -94,6 +97,22 @@ namespace ZombieLynxPortalAPI.Controllers
             zlgMember.SteamImgUrl = steamData.SteamImgUrl;
 
             await _dbContext.SaveChangesAsync();
+
+            if (!zlgMember.ASELinked && !string.IsNullOrEmpty(zlgMember.SteamId))
+            {
+                if (ulong.TryParse(zlgMember.SteamId, out var steamIdAsUlong))
+                {
+                    var arkPlayer = await _arkLinkPointsDbContext.ArkShopPlayers
+                        .FirstOrDefaultAsync(p => p.SteamId == steamIdAsUlong);
+
+                    if (arkPlayer != null)
+                    {
+                        zlgMember.Points += arkPlayer.Points;
+                    }
+                }
+
+                zlgMember.ASELinked = true;
+            }
 
             return Ok("Steam account linked successfully.");
         }

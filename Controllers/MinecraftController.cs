@@ -18,11 +18,13 @@ namespace ZombieLynxPortalAPI.Controllers
     {
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
         private readonly string _mysqlConnectionString;
+        private readonly MinecraftLinkPointsDbContext _minecraftLinkPointsDbContext;
 
-        public MinecraftController(ZombieLynxPortalAPIDbContext dbContext, IConfiguration configuration)
+        public MinecraftController(ZombieLynxPortalAPIDbContext dbContext, IConfiguration configuration, MinecraftLinkPointsDbContext minecraftLinkPointsDbContext)
         {
             _dbContext = dbContext;
             _mysqlConnectionString = configuration.GetConnectionString("MinecraftMySql");
+            _minecraftLinkPointsDbContext = minecraftLinkPointsDbContext;
         }
 
         [HttpGet("ping")]
@@ -78,6 +80,22 @@ namespace ZombieLynxPortalAPI.Controllers
             zlgMember.MinecraftAvatarUrl = mcAvatarUrl;
 
             await _dbContext.SaveChangesAsync();
+
+            if (!zlgMember.MinecraftLinked)
+            {
+                var coinsUser = await _minecraftLinkPointsDbContext.CoinsEngineUsers
+                    .FirstOrDefaultAsync(u => u.uuid == minecraftUuid);
+
+                if (coinsUser != null)
+                {
+                    zlgMember.Points += coinsUser.coins;
+                }
+
+                zlgMember.MinecraftLinked = true;
+
+                await _dbContext.SaveChangesAsync();
+            }
+
             return Ok("Minecraft account linked successfully.");
         }
 

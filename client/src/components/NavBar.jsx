@@ -2,12 +2,19 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { NavLink as RRNavLink, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
+import { usePointsRefresher } from "../hooks/usePointsRefresher";
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+import { formatDiscordName } from "../utils/formatDiscordName";
 import { logout } from "../managers/authManager";
-import { getUserProfiles } from "../managers/userProfileManager";
+import {
+  getUserProfiles,
+  getUserMembership,
+} from "../managers/userProfileManager";
 import "../assets/styles/NavBar.css";
 import zlgLogo from "../assets/zlg-logo.png";
 import { getLinkedSteamAccount } from "../managers/steamAuthManager";
 import { getLinkedDiscordAccount } from "../managers/discordAuthManager";
+import { getUserNotifications } from "../managers/notificationManager";
 import zlgCoin from "../assets/images/zlgCoin.png";
 import buyPoints from "../assets/images/buyPoints.png";
 import addPoints from "../assets/images/addPoints.png";
@@ -20,9 +27,12 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   const [discordAccount, setDiscordAccount] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [randomSeed, setRandomSeed] = useState(null);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const { cartItems } = useCart();
+  const [userPoints, setUserPoints] = useState(0);
+  usePointsRefresher(setUserPoints, loggedInUser);
 
   const cartCount =
     (cartItems.subscription ? 1 : 0) +
@@ -40,7 +50,6 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   // Fetch user profile
   useEffect(() => {
     if (!loggedInUser) {
-      console.log("No user is logged in");
       return;
     }
     getUserProfiles()
@@ -58,9 +67,47 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           profile.id === loggedInUser.id
         ) {
           setUserProfile(profile);
+          getUserMembership()
+            .then((membership) => {
+              if (membership?.points != null) {
+                setUserPoints(membership.points);
+              }
+            })
+            .catch((error) =>
+              console.error("Failed to fetch membership info:", error)
+            );
         }
       })
       .catch((error) => console.error("Failed to fetch user profile:", error));
+  }, [loggedInUser]);
+
+  useEffect(() => {
+    const fetchUnreadNotifications = async () => {
+      if (!loggedInUser) return;
+      try {
+        const data = await getUserNotifications();
+        const unreadCount = data.filter((n) => !n.isRead).length;
+        setUnreadNotifications(unreadCount);
+      } catch (error) {
+        console.error("Failed to fetch unread notifications:", error);
+      }
+    };
+
+    fetchUnreadNotifications();
+    const intervalId = setInterval(fetchUnreadNotifications, 60000);
+
+    const handleStorageChange = (e) => {
+      if (e.key === "zlg-notifications-updated") {
+        fetchUnreadNotifications();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, [loggedInUser]);
 
   // Fetch Steam account
@@ -201,8 +248,20 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           ) : (
             <div className="d-flex justify-content-between align-items-center col-10 ms-2">
               <Link
+                to="/member/notifications"
+                className="nav-link ps-2 pe-2 position-relative border-start border-secondary"
+              >
+                <i className="fa-solid fa-envelope text-white fs-6 me-2"></i>
+                {unreadNotifications > 0 && (
+                  <span className="cart-badge rounded-circle text-white bg-danger">
+                    {unreadNotifications}
+                  </span>
+                )}
+              </Link>
+
+              <Link
                 to="/shop/cart"
-                className="nav-link pe-2 ps-3 border-end border-start border-secondary position-relative"
+                className="nav-link pe-2 ps-0 border-end border-secondary position-relative"
               >
                 <i
                   className="fa-solid fa-cart-shopping text-white fs-6 me-2"
@@ -223,13 +282,19 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
               <div className="m-0 text-center col-8 my-2 ps-3">
                 <h5 className="text-white text-center mb-1 navbar-first-name">
-                  {loggedInUser.firstName}
+                  <div className="text-white text-center mb-1 navbar-first-name">
+                    {discordAccount?.discordName
+                      ? capitalizeFirstLetter(
+                          formatDiscordName(discordAccount.discordName)
+                        )
+                      : loggedInUser?.firstName || "Guest"}
+                  </div>
                 </h5>
 
                 <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
                   <img src={zlgCoin} alt="" className="zlg-coin3" />
                   <div className="text-container points-container">
-                    <p className="mb-0">1455</p>
+                    <p className="mb-0">{userPoints}</p>
                   </div>
                   <Link
                     to="/shop"
@@ -319,9 +384,30 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           >
             <i className="fa-solid fa-gamepad text-white fs-5 me-1"></i>
           </Link>
-          <Link to="/shop/cart" className="nav-link pe-2 ps-3">
-            <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
+          <Link
+            to="/member/notifications"
+            className="nav-link ps-2 pe-0 position-relative"
+          >
+            <i className="fa-solid fa-envelope text-white fs-6 me-2"></i>
+            {unreadNotifications > 0 && (
+              <span className="cart-badge2 rounded-circle text-white bg-danger">
+                {unreadNotifications}
+              </span>
+            )}
           </Link>
+
+          <Link
+            to="/shop/cart"
+            className="nav-link pe-2 ps-1 position-relative"
+          >
+            <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
+            {cartCount > 0 && (
+              <span className="cart-badge rounded-circle text-white bg-danger">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+
           <button
             className="btn btn-dark navbar-toggler border-0"
             type="button"

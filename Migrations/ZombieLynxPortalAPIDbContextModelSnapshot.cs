@@ -50,7 +50,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@zombielynx.com",
-                            PasswordHash = "$2a$11$O.sgWeC8cDiOjTXohaa6D.BVpKzhwGAcAsV9/umWJoywvbbpm0Zc2",
+                            PasswordHash = "$2a$11$wUrw.m2FV2xPx21UKruxM.Xw5XTJRQ8nIj/Kn6TdXTCN9I6K0KDu6",
                             Role = "Admin"
                         });
                 });
@@ -77,7 +77,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             AdminId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 4, 16, 23, 10, 20, 202, DateTimeKind.Utc).AddTicks(9034)
+                            AssignedAt = new DateTime(2025, 4, 27, 20, 11, 3, 192, DateTimeKind.Utc).AddTicks(9818)
                         });
                 });
 
@@ -134,7 +134,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Content = "This is the first message in the ticket conversation.",
-                            CreatedAt = new DateTime(2025, 4, 16, 23, 10, 20, 203, DateTimeKind.Utc).AddTicks(1056),
+                            CreatedAt = new DateTime(2025, 4, 27, 20, 11, 3, 193, DateTimeKind.Utc).AddTicks(2139),
                             ImgUrlsJson = "[]",
                             MessageGroupId = 1,
                             SentToDiscord = false,
@@ -144,7 +144,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 2,
                             Content = "Following up on the issue. Any updates?",
-                            CreatedAt = new DateTime(2025, 4, 16, 23, 20, 20, 203, DateTimeKind.Utc).AddTicks(1210),
+                            CreatedAt = new DateTime(2025, 4, 27, 20, 21, 3, 193, DateTimeKind.Utc).AddTicks(2289),
                             ImgUrlsJson = "[]",
                             MessageGroupId = 1,
                             SentToDiscord = false,
@@ -154,7 +154,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 3,
                             Content = "Please let me know if you need more details.",
-                            CreatedAt = new DateTime(2025, 4, 16, 23, 30, 20, 203, DateTimeKind.Utc).AddTicks(1239),
+                            CreatedAt = new DateTime(2025, 4, 27, 20, 31, 3, 193, DateTimeKind.Utc).AddTicks(2303),
                             ImgUrlsJson = "[]",
                             MessageGroupId = 1,
                             SentToDiscord = false,
@@ -184,6 +184,11 @@ namespace ZombieLynxPortalAPI.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Notifications");
@@ -192,16 +197,18 @@ namespace ZombieLynxPortalAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 16, 23, 10, 20, 202, DateTimeKind.Utc).AddTicks(9526),
+                            CreatedAt = new DateTime(2025, 4, 27, 20, 11, 3, 193, DateTimeKind.Utc).AddTicks(428),
                             IsGlobal = true,
-                            Message = "Welcome to Zombie Lynx Portal!"
+                            Message = "Welcome to Zombie Lynx Portal!",
+                            Subject = "Welcome!"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 4, 15, 23, 10, 20, 202, DateTimeKind.Utc).AddTicks(9777),
+                            CreatedAt = new DateTime(2025, 4, 26, 20, 11, 3, 193, DateTimeKind.Utc).AddTicks(681),
                             IsGlobal = false,
-                            Message = "New server update available."
+                            Message = "New server update available.",
+                            Subject = "Server Update"
                         });
                 });
 
@@ -298,13 +305,13 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             Id = 1,
                             Category = "Bug",
-                            CreatedAt = new DateTime(2025, 4, 16, 23, 10, 20, 202, DateTimeKind.Utc).AddTicks(7793),
+                            CreatedAt = new DateTime(2025, 4, 27, 20, 11, 3, 192, DateTimeKind.Utc).AddTicks(8637),
                             Description = "Initial test ticket for the system.",
                             Game = "Ark:SA",
                             Server = "NA-East",
                             Status = "Open",
                             Subject = "Test Ticket",
-                            UpdatedAt = new DateTime(2025, 4, 16, 23, 10, 20, 202, DateTimeKind.Utc).AddTicks(7878),
+                            UpdatedAt = new DateTime(2025, 4, 27, 20, 11, 3, 192, DateTimeKind.Utc).AddTicks(8720),
                             UserProfileId = 1
                         });
                 });
@@ -406,7 +413,7 @@ namespace ZombieLynxPortalAPI.Migrations
                         {
                             UserProfileId = 1,
                             TicketId = 1,
-                            AssignedAt = new DateTime(2025, 4, 16, 23, 10, 20, 202, DateTimeKind.Utc).AddTicks(8529)
+                            AssignedAt = new DateTime(2025, 4, 27, 20, 11, 3, 192, DateTimeKind.Utc).AddTicks(9316)
                         });
                 });
 
@@ -417,6 +424,16 @@ namespace ZombieLynxPortalAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ASALinked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("ASELinked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("DiscordId")
                         .HasMaxLength(100)
@@ -446,6 +463,11 @@ namespace ZombieLynxPortalAPI.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
+                    b.Property<bool>("MinecraftLinked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("MinecraftUsername")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
@@ -453,6 +475,18 @@ namespace ZombieLynxPortalAPI.Migrations
                     b.Property<string>("MinecraftUuid")
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)");
+
+                    b.Property<string>("PermissionGroups")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("RustLinked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("SteamId")
                         .HasMaxLength(100)
@@ -465,6 +499,10 @@ namespace ZombieLynxPortalAPI.Migrations
                     b.Property<string>("SteamName")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<string>("TimedPermissionGroups")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<int>("UserProfileId")
                         .HasColumnType("integer");
@@ -479,14 +517,20 @@ namespace ZombieLynxPortalAPI.Migrations
                         new
                         {
                             Id = 1,
+                            ASALinked = false,
+                            ASELinked = false,
                             DiscordId = "1167715864339030016",
                             DiscordImgUrl = "https://cdn.discordapp.com/avatars/1167715864339030016/a9e52c811d7724ba08fbba1c4e30154d.png",
                             DiscordName = "zombielynxgaming",
                             EosId = "eos-admin-id",
                             EpicName = "AdminEpic",
                             MinecraftAvatarUrl = "https://crafatar.com/avatars/550e8400-e29b-41d4-a716-446655440000",
+                            MinecraftLinked = false,
                             MinecraftUsername = "AdminMinecraft",
                             MinecraftUuid = "550e8400-e29b-41d4-a716-446655440000",
+                            PermissionGroups = "Default,Admins",
+                            Points = 0,
+                            RustLinked = false,
                             SteamId = "76561198021051513",
                             SteamName = "AdminSteam",
                             UserProfileId = 1

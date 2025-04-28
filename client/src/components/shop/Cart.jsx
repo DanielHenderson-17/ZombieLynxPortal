@@ -37,6 +37,19 @@ export default function Cart() {
 
         if (confirmed) {
           toast.success("Thanks for your purchase!", { autoClose: 3000 });
+
+          // 🔁 Trigger UI update in NavBar or other components
+          setTimeout(() => {
+            const now = Date.now().toString();
+            localStorage.setItem("zlg-points-updated", now);
+            window.dispatchEvent(
+              new StorageEvent("storage", {
+                key: "zlg-points-updated",
+                newValue: now,
+              })
+            );
+          }, 5000);
+
           clearCart();
           setBasketIdent(null);
           setCheckoutStarted(false);
@@ -117,7 +130,6 @@ export default function Cart() {
       for (const item of items) {
         try {
           await addPackageToBasket(ident, item, token);
-          console.log("📦 Package added:", item);
         } catch (err) {
           if (err.data?.error === "limit_reached") {
             setCheckoutErrorMessage(
@@ -153,11 +165,6 @@ export default function Cart() {
       console.error("Checkout failed:", err);
       toast.error("There was a problem creating your checkout.");
     }
-
-    console.log(
-      "🛒 Sent items to backend:",
-      JSON.stringify({ items }, null, 2)
-    );
   };
 
   return (
@@ -182,26 +189,41 @@ export default function Cart() {
           <>
             {/* Subscription */}
             {subscription && (
-              <div className="row align-items-center mb-2 p-3 rounded cart-item">
+              <div className="row align-items-center mb-2 p-md-3 p-1 rounded cart-item">
                 <div className="col-md-7 d-flex align-items-center">
                   <img
                     src={subscription.image}
                     alt={subscription.name}
                     className="cart-item-img me-3"
                   />
-                  <span>{subscription.name}</span>
+                  <span className="text-start">{subscription.name}</span>
                 </div>
                 <div className="col-md-3"></div>
-                <div className="col-md-1 text-center">
+                <div className="col-md-1 text-center d-none d-md-block">
                   ${subscription.total_price.toFixed(2)}
                 </div>
-                <div className="col-md-1 text-center">
+                <div className="col-md-1 text-center d-none d-md-block">
                   <button
                     className="btn btn-sm btn-outline-danger"
                     onClick={() => removeItem(subscription.id, "subscription")}
                   >
                     <i className="bi bi-trash-fill fs-5"></i>
                   </button>
+                </div>
+                <div className="d-md-none d-flex justify-content-end align-items-center mt-3">
+                  <div className="col-md-1 text-center me-3">
+                    ${subscription.total_price.toFixed(2)}
+                  </div>
+                  <div className="col-md-1 text-center">
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() =>
+                        removeItem(subscription.id, "subscription")
+                      }
+                    >
+                      <i className="bi bi-trash-fill fs-6"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -212,7 +234,7 @@ export default function Cart() {
                 {singleItems.map((item) => (
                   <div
                     key={item.package.id}
-                    className={`row align-items-center mb-2 p-3 rounded cart-item ${
+                    className={`row align-items-center mb-2 p-md-3 p-1 rounded cart-item ${
                       highlightItemId === item.package.id
                         ? "border border-danger border-1"
                         : ""
@@ -224,9 +246,9 @@ export default function Cart() {
                         alt={item.package.name}
                         className="cart-item-img me-3"
                       />
-                      <span>{item.package.name}</span>
+                      <span className="text-start">{item.package.name}</span>
                     </div>
-                    <div className="col-md-3 d-flex justify-content-end align-items-center">
+                    <div className="col-md-3 d-flex justify-content-end align-items-center d-none d-md-block">
                       <button
                         className="btn btn-sm btn-outline-secondary"
                         onClick={() => {
@@ -264,16 +286,74 @@ export default function Cart() {
                         +
                       </button>
                     </div>
-                    <div className="col-md-1 text-center">
+                    <div className="col-md-1 text-center d-none d-md-block">
                       ${(item.package.total_price * item.quantity).toFixed(2)}
                     </div>
-                    <div className="col-md-1 text-center">
+                    <div className="col-md-1 text-center d-none d-md-block">
                       <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => removeItem(item.package.id)}
                       >
                         <i className="bi bi-trash-fill fs-5"></i>
                       </button>
+                    </div>
+                    <div className="d-flex justify-content-end align-items-center  mt-3">
+                      <div className="col-md-3 d-flex justify-content-end align-items-center d-md-none me-3">
+                        <button
+                          className="btn btn-sm btn-outline-secondary py-0"
+                          onClick={() => {
+                            const newQty = item.quantity - 1;
+                            if (newQty <= 0) removeItem(item.package.id);
+                            else updateQuantity(item.package.id, newQty);
+                          }}
+                        >
+                          −
+                        </button>
+                        <input
+                          type="number"
+                          min="1"
+                          className="form-control mx-2 text-center cart-qty-input py-0"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const newQty = Math.max(
+                              1,
+                              parseInt(e.target.value)
+                            );
+                            if (isFree(item.package) && newQty > 1) {
+                              toast.error(
+                                "You can only add one of a free item."
+                              );
+                              return;
+                            }
+                            updateQuantity(item.package.id, newQty);
+                          }}
+                        />
+                        <button
+                          className="btn btn-sm btn-outline-secondary py-0"
+                          onClick={() => {
+                            if (isFree(item.package) && item.quantity >= 1) {
+                              toast.error(
+                                "You can only add one of a free item."
+                              );
+                              return;
+                            }
+                            updateQuantity(item.package.id, item.quantity + 1);
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div className="col-md-1 text-center d-md-none me-3">
+                        ${(item.package.total_price * item.quantity).toFixed(2)}
+                      </div>
+                      <div className="col-md-1 text-center d-md-none">
+                        <button
+                          className="btn btn-sm btn-outline-danger"
+                          onClick={() => removeItem(item.package.id)}
+                        >
+                          <i className="bi bi-trash-fill fs-6"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -307,7 +387,8 @@ export default function Cart() {
           )}
           <i className="fs-6 text-secondary">
             Zombie Lynx Gaming does not collect any of your personal information
-            during checkout or purchases. All purchases are handled by Tebex.
+            during checkout or purchases. All purchases are handled through
+            Tebex.
           </i>
         </div>
       </div>

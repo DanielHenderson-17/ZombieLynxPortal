@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.Models;
+using ZombieLynxPortalAPI.Data.Ark;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -16,11 +17,13 @@ namespace ZombieLynxPortalAPI.Controllers
     {
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
         private readonly string _mysqlConnectionString;
+        private readonly AsaLinkPointsDbContext _asaLinkPointsDbContext;
 
-        public EpicController(ZombieLynxPortalAPIDbContext dbContext, IConfiguration configuration)
+        public EpicController(ZombieLynxPortalAPIDbContext dbContext, IConfiguration configuration, AsaLinkPointsDbContext asaLinkPointsDbContext)
         {
             _dbContext = dbContext;
             _mysqlConnectionString = configuration.GetConnectionString("EpicMySql");
+            _asaLinkPointsDbContext = asaLinkPointsDbContext;
         }
 
         [HttpGet("ping")]
@@ -72,7 +75,28 @@ namespace ZombieLynxPortalAPI.Controllers
             zlgMember.EpicImgUrl = null;
 
             await _dbContext.SaveChangesAsync();
-            return Ok("Epic account linked successfully.");
+
+            if (!zlgMember.ASALinked)
+            {
+                using (var scope = HttpContext.RequestServices.CreateScope())
+                {
+                    var asaDbContext = scope.ServiceProvider.GetRequiredService<AsaLinkPointsDbContext>();
+
+                    var asaPlayer = await asaDbContext.AsaShopPlayers
+                        .FirstOrDefaultAsync(p => p.EosId == zlgMember.EosId);
+
+                    if (asaPlayer != null)
+                    {
+                        zlgMember.Points += asaPlayer.Points;
+                        zlgMember.ASALinked = true;
+                    }
+                }
+
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return Ok("Minecraft account linked successfully.");
+
         }
 
         [HttpPut("unlink-epic")]

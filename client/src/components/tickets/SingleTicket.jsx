@@ -4,8 +4,6 @@ import {
   getTicketById,
   closeTicketAPI,
   restoreTicketAPI,
-  assignUserToTicket,
-  getAllUsers,
 } from "../../managers/ticketManager";
 import {
   getMessagesByTicketId,
@@ -29,8 +27,6 @@ export default function SingleTicket({ loggedInUser }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
-  const [allUsers, setAllUsers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(loggedInUser.role === "Admin");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [discordAccount, setDiscordAccount] = useState(null);
@@ -45,11 +41,6 @@ export default function SingleTicket({ loggedInUser }) {
 
         const messageData = await getMessagesByTicketId(ticketId);
         setMessages(messageData);
-
-        const users = await getAllUsers();
-        setAllUsers(users);
-
-        setIsAdmin(loggedInUser.role === "Admin");
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to fetch ticket details or messages.");
@@ -140,18 +131,6 @@ export default function SingleTicket({ loggedInUser }) {
     }
   };
 
-  // Assign user to ticket
-  const handleAssignUser = async (userId) => {
-    try {
-      await assignUserToTicket(ticketId, userId);
-      const updatedTicket = await getTicketById(ticketId);
-      setTicket(updatedTicket);
-    } catch (error) {
-      console.error("Error assigning user to ticket:", error);
-      setError("Failed to assign user.");
-    }
-  };
-
   const handleRefreshMessages = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
@@ -218,29 +197,6 @@ export default function SingleTicket({ loggedInUser }) {
                     {user.firstName}
                   </span>
                 ))}
-
-                {isAdmin && (
-                  <div className="mt-2">
-                    <select
-                      onChange={(e) => handleAssignUser(e.target.value)}
-                      className="form-select form-select-sm single-ticket-user-select"
-                    >
-                      <option value="">Add User</option>
-                      {allUsers
-                        .filter(
-                          (user) =>
-                            !ticket.assignedUsers.some(
-                              (assignedUser) => assignedUser.id === user.id
-                            )
-                        )
-                        .map((user) => (
-                          <option key={user.id} value={user.id}>
-                            {user.firstName} {user.lastName}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -372,22 +328,34 @@ export default function SingleTicket({ loggedInUser }) {
                 </div>
 
                 {/* Input and Send Button */}
-                <div className="d-flex">
-                  <input
-                    type="text"
-                    className="form-control me-2 message-input"
-                    placeholder="Type a message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <button
-                    className="btn btn-primary message-button"
-                    onClick={handleSendMessage}
-                  >
-                    Send
-                  </button>
-                </div>
+                {ticket.status === "Open" && (
+                  <div className="d-flex">
+                    <input
+                      type="text"
+                      className="form-control me-2 message-input"
+                      placeholder={
+                        ticket.status === "Open"
+                          ? "Type a message..."
+                          : "Ticket is closed"
+                      }
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (ticket.status === "Open") {
+                          handleKeyPress(e);
+                        }
+                      }}
+                      disabled={ticket.status !== "Open"}
+                    />
+                    <button
+                      className="btn btn-primary message-button"
+                      onClick={handleSendMessage}
+                      disabled={ticket.status !== "Open"}
+                    >
+                      Send
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -1,10 +1,17 @@
 using Microsoft.EntityFrameworkCore;
+using MySql.EntityFrameworkCore.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using ZombieLynxPortalAPI.Data;
 using AspNet.Security.OpenId.Steam;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using ZombieLynxPortalAPI.Services.Tebex;
+using ZombieLynxPortalAPI.Models;
+using ZombieLynxPortalAPI.Services;
+using ZombieLynxPortalAPI.Services.Ark;
+using ZombieLynxPortalAPI.Services.Minecraft;
+using ZombieLynxPortalAPI.Data.Ark;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +28,20 @@ builder.Logging.AddDebug();
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.Configure<PointsDatabaseOptions>(
+    builder.Configuration.GetSection("PointsDatabaseOptions"));
+builder.Services.AddSingleton<PointsDbConnectionService>();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<TebexOrderProcessor>();
+builder.Services.AddScoped<ArkPointsSyncService>();
+builder.Services.AddHostedService<ArkPointsSyncWorker>();
+builder.Services.AddScoped<ArkSubscriptionSyncService>();
+builder.Services.AddScoped<AsaPointsSyncService>();
+builder.Services.AddHostedService<AsaPointsSyncWorker>();
+builder.Services.AddScoped<AsaSubscriptionSyncService>();
+builder.Services.AddScoped<MinecraftPointsSyncService>();
+builder.Services.AddHostedService<MinecraftPointsSyncWorker>();
+builder.Services.AddScoped<MinecraftSubscriptionSyncService>();
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
@@ -29,6 +49,105 @@ builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>
            .ConfigureWarnings(warnings =>
                warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning))
 );
+
+// Configure MySQL for ArkShop
+builder.Services.AddDbContext<ArkShopDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("ArkShop");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
+});
+
+// Configure MySQL for ArkLink
+builder.Services.AddDbContext<ArkLinkPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("ArkShop");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
+});
+
+
+// Configure MySQL for AsaShop
+builder.Services.AddDbContext<AsaShopDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("AsaShop");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+{
+    mySqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(10),
+        errorNumbersToAdd: null
+    );
+});
+});
+
+// Configure MySQL for AsaLink
+builder.Services.AddDbContext<AsaLinkPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("AsaShop");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
+});
+
+// Configure MySQL for MinecraftPoints
+builder.Services.AddDbContext<MinecraftPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("MinecraftPoints");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+{
+    mySqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(10),
+        errorNumbersToAdd: null
+    );
+});
+
+});
+
+// Configure MySQL for MinecraftLink
+builder.Services.AddDbContext<MinecraftLinkPointsDbContext>((serviceProvider, options) =>
+{
+    var connService = serviceProvider.GetRequiredService<PointsDbConnectionService>();
+    var connectionString = connService.GetConnectionString("MinecraftPoints");
+
+    options.UseMySQL(connectionString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
+});
+
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -144,7 +263,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZombieLynxPortal API V1");
-        c.RoutePrefix = string.Empty;
+        // c.RoutePrefix = string.Empty;
     });
 }
 
@@ -183,7 +302,7 @@ app.Use(async (context, next) =>
 });
 
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -191,7 +310,22 @@ app.MapControllers();
 
 // ✅ Bind to all network interfaces
 app.Urls.Add("http://0.0.0.0:5000");
-app.Urls.Add("https://0.0.0.0:5001");
+app.Urls.Add("https://localhost:5001");
+
+
+// ✅ Start <GameName>PointsSyncService after app startup
+using (var scope = app.Services.CreateScope())
+{
+    var arkSync = scope.ServiceProvider.GetRequiredService<ArkPointsSyncService>();
+    await arkSync.SyncPendingPointsAsync();
+
+    var asaSync = scope.ServiceProvider.GetRequiredService<AsaPointsSyncService>();
+    await asaSync.SyncPendingPointsAsync();
+
+    var minecraftSync = scope.ServiceProvider.GetRequiredService<MinecraftPointsSyncService>();
+    await minecraftSync.SyncPendingPointsAsync();
+}
+
 
 app.Run();
 

@@ -66,7 +66,11 @@ namespace ZombieLynxPortalAPI.Data
                 EpicImgUrl = null,
                 MinecraftUuid = "550e8400-e29b-41d4-a716-446655440000",
                 MinecraftUsername = "AdminMinecraft",
-                MinecraftAvatarUrl = "https://crafatar.com/avatars/550e8400-e29b-41d4-a716-446655440000"
+                MinecraftAvatarUrl = "https://crafatar.com/avatars/550e8400-e29b-41d4-a716-446655440000",
+                PermissionGroups = "Default,Admins",
+                TimedPermissionGroups = null,
+                Points = 0,
+
             });
 
             // ✅ Seed Ticket
@@ -105,6 +109,7 @@ namespace ZombieLynxPortalAPI.Data
                 new Notification
                 {
                     Id = 1,
+                    Subject = "Welcome!",
                     Message = "Welcome to Zombie Lynx Portal!",
                     CreatedAt = DateTime.UtcNow,
                     IsGlobal = true,
@@ -113,6 +118,7 @@ namespace ZombieLynxPortalAPI.Data
                 new Notification
                 {
                     Id = 2,
+                    Subject = "Server Update",
                     Message = "New server update available.",
                     CreatedAt = DateTime.UtcNow.AddDays(-1),
                     IsGlobal = false
@@ -182,6 +188,23 @@ namespace ZombieLynxPortalAPI.Data
                 .HasForeignKey(t => t.UserProfileId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // ✅ Relationships for ZLGMembers
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.MinecraftLinked)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.ASELinked)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.ASALinked)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ZLGMember>()
+                .Property(z => z.RustLinked)
+                .HasDefaultValue(false);
 
             // ✅ Relationships for UserTickets
             modelBuilder.Entity<UserTicket>()

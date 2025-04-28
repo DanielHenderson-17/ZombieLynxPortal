@@ -37,6 +37,14 @@ export default function Notification({ loggedInUser }) {
     try {
       await markNotificationAsRead(id);
       fetchNotifications();
+      // 👇 Notify NavBar to refresh
+      localStorage.setItem("zlg-notifications-updated", Date.now().toString());
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: "zlg-notifications-updated",
+          newValue: Date.now().toString(),
+        })
+      );
     } catch (error) {
       console.error("Error marking notification as read:", error);
     }
@@ -83,17 +91,19 @@ export default function Notification({ loggedInUser }) {
                 notification.isRead ? "isRead" : ""
               }`}
             >
-              <div className="text-start ms-md-3 ms-1 p-1">
-                <p className="mb-0">
-                  <strong>{notification.message}</strong>
+              <div className="text-start ms-md-3 ms-1 p-1 col-md-10 col-8">
+                {notification.subject && (
+                  <strong className="mb-0">{notification.subject}</strong>
+                )}
+                <p className="my-1">
+                  <small>{notification.message}</small>
                 </p>
                 <small>
-                  <p className="my-0">
+                  <i className="mt-2 mb-0">
                     {new Date(notification.createdAt).toLocaleString()}
-                  </p>
+                  </i>
                 </small>
               </div>
-
               <div className="my-auto">
                 {!notification.isRead && (
                   <button

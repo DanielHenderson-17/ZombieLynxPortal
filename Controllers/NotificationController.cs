@@ -31,6 +31,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var notification = new Notification
             {
+                Subject = dto.Subject,
                 Message = dto.Message,
                 IsGlobal = dto.IsGlobal,
                 CreatedAt = DateTime.UtcNow,
@@ -72,7 +73,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
 
             await _dbContext.SaveChangesAsync();
-            return Ok(new { notification.Id, notification.Message, notification.IsGlobal });
+            return Ok(new { notification.Id, notification.Subject, notification.Message, notification.IsGlobal });
         }
 
         // ✅ User: Get Notifications for the Logged-in User
@@ -94,6 +95,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 .Select(un => new
                 {
                     un.Notification.Id,
+                    un.Notification.Subject,
                     un.Notification.Message,
                     un.Notification.CreatedAt,
                     un.Notification.IsGlobal,
@@ -189,6 +191,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var notification = new Notification
             {
+                Subject = "Tebex Payment Notification",
                 Message = dto.Message,
                 IsGlobal = false,
                 CreatedAt = DateTime.UtcNow,
@@ -209,7 +212,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             Console.WriteLine($"📨 Notification sent to UserProfileId {userProfile.Id} with message:\n{dto.Message}");
 
-            return Ok(new { notification.Id, notification.Message });
+            return Ok(new { notification.Id, notification.Message, notification.Subject });
         }
 
     }

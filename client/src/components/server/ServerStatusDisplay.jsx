@@ -46,7 +46,10 @@ export default function ServerStatusDisplay() {
   };
 
   return (
-    <div className="col-11 mx-auto server-status-display">
+    <div
+      className="col-11 mx-auto server-status-display"
+      id="ServerStatusDisplay"
+    >
       {/* Server Status Header */}
       <h3 className="text-start text-danger server-status-title mb-3">
         SERVER <span className="text-white ms-2">STATUS</span>

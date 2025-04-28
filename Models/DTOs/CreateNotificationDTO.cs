@@ -1,5 +1,7 @@
 public class CreateNotificationDTO
 {
+
+    public string Subject { get; set; }
     public string Message { get; set; }
 
     public bool IsGlobal { get; set; }

@@ -1,4 +1,11 @@
 import { useState } from "react";
+import DiscordRules from "./DiscordRules";
+import ASERules from "./ASERules";
+import ASARules from "./ASARules";
+import MinecraftRules from "./MinecraftRules";
+import RustRules from "./RustRules";
+import EmpyrionRules from "./EmpyrionRules";
+import EcoRules from "./EcoRules";
 import "../../assets/styles/Rules.css";
 
 export default function Rules() {
@@ -12,6 +19,16 @@ export default function Rules() {
     "Eco",
   ];
   const [activeTab, setActiveTab] = useState("Discord");
+
+  const rulesComponents = {
+    Discord: <DiscordRules />,
+    ASE: <ASERules />,
+    ASA: <ASARules />,
+    Minecraft: <MinecraftRules />,
+    Rust: <RustRules />,
+    Empyrion: <EmpyrionRules />,
+    Eco: <EcoRules />,
+  };
 
   return (
     <div className="rules-container mt-5 pt-5">
@@ -50,7 +67,7 @@ export default function Rules() {
       {/* Tab Content */}
       <div className="rules-content mt-4">
         <h3 className="text-white">{activeTab} Rules</h3>
-        <h4>Below Are the rules of the server and the games we host!</h4>
+        {rulesComponents[activeTab]}
       </div>
     </div>
   );
