@@ -37,8 +37,7 @@ export default function Verify() {
       <img src={zlglogo} alt="Zombie Lynx Logo" className="col-10 mt-3 mb-3" />
       <h4 className="register-title mb-4">Confirm Your Email</h4>
       <p className="mb-3">
-        Thank you for registering! Please check your email and click the
-        verification link to activate your account.
+        Thank you for registering! Please check your email!
       </p>
       <p className="text-secondary small">
         Didn&apos;t get the email? Check your Spam folder or enter your email
