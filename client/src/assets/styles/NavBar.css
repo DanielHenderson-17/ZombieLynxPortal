@@ -15,6 +15,10 @@
   width: 30px;
 }
 
+.small-username {
+  font-size: 1rem;
+}
+
 .dropdown-menu {
   background-color: rgba(0, 0, 0, 0.856);
   right: 0;
