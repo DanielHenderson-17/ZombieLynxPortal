@@ -41,7 +41,8 @@ export default function Verify() {
         verification link to activate your account.
       </p>
       <p className="text-secondary small">
-        Didn&apos;t get the email? Enter your email below to resend it.
+        Didn&apos;t get the email? Check your Spam folder or enter your email
+        again to resend it.
       </p>
 
       {/* 🔥 Resend Verification Form */}
