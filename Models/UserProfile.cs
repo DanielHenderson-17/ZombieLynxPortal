@@ -17,5 +17,7 @@ namespace ZombieLynxPortalAPI.Models
         [ForeignKey("User")]
         public Guid UserId { get; set; }
         public User User { get; set; }
+        public bool AllowMarketingEmails { get; set; } = true;
+
     }
 }

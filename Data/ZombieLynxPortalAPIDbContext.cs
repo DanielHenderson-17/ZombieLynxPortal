@@ -175,6 +175,11 @@ namespace ZombieLynxPortalAPI.Data
                 }
             );
 
+            // ✅ Default Value for AllowMarketingEmails
+            modelBuilder.Entity<UserProfile>()
+                .Property(up => up.AllowMarketingEmails)
+                .HasDefaultValue(true);
+
             // ✅ Composite Keys for Join Tables
             modelBuilder.Entity<UserTicket>()
                 .HasKey(ut => new { ut.UserProfileId, ut.TicketId });
