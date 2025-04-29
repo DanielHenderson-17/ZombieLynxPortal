@@ -588,7 +588,7 @@ export default function Member({ loggedInUser }) {
               <NavLink
                 to="/member/stats"
                 className={({ isActive }) =>
-                  `mx-4 text-white text-decoration-none d-flex align-items-center ${
+                  `me-md-4 me-3 text-white text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
@@ -596,21 +596,21 @@ export default function Member({ loggedInUser }) {
                 <i className="bi bi-bar-chart-fill me-1"></i>
                 <p className="ps-2 m-0">Stats</p>
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to="/shop"
                 className={({ isActive }) =>
-                  `me-4 text-white text-decoration-none d-flex align-items-center ${
+                  `me-md-4 me-3 text-white text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
               >
                 <i className="bi bi-bag-plus-fill me-1"></i>
                 <p className="ps-2 m-0">Shop</p>
-              </NavLink>
+              </NavLink> */}
               <NavLink
                 to="/member/tickets"
                 className={({ isActive }) =>
-                  `text-white me-4 text-decoration-none d-flex align-items-center ${
+                  `text-white me-md-4 me-3 text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
@@ -621,13 +621,24 @@ export default function Member({ loggedInUser }) {
               <NavLink
                 to="/member/notifications"
                 className={({ isActive }) =>
-                  `text-white me-4 text-decoration-none d-flex align-items-center ${
+                  `text-white me-md-4 me-3 text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
               >
                 <i className="bi bi-envelope-fill me-1"></i>
                 <p className="ps-2 m-0">Notifications</p>
+              </NavLink>
+              <NavLink
+                to="/member/accountsettings"
+                className={({ isActive }) =>
+                  `text-white text-decoration-none d-flex align-items-center ${
+                    isActive ? "border-bottom border-danger border-5" : ""
+                  }`
+                }
+              >
+                <i className="bi bi-gear-fill me-1"></i>
+                <p className="ps-2 m-0">Settings</p>
               </NavLink>
             </div>
           </nav>

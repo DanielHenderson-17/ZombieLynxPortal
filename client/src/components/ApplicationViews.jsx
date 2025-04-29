@@ -12,6 +12,7 @@ import Shop from "../components/shop/Shop";
 import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
+import AccountSettings from "../components/member/AccountSettings";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "./NavBar";
 import PrivacyPolicy from "../components/legal/PrivacyPolicy";
@@ -74,6 +75,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             path="notifications/create"
             element={<CreateNotification loggedInUser={loggedInUser} />}
           />
+          <Route path="accountsettings" element={<AccountSettings />} />
           <Route
             index
             element={<p>Select a module from the navigation above.</p>}
