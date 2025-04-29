@@ -141,5 +141,22 @@ namespace ZombieLynxPortalAPI.Controllers
             });
         }
 
+        [HttpPut("marketing-consent")]
+        [Authorize]
+        public async Task<IActionResult> UpdateMarketingConsent([FromBody] MarketingConsentDTO dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+
+            var profile = await _context.UserProfiles
+                .FirstOrDefaultAsync(up => up.UserId.ToString() == userId);
+
+            if (profile == null) return NotFound("User profile not found.");
+
+            profile.AllowMarketingEmails = dto.AllowMarketingEmails;
+            await _context.SaveChangesAsync();
+
+            return Ok("Marketing email preference updated.");
+        }
     }
 }

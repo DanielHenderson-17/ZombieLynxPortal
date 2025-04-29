@@ -74,3 +74,14 @@ export const getUserMembership = () => {
     res.ok ? res.json() : Promise.reject("Failed to fetch membership info")
   );
 };
+
+// ✅ Update marketing email preference
+export const updateMarketingConsent = (allowMarketingEmails) => {
+  return fetch(`${_apiUrl}/marketing-consent`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ allowMarketingEmails }),
+  }).then((res) =>
+    res.ok ? res.text() : Promise.reject("Failed to update marketing consent")
+  );
+};
