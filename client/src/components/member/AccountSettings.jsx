@@ -3,15 +3,15 @@ import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
 import PrivacySettings from "./PrivacySettings";
 import LinkedAccountsSettings from "./LinkedAccountsSettings";
-import "../../assets/styles/tickets.css"; // using ticket styles for now
+import "../../assets/styles/tickets.css"; // reuse existing ticket styling
 
 export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState("General");
 
   const tabs = [
-    { name: "General", icon: "bi-gear", badge: null },
-    { name: "Privacy", icon: "bi-shield-lock", badge: null },
-    { name: "Accounts", icon: "bi-person-badge", badge: null },
+    { name: "General", icon: "bi-gear" },
+    { name: "Privacy", icon: "bi-shield-lock" },
+    { name: "Accounts", icon: "bi-person-badge" },
   ];
 
   const renderTabContent = () => {
@@ -29,7 +29,7 @@ export default function AccountSettings() {
 
   return (
     <div className="d-flex flex-column flex-lg-row ticket-container text-white">
-      {/* Sidebar */}
+      {/* Sidebar for Desktop */}
       <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0">
         <div>
           {tabs.map((tab) => (
@@ -56,6 +56,26 @@ export default function AccountSettings() {
       {/* Main Content */}
       <div className="flex-grow-1 mb-0 ticket-main px-4 pt-4">
         {renderTabContent()}
+      </div>
+
+      {/* Bottom Nav for Mobile */}
+      <div className="d-lg-none fixed-bottom bg-dark text-white bottom-nav">
+        <div className="d-flex justify-content-around pt-2 pb-1 my-1">
+          {tabs.map((tab) => (
+            <div
+              key={tab.name}
+              className={`text-decoration-none text-white ${
+                activeTab === tab.name ? "active" : ""
+              }`}
+              onClick={() => setActiveTab(tab.name)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className="d-flex flex-column align-items-center">
+                <i className={`bi ${tab.icon} fs-4`}></i>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
