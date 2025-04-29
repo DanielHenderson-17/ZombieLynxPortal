@@ -37,7 +37,8 @@ namespace ZombieLynxPortalAPI.Controllers
                     FirstName = up.FirstName,
                     LastName = up.LastName,
                     Email = up.User.Email,
-                    Role = up.User.Role
+                    Role = up.User.Role,
+                    AllowMarketingEmails = up.AllowMarketingEmails
                 })
                 .FirstOrDefaultAsync();
 
