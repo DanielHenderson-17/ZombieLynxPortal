@@ -64,34 +64,18 @@ export const fetchSteamApiKey = () => {
 
 // Link Steam account
 export const linkSteamAccount = (onSuccess) => {
-  fetchSteamApiKey().then((apiKey) => {
-    if (!apiKey) {
-      console.error("❌ Cannot proceed without Steam API key.");
-      return;
-    }
+  const handleMessage = (event) => {
+    if (event.origin !== window.location.origin) return;
 
-    // Open Steam login popup window and redirect to Steam OpenID login page for authentication
-    const steamLoginUrl =
-      `${STEAM_OPENID_URL}?openid.ns=http://specs.openid.net/auth/2.0` +
-      `&openid.mode=checkid_setup` +
-      `&openid.return_to=${encodeURIComponent(REDIRECT_URL)}` +
-      `&openid.realm=${window.location.origin}` +
-      `&openid.identity=http://specs.openid.net/auth/2.0/identifier_select` +
-      `&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select`;
+    const { type, steamId } = event.data;
+    if (type === "STEAM_AUTH_SUCCESS" && steamId) {
+      fetchSteamApiKey().then((apiKey) => {
+        if (!apiKey) {
+          console.error("❌ Cannot proceed without Steam API key.");
+          window.removeEventListener("message", handleMessage);
+          return;
+        }
 
-    const steamWindow = window.open(
-      steamLoginUrl,
-      "Steam Login",
-      "width=600,height=800"
-    );
-
-    // Handle Steam auth response from popup window (steam-callback.html) and link account to user profile on server side if successful leveraging CORS proxy
-    const handleMessage = (event) => {
-      if (event.origin !== window.location.origin) return;
-
-      // Extract Steam ID from auth response and fetch Steam profile data using Steam API key and CORS proxy server (corsproxy.io) to link account to user profile
-      const { type, steamId } = event.data;
-      if (type === "STEAM_AUTH_SUCCESS" && steamId) {
         const proxyUrl = "https://corsproxy.io/?";
         const steamApiUrl = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId}`;
 
@@ -125,28 +109,54 @@ export const linkSteamAccount = (onSuccess) => {
                 .then((res) => {
                   if (res.ok) {
                     if (onSuccess) onSuccess();
-
-                    if (steamWindow && !steamWindow.closed) {
-                      steamWindow.close();
+                  } else if (res.status === 409) {
+                    if (window.opener && !window.opener.closed) {
+                      window.opener.postMessage(
+                        { type: "STEAM_DUPLICATE_ERROR" },
+                        window.origin
+                      );
                     }
-                    window.removeEventListener("message", handleMessage);
                   } else {
                     console.error("❌ Failed to link Steam account.");
                   }
                 })
                 .catch((err) =>
                   console.error("❌ Error linking Steam account:", err)
-                );
+                )
+                .finally(() => {
+                  window.removeEventListener("message", handleMessage);
+                  if (steamWindow && !steamWindow.closed) {
+                    steamWindow.close();
+                  }
+                });
             })
-            .catch((err) =>
-              console.error("❌ Error fetching Steam profile:", err)
-            );
+            .catch((err) => {
+              console.error("❌ Error fetching Steam profile:", err);
+              window.removeEventListener("message", handleMessage);
+              if (steamWindow && !steamWindow.closed) {
+                steamWindow.close();
+              }
+            });
         });
-      }
-    };
+      });
+    }
+  };
 
-    window.addEventListener("message", handleMessage);
-  });
+  window.addEventListener("message", handleMessage); // ✅ must come before popup opens
+
+  const steamLoginUrl =
+    `${STEAM_OPENID_URL}?openid.ns=http://specs.openid.net/auth/2.0` +
+    `&openid.mode=checkid_setup` +
+    `&openid.return_to=${encodeURIComponent(REDIRECT_URL)}` +
+    `&openid.realm=${window.location.origin}` +
+    `&openid.identity=http://specs.openid.net/auth/2.0/identifier_select` +
+    `&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select`;
+
+  var steamWindow = window.open(
+    steamLoginUrl,
+    "Steam Login",
+    "width=600,height=800"
+  );
 };
 
 // Unlink Steam account

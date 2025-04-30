@@ -71,6 +71,16 @@ namespace ZombieLynxPortalAPI.Controllers
             if (minecraftUuid == null)
                 return NotFound("No Minecraft account linked to this Discord ID.");
 
+            // Prevent duplicate Minecraft UUID linking
+            var existingLink = await _dbContext.ZLGMembers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.MinecraftUuid == minecraftUuid);
+
+            if (existingLink != null && existingLink.UserProfileId != zlgMember.UserProfileId)
+            {
+                return Conflict("This Minecraft account is already linked to another user.");
+            }
+
             var (mcUsername, mcAvatarUrl) = await FetchMinecraftProfile(minecraftUuid);
             if (mcUsername == null)
                 return BadRequest("Failed to retrieve Minecraft profile.");
