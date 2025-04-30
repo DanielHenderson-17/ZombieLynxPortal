@@ -1,0 +1,189 @@
+import { useState, useEffect } from "react";
+import { updateAccount, tryGetLoggedInUser } from "../../managers/authManager";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export default function GeneralSettings() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
+  const [originalData, setOriginalData] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    tryGetLoggedInUser()
+      .then((user) => {
+        setFormData((prev) => ({
+          ...prev,
+          firstName: user.firstName || "",
+          lastName: user.lastName || "",
+        }));
+        setOriginalData({
+          firstName: user.firstName || "",
+          lastName: user.lastName || "",
+        });
+      })
+      .catch(() => setStatus("Failed to load user info"));
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const hasChanges = () => {
+    const {
+      firstName,
+      lastName,
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+    } = formData;
+    const nameChanged =
+      firstName !== originalData.firstName ||
+      lastName !== originalData.lastName;
+    const passwordFieldsFilled =
+      currentPassword || newPassword || confirmNewPassword;
+    return nameChanged || passwordFieldsFilled;
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+
+    try {
+      await updateAccount(formData);
+      toast.success("Changes saved.");
+      setOriginalData({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+      });
+      setFormData((prev) => ({
+        ...prev,
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+      }));
+    } catch (err) {
+      toast.error(err.message || "Failed to update account.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="pt-3 general-main">
+      <section className="mb-5 text-start">
+        <div className="row align-items-center mx-3">
+          <h4 className="settings-section-header text-start mb-2 border-bottom border-secondary ps-0 pb-2">
+            Profile Information
+          </h4>
+        </div>
+        <div className="d-flex justify-content-between flex-wrap mx-0">
+          {/* Name */}
+          <div className="name col-6 text-start mt-2">
+            {/* FirstName */}
+            <div className="mb-3 mx-3 d-flex align-items-center">
+              <label className="form-label col-3 m-0">First Name</label>
+              <input
+                className="form-control col"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+              />
+            </div>
+            {/* Last Name */}
+            <div className="mb-3 mx-3 d-flex align-items-center">
+              <label className="form-label col-3 m-0">Last Name</label>
+              <input
+                className="form-control"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div className="password col-6 text-start mt-2">
+            <div className="mb-3 mx-3 d-flex align-items-center">
+              <label className="form-label col-4 m-0">Current Password</label>
+              <input
+                className="form-control"
+                name="currentPassword"
+                type="password"
+                value={formData.currentPassword}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="mb-3 mx-3 d-flex align-items-center">
+              <label className="form-label col-4 m-0">New Password</label>
+              <input
+                className="form-control"
+                name="newPassword"
+                type="password"
+                value={formData.newPassword}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="mb-3 mx-3 d-flex align-items-center">
+              <label className="form-label col-4 m-0">Confirm Password</label>
+              <input
+                className="form-control"
+                name="confirmNewPassword"
+                type="password"
+                value={formData.confirmNewPassword}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        </div>
+        {status && (
+          <div className="mx-3 text-secondary small mt-1">{status}</div>
+        )}
+
+        <div className="mx-3 mt-1 d-flex justify-content-end">
+          <button
+            className="btn btn-success"
+            disabled={!hasChanges() || saving}
+            onClick={handleSave}
+          >
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
+      </section>
+      {/* ❌ Deactivate Account */}
+      <section className="mb-5">
+        <div className="row align-items-center mx-3">
+          <h4 className="settings-section-header text-start mb-2 border-bottom border-secondary ps-0 pb-2 text-danger">
+            Deactivate Zombie Lynx Account
+          </h4>
+          <div className="col text-start ps-0">
+            <label className="form-label fw-semibold mb-0 text-danger">
+              Permanently deactivate your account
+            </label>
+            <div className="text-secondary small">
+              This action is irreversible and will remove all your data.
+            </div>
+          </div>
+          <div className="col-auto">
+            <button className="btn btn-outline-danger">Deactivate</button>
+          </div>
+        </div>
+      </section>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={4000}
+        hideProgressBar
+        newestOnTop
+      />
+    </div>
+  );
+}

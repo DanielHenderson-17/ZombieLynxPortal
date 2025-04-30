@@ -23,6 +23,7 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<TebexBasket> TebexBaskets { get; set; }
+        public DbSet<EmailVerification> EmailVerifications { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -174,6 +175,11 @@ namespace ZombieLynxPortalAPI.Data
                 }
             );
 
+            // ✅ Default Value for AllowMarketingEmails
+            modelBuilder.Entity<UserProfile>()
+                .Property(up => up.AllowMarketingEmails)
+                .HasDefaultValue(true);
+
             // ✅ Composite Keys for Join Tables
             modelBuilder.Entity<UserTicket>()
                 .HasKey(ut => new { ut.UserProfileId, ut.TicketId });
@@ -188,6 +194,13 @@ namespace ZombieLynxPortalAPI.Data
                 .HasForeignKey(t => t.UserProfileId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // ✅ Relationships for EmailVerifications
+            modelBuilder.Entity<EmailVerification>()
+                .HasOne(ev => ev.User)
+                .WithMany()
+                .HasForeignKey(ev => ev.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ✅ Relationships for ZLGMembers
             modelBuilder.Entity<ZLGMember>()

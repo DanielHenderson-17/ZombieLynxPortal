@@ -45,22 +45,23 @@ export const login = (email, password) => {
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
-      if (res.ok) return res.json();
-      throw new Error("Invalid login credentials.");
+      if (!res.ok) return null;
+      return res.json();
     })
     .then((data) => {
+      if (!data?.token) return null;
+
       saveToken(data.token);
-      // 🔥 Directly fetch the full user profile here
       return fetch("/api/Auth/me", {
         headers: { Authorization: `Bearer ${data.token}` },
       }).then((res) => {
-        if (res.ok) return res.json();
-        throw new Error("Failed to fetch user profile.");
+        if (!res.ok) return null;
+        return res.json();
       });
     })
     .catch((error) => {
       console.error("Login failed:", error);
-      throw error;
+      return null; // Final fallback
     });
 };
 
@@ -131,4 +132,46 @@ export const isJwtExpired = (token) => {
     console.error("Error checking token expiration:", err);
     return true;
   }
+};
+
+/**
+ * 🔥 Resend email verification link
+ * @param {string} email - User's email
+ * @returns {Promise<string>} - Success message
+ */
+export const resendVerificationEmail = (email) => {
+  return fetch(`${apiUrl}/resend-verification`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  })
+    .then((res) => {
+      if (res.ok) return res.text();
+      throw new Error("Failed to resend verification email.");
+    })
+    .catch((error) => {
+      console.error("Resend verification error:", error);
+      throw error;
+    });
+};
+
+export const updateAccount = (updateData) => {
+  const token = getToken();
+  return fetch(`${apiUrl}/update-account`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updateData),
+  }).then((res) => {
+    if (!res.ok) {
+      return res.text().then((msg) => {
+        throw new Error(msg || "Failed to update account.");
+      });
+    }
+    return res.text();
+  });
 };

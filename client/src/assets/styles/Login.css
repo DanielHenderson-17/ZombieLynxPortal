@@ -5,6 +5,10 @@
   max-width: 500px;
 }
 
+.confirm-email {
+  margin-top: 150px;
+}
+
 hr {
   margin-bottom: 50px !important;
 }

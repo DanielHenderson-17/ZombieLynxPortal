@@ -70,6 +70,16 @@ namespace ZombieLynxPortalAPI.Controllers
             if (string.IsNullOrEmpty(eosId))
                 return NotFound("No Epic account linked to this Discord ID.");
 
+            // Prevent duplicate EOS ID linking
+            var existingLink = await _dbContext.ZLGMembers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.EosId == eosId);
+
+            if (existingLink != null && existingLink.UserProfileId != zlgMember.UserProfileId)
+            {
+                return Conflict("This Epic account is already linked to another user.");
+            }
+
             zlgMember.EosId = eosId;
             zlgMember.EpicName = steamName;
             zlgMember.EpicImgUrl = null;

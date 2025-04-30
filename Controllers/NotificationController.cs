@@ -5,6 +5,7 @@ using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.DTOs;
 using System.Security.Claims;
+using ZombieLynxPortalAPI.Services.Email;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -13,10 +14,12 @@ namespace ZombieLynxPortalAPI.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
+        private readonly IEmailSender _emailSender;
 
-        public NotificationController(ZombieLynxPortalAPIDbContext dbContext)
+        public NotificationController(ZombieLynxPortalAPIDbContext dbContext, IEmailSender emailSender)
         {
             _dbContext = dbContext;
+            _emailSender = emailSender;
         }
 
         // ✅ Admin: Create a Notification
@@ -41,10 +44,19 @@ namespace ZombieLynxPortalAPI.Controllers
             await _dbContext.Notifications.AddAsync(notification);
             await _dbContext.SaveChangesAsync();
 
+            var unsubscribeFooter = @"
+                <p style='font-size:10px;color:gray;margin-top:30px;'>
+                To manage your marketing email preferences, click <a href='http://localhost:5174/member/accountsettings'>here</a>.
+                </p>";
+
             if (dto.IsGlobal)
             {
-                // Assign notification to all users
-                var userProfiles = await _dbContext.UserProfiles.ToListAsync();
+                // Send to all users who allow marketing emails
+                var userProfiles = await _dbContext.UserProfiles
+                    .Include(up => up.User)
+                    .Where(up => up.User != null)
+                    .ToListAsync();
+
                 foreach (var userProfile in userProfiles)
                 {
                     await _dbContext.UserNotifications.AddAsync(new UserNotification
@@ -53,24 +65,39 @@ namespace ZombieLynxPortalAPI.Controllers
                         UserProfileId = userProfile.Id,
                         IsRead = false
                     });
+
+                    if (userProfile.AllowMarketingEmails && !string.IsNullOrEmpty(userProfile.User.Email))
+                    {
+                        var emailBody = dto.Message + unsubscribeFooter;
+                        await _emailSender.SendEmailAsync(userProfile.User.Email, dto.Subject, emailBody);
+                    }
                 }
             }
             else if (dto.TargetUserIds != null && dto.TargetUserIds.Any())
             {
                 foreach (var userId in dto.TargetUserIds)
                 {
-                    if (await _dbContext.UserProfiles.AnyAsync(up => up.Id == userId))
+                    var userProfile = await _dbContext.UserProfiles
+                        .Include(up => up.User)
+                        .FirstOrDefaultAsync(up => up.Id == userId);
+
+                    if (userProfile != null)
                     {
                         await _dbContext.UserNotifications.AddAsync(new UserNotification
                         {
                             NotificationId = notification.Id,
-                            UserProfileId = userId,
+                            UserProfileId = userProfile.Id,
                             IsRead = false
                         });
+
+                        if (userProfile.AllowMarketingEmails && userProfile.User != null && !string.IsNullOrEmpty(userProfile.User.Email))
+                        {
+                            var emailBody = dto.Message + unsubscribeFooter;
+                            await _emailSender.SendEmailAsync(userProfile.User.Email, dto.Subject, emailBody);
+                        }
                     }
                 }
             }
-
 
             await _dbContext.SaveChangesAsync();
             return Ok(new { notification.Id, notification.Subject, notification.Message, notification.IsGlobal });
@@ -184,10 +211,11 @@ namespace ZombieLynxPortalAPI.Controllers
                 return BadRequest("Missing or invalid notification data.");
 
             var userProfile = await _dbContext.UserProfiles
+                .Include(up => up.User)
                 .FirstOrDefaultAsync(up => up.Id == dto.UserProfileId);
 
-            if (userProfile == null)
-                return NotFound("User profile not found.");
+            if (userProfile == null || userProfile.User == null || string.IsNullOrEmpty(userProfile.User.Email))
+                return NotFound("User profile or email not found.");
 
             var notification = new Notification
             {
@@ -210,7 +238,14 @@ namespace ZombieLynxPortalAPI.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            Console.WriteLine($"📨 Notification sent to UserProfileId {userProfile.Id} with message:\n{dto.Message}");
+            // ✅ Always send the email (payment notifications must be delivered)
+            await _emailSender.SendEmailAsync(
+                userProfile.User.Email,
+                "Your Payment was Successful!",
+                dto.Message
+            );
+
+            Console.WriteLine($"📨 Tebex payment notification and email sent to UserProfileId {userProfile.Id} with message:\n{dto.Message}");
 
             return Ok(new { notification.Id, notification.Message, notification.Subject });
         }

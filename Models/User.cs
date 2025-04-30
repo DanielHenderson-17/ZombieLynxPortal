@@ -15,4 +15,6 @@ public class User
     public string Role { get; set; } = "User";
 
     public UserProfile Profile { get; set; }
+    public bool Verified { get; set; } = false;
+
 }

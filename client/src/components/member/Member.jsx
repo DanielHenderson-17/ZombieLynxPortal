@@ -1,3 +1,5 @@
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   NavLink,
   Outlet,
@@ -98,6 +100,19 @@ export default function Member({ loggedInUser }) {
     background: "#960606",
     color: "#fff",
   };
+
+  useEffect(() => {
+    const handleSteamMessages = (event) => {
+      if (event.origin !== window.location.origin) return;
+
+      if (event.data?.type === "STEAM_DUPLICATE_ERROR") {
+        toast.error("Steam account is already linked to another user.");
+      }
+    };
+
+    window.addEventListener("message", handleSteamMessages);
+    return () => window.removeEventListener("message", handleSteamMessages);
+  }, []);
 
   // Generate a random seed once when the component mounts
   useEffect(() => {
@@ -262,7 +277,7 @@ export default function Member({ loggedInUser }) {
             isMobile ? "rounded-start" : "rounded-end"
           }`}
           style={{
-            top: isMobile ? 30 : 20,
+            top: isMobile ? 20 : 20,
             left: isMobile ? "auto" : 0,
             right: isMobile ? 0 : "auto",
             fontWeight: "bold",
@@ -299,20 +314,19 @@ export default function Member({ loggedInUser }) {
                   </div>
 
                   {/* Username */}
+                  {/* Desktop Username Display (shows on md and larger screens) */}
                   <div className="d-flex align-items-center justify-content-center">
                     <h3 className="text-white d-none d-md-block mb-0 member-name">
-                      {userLoading
-                        ? "Loading..."
-                        : discordAccount?.discordName
-                        ? capitalizeFirstLetter(
-                            formatDiscordName(discordAccount.discordName)
-                          )
-                        : loggedInUser?.firstName || "Guest"}
-                    </h3>
-                  </div>
-                  <div className="d-md-flex d-block col-6 col-md-12 justify-content-center ms-2 ms-md-0">
-                    <div className="d-flex align-items-center">
-                      <h3 className="text-white text-start d-md-none d-block mb-0 mt-4">
+                      <span
+                        className={
+                          (discordAccount?.discordName
+                            ? formatDiscordName(discordAccount.discordName)
+                            : loggedInUser?.firstName || "Guest"
+                          ).length > 12
+                            ? "smaller-username"
+                            : ""
+                        }
+                      >
                         {userLoading
                           ? "Loading..."
                           : discordAccount?.discordName
@@ -320,6 +334,31 @@ export default function Member({ loggedInUser }) {
                               formatDiscordName(discordAccount.discordName)
                             )
                           : loggedInUser?.firstName || "Guest"}
+                      </span>
+                    </h3>
+                  </div>
+                  {/* Mobile Username Display (shows only on small screens) */}
+                  <div className="d-md-flex d-block col-6 col-md-12 justify-content-center ms-2 ms-md-0">
+                    <div className="d-flex align-items-center">
+                      <h3 className="text-white text-start d-md-none d-block mb-0 mt-4">
+                        <span
+                          className={
+                            (discordAccount?.discordName
+                              ? formatDiscordName(discordAccount.discordName)
+                              : loggedInUser?.firstName || "Guest"
+                            ).length > 12
+                              ? "smaller-username"
+                              : ""
+                          }
+                        >
+                          {userLoading
+                            ? "Loading..."
+                            : discordAccount?.discordName
+                            ? capitalizeFirstLetter(
+                                formatDiscordName(discordAccount.discordName)
+                              )
+                            : loggedInUser?.firstName || "Guest"}
+                        </span>
                       </h3>
                       {/* Linked Accounts for Mobile */}
                       {linkedAccounts.length > 0 && (
@@ -564,7 +603,7 @@ export default function Member({ loggedInUser }) {
               <NavLink
                 to="/member/stats"
                 className={({ isActive }) =>
-                  `mx-4 text-white text-decoration-none d-flex align-items-center ${
+                  `me-md-4 me-3 text-white text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
@@ -572,21 +611,21 @@ export default function Member({ loggedInUser }) {
                 <i className="bi bi-bar-chart-fill me-1"></i>
                 <p className="ps-2 m-0">Stats</p>
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to="/shop"
                 className={({ isActive }) =>
-                  `me-4 text-white text-decoration-none d-flex align-items-center ${
+                  `me-md-4 me-3 text-white text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
               >
                 <i className="bi bi-bag-plus-fill me-1"></i>
                 <p className="ps-2 m-0">Shop</p>
-              </NavLink>
+              </NavLink> */}
               <NavLink
                 to="/member/tickets"
                 className={({ isActive }) =>
-                  `text-white me-4 text-decoration-none d-flex align-items-center ${
+                  `text-white me-md-4 me-3 text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
@@ -597,13 +636,24 @@ export default function Member({ loggedInUser }) {
               <NavLink
                 to="/member/notifications"
                 className={({ isActive }) =>
-                  `text-white me-4 text-decoration-none d-flex align-items-center ${
+                  `text-white me-md-4 me-3 text-decoration-none d-flex align-items-center ${
                     isActive ? "border-bottom border-danger border-5" : ""
                   }`
                 }
               >
                 <i className="bi bi-envelope-fill me-1"></i>
                 <p className="ps-2 m-0">Notifications</p>
+              </NavLink>
+              <NavLink
+                to="/member/accountsettings"
+                className={({ isActive }) =>
+                  `text-white text-decoration-none d-flex align-items-center ${
+                    isActive ? "border-bottom border-danger border-5" : ""
+                  }`
+                }
+              >
+                <i className="bi bi-gear-fill me-1"></i>
+                <p className="ps-2 m-0">Settings</p>
               </NavLink>
             </div>
           </nav>
@@ -612,6 +662,7 @@ export default function Member({ loggedInUser }) {
       <div className="member-content">
         <Outlet />
       </div>
+      <ToastContainer position="top-center" autoClose={4000} />
     </div>
   );
 }

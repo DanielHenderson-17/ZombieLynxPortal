@@ -283,11 +283,22 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
               <div className="m-0 text-center col-8 my-2 ps-3">
                 <h5 className="text-white text-center mb-1 navbar-first-name">
                   <div className="text-white text-center mb-1 navbar-first-name">
-                    {discordAccount?.discordName
-                      ? capitalizeFirstLetter(
-                          formatDiscordName(discordAccount.discordName)
-                        )
-                      : loggedInUser?.firstName || "Guest"}
+                    <span
+                      className={
+                        (discordAccount?.discordName
+                          ? formatDiscordName(discordAccount.discordName)
+                          : loggedInUser?.firstName || "Guest"
+                        ).length > 12
+                          ? "small-username"
+                          : ""
+                      }
+                    >
+                      {discordAccount?.discordName
+                        ? capitalizeFirstLetter(
+                            formatDiscordName(discordAccount.discordName)
+                          )
+                        : loggedInUser?.firstName || "Guest"}
+                    </span>
                   </div>
                 </h5>
 
@@ -345,6 +356,14 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
 
                   <button
                     className="dropdown-item text-white d-flex justify-content-between"
+                    onClick={() => navigate("/member/accountsettings")}
+                  >
+                    <p className="m-0">Settings</p>
+                    <i className="bi bi-gear text-white"></i>
+                  </button>
+
+                  <button
+                    className="dropdown-item text-white d-flex justify-content-between"
                     onClick={() =>
                       window.open("https://www.zlg.gg/discord", "_blank")
                     }
@@ -366,6 +385,15 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
         </div>
         {/* Mobile Hamburger Menu */}
         <div className="d-flex d-lg-none align-items-center">
+          <Link
+            to={`/shop`}
+            className="mb-1"
+            data-bs-toggle="tooltip"
+            title="Shop"
+            data-bs-placement="bottom"
+          >
+            <img src={addPoints} alt="" className="me-3 addPoints" />
+          </Link>
           <Link
             className="d-flex align-items-center text-decoration-none"
             to={`https://www.zlg.gg/discord`}
@@ -400,7 +428,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             to="/shop/cart"
             className="nav-link pe-2 ps-1 position-relative"
           >
-            <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
+            <i className="fa-solid fa-cart-shopping text-white fs-6 me-0"></i>
             {cartCount > 0 && (
               <span className="cart-badge rounded-circle text-white bg-danger">
                 {cartCount}
@@ -409,7 +437,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
           </Link>
 
           <button
-            className="btn btn-dark navbar-toggler border-0"
+            className="btn btn-dark navbar-toggler border-0 pe-0"
             type="button"
             aria-expanded={open}
             onClick={() => setOpen(!open)}
@@ -448,6 +476,16 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                 >
                   My Profile
                 </button>
+                <button
+                  className="btn btn-secondary w-100 mt-2"
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/member/accountsettings");
+                  }}
+                >
+                  Account Settings
+                </button>
+
                 <button
                   className="btn btn-danger w-100 mt-2"
                   onClick={() => {

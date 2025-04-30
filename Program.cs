@@ -12,6 +12,7 @@ using ZombieLynxPortalAPI.Services;
 using ZombieLynxPortalAPI.Services.Ark;
 using ZombieLynxPortalAPI.Services.Minecraft;
 using ZombieLynxPortalAPI.Data.Ark;
+using ZombieLynxPortalAPI.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,17 +32,25 @@ builder.Services.AddControllers();
 builder.Services.Configure<PointsDatabaseOptions>(
     builder.Configuration.GetSection("PointsDatabaseOptions"));
 builder.Services.AddSingleton<PointsDbConnectionService>();
+//Add services for HttpClient
 builder.Services.AddHttpClient();
+// Add services for Tebex
 builder.Services.AddScoped<TebexOrderProcessor>();
+// Add Services for Ark
 builder.Services.AddScoped<ArkPointsSyncService>();
 builder.Services.AddHostedService<ArkPointsSyncWorker>();
 builder.Services.AddScoped<ArkSubscriptionSyncService>();
+// Add Services for Asa
 builder.Services.AddScoped<AsaPointsSyncService>();
 builder.Services.AddHostedService<AsaPointsSyncWorker>();
 builder.Services.AddScoped<AsaSubscriptionSyncService>();
+// Add Services for Minecraft
 builder.Services.AddScoped<MinecraftPointsSyncService>();
 builder.Services.AddHostedService<MinecraftPointsSyncWorker>();
 builder.Services.AddScoped<MinecraftSubscriptionSyncService>();
+// Add Email Sender Service
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<ZombieLynxPortalAPIDbContext>(options =>

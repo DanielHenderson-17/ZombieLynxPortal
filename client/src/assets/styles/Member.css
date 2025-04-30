@@ -8,6 +8,10 @@
   outline: 1px solid #000000;
 }
 
+.smaller-username {
+  font-size: 1.2rem;
+}
+
 .linked-icon-img {
   width: 25px;
   height: 25px;
@@ -194,6 +198,9 @@
   }
   .member-layout {
     margin-top: 15px !important;
+  }
+  .smaller-username {
+    font-size: 1rem;
   }
   .available-accounts {
     width: 110px !important;

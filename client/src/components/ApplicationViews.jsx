@@ -3,6 +3,8 @@ import { AuthorizedRoute } from "./auth/AuthorizedRoute";
 import Home from "../components/home/Home";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import Verify from "./auth/Verify";
+import VerifyEmail from "./auth/VerifyEmail";
 import Member from "../components/member/Member";
 import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
@@ -10,6 +12,7 @@ import Shop from "../components/shop/Shop";
 import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
+import AccountSettings from "../components/member/AccountSettings";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "./NavBar";
 import PrivacyPolicy from "../components/legal/PrivacyPolicy";
@@ -45,6 +48,8 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
         />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route path="zlg-rules" element={<Rules />} />
+        <Route path="verify" element={<Verify />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
 
         {/* Protected Routes */}
         <Route
@@ -70,6 +75,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             path="notifications/create"
             element={<CreateNotification loggedInUser={loggedInUser} />}
           />
+          <Route path="accountsettings" element={<AccountSettings />} />
           <Route
             index
             element={<p>Select a module from the navigation above.</p>}

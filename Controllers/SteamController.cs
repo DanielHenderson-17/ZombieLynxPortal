@@ -80,6 +80,17 @@ namespace ZombieLynxPortalAPI.Controllers
             if (userProfile == null)
                 return NotFound("User profile not found.");
 
+            // Check if this Steam ID is already linked to another user
+            var incomingSteamId = steamData.SteamId?.Trim();
+            var existingLink = await _dbContext.ZLGMembers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.SteamId == incomingSteamId);
+
+            if (existingLink != null && existingLink.UserProfileId != userProfile.Id)
+            {
+                return Conflict("This Steam account is already linked to another user.");
+            }
+
             var zlgMember = await _dbContext.ZLGMembers
                 .FirstOrDefaultAsync(m => m.UserProfileId == userProfile.Id);
 
@@ -92,7 +103,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 _dbContext.ZLGMembers.Add(zlgMember);
             }
 
-            zlgMember.SteamId = steamData.SteamId;
+            zlgMember.SteamId = incomingSteamId;
             zlgMember.SteamName = steamData.SteamName;
             zlgMember.SteamImgUrl = steamData.SteamImgUrl;
 
@@ -115,6 +126,16 @@ namespace ZombieLynxPortalAPI.Controllers
             }
 
             return Ok("Steam account linked successfully.");
+        }
+
+        [HttpGet("check-steam/{steamId}")]
+        public async Task<IActionResult> CheckSteamLinked(string steamId)
+        {
+            var exists = await _dbContext.ZLGMembers
+                .AsNoTracking()
+                .AnyAsync(m => m.SteamId == steamId);
+
+            return Ok(new { isLinked = exists });
         }
 
 
