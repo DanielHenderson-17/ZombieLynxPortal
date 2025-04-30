@@ -45,22 +45,23 @@ export const login = (email, password) => {
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
-      if (res.ok) return res.json();
-      throw new Error("Invalid login credentials.");
+      if (!res.ok) return null;
+      return res.json();
     })
     .then((data) => {
+      if (!data?.token) return null;
+
       saveToken(data.token);
-      // 🔥 Directly fetch the full user profile here
       return fetch("/api/Auth/me", {
         headers: { Authorization: `Bearer ${data.token}` },
       }).then((res) => {
-        if (res.ok) return res.json();
-        throw new Error("Failed to fetch user profile.");
+        if (!res.ok) return null;
+        return res.json();
       });
     })
     .catch((error) => {
       console.error("Login failed:", error);
-      throw error;
+      return null; // Final fallback
     });
 };
 

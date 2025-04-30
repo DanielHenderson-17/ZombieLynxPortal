@@ -41,8 +41,6 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok(new { clientId = discordClientId });
         }
 
-
-
         [HttpGet("linked")]
         public async Task<IActionResult> GetLinkedDiscordAccount()
         {
@@ -69,6 +67,18 @@ namespace ZombieLynxPortalAPI.Controllers
             });
         }
 
+        // GET: api/Discord/is-linked/{discordId}
+        [HttpGet("is-linked/{discordId}")]
+        public async Task<IActionResult> IsDiscordIdLinked(string discordId)
+        {
+            var exists = await _dbContext.ZLGMembers
+                .AsNoTracking()
+                .AnyAsync(m => m.DiscordId == discordId);
+
+            return Ok(new { isLinked = exists });
+        }
+
+
         // PUT: api/Discord/link-discord
         [HttpPut("link-discord")]
         public async Task<IActionResult> LinkDiscordAccount([FromBody] ZLGMemberDTO discordData)
@@ -83,6 +93,18 @@ namespace ZombieLynxPortalAPI.Controllers
             if (userProfile == null)
                 return NotFound("User profile not found.");
 
+            // Check if this Discord ID is already linked to another user
+            var incomingDiscordId = discordData.DiscordId?.Trim();
+            var existingLink = await _dbContext.ZLGMembers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.DiscordId == incomingDiscordId);
+
+
+            if (existingLink != null && existingLink.UserProfileId != userProfile.Id)
+            {
+                return Conflict("This Discord account is already linked to another user.");
+            }
+
             var zlgMember = await _dbContext.ZLGMembers
                 .FirstOrDefaultAsync(m => m.UserProfileId == userProfile.Id);
 
@@ -95,7 +117,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 _dbContext.ZLGMembers.Add(zlgMember);
             }
 
-            zlgMember.DiscordId = discordData.DiscordId;
+            zlgMember.DiscordId = incomingDiscordId;
             zlgMember.DiscordName = discordData.DiscordName;
             zlgMember.DiscordImgUrl = discordData.DiscordImgUrl;
 

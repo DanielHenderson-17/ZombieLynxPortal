@@ -56,8 +56,12 @@ export default function Login({ setLoggedInUser }) {
             setPassword(e.target.value);
           }}
         />
-        <FormFeedback>Login failed.</FormFeedback>
       </FormGroup>
+      {failedLogin && (
+        <div className="text-danger text-center mb-3">
+          Incorrect email or password.
+        </div>
+      )}
 
       <Button color="primary" onClick={handleSubmit} className="mt-3 mb-4">
         Login
