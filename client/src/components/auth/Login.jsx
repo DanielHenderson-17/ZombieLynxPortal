@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../managers/authManager";
-import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
+import { Button, FormGroup, Input } from "reactstrap";
 import zlglogo from "../../assets/images/zlglogo.png";
 import "../../assets/styles/Login.css";
 
