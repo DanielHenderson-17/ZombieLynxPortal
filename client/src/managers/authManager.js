@@ -155,3 +155,22 @@ export const resendVerificationEmail = (email) => {
       throw error;
     });
 };
+
+export const updateAccount = (updateData) => {
+  const token = getToken();
+  return fetch(`${apiUrl}/update-account`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updateData),
+  }).then((res) => {
+    if (!res.ok) {
+      return res.text().then((msg) => {
+        throw new Error(msg || "Failed to update account.");
+      });
+    }
+    return res.text();
+  });
+};

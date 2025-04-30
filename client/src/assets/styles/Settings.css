@@ -1,10 +1,14 @@
 .settings-container {
   background-color: #13151a !important;
   height: 470px;
-  overflow-y: scroll;
 }
 
 .form-check-input:checked {
-  background-color: #198754;
-  border-color: #198754;
+  background-color: #198754 !important;
+  border-color: #198754 !important;
+}
+
+.settings-main {
+  background: linear-gradient(145deg, #1a1d20, #1d2027);
+  overflow-y: scroll;
 }

@@ -155,6 +155,64 @@ namespace ZombieLynxPortalAPI.Controllers
             });
         }
 
+
+        // Put: api/Auth/update-account
+        [HttpPut("update-account")]
+        [Authorize]
+        public async Task<IActionResult> UpdateAccount(UpdateAccountDTO dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+                return Unauthorized("User ID not found in token.");
+
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            // Update name fields if provided
+            if (!string.IsNullOrWhiteSpace(dto.FirstName))
+                user.Profile.FirstName = dto.FirstName;
+
+            if (!string.IsNullOrWhiteSpace(dto.LastName))
+                user.Profile.LastName = dto.LastName;
+
+            // Handle password change if any password fields are present
+            bool wantsToChangePassword = !string.IsNullOrWhiteSpace(dto.CurrentPassword) ||
+                                         !string.IsNullOrWhiteSpace(dto.NewPassword) ||
+                                         !string.IsNullOrWhiteSpace(dto.ConfirmNewPassword);
+
+            if (wantsToChangePassword)
+            {
+                if (string.IsNullOrWhiteSpace(dto.CurrentPassword) ||
+                    string.IsNullOrWhiteSpace(dto.NewPassword) ||
+                    string.IsNullOrWhiteSpace(dto.ConfirmNewPassword))
+                {
+                    return BadRequest("To change your password, all password fields must be filled.");
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.PasswordHash))
+                {
+                    return BadRequest("Current password is incorrect.");
+                }
+
+                if (dto.NewPassword != dto.ConfirmNewPassword)
+                {
+                    return BadRequest("New password and confirmation do not match.");
+                }
+
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Account updated successfully.");
+        }
+
+
         // POST: api/Auth/Login
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO dto)

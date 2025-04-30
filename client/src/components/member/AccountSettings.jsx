@@ -3,7 +3,7 @@ import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
 import PrivacySettings from "./PrivacySettings";
 import LinkedAccountsSettings from "./LinkedAccountsSettings";
-import "../../assets/styles/tickets.css"; // reuse existing ticket styling
+import "../../assets/styles/settings.css";
 
 export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState("General");
@@ -28,9 +28,9 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="d-flex flex-column flex-lg-row ticket-container text-white">
+    <div className="d-flex flex-lg-row settings-container text-white">
       {/* Sidebar for Desktop */}
-      <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0">
+      <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0 overflow-auto">
         <div>
           {tabs.map((tab) => (
             <div
@@ -54,7 +54,7 @@ export default function AccountSettings() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow-1 mb-0 ticket-main px-4 pt-4">
+      <div className="flex-grow-1 settings-main px-4 pt-4">
         {renderTabContent()}
       </div>
 
