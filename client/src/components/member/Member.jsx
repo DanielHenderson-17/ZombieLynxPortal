@@ -16,11 +16,7 @@ import {
   getLinkedSteamAccount,
   getMainJwtToken,
 } from "../../managers/steamAuthManager";
-import {
-  linkDiscordAccount,
-  unlinkDiscordAccount,
-  getLinkedDiscordAccount,
-} from "../../managers/discordAuthManager";
+import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import {
   getLinkedMinecraftAccount,
   unlinkMinecraftAccount,
@@ -62,7 +58,6 @@ export default function Member({ loggedInUser }) {
   const [linkedAccounts, setLinkedAccounts] = useState([]);
   const availableAccounts = [
     { name: "Epic", icon: "/epicIcon.png" },
-    { name: "Discord", icon: "/discordIcon.png" },
     { name: "Steam", icon: "/steamIcon.png" },
     { name: "Minecraft", icon: "/minecraftIcon.png" },
   ];
@@ -147,7 +142,6 @@ export default function Member({ loggedInUser }) {
           const linked = [];
           if (discordData?.discordId) {
             setDiscordAccount(discordData);
-            linked.push({ name: "Discord", ...discordData });
           } else {
             setDiscordAccount(null);
           }
@@ -213,11 +207,6 @@ export default function Member({ loggedInUser }) {
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
-    } else if (platform === "Discord") {
-      linkDiscordAccount(() => {
-        setRefreshTrigger((prev) => !prev);
-        setLoading(false);
-      });
     } else if (platform === "Minecraft") {
       openMinecraftAuthWindow();
       setTimeout(() => setRefreshTrigger((prev) => !prev), 5000);
@@ -237,15 +226,6 @@ export default function Member({ loggedInUser }) {
       unlinkSteamAccount(() => {
         setSteamAccount(null);
         setLinkedAccounts((prev) => prev.filter((acc) => acc.name !== "Steam"));
-        setRefreshTrigger((prev) => !prev);
-        setLoading(false);
-      });
-    } else if (platform === "Discord") {
-      unlinkDiscordAccount(() => {
-        setDiscordAccount(null);
-        setLinkedAccounts((prev) =>
-          prev.filter((acc) => acc.name !== "Discord")
-        );
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
@@ -316,7 +296,13 @@ export default function Member({ loggedInUser }) {
                   {/* Username */}
                   {/* Desktop Username Display (shows on md and larger screens) */}
                   <div className="d-flex align-items-center justify-content-center">
-                    <h3 className="text-white d-none d-md-block mb-0 member-name">
+                    <h3 className="text-white d-none d-md-flex mb-0 member-name align-items-center">
+                      <img
+                        src="/public/discordIcon.png"
+                        alt=""
+                        style={{ width: "25px", height: "25px" }}
+                        className="me-2"
+                      />
                       <span
                         className={
                           (discordAccount?.discordName
@@ -458,7 +444,7 @@ export default function Member({ loggedInUser }) {
                     {linkedAccounts.map((acc) => (
                       <div
                         key={acc.name}
-                        className="d-flex align-items-center justify-content-between linked-back rounded mb-2"
+                        className="d-flex align-items-center justify-content-between linked-back rounded mb-2 py-1"
                       >
                         <div className="d-flex align-items-center gap-2">
                           <img
@@ -483,13 +469,6 @@ export default function Member({ loggedInUser }) {
                             </p>
                           </div>
                         </div>
-                        <button
-                          className="btn btn-sm btn-link text-secondary unlink-btn"
-                          onClick={() => handleUnlinkAccount(acc.name)}
-                          disabled={loading}
-                        >
-                          <i className="bi bi-x-lg"></i>
-                        </button>
                       </div>
                     ))}
                   </div>
