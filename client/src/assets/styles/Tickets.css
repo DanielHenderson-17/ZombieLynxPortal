@@ -116,7 +116,6 @@ hr {
 
 .messages {
   overflow-x: auto;
-  height: 400px;
   overflow-y: scroll;
 }
 

@@ -56,7 +56,7 @@ export default function ProfileInfo({ loggedInUser }) {
   return (
     <div className="profile-info d-md-flex justify-content-center col-12">
       <div className="d-flex justify-content-md-end justify-content-center align-items-end img-name-points col-12 mb-md-0 mb-2">
-        <div className="d-flex flex-row align-items-center justify-content-md-start justify-content-center col-12 ps-md-2 ps-0 gap-1 h-100">
+        <div className="d-flex flex-row align-items-center justify-content-start col-12 ps-md-2 ps-0 gap-1 h-100">
           <div className="hexagon" style={{ background: tierGradient }}>
             <img
               src={discordAccount?.discordImgUrl}
@@ -64,8 +64,10 @@ export default function ProfileInfo({ loggedInUser }) {
               className="profile-img"
             />
           </div>
-
-          <div className="info-container border-md-start border-secondary ps-md-3 ps-0">
+          <div className="py-4 h-100 px-2 d-none d-md-block">
+            <div className="border-start border-secondary h-100"></div>
+          </div>
+          <div className="info-container ps-md-2 ps-0">
             {/* Discord Name */}
             <h3 className="text-white d-flex mb-0 member-name align-items-center">
               <img

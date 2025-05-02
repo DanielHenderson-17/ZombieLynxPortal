@@ -262,7 +262,7 @@ export default function SingleTicket({ loggedInUser }) {
           ) : (
             // If logged in, show the normal message UI
             <div className="shadow border-black rounded p-0 message-box">
-              <div className="d-flex flex-column message-box-inner">
+              <div className="d-flex flex-column message-box-inner h-100">
                 {/* Messages Container */}
                 <div
                   ref={messagesEndRef}

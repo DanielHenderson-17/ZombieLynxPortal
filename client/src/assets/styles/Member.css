@@ -3,6 +3,11 @@
   overflow-y: hidden;
 }
 
+.active-icon svg {
+  transform: scale(1.15);
+  transition: transform 0.2s ease;
+}
+
 .member-sidebar {
   height: 100vh;
 }
@@ -26,7 +31,7 @@
 }
 
 .member-header {
-  height: 120px;
+  height: 130px;
 }
 
 .member-content {
@@ -212,7 +217,7 @@
     padding-bottom: 20px;
   }
   .member-layout {
-    margin-top: 15px !important;
+    margin-top: 0px !important;
   }
   .smaller-username {
     font-size: 1rem;

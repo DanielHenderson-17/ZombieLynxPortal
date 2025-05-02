@@ -15,7 +15,7 @@ export default function Member({ loggedInUser }) {
   }, [location.pathname, navigate]);
 
   return (
-    <div className="d-flex px-0 mt-5 member">
+    <div className="d-flex px-0 mt-md-5 mt-3 member">
       {/* Sidebar - desktop only */}
       <aside
         className="d-none d-md-flex flex-column align-items-center bg-dark py-4 pb-2 pt-5 member-sidebar"
