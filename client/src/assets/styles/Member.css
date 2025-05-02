@@ -1,6 +1,14 @@
+.member {
+  height: 98%;
+  overflow-y: hidden;
+}
+
+.member-sidebar {
+  height: 100vh;
+}
+
 .member-layout {
-  margin-top: 85px !important;
-  height: 85vh;
+  overflow-y: hidden;
 }
 
 .member-container {
@@ -18,7 +26,11 @@
 }
 
 .member-header {
-  height: 230px !important;
+  height: 120px;
+}
+
+.member-content {
+  height: 70vh;
 }
 
 .modal-backdrop {
@@ -54,11 +66,10 @@
 }
 
 .hexagon {
-  width: 190px;
-  height: 200px;
+  height: 90%;
   background: linear-gradient(to top, rgb(150, 6, 6), black);
   clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-  padding: 4px;
+  padding: 2px;
   box-sizing: border-box;
 }
 
@@ -119,10 +130,9 @@
 
 .zlg-coin {
   position: absolute;
-  top: -5px;
-  left: -10px;
-  width: 40px;
-  height: 40px;
+  left: -12px;
+  width: 30px;
+  height: 30px;
 }
 
 .zlg-coin3 {
@@ -147,13 +157,13 @@
 
 .buy-points {
   position: absolute;
-  top: -7px;
-  right: -10px;
+  top: -4px;
+  right: -12px;
 }
 
 .buy-points img {
-  width: 45px;
-  height: 45px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
 }
 
@@ -189,6 +199,11 @@
 
 .plus-icon:hover {
   transform: scale(1.1);
+}
+
+.points2 {
+  font-size: 1rem !important;
+  padding: 0px 10px !important;
 }
 
 @media (max-width: 768px) {

@@ -27,6 +27,7 @@ namespace ZombieLynxPortalAPI.Services.Email
                 Credentials = new NetworkCredential(smtpUser, smtpPass),
                 EnableSsl = true
             };
+            Console.WriteLine($"SMTP config loaded: {smtpHost}, {smtpPort}, {smtpUser}, {fromEmail}");
 
             var mailMessage = new MailMessage
             {
