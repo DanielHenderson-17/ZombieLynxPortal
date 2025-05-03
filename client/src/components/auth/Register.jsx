@@ -19,8 +19,25 @@ export default function Register() {
   const [discordName, setDiscordName] = useState(null);
   const [discordImgUrl, setDiscordImgUrl] = useState(null);
   const [discordLinked, setDiscordLinked] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
+
+  // Validate password with 1 uppercase, 1 special character, no spaces, and at least 8 characters
+  const validatePassword = (pwd) => {
+    const hasUpperCase = /[A-Z]/.test(pwd);
+    const hasSpecialChar = /[^a-zA-Z0-9]/.test(pwd);
+    const hasNoSpaces = /^\S+$/.test(pwd);
+    const isLongEnough = pwd.length >= 8;
+
+    if (!isLongEnough) return "Password must be at least 8 characters long.";
+    if (!hasUpperCase)
+      return "Password must contain at least one uppercase letter.";
+    if (!hasSpecialChar) return "Password must include a special character.";
+    if (!hasNoSpaces) return "Password must not contain spaces.";
+
+    return "";
+  };
 
   useEffect(() => {
     fetchDiscordClientId().then((clientId) => {
@@ -44,6 +61,7 @@ export default function Register() {
 
       const windowCheckInterval = setInterval(() => {
         if (discordWindow.closed) {
+          console.error(discordLinked);
           clearInterval(windowCheckInterval);
           setTimeout(() => {
             setDiscordLinked((linked) => {
@@ -179,13 +197,18 @@ export default function Register() {
         <Input
           type="password"
           placeholder="Password"
-          invalid={passwordMismatch}
+          invalid={!!passwordError || passwordMismatch}
           value={password}
           onChange={(e) => {
+            const newPassword = e.target.value;
+            setPassword(newPassword);
             setPasswordMismatch(false);
-            setPassword(e.target.value);
+            setPasswordError(validatePassword(newPassword));
           }}
         />
+        {passwordError && (
+          <FormFeedback className="d-block">{passwordError}</FormFeedback>
+        )}
       </FormGroup>
 
       <FormGroup className="mb-4">
@@ -212,11 +235,14 @@ export default function Register() {
       <Button
         color="primary"
         onClick={handleSubmit}
-        disabled={passwordMismatch}
+        disabled={
+          !!passwordError || passwordMismatch || !password || !confirmPassword
+        }
         className="mt-3 mb-2"
       >
         Register
       </Button>
+
       <p className="mb-0">
         <Link to="/login" className="text-decoration-none text-secondary">
           Already have an account?
