@@ -1,7 +1,7 @@
 .notifications-container,
 .create-notification-container {
   background-color: #13151a !important;
-  height: 470px;
+  height: 100%;
 }
 
 .notifications-container {

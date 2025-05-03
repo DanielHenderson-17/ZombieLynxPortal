@@ -10,6 +10,10 @@
   color: #6c757d;
 }
 
+.ticket-body1 {
+  overflow-y: scroll;
+}
+
 .ticket-nav,
 .ticket-body,
 .ticket-container {
@@ -17,11 +21,10 @@
 }
 
 .ticket-container {
-  height: 470px;
+  height: 100%;
 }
 
 .ticket-body1 {
-  overflow-y: scroll;
   overflow-x: hidden;
   background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
@@ -113,7 +116,6 @@ hr {
 
 .messages {
   overflow-x: auto;
-  height: 400px;
   overflow-y: scroll;
 }
 
@@ -145,6 +147,15 @@ hr {
 }
 
 @media (max-width: 767.98px) {
+  .ticket-body1 {
+    overflow-y: hidden;
+    padding-bottom: 100px;
+  }
+
+  .ticket-container {
+    overflow-y: scroll;
+  }
+
   .subject-font {
     font-size: 1.25rem;
   }

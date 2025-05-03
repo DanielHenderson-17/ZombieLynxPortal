@@ -88,8 +88,10 @@ export default function GeneralSettings() {
           {/* Name */}
           <div className="name col-6 text-start mt-2">
             {/* FirstName */}
-            <div className="mb-3 mx-3 d-flex align-items-center">
-              <label className="form-label col-3 m-0">First Name</label>
+            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
+              <label className="form-label col-md-3 col-12 m-md-0 mb-1">
+                First Name
+              </label>
               <input
                 className="form-control col"
                 name="firstName"
@@ -98,8 +100,10 @@ export default function GeneralSettings() {
               />
             </div>
             {/* Last Name */}
-            <div className="mb-3 mx-3 d-flex align-items-center">
-              <label className="form-label col-3 m-0">Last Name</label>
+            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
+              <label className="form-label col-md-3 col-12 m-md-0 mb-1">
+                Last Name
+              </label>
               <input
                 className="form-control"
                 name="lastName"
@@ -111,8 +115,10 @@ export default function GeneralSettings() {
 
           {/* Password */}
           <div className="password col-6 text-start mt-2">
-            <div className="mb-3 mx-3 d-flex align-items-center">
-              <label className="form-label col-4 m-0">Current Password</label>
+            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
+              <label className="form-label col-md-4 col-12 m-md-0 mb-1">
+                Current Password
+              </label>
               <input
                 className="form-control"
                 name="currentPassword"
@@ -122,8 +128,10 @@ export default function GeneralSettings() {
               />
             </div>
 
-            <div className="mb-3 mx-3 d-flex align-items-center">
-              <label className="form-label col-4 m-0">New Password</label>
+            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
+              <label className="form-label col-md-4 col-12 m-md-0 mb-1">
+                New Password
+              </label>
               <input
                 className="form-control"
                 name="newPassword"
@@ -133,8 +141,10 @@ export default function GeneralSettings() {
               />
             </div>
 
-            <div className="mb-3 mx-3 d-flex align-items-center">
-              <label className="form-label col-4 m-0">Confirm Password</label>
+            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
+              <label className="form-label col-md-4 col-12 m-md-0 mb-1">
+                Confirm Password
+              </label>
               <input
                 className="form-control"
                 name="confirmNewPassword"
@@ -160,8 +170,8 @@ export default function GeneralSettings() {
         </div>
       </section>
       {/* ❌ Deactivate Account */}
-      <section className="mb-5">
-        <div className="row align-items-center mx-3">
+      <section className="mb-5 pb-5">
+        <div className="row align-items-center mx-md-3 mx-2 pb-5">
           <h4 className="settings-section-header text-start mb-2 border-bottom border-secondary ps-0 pb-2 text-danger">
             Deactivate Zombie Lynx Account
           </h4>

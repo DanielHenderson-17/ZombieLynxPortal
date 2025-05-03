@@ -27,7 +27,10 @@ export default function Login({ setLoggedInUser }) {
   };
 
   return (
-    <div className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11">
+    <form
+      className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
+      onSubmit={handleSubmit}
+    >
       <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
       <h4>Welcome Back</h4>
       <hr />
@@ -63,7 +66,7 @@ export default function Login({ setLoggedInUser }) {
         </div>
       )}
 
-      <Button color="primary" onClick={handleSubmit} className="mt-3 mb-4">
+      <Button color="primary" type="submit" className="mt-3 mb-4">
         Login
       </Button>
 
@@ -72,6 +75,6 @@ export default function Login({ setLoggedInUser }) {
           Not signed up? Register here
         </Link>
       </p>
-    </div>
+    </form>
   );
 }

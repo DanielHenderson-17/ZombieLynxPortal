@@ -107,6 +107,44 @@ namespace ZombieLynxPortalAPI.Controllers
             _context.ZLGMembers.Add(zlgMember);
             await _context.SaveChangesAsync();
 
+            // ✅ Create two personal notifications for the new user
+            var welcomeNotification = new Notification
+            {
+                Subject = "🎉 Welcome to Zombie Lynx Gaming!",
+                Message = "Thanks for registering! You're officially part of the Zombie Lynx Player Portal. 🧟‍♂️",
+                IsGlobal = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            var reminderNotification = new Notification
+            {
+                Subject = "🔗 Link Your Game Accounts",
+                Message = "Don't forget to link your Steam, Minecraft, and other accounts for full access to features and rewards.",
+                IsGlobal = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _context.Notifications.AddRangeAsync(welcomeNotification, reminderNotification);
+            await _context.SaveChangesAsync(); // Save to get IDs
+
+            await _context.UserNotifications.AddRangeAsync(
+                new UserNotification
+                {
+                    NotificationId = welcomeNotification.Id,
+                    UserProfileId = userProfile.Id,
+                    IsRead = false
+                },
+                new UserNotification
+                {
+                    NotificationId = reminderNotification.Id,
+                    UserProfileId = userProfile.Id,
+                    IsRead = false
+                }
+            );
+
+            await _context.SaveChangesAsync();
+
+
             // ✅ Convert DiscordId from string to ulong for comparison
             var discordIdAsUlong = ulong.TryParse(dto.DiscordId, out var parsedId) ? parsedId : (ulong?)null;
 

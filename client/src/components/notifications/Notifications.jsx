@@ -83,7 +83,7 @@ export default function Notification({ loggedInUser }) {
           You currently do not have any notifications.
         </p>
       ) : (
-        <ul className="list-unstyled">
+        <ul className="list-unstyled pb-5 mb-5">
           {notifications.map((notification) => (
             <li
               key={notification.id}

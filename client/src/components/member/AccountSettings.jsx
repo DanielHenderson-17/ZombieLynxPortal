@@ -54,7 +54,7 @@ export default function AccountSettings() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow-1 settings-main px-4 pt-4">
+      <div className="flex-grow-1 settings-main px-md-4 px-0 pt-4">
         {renderTabContent()}
       </div>
 
