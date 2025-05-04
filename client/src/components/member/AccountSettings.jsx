@@ -1,4 +1,3 @@
-// components/settings/AccountSettings.jsx
 import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
 import PrivacySettings from "./PrivacySettings";

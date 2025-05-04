@@ -16,5 +16,6 @@ public class User
 
     public UserProfile Profile { get; set; }
     public bool Verified { get; set; } = false;
+    public bool Active { get; set; } = true;
 
 }

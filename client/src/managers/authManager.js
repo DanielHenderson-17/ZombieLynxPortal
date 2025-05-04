@@ -175,3 +175,25 @@ export const updateAccount = (updateData) => {
     return res.text();
   });
 };
+
+/**
+ * ✅ Deactivate the user's account (soft delete)
+ * @returns {Promise<string>} - Success message or error
+ */
+export const deactivateAccount = () => {
+  const token = getToken();
+
+  return fetch(`${apiUrl}/deactivate-account`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      return res.text().then((msg) => {
+        throw new Error(msg || "Failed to deactivate account.");
+      });
+    }
+    return res.text();
+  });
+};

@@ -1,4 +1,3 @@
-// components/settings/PrivacySettings.jsx
 import { useEffect, useState } from "react";
 import {
   getUserProfiles,

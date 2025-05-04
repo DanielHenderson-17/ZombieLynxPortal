@@ -125,7 +125,7 @@ namespace ZombieLynxPortalAPI.Controllers
             };
 
             await _context.Notifications.AddRangeAsync(welcomeNotification, reminderNotification);
-            await _context.SaveChangesAsync(); // Save to get IDs
+            await _context.SaveChangesAsync();
 
             await _context.UserNotifications.AddRangeAsync(
                 new UserNotification
@@ -255,10 +255,17 @@ namespace ZombieLynxPortalAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO dto)
         {
-            var user = await _context.Users.Include(u => u.Profile)
-                                           .FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            if (user == null)
+                return Unauthorized("Invalid email or password.");
+
+            if (!user.Active)
+                return Unauthorized("This account has been deactivated.");
+
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return Unauthorized("Invalid email or password.");
 
             if (!user.Verified)
@@ -268,6 +275,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(new { Token = token });
         }
+
 
         private string GenerateJwtToken(User user)
         {
@@ -436,5 +444,28 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok("Verification email resent successfully.");
         }
+
+        [HttpPut("deactivate-account")]
+        [Authorize]
+        public async Task<IActionResult> DeactivateAccount()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+                return Unauthorized("User ID not found in token.");
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            user.Active = false;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Account deactivated successfully.");
+        }
+
     }
 }

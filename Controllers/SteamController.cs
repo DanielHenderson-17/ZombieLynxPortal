@@ -128,8 +128,6 @@ namespace ZombieLynxPortalAPI.Controllers
                         zlgMember.Points += arkPlayer.Points;
                     }
                 }
-
-                // ✅ Always mark as linked
                 zlgMember.ASELinked = true;
             }
             await _dbContext.SaveChangesAsync();

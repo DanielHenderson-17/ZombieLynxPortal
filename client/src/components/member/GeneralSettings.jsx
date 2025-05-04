@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { updateAccount, tryGetLoggedInUser } from "../../managers/authManager";
+import {
+  updateAccount,
+  tryGetLoggedInUser,
+  deactivateAccount,
+  logout,
+} from "../../managers/authManager";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,6 +20,7 @@ export default function GeneralSettings() {
   const [originalData, setOriginalData] = useState({});
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState("");
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
 
   useEffect(() => {
     tryGetLoggedInUser()
@@ -73,6 +79,16 @@ export default function GeneralSettings() {
       toast.error(err.message || "Failed to update account.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeactivate = async () => {
+    try {
+      await deactivateAccount();
+      await logout();
+      window.location.href = "/";
+    } catch (err) {
+      toast.error(err.message || "Failed to deactivate account.");
     }
   };
 
@@ -180,11 +196,18 @@ export default function GeneralSettings() {
               Permanently deactivate your account
             </label>
             <div className="text-secondary small">
-              This action is irreversible and will remove all your data.
+              This action will remove your account and all associated game
+              accounts. You will not be able to log in again unless you register
+              a new account.
             </div>
           </div>
           <div className="col-auto">
-            <button className="btn btn-outline-danger">Deactivate</button>
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => setShowDeactivateModal(true)}
+            >
+              Deactivate
+            </button>
           </div>
         </div>
       </section>
@@ -194,6 +217,45 @@ export default function GeneralSettings() {
         hideProgressBar
         newestOnTop
       />
+      {showDeactivateModal && (
+        <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content bg-dark border border-secondary text-white">
+              <div className="modal-header">
+                <h5 className="modal-title">Are you sure?</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  aria-label="Close"
+                  onClick={() => setShowDeactivateModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p className="mb-0">
+                  Deactivating your account will permanently unlink all
+                  associated game accounts and prevent future logins.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowDeactivateModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleDeactivate}
+                >
+                  Yes, Deactivate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
