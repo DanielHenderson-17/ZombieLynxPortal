@@ -93,12 +93,24 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (!zlgMember.MinecraftLinked)
             {
-                var coinsUser = await _minecraftLinkPointsDbContext.CoinsEngineUsers
-                    .FirstOrDefaultAsync(u => u.uuid == minecraftUuid);
+                // 🧠 Check if UUID was previously unlinked
+                var previouslyLinked = await _dbContext.PreviouslyLinkedAccounts
+                    .AsNoTracking()
+                    .AnyAsync(p =>
+                        p.Platform == "Minecraft" &&
+                        p.ExternalId == minecraftUuid
+                    );
 
-                if (coinsUser != null)
+                // ✅ Only award points if UUID wasn't previously used
+                if (!previouslyLinked)
                 {
-                    zlgMember.Points += coinsUser.coins;
+                    var coinsUser = await _minecraftLinkPointsDbContext.CoinsEngineUsers
+                        .FirstOrDefaultAsync(u => u.uuid == minecraftUuid);
+
+                    if (coinsUser != null)
+                    {
+                        zlgMember.Points += coinsUser.coins;
+                    }
                 }
 
                 zlgMember.MinecraftLinked = true;
@@ -122,13 +134,26 @@ namespace ZombieLynxPortalAPI.Controllers
             if (zlgMember == null || string.IsNullOrEmpty(zlgMember.MinecraftUuid))
                 return BadRequest("No linked Minecraft account to unlink.");
 
-            // ✅ Record unlink in anti-abuse table
-            _dbContext.PreviouslyLinkedAccounts.Add(new PreviouslyLinkedAccount
+            var existingRecord = await _dbContext.PreviouslyLinkedAccounts
+                .FirstOrDefaultAsync(p =>
+                    p.Platform == "Minecraft" &&
+                    p.ExternalId == zlgMember.MinecraftUuid
+                );
+
+            if (existingRecord != null)
             {
-                Platform = "Minecraft",
-                ExternalId = zlgMember.MinecraftUuid,
-                UnlinkedAt = DateTime.UtcNow
-            });
+                existingRecord.UnlinkedAt = DateTime.UtcNow;
+                _dbContext.PreviouslyLinkedAccounts.Update(existingRecord);
+            }
+            else
+            {
+                _dbContext.PreviouslyLinkedAccounts.Add(new PreviouslyLinkedAccount
+                {
+                    Platform = "Minecraft",
+                    ExternalId = zlgMember.MinecraftUuid,
+                    UnlinkedAt = DateTime.UtcNow
+                });
+            }
 
             zlgMember.MinecraftUuid = null;
             zlgMember.MinecraftUsername = null;

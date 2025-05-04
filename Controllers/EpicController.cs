@@ -76,9 +76,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 .FirstOrDefaultAsync(m => m.EosId == eosId);
 
             if (existingLink != null && existingLink.UserProfileId != zlgMember.UserProfileId)
-            {
                 return Conflict("This Epic account is already linked to another user.");
-            }
 
             zlgMember.EosId = eosId;
             zlgMember.EpicName = steamName;
@@ -88,25 +86,29 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (!zlgMember.ASALinked)
             {
+                var wasPreviouslyLinked = await _dbContext.PreviouslyLinkedAccounts
+                    .AsNoTracking()
+                    .AnyAsync(p => p.Platform == "Epic" && p.ExternalId == eosId);
+
                 using (var scope = HttpContext.RequestServices.CreateScope())
                 {
                     var asaDbContext = scope.ServiceProvider.GetRequiredService<AsaLinkPointsDbContext>();
 
                     var asaPlayer = await asaDbContext.AsaShopPlayers
-                        .FirstOrDefaultAsync(p => p.EosId == zlgMember.EosId);
+                        .FirstOrDefaultAsync(p => p.EosId == eosId);
 
-                    if (asaPlayer != null)
+                    if (asaPlayer != null && !wasPreviouslyLinked)
                     {
                         zlgMember.Points += asaPlayer.Points;
-                        zlgMember.ASALinked = true;
                     }
+
+                    zlgMember.ASALinked = true;
                 }
 
                 await _dbContext.SaveChangesAsync();
             }
 
-            return Ok("Minecraft account linked successfully.");
-
+            return Ok("Epic account linked successfully.");
         }
 
         [HttpPut("unlink-epic")]
@@ -122,13 +124,28 @@ namespace ZombieLynxPortalAPI.Controllers
             if (zlgMember == null || string.IsNullOrEmpty(zlgMember.EosId))
                 return BadRequest("No linked Epic account to unlink.");
 
-            // ✅ Record unlink in PreviouslyLinkedAccounts
-            _dbContext.PreviouslyLinkedAccounts.Add(new PreviouslyLinkedAccount
+            var existingRecord = await _dbContext.PreviouslyLinkedAccounts
+                .FirstOrDefaultAsync(p =>
+                    p.Platform == "Epic" &&
+                    p.ExternalId == zlgMember.EosId
+                );
+
+            if (existingRecord != null)
             {
-                Platform = "Epic",
-                ExternalId = zlgMember.EosId,
-                UnlinkedAt = DateTime.UtcNow
-            });
+                // ✅ Update timestamp if already exists
+                existingRecord.UnlinkedAt = DateTime.UtcNow;
+                _dbContext.PreviouslyLinkedAccounts.Update(existingRecord);
+            }
+            else
+            {
+                // ✅ Add new record
+                _dbContext.PreviouslyLinkedAccounts.Add(new PreviouslyLinkedAccount
+                {
+                    Platform = "Epic",
+                    ExternalId = zlgMember.EosId,
+                    UnlinkedAt = DateTime.UtcNow
+                });
+            }
 
             zlgMember.EosId = null;
             zlgMember.EpicName = null;
