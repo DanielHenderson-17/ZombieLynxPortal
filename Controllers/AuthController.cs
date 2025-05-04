@@ -455,16 +455,31 @@ namespace ZombieLynxPortalAPI.Controllers
                 return Unauthorized("User ID not found in token.");
 
             var user = await _context.Users
+                .Include(u => u.Profile)
                 .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
             if (user == null)
                 return NotFound("User not found.");
 
-            user.Active = false;
+            if (!user.Active)
+                return BadRequest("Account is already deactivated.");
 
+            user.Active = false;
             await _context.SaveChangesAsync();
 
-            return Ok("Account deactivated successfully.");
+            // ✅ Send goodbye email
+            var subject = "Your Zombie Lynx account has been deactivated";
+            var body = $@"
+                <p>Hey {user.Profile.FirstName},</p>
+                <p>Your account has been successfully deactivated as requested.</p>
+                <p>Thank you for being a part of the Zombie Lynx Gaming community. 🧟‍♀️</p>
+                <p>We hope to see you again someday!</p>
+                <p>- The ZLG Team</p>
+                ";
+
+            await _emailSender.SendEmailAsync(user.Email, subject, body);
+
+            return Ok("Account deactivated and confirmation email sent.");
         }
 
     }
