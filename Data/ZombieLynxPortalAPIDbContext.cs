@@ -24,7 +24,7 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<TebexBasket> TebexBaskets { get; set; }
         public DbSet<EmailVerification> EmailVerifications { get; set; }
-
+        public DbSet<PreviouslyLinkedAccount> PreviouslyLinkedAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -300,6 +300,11 @@ namespace ZombieLynxPortalAPI.Data
                 .WithMany()
                 .HasForeignKey(tb => tb.UserProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PreviouslyLinkedAccount>()
+                .HasIndex(p => new { p.Platform, p.ExternalId })
+                .IsUnique();
+
 
         }
     }

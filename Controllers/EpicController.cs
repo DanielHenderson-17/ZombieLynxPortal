@@ -116,16 +116,27 @@ namespace ZombieLynxPortalAPI.Controllers
             if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
                 return Unauthorized("User not authenticated.");
 
-            var zlgMember = await _dbContext.ZLGMembers.FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
+            var zlgMember = await _dbContext.ZLGMembers
+                .FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
+
             if (zlgMember == null || string.IsNullOrEmpty(zlgMember.EosId))
                 return BadRequest("No linked Epic account to unlink.");
+
+            // ✅ Record unlink in PreviouslyLinkedAccounts
+            _dbContext.PreviouslyLinkedAccounts.Add(new PreviouslyLinkedAccount
+            {
+                Platform = "Epic",
+                ExternalId = zlgMember.EosId,
+                UnlinkedAt = DateTime.UtcNow
+            });
 
             zlgMember.EosId = null;
             zlgMember.EpicName = null;
             zlgMember.EpicImgUrl = null;
+
             await _dbContext.SaveChangesAsync();
 
-            return Ok("Epic account unlinked successfully.");
+            return Ok("Epic account unlinked and recorded.");
         }
 
         private async Task<(string EosId, string SteamName)> GetEpicAccountFromDiscord(string discordId)

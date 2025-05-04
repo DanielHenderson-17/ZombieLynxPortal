@@ -153,13 +153,27 @@ namespace ZombieLynxPortalAPI.Controllers
             if (zlgMember == null)
                 return NotFound("User profile not found.");
 
+            if (!string.IsNullOrEmpty(zlgMember.SteamId))
+            {
+                // ✅ Add to PreviouslyLinkedAccounts
+                var record = new PreviouslyLinkedAccount
+                {
+                    Platform = "Steam",
+                    ExternalId = zlgMember.SteamId,
+                    UnlinkedAt = DateTime.UtcNow
+                };
+
+                _dbContext.PreviouslyLinkedAccounts.Add(record);
+            }
+
             zlgMember.SteamId = null;
             zlgMember.SteamName = null;
             zlgMember.SteamImgUrl = null;
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok("Steam account unlinked successfully.");
+            return Ok("Steam account unlinked and recorded.");
         }
+
     }
 }

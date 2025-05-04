@@ -116,16 +116,27 @@ namespace ZombieLynxPortalAPI.Controllers
             if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
                 return Unauthorized("User not authenticated.");
 
-            var zlgMember = await _dbContext.ZLGMembers.FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
+            var zlgMember = await _dbContext.ZLGMembers
+                .FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
+
             if (zlgMember == null || string.IsNullOrEmpty(zlgMember.MinecraftUuid))
                 return BadRequest("No linked Minecraft account to unlink.");
+
+            // ✅ Record unlink in anti-abuse table
+            _dbContext.PreviouslyLinkedAccounts.Add(new PreviouslyLinkedAccount
+            {
+                Platform = "Minecraft",
+                ExternalId = zlgMember.MinecraftUuid,
+                UnlinkedAt = DateTime.UtcNow
+            });
 
             zlgMember.MinecraftUuid = null;
             zlgMember.MinecraftUsername = null;
             zlgMember.MinecraftAvatarUrl = null;
+
             await _dbContext.SaveChangesAsync();
 
-            return Ok("Minecraft account unlinked successfully.");
+            return Ok("Minecraft account unlinked and recorded.");
         }
 
         private async Task<string> GetMinecraftUuidFromDiscord(string discordId)
