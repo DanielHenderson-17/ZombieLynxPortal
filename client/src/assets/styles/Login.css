@@ -13,6 +13,10 @@ hr {
   margin-bottom: 50px !important;
 }
 
+.login-container {
+  margin-top: 100px !important;
+}
+
 @media (min-width: 2900px) {
   .login-container,
   .register-container {

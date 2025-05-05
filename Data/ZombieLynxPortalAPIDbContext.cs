@@ -25,6 +25,7 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<TebexBasket> TebexBaskets { get; set; }
         public DbSet<EmailVerification> EmailVerifications { get; set; }
         public DbSet<PreviouslyLinkedAccount> PreviouslyLinkedAccounts { get; set; }
+        public DbSet<PasswordReset> PasswordResets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -305,7 +306,11 @@ namespace ZombieLynxPortalAPI.Data
                 .HasIndex(p => new { p.Platform, p.ExternalId })
                 .IsUnique();
 
-
+            modelBuilder.Entity<PasswordReset>()
+                .HasOne(pr => pr.User)
+                .WithMany()
+                .HasForeignKey(pr => pr.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

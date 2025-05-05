@@ -69,6 +69,14 @@ export default function Login({ setLoggedInUser }) {
       <Button color="primary" type="submit" className="mt-3 mb-4">
         Login
       </Button>
+      <p className="mb-2">
+        <Link
+          to="/forgot-password"
+          className="text-decoration-none text-secondary"
+        >
+          Forgot your password?
+        </Link>
+      </p>
 
       <p className="mb-0">
         <Link to="/register" className="text-decoration-none text-secondary">

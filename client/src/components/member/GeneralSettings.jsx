@@ -232,8 +232,8 @@ export default function GeneralSettings() {
               </div>
               <div className="modal-body">
                 <p className="mb-0">
-                  Deactivating your account will permanently unlink all
-                  associated game accounts and prevent future logins.
+                  Deactivating your account will unlink all associated game
+                  accounts and prevent future logins.
                 </p>
               </div>
               <div className="modal-footer">
