@@ -1,30 +1,24 @@
 .mission-text {
   font-size: 1.25rem;
 }
-
 .custom-col-3-75 {
   flex: 0 0 31.25%;
   max-width: 31.25%;
 }
-
 .text-shadow {
   text-shadow: 2px 2px 4px rgb(0, 0, 0);
 }
-
 .text-shadow2 {
   text-shadow: 2px 2px 4px rgb(49, 49, 49);
 }
-
 .online2-dot {
   width: 15px !important;
   height: 15px !important;
 }
-
 .splash-main-container {
   height: 92vh;
   background: linear-gradient(145deg, #121214, #1a1a1d);
 }
-
 .splash-background {
   position: absolute;
   top: 0;
@@ -33,65 +27,52 @@
   object-fit: cover;
   z-index: 1;
 }
-
 .splash-logo {
   z-index: 2;
   height: 80vh !important;
 }
-
 .splash-logo img {
   height: 130px;
   z-index: 200;
 }
-
 .about-single {
   background-color: #292e38;
 }
-
 .zlg-about h4 {
   font-family: "Montserrat", sans-serif;
   font-weight: 700 !important;
   margin-bottom: 0;
   text-transform: uppercase;
 }
-
 .zlg-about h5 {
   text-transform: uppercase;
 }
-
 .headset-icon {
   width: 40px;
 }
-
 @media (max-width: 768px) {
   .splash-main-container {
     height: 89vh;
   }
-
   .zlg-about {
     margin-top: 400px;
   }
-
   .custom-col-3-75 {
     flex: 0 0 33%;
     max-width: 31.25%;
   }
-
   .mission-text {
     font-size: 0.8rem;
     margin-top: 10px;
   }
-
   .splash-container {
     height: 300px;
   }
-
   .splash-logo img {
     width: 75%;
     margin-top: 70px;
     height: 75%;
   }
-
   .splash-background {
     position: absolute;
     top: 0;
@@ -101,21 +82,17 @@
     object-fit: stretch;
     z-index: 1;
   }
-
   .us {
     position: relative;
     top: 32vh;
   }
-
   .mission-statement h4 {
     font-size: 1.1rem;
   }
-
   .us button {
     font-size: 0.7rem;
   }
 }
-
 @media (min-width: 2900px) {
   .home-container {
     margin-top: 110px !important;

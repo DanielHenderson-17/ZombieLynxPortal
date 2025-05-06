@@ -1,6 +1,13 @@
 const _apiUrl = "/api/tebex";
 
-// ✅ Helper: Get JWT Token from Local Storage
+/* ============================================================================
+ * ✅ AUTH HEADER UTILITY
+ * ========================================================================== */
+
+/**
+ * ✅ Get Authorization headers with JWT token
+ * @returns {object}
+ */
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
   return {
@@ -9,7 +16,14 @@ const getAuthHeaders = () => {
   };
 };
 
-// ✅ Get All Packages
+/* ============================================================================
+ * ✅ PACKAGE MANAGEMENT
+ * ========================================================================== */
+
+/**
+ * ✅ Get all Tebex packages
+ * @returns {Promise<object[]>}
+ */
 export const getPackages = () => {
   return fetch(`${_apiUrl}/packages`, {
     headers: getAuthHeaders(),
@@ -21,6 +35,16 @@ export const getPackages = () => {
     });
 };
 
+/* ============================================================================
+ * ✅ BASKET OPERATIONS
+ * ========================================================================== */
+
+/**
+ * ✅ Create a new Tebex basket
+ * @param {object[]} items - Cart items
+ * @param {string} token - JWT token
+ * @returns {Promise<object>}
+ */
 export const createBasket = (items, token) => {
   return fetch("/api/tebex/create-basket", {
     method: "POST",
@@ -35,6 +59,12 @@ export const createBasket = (items, token) => {
   });
 };
 
+/**
+ * ✅ Authenticate the Tebex basket with the user
+ * @param {object} ident - Basket identifier
+ * @param {string} token - JWT token
+ * @returns {Promise<object>}
+ */
 export const authenticateBasket = (ident, token) => {
   return fetch("/api/tebex/authenticate-basket", {
     method: "POST",
@@ -49,6 +79,13 @@ export const authenticateBasket = (ident, token) => {
   });
 };
 
+/**
+ * ✅ Add a package to an existing Tebex basket
+ * @param {string} ident - Basket identifier
+ * @param {object} item - Package item to add
+ * @param {string} token - JWT token
+ * @returns {Promise<object>}
+ */
 export const addPackageToBasket = async (ident, item, token) => {
   const response = await fetch(`/api/tebex/add-package/${ident}`, {
     method: "POST",
@@ -62,9 +99,8 @@ export const addPackageToBasket = async (ident, item, token) => {
   const result = await response.json();
 
   if (!response.ok) {
-    // Structured error like { error: "limit_reached", message: "..." }
     const error = new Error(result.message || "Failed to add package");
-    error.data = result; // attach structured response to the error
+    error.data = result;
     throw error;
   }
 

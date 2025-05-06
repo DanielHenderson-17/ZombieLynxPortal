@@ -1,6 +1,13 @@
 const _apiUrl = "/api/message";
 
-// ✅ Helper: Get JWT Token from Local Storage
+/* ============================================================================
+ * ✅ AUTH HEADER UTILITY
+ * ========================================================================== */
+
+/**
+ * ✅ Get Authorization headers with JWT token
+ * @returns {object} - Headers including Content-Type and Authorization
+ */
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
   return {
@@ -9,7 +16,15 @@ const getAuthHeaders = () => {
   };
 };
 
-// ✅ Get All Messages for a Specific Ticket
+/* ============================================================================
+ * ✅ MESSAGE OPERATIONS
+ * ========================================================================== */
+
+/**
+ * ✅ Get all messages for a specific ticket
+ * @param {string} ticketId
+ * @returns {Promise<object[]>}
+ */
 export const getMessagesByTicketId = (ticketId) => {
   return fetch(`${_apiUrl}/ticket/${ticketId}`, {
     headers: getAuthHeaders(),
@@ -24,7 +39,11 @@ export const getMessagesByTicketId = (ticketId) => {
     });
 };
 
-// ✅ Send a New Message
+/**
+ * ✅ Send a new message
+ * @param {object} message - Message payload
+ * @returns {Promise<object>} - Sent message data
+ */
 export const sendMessage = (message) => {
   return fetch(_apiUrl, {
     method: "POST",
@@ -47,7 +66,11 @@ export const sendMessage = (message) => {
     });
 };
 
-// ✅ Delete a Message (Admin Only)
+/**
+ * ✅ Delete a message (admin only)
+ * @param {string} messageId
+ * @returns {Promise<void>}
+ */
 export const deleteMessage = (messageId) => {
   return fetch(`${_apiUrl}/${messageId}`, {
     method: "DELETE",

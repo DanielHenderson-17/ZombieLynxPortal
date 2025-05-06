@@ -1,6 +1,13 @@
 const _apiUrl = "/api/Notification";
 
-// ✅ Helper: Get JWT Token from Local Storage
+/* ============================================================================
+ * ✅ AUTH HEADER UTILITY
+ * ========================================================================== */
+
+/**
+ * ✅ Get Authorization headers with JWT token
+ * @returns {object} - Headers including Content-Type and Authorization
+ */
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
   return {
@@ -9,7 +16,14 @@ const getAuthHeaders = () => {
   };
 };
 
-// ✅ Get Notifications for the Logged-in User
+/* ============================================================================
+ * ✅ NOTIFICATION MANAGEMENT
+ * ========================================================================== */
+
+/**
+ * ✅ Get notifications for the logged-in user
+ * @returns {Promise<object[]>}
+ */
 export const getUserNotifications = () => {
   return fetch(_apiUrl, {
     headers: getAuthHeaders(),
@@ -21,7 +35,11 @@ export const getUserNotifications = () => {
     });
 };
 
-// ✅ Create a Notification (Admin Only)
+/**
+ * ✅ Create a new notification (admin only)
+ * @param {object} notification
+ * @returns {Promise<object>}
+ */
 export const createNotification = (notification) => {
   console.log("Notification payload:", notification);
 
@@ -46,7 +64,11 @@ export const createNotification = (notification) => {
     });
 };
 
-// ✅ Mark a Notification as Read
+/**
+ * ✅ Mark a notification as read
+ * @param {string} notificationId
+ * @returns {Promise<void>}
+ */
 export const markNotificationAsRead = (notificationId) => {
   return fetch(`${_apiUrl}/read`, {
     method: "PUT",
@@ -64,7 +86,11 @@ export const markNotificationAsRead = (notificationId) => {
     });
 };
 
-// ✅ Delete a Notification (Admin Only)
+/**
+ * ✅ Delete a notification (admin only)
+ * @param {string} notificationId
+ * @returns {Promise<void>}
+ */
 export const deleteNotification = (notificationId) => {
   return fetch(`${_apiUrl}/${notificationId}`, {
     method: "DELETE",
@@ -81,7 +107,10 @@ export const deleteNotification = (notificationId) => {
     });
 };
 
-// ✅ Get All Users with User ID and Profile ID
+/**
+ * ✅ Get all users with user ID and profile ID (admin only)
+ * @returns {Promise<object[]>}
+ */
 export const getAllUsersAndId = () => {
   return fetch(`${_apiUrl}/GetAllUsersAndId`, {
     headers: getAuthHeaders(),

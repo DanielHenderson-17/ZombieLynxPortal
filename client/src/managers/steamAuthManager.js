@@ -2,12 +2,22 @@ const STEAM_OPENID_URL = "https://steamcommunity.com/openid/login";
 const REDIRECT_URL = `${window.location.origin}/steam-callback.html`;
 const API_BASE_URL = "https://localhost:5001/api/Steam";
 
-// Set JWT token in Local Storage
+/* ============================================================================
+ * ✅ TOKEN UTILITIES
+ * ========================================================================== */
+
+/**
+ * ✅ Retrieve JWT token from localStorage
+ * @returns {string|null}
+ */
 export const getMainJwtToken = () => {
   return localStorage.getItem("authToken");
 };
 
-// Check if JWT token is valid
+/**
+ * ✅ Check if JWT token is valid
+ * @returns {boolean}
+ */
 export const isMainJwtValid = () => {
   const token = getMainJwtToken();
   if (!token) return false;
@@ -16,7 +26,14 @@ export const isMainJwtValid = () => {
   return payload.exp * 1000 > Date.now();
 };
 
-// Get linked Steam account
+/* ============================================================================
+ * ✅ LINKED ACCOUNT CHECK
+ * ========================================================================== */
+
+/**
+ * ✅ Get linked Steam account
+ * @returns {Promise<object|null>}
+ */
 export const getLinkedSteamAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
 
@@ -27,13 +44,9 @@ export const getLinkedSteamAccount = () => {
     },
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else if (res.status === 404) {
-        return null;
-      } else {
-        throw new Error(`Unexpected error: ${res.status}`);
-      }
+      if (res.ok) return res.json();
+      if (res.status === 404) return null;
+      throw new Error(`Unexpected error: ${res.status}`);
     })
     .catch((err) => {
       console.error(err);
@@ -41,7 +54,14 @@ export const getLinkedSteamAccount = () => {
     });
 };
 
-// Fetch Steam API key
+/* ============================================================================
+ * ✅ STEAM API KEY
+ * ========================================================================== */
+
+/**
+ * ✅ Fetch Steam API key
+ * @returns {Promise<string|null>}
+ */
 export const fetchSteamApiKey = () => {
   return fetch(`${API_BASE_URL}/get-api-key`, {
     method: "GET",
@@ -53,16 +73,21 @@ export const fetchSteamApiKey = () => {
       if (!res.ok) throw new Error("Failed to retrieve Steam API key.");
       return res.json();
     })
-    .then((data) => {
-      return data.apiKey;
-    })
+    .then((data) => data.apiKey)
     .catch((err) => {
       console.error("❌ Error fetching Steam API key:", err);
       return null;
     });
 };
 
-// Link Steam account
+/* ============================================================================
+ * ✅ LINK STEAM ACCOUNT
+ * ========================================================================== */
+
+/**
+ * ✅ Link Steam account via OpenID + Steam API
+ * @param {Function} onSuccess - Callback on successful link
+ */
 export const linkSteamAccount = (onSuccess) => {
   const handleMessage = (event) => {
     if (event.origin !== window.location.origin) return;
@@ -159,7 +184,15 @@ export const linkSteamAccount = (onSuccess) => {
   );
 };
 
-// Unlink Steam account
+/* ============================================================================
+ * ✅ UNLINK STEAM ACCOUNT
+ * ========================================================================== */
+
+/**
+ * ✅ Unlink Steam account
+ * @param {Function} onSuccess - Callback on successful unlink
+ * @returns {Promise<void>}
+ */
 export const unlinkSteamAccount = (onSuccess) => {
   return fetch(`${API_BASE_URL}/unlink-steam`, {
     method: "PUT",

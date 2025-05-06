@@ -1,7 +1,6 @@
 .zlg-servers {
   height: 90vh;
 }
-
 .server-list-selections ul {
   min-height: 100% !important;
 }
@@ -9,20 +8,16 @@
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
 }
-
 .game-title {
   font-size: 1rem !important;
 }
-
 .game-title2 {
   font-size: 1.5rem !important;
 }
-
 .server-description-text {
   color: #adadad;
   font-size: 0.95rem !important;
 }
-
 .server-list-item {
   cursor: pointer;
   display: flex;
@@ -32,11 +27,9 @@
   margin-bottom: 10px;
   transition: background-color 0.2s;
 }
-
 .server-list-item:hover {
   cursor: pointer !important;
 }
-
 .server-list-item img {
   width: 40px;
   height: 40px;
@@ -44,32 +37,26 @@
   margin-right: 10px;
   border-radius: 5px;
 }
-
 .server-list-item.active {
   color: white;
 }
-
 .server-list-item.active p {
   color: white !important;
 }
-
 .server-details img {
   max-height: 300px;
   object-fit: contain;
 }
-
 .server-status-title {
   display: flex;
   align-items: center;
   color: white;
   font-size: 1.75rem !important;
 }
-
 .server-status-title span {
   color: #b31818;
   margin-right: 10px;
 }
-
 .server-status-title::after {
   content: "";
   flex-grow: 1;
@@ -79,7 +66,6 @@
   background: linear-gradient(145deg, #121214, #1a1a1d);
   margin-left: 5px;
 }
-
 .list-group-item {
   background: linear-gradient(145deg, #121214, #1a1a1d);
   outline: 1px solid #202020;
@@ -88,41 +74,32 @@
   border-bottom: 1px solid #1c1c1f !important;
   border-right: 1px solid #1c1c1f !important;
 }
-
 .list-group-item-active {
   background: #282a2d !important;
   border-radius: 0 !important;
 }
-
 .active-server-details {
   background: linear-gradient(#121214, #1a1a1d);
 }
-
 .badge-mmo-survival {
   background-color: #22a2b1;
 }
-
 .badge-sandbox-simulation {
   background-color: #882adf;
 }
-
 .badge-sandbox {
   background-color: #49ada3;
 }
-
 .badge-space-survival {
   background-color: #1464d2;
 }
-
 .active-server-details .badge {
   color: white;
   font-weight: bold;
 }
-
 .server-thumb {
   width: 100px;
 }
-
 @media (max-width: 768px) {
   .server-description-text {
     font-size: 0.85rem !important;
@@ -135,7 +112,6 @@
     font-size: 0.85rem !important;
   }
 }
-
 @media (min-width: 2900px) {
   .server-thumb {
     width: 300px;
@@ -143,7 +119,6 @@
   .game-title {
     font-size: 2.5rem !important;
   }
-
   .game-title2 {
     margin-top: 40px !important;
     font-size: 3rem !important;

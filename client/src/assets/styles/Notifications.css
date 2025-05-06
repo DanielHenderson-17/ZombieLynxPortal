@@ -3,27 +3,22 @@
   background-color: #13151a !important;
   height: 100%;
 }
-
 .notifications-container {
   overflow-y: scroll;
   background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
-
 .notifications-container .flex-grow-1 {
   margin-bottom: 60px;
 }
-
 .single-notification,
 .create-notification-container {
   color: white;
   background-color: #2c3034;
 }
-
 .isRead {
   background-color: #3c4044;
   color: #8d97a0 !important;
 }
-
 .user-selection {
   border: 1px solid gray;
   border-radius: 5px;
@@ -32,14 +27,12 @@
   min-height: 120px;
   max-height: 150px;
 }
-
 @media (max-width: 768px) {
   .notifications-container,
   .create-notification-container {
     height: 69vh;
   }
 }
-
 @media (min-width: 2900px) {
   .notifications-container {
     height: 57vh;

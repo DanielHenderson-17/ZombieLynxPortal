@@ -1,17 +1,34 @@
 const _apiUrl = "/api/userprofile";
 
-// ✅ Use localStorage for persistent authentication
+/* ============================================================================
+ * ✅ AUTH UTILITIES
+ * ========================================================================== */
+
+/**
+ * ✅ Retrieve JWT token from localStorage
+ * @returns {string|null}
+ */
 const getToken = () => {
   return localStorage.getItem("authToken");
 };
 
-// ✅ Centralized function to attach Authorization headers
+/**
+ * ✅ Get authorization headers for fetch requests
+ * @returns {object}
+ */
 const getAuthHeaders = () => ({
   Authorization: `Bearer ${getToken()}`,
   "Content-Type": "application/json",
 });
 
-// 🔍 Get the current logged-in user's profile
+/* ============================================================================
+ * 🔍 PROFILE & ROLE MANAGEMENT
+ * ========================================================================== */
+
+/**
+ * 🔍 Get the current user's profile
+ * @returns {Promise<object>}
+ */
 export const getUserProfiles = () => {
   return fetch(_apiUrl, {
     headers: getAuthHeaders(),
@@ -20,7 +37,10 @@ export const getUserProfiles = () => {
   );
 };
 
-// 🔍 Get all users
+/**
+ * 🔍 Get all users (admin only)
+ * @returns {Promise<object[]>}
+ */
 export const getAllUsers = () => {
   return fetch(`${_apiUrl}/all`, {
     headers: getAuthHeaders(),
@@ -37,7 +57,10 @@ export const getAllUsers = () => {
     });
 };
 
-// 🔍 Get user profiles with roles (Admin only)
+/**
+ * 🔍 Get all user profiles including roles (admin only)
+ * @returns {Promise<object[]>}
+ */
 export const getUserProfilesWithRoles = () => {
   return fetch(`${_apiUrl}/withroles`, {
     headers: getAuthHeaders(),
@@ -46,7 +69,11 @@ export const getUserProfilesWithRoles = () => {
   );
 };
 
-// 🔼 Promote user to Admin
+/**
+ * 🔼 Promote a user to Admin
+ * @param {string} userId
+ * @returns {Promise<void>}
+ */
 export const promoteUser = (userId) => {
   return fetch(`${_apiUrl}/promote/${userId}`, {
     method: "POST",
@@ -56,7 +83,11 @@ export const promoteUser = (userId) => {
   });
 };
 
-// 🔽 Demote user to User
+/**
+ * 🔽 Demote a user from Admin
+ * @param {string} userId
+ * @returns {Promise<void>}
+ */
 export const demoteUser = (userId) => {
   return fetch(`${_apiUrl}/demote/${userId}`, {
     method: "POST",
@@ -66,7 +97,14 @@ export const demoteUser = (userId) => {
   });
 };
 
-// 🔍 Get membership info (points and sub)
+/* ============================================================================
+ * 🔍 MEMBERSHIP & SETTINGS
+ * ========================================================================== */
+
+/**
+ * 🔍 Get user membership info (points & subscriptions)
+ * @returns {Promise<object>}
+ */
 export const getUserMembership = () => {
   return fetch(`${_apiUrl}/membership`, {
     headers: getAuthHeaders(),
@@ -75,7 +113,11 @@ export const getUserMembership = () => {
   );
 };
 
-// ✅ Update marketing email preference
+/**
+ * ✅ Update marketing email preference
+ * @param {boolean} allowMarketingEmails
+ * @returns {Promise<string>}
+ */
 export const updateMarketingConsent = (allowMarketingEmails) => {
   return fetch(`${_apiUrl}/marketing-consent`, {
     method: "PUT",
