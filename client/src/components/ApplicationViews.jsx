@@ -2,6 +2,8 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthorizedRoute } from "./auth/AuthorizedRoute";
 import Home from "../components/home/Home";
 import Login from "./auth/Login";
+import ForgotPassword from "./auth/ForgotPassword";
+import ResetPassword from "./auth/ResetPassword";
 import Register from "./auth/Register";
 import Verify from "./auth/Verify";
 import VerifyEmail from "./auth/VerifyEmail";
@@ -22,7 +24,12 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
 
   // Routes where the NavBar should not be displayed
-  const hideNavBarRoutes = ["/login", "/register"];
+  const hideNavBarRoutes = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+  ];
 
   return (
     <>
@@ -50,6 +57,8 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
         <Route path="zlg-rules" element={<Rules />} />
         <Route path="verify" element={<Verify />} />
         <Route path="verify-email" element={<VerifyEmail />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password" element={<ResetPassword />} />
 
         {/* Protected Routes */}
         <Route

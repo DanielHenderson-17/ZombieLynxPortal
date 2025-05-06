@@ -1,4 +1,3 @@
-// components/member/MemberNav.jsx
 import { NavLink } from "react-router-dom";
 
 export default function MemberNav({ isMobile = false }) {

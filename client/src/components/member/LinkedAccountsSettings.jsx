@@ -1,4 +1,3 @@
-// components/settings/LinkedAccountsSettings.jsx
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,6 +27,8 @@ export default function LinkedAccountsSettings() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [platformToUnlink, setPlatformToUnlink] = useState(null);
 
   const availableAccounts = [
     { name: "Epic", icon: "/epicIcon.png" },
@@ -99,21 +100,27 @@ export default function LinkedAccountsSettings() {
   };
 
   const handleUnlinkAccount = (platform) => {
-    setLoading(true);
+    setPlatformToUnlink(platform);
+    setShowModal(true);
+  };
 
-    if (platform === "Steam") {
+  const confirmUnlink = () => {
+    setLoading(true);
+    setShowModal(false);
+
+    if (platformToUnlink === "Steam") {
       unlinkSteamAccount(() => {
         setSteamAccount(null);
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
-    } else if (platform === "Minecraft") {
+    } else if (platformToUnlink === "Minecraft") {
       unlinkMinecraftAccount(() => {
         setMinecraftAccount(null);
         setRefreshTrigger((prev) => !prev);
         setLoading(false);
       });
-    } else if (platform === "Epic") {
+    } else if (platformToUnlink === "Epic") {
       unlinkEpicAccount(() => {
         setEpicAccount(null);
         setRefreshTrigger((prev) => !prev);
@@ -215,6 +222,46 @@ export default function LinkedAccountsSettings() {
       </section>
       {error && <p className="text-danger text-center">{error}</p>}
       <ToastContainer position="top-center" autoClose={4000} />
+      {showModal && (
+        <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content bg-dark border border-secondary text-white">
+              <div className="modal-header">
+                <h5 className="modal-title">Are you sure?</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  aria-label="Close"
+                  onClick={() => setShowModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p className="mb-0">
+                  Unlinking this {platformToUnlink} account means it will no
+                  longer be eligible to add points to the ZLG Portal — even if
+                  linked again to this or another account.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={confirmUnlink}
+                >
+                  Yes, Unlink
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

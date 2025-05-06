@@ -111,7 +111,14 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (!zlgMember.ASELinked && !string.IsNullOrEmpty(zlgMember.SteamId))
             {
-                if (ulong.TryParse(zlgMember.SteamId, out var steamIdAsUlong))
+                var previouslyLinked = await _dbContext.PreviouslyLinkedAccounts
+                    .AsNoTracking()
+                    .AnyAsync(p =>
+                        p.Platform == "Steam" &&
+                        p.ExternalId == zlgMember.SteamId
+                    );
+
+                if (!previouslyLinked && ulong.TryParse(zlgMember.SteamId, out var steamIdAsUlong))
                 {
                     var arkPlayer = await _arkLinkPointsDbContext.ArkShopPlayers
                         .FirstOrDefaultAsync(p => p.SteamId == steamIdAsUlong);
@@ -121,9 +128,9 @@ namespace ZombieLynxPortalAPI.Controllers
                         zlgMember.Points += arkPlayer.Points;
                     }
                 }
-
                 zlgMember.ASELinked = true;
             }
+            await _dbContext.SaveChangesAsync();
 
             return Ok("Steam account linked successfully.");
         }
@@ -153,13 +160,41 @@ namespace ZombieLynxPortalAPI.Controllers
             if (zlgMember == null)
                 return NotFound("User profile not found.");
 
+            if (!string.IsNullOrEmpty(zlgMember.SteamId))
+            {
+                var existingRecord = await _dbContext.PreviouslyLinkedAccounts
+                    .FirstOrDefaultAsync(p =>
+                        p.Platform == "Steam" &&
+                        p.ExternalId == zlgMember.SteamId
+                    );
+
+                if (existingRecord != null)
+                {
+                    // ✅ Update existing
+                    existingRecord.UnlinkedAt = DateTime.UtcNow;
+                    _dbContext.PreviouslyLinkedAccounts.Update(existingRecord);
+                }
+                else
+                {
+                    // ✅ Add new
+                    var record = new PreviouslyLinkedAccount
+                    {
+                        Platform = "Steam",
+                        ExternalId = zlgMember.SteamId,
+                        UnlinkedAt = DateTime.UtcNow
+                    };
+                    _dbContext.PreviouslyLinkedAccounts.Add(record);
+                }
+            }
+
             zlgMember.SteamId = null;
             zlgMember.SteamName = null;
             zlgMember.SteamImgUrl = null;
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok("Steam account unlinked successfully.");
+            return Ok("Steam account unlinked and recorded.");
         }
+
     }
 }

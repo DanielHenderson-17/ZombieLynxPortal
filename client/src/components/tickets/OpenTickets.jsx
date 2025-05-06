@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { getOpenTickets, closeTicketAPI } from "../../managers/ticketManager";
 import { getGameImage } from "../../utils/gameFormatter";
 import { truncateText } from "../../utils/truncateText";
@@ -69,9 +69,50 @@ export default function OpenTickets({ onTicketChange }) {
   return (
     <div className="col-12 h-100 ticket-body1 border border-0">
       {tickets.length === 0 ? (
-        <p className="mt-5 pt-4 text-white no-tickets">
-          You have no open tickets.
-        </p>
+        <div className="mt-md-5 mt-0">
+          <div className="d-md-flex d-none no-tickets justify-content-center align-items-center h-100">
+            <div>
+              <p className="mt-5 pt-4 text-white fs-4">
+                You have no open tickets.
+              </p>
+              <Link
+                to="/member/tickets/new-ticket"
+                className={`d-flex justify-content-center text-decoration-none ${
+                  location.pathname === "/member/tickets/new-ticket"
+                    ? "active"
+                    : ""
+                }`}
+              >
+                <button className="btn d-block d-flex align-items-center text-center mb-3 btn-success create-ticket">
+                  <i className="bi bi-plus-circle me-2"></i>
+                  <p className="m-0 p-0">Create a Ticket</p>
+                </button>
+              </Link>
+            </div>
+            <img src="/public/kaeneko.png" alt="" className="kaeneko" />
+          </div>
+          <div className="d-block d-md-none no-tickets justify-content-center align-items-center h-100">
+            <img src="/public/kaeneko.png" alt="" className="kaeneko" />
+            <div>
+              <p className="mt-2 pt-2 text-white fs-4">
+                You have no open tickets.
+              </p>
+              <Link
+                to="/member/tickets/new-ticket"
+                className={`d-flex justify-content-center text-decoration-none ${
+                  location.pathname === "/member/tickets/new-ticket"
+                    ? "active"
+                    : ""
+                }`}
+              >
+                <button className="btn d-block d-flex align-items-center text-center mb-3 btn-success create-ticket">
+                  <i className="bi bi-plus-circle me-2"></i>
+                  <p className="m-0 p-0">Create a Ticket</p>
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
       ) : (
         <table className="table table-dark table-striped align-middle">
           <thead className="thead-dark ticket-header">

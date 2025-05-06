@@ -2,3 +2,14 @@
   height: 100%;
   background-color: #13151a !important;
 }
+
+@media (max-width: 767.98px) {
+  .kibo {
+    height: 60%;
+    margin-top: 10px;
+  }
+  .kaeneko {
+    height: 400px !important;
+    margin-top: 10px;
+  }
+}

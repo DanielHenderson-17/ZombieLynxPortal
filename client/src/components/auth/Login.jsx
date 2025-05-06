@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../managers/authManager";
 import { Button, FormGroup, Input } from "reactstrap";
 import zlglogo from "../../assets/images/zlglogo.png";
+import loadingGif from "/public/runninglynx.gif";
 import "../../assets/styles/Login.css";
 
 export default function Login({ setLoggedInUser }) {
@@ -10,10 +11,10 @@ export default function Login({ setLoggedInUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [failedLogin, setFailedLogin] = useState(false);
+  const [showLoginAnimation, setShowLoginAnimation] = useState(false);
   const location = useLocation();
   const from = location.state?.from?.pathname || "/member";
 
-  // Handle form submission and login user
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email, password).then((user) => {
@@ -21,17 +22,28 @@ export default function Login({ setLoggedInUser }) {
         setFailedLogin(true);
       } else {
         setLoggedInUser(user);
-        navigate(from, { replace: true });
+        setShowLoginAnimation(true);
+        setTimeout(() => {
+          navigate(from, { replace: true });
+        }, 3000);
       }
     });
   };
+
+  if (showLoginAnimation) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <img src={loadingGif} alt="Logging in..." className="running-lynx" />
+      </div>
+    );
+  }
 
   return (
     <form
       className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
       onSubmit={handleSubmit}
     >
-      <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
+      <img src={zlglogo} alt="ZLG Logo" className="col-10 mt-3 mb-3" />
       <h4>Welcome Back</h4>
       <hr />
 
@@ -69,6 +81,14 @@ export default function Login({ setLoggedInUser }) {
       <Button color="primary" type="submit" className="mt-3 mb-4">
         Login
       </Button>
+      <p className="mb-2">
+        <Link
+          to="/forgot-password"
+          className="text-decoration-none text-secondary"
+        >
+          Forgot your password?
+        </Link>
+      </p>
 
       <p className="mb-0">
         <Link to="/register" className="text-decoration-none text-secondary">

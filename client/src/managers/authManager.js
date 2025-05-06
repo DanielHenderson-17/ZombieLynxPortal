@@ -175,3 +175,82 @@ export const updateAccount = (updateData) => {
     return res.text();
   });
 };
+
+/**
+ * ✅ Deactivate the user's account (soft delete)
+ * @returns {Promise<string>} - Success message or error
+ */
+export const deactivateAccount = () => {
+  const token = getToken();
+
+  return fetch(`${apiUrl}/deactivate-account`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      return res.text().then((msg) => {
+        throw new Error(msg || "Failed to deactivate account.");
+      });
+    }
+    return res.text();
+  });
+};
+
+/**
+ * 🔐 Request a password reset email
+ * @param {string} email - User's email
+ * @returns {Promise<string>} - Success or failure message
+ */
+export const requestPasswordReset = (email) => {
+  return fetch(`${apiUrl}/request-password-reset`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to send reset email.");
+      return res.json();
+    })
+    .then((data) => data.message)
+    .catch((error) => {
+      console.error("Password reset request error:", error);
+      throw error;
+    });
+};
+
+/**
+ * 🔐 Submit a new password using reset token
+ * @param {string} token - Reset token
+ * @param {string} newPassword
+ * @param {string} confirmPassword
+ * @returns {Promise<string>} - Success message
+ */
+export const resetPassword = (token, newPassword, confirmPassword) => {
+  return fetch(`${apiUrl}/reset-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token,
+      newPassword,
+      confirmPassword,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok)
+        return res.json().then((data) => {
+          throw new Error(data.error || "Password reset failed.");
+        });
+      return res.json();
+    })
+    .then((data) => data.message)
+    .catch((error) => {
+      console.error("Reset password error:", error);
+      throw error;
+    });
+};
