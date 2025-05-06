@@ -5,6 +5,9 @@
   max-width: 500px;
 }
 
+.running-lynx {
+  height: 10%;
+}
 .confirm-email {
   margin-top: 150px;
 }

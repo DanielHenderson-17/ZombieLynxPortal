@@ -69,7 +69,7 @@ export default function OpenTickets({ onTicketChange }) {
   return (
     <div className="col-12 h-100 ticket-body1 border border-0">
       {tickets.length === 0 ? (
-        <div>
+        <div className="mt-md-5 mt-0">
           <div className="d-md-flex d-none no-tickets justify-content-center align-items-center h-100">
             <div>
               <p className="mt-5 pt-4 text-white fs-4">
