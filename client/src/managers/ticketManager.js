@@ -1,6 +1,13 @@
 const _apiUrl = "/api/tickets";
 
-// ✅ Helper: Get JWT Token from Local Storage
+/* ============================================================================
+ * ✅ AUTH HEADER UTILITY
+ * ========================================================================== */
+
+/**
+ * ✅ Get Authorization headers with JWT token
+ * @returns {object}
+ */
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
   return {
@@ -9,7 +16,14 @@ const getAuthHeaders = () => {
   };
 };
 
-// ✅ Get Open Tickets
+/* ============================================================================
+ * ✅ TICKET FETCHING
+ * ========================================================================== */
+
+/**
+ * ✅ Get open tickets
+ * @returns {Promise<object[]>}
+ */
 export const getOpenTickets = () => {
   return fetch(`${_apiUrl}/open`, {
     headers: getAuthHeaders(),
@@ -21,7 +35,10 @@ export const getOpenTickets = () => {
     });
 };
 
-// ✅ Get Closed Tickets
+/**
+ * ✅ Get closed tickets
+ * @returns {Promise<object[]>}
+ */
 export const getClosedTickets = () => {
   return fetch(`${_apiUrl}/closed`, {
     headers: getAuthHeaders(),
@@ -33,31 +50,58 @@ export const getClosedTickets = () => {
     });
 };
 
-// ✅ Close a Ticket
-export const closeTicketAPI = (ticketId) => {
-  return fetch(`${_apiUrl}/${ticketId}/close`, {
-    method: "PUT",
+/**
+ * ✅ Get ticket by ID
+ * @param {string} id
+ * @returns {Promise<object>}
+ */
+export const getTicketById = (id) => {
+  return fetch(`${_apiUrl}/${id}`, {
     headers: getAuthHeaders(),
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error("Error closing ticket.");
-    }
-  });
+  }).then((res) =>
+    res.ok ? res.json() : Promise.reject(`Error fetching ticket with ID ${id}`)
+  );
 };
 
-// ✅ Restore a Ticket
-export const restoreTicketAPI = (ticketId) => {
-  return fetch(`${_apiUrl}/${ticketId}/restore`, {
-    method: "PUT",
+/**
+ * ✅ Get ticket creation options (categories, games, servers)
+ * @returns {Promise<object>}
+ */
+export const getTicketOptions = () => {
+  return fetch(`${_apiUrl}/options`, {
     headers: getAuthHeaders(),
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error("Error restoring ticket.");
-    }
-  });
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching ticket options:", error);
+      throw error;
+    });
 };
 
-// ✅ Create a New Ticket
+/**
+ * ✅ Get all users (admin only)
+ * @returns {Promise<object[]>}
+ */
+export const getAllUsers = () => {
+  return fetch(`${_apiUrl}/users`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching users:", error);
+      throw error;
+    });
+};
+
+/* ============================================================================
+ * ✅ TICKET ACTIONS
+ * ========================================================================== */
+
+/**
+ * ✅ Create a new ticket
+ * @param {object} ticket
+ * @returns {Promise<object>}
+ */
 export const createTicket = (ticket) => {
   return fetch(_apiUrl, {
     method: "POST",
@@ -75,7 +119,11 @@ export const createTicket = (ticket) => {
   });
 };
 
-// ✅ Update/Edit a Ticket
+/**
+ * ✅ Update ticket (basic)
+ * @param {object} ticket
+ * @returns {Promise<void>}
+ */
 export const updateTicket = (ticket) => {
   return fetch(`${_apiUrl}/${ticket.id}/edit`, {
     method: "PUT",
@@ -88,65 +136,12 @@ export const updateTicket = (ticket) => {
   });
 };
 
-// ✅ Delete a Ticket
-export const deleteTicket = (ticketId) => {
-  return fetch(`${_apiUrl}/${ticketId}`, {
-    method: "DELETE",
-    headers: getAuthHeaders(),
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error("Error deleting ticket.");
-    }
-  });
-};
-
-// ✅ Get Ticket Creation Options
-export const getTicketOptions = () => {
-  return fetch(`${_apiUrl}/options`, {
-    headers: getAuthHeaders(),
-  })
-    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
-    .catch((error) => {
-      console.error("Error fetching ticket options:", error);
-      throw error;
-    });
-};
-
-// ✅ Get Ticket by ID
-export const getTicketById = (id) => {
-  return fetch(`${_apiUrl}/${id}`, {
-    headers: getAuthHeaders(),
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Error fetching ticket with ID ${id}`)
-  );
-};
-
-// ✅ Assign User to Ticket
-export const assignUserToTicket = (ticketId, userId) => {
-  return fetch(`${_apiUrl}/${ticketId}/assign-user`, {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(userId),
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Error assigning user: ${res.statusText}`);
-    }
-  });
-};
-
-// ✅ Get All Users (Admin Only)
-export const getAllUsers = () => {
-  return fetch(`${_apiUrl}/users`, {
-    headers: getAuthHeaders(),
-  })
-    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
-    .catch((error) => {
-      console.error("Error fetching users:", error);
-      throw error;
-    });
-};
-
-// ✅ Edit a Ticket
+/**
+ * ✅ Edit a ticket (full response)
+ * @param {string} ticketId
+ * @param {object} updatedTicket
+ * @returns {Promise<object>}
+ */
 export const editTicket = (ticketId, updatedTicket) => {
   return fetch(`${_apiUrl}/${ticketId}/edit`, {
     method: "PUT",
@@ -161,5 +156,71 @@ export const editTicket = (ticketId, updatedTicket) => {
       });
     }
     return res.json();
+  });
+};
+
+/**
+ * ✅ Close a ticket
+ * @param {string} ticketId
+ * @returns {Promise<void>}
+ */
+export const closeTicketAPI = (ticketId) => {
+  return fetch(`${_apiUrl}/${ticketId}/close`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Error closing ticket.");
+    }
+  });
+};
+
+/**
+ * ✅ Restore a closed ticket
+ * @param {string} ticketId
+ * @returns {Promise<void>}
+ */
+export const restoreTicketAPI = (ticketId) => {
+  return fetch(`${_apiUrl}/${ticketId}/restore`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Error restoring ticket.");
+    }
+  });
+};
+
+/**
+ * ✅ Delete a ticket
+ * @param {string} ticketId
+ * @returns {Promise<void>}
+ */
+export const deleteTicket = (ticketId) => {
+  return fetch(`${_apiUrl}/${ticketId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Error deleting ticket.");
+    }
+  });
+};
+
+/**
+ * ✅ Assign a user to a ticket
+ * @param {string} ticketId
+ * @param {string} userId
+ * @returns {Promise<void>}
+ */
+export const assignUserToTicket = (ticketId, userId) => {
+  return fetch(`${_apiUrl}/${ticketId}/assign-user`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(userId),
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error(`Error assigning user: ${res.statusText}`);
+    }
   });
 };

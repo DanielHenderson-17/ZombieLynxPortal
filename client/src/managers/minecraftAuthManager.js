@@ -2,20 +2,39 @@ const API_BASE_URL = "https://localhost:5001/api/Minecraft";
 const DISCORD_API_BASE_URL = "https://localhost:5001/api/Discord";
 const MINECRAFT_AUTH_URL = `${window.location.origin}/minecraft-auth.html`;
 
-// ✅ Get JWT Token from Local Storage
+/* ============================================================================
+ * ✅ TOKEN UTILITIES
+ * ========================================================================== */
+
+/**
+ * ✅ Retrieve JWT token from localStorage
+ * @returns {string|null}
+ */
 export const getMainJwtToken = () => localStorage.getItem("authToken");
 
-// ✅ Check if JWT Token is Valid
+/**
+ * ✅ Check if the JWT token is valid
+ * @returns {boolean}
+ */
 export const isMainJwtValid = () => {
   const token = getMainJwtToken();
   if (!token) return false;
+
   const payload = JSON.parse(atob(token.split(".")[1]));
   return payload.exp * 1000 > Date.now();
 };
 
-// ✅ Check if Discord is Linked
+/* ============================================================================
+ * ✅ LINKED ACCOUNT CHECKS
+ * ========================================================================== */
+
+/**
+ * ✅ Check if Discord is linked (required for Minecraft linking)
+ * @returns {Promise<object|null>}
+ */
 export const getLinkedDiscordAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
+
   return fetch(`${DISCORD_API_BASE_URL}/linked`, {
     method: "GET",
     headers: { Authorization: `Bearer ${getMainJwtToken()}` },
@@ -27,9 +46,13 @@ export const getLinkedDiscordAccount = () => {
     });
 };
 
-// ✅ Check if Minecraft is Linked
+/**
+ * ✅ Check if Minecraft account is linked
+ * @returns {Promise<object|null>}
+ */
 export const getLinkedMinecraftAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
+
   return fetch(`${API_BASE_URL}/linked`, {
     method: "GET",
     headers: { Authorization: `Bearer ${getMainJwtToken()}` },
@@ -41,6 +64,14 @@ export const getLinkedMinecraftAccount = () => {
     });
 };
 
+/* ============================================================================
+ * ✅ LINKING & UNLINKING
+ * ========================================================================== */
+
+/**
+ * ✅ Link Minecraft account manually (no popup)
+ * @param {Function} onSuccess - Callback on success
+ */
 export const linkMinecraftAccount = (onSuccess) => {
   fetch(`${API_BASE_URL}/link-minecraft`, {
     method: "PUT",
@@ -60,7 +91,9 @@ export const linkMinecraftAccount = (onSuccess) => {
     .catch((err) => console.error("❌ Error linking Minecraft account:", err));
 };
 
-// ✅ Open Minecraft Authentication Popup (600x800)
+/**
+ * ✅ Open popup to link Minecraft account
+ */
 export const openMinecraftAuthWindow = () => {
   const minecraftWindow = window.open(
     MINECRAFT_AUTH_URL,
@@ -73,13 +106,12 @@ export const openMinecraftAuthWindow = () => {
     return;
   }
 
-  // Listen for messages from the popup
   const handleMessage = (event) => {
     if (event.origin !== window.location.origin) return;
 
-    // Extract Minecraft user details from the auth response
     const { type, minecraftUuid, minecraftUsername, minecraftAvatarUrl } =
       event.data;
+
     if (type === "MINECRAFT_AUTH_SUCCESS" && minecraftUuid) {
       const minecraftData = {
         MinecraftUuid: minecraftUuid,
@@ -114,7 +146,11 @@ export const openMinecraftAuthWindow = () => {
   window.addEventListener("message", handleMessage);
 };
 
-// ✅ Unlink Minecraft Account
+/**
+ * ✅ Unlink Minecraft account
+ * @param {Function} onSuccess - Callback on success
+ * @returns {Promise<void>}
+ */
 export const unlinkMinecraftAccount = (onSuccess) => {
   return fetch(`${API_BASE_URL}/unlink-minecraft`, {
     method: "PUT",

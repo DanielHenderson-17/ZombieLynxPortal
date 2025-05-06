@@ -1,5 +1,9 @@
 const apiUrl = "/api/Auth";
 
+/* ============================================================================
+ * ✅ TOKEN MANAGEMENT
+ * ========================================================================== */
+
 /**
  * ✅ Save the token to local storage
  * @param {string} token - JWT token to be saved
@@ -31,6 +35,27 @@ export const parseJwt = (token) => {
 };
 
 /**
+ * ✅ Check if the JWT is expired
+ * @param {string} token
+ * @returns {boolean}
+ */
+export const isJwtExpired = (token) => {
+  try {
+    const decoded = parseJwt(token);
+    if (!decoded?.exp) return true;
+    const now = Math.floor(Date.now() / 1000);
+    return decoded.exp < now;
+  } catch (err) {
+    console.error("Error checking token expiration:", err);
+    return true;
+  }
+};
+
+/* ============================================================================
+ * ✅ AUTHENTICATION
+ * ========================================================================== */
+
+/**
  * ✅ Login user and save the token
  * @param {string} email - User's email
  * @param {string} password - User's password
@@ -39,9 +64,7 @@ export const parseJwt = (token) => {
 export const login = (email, password) => {
   return fetch(`${apiUrl}/login`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
@@ -54,14 +77,11 @@ export const login = (email, password) => {
       saveToken(data.token);
       return fetch("/api/Auth/me", {
         headers: { Authorization: `Bearer ${data.token}` },
-      }).then((res) => {
-        if (!res.ok) return null;
-        return res.json();
-      });
+      }).then((res) => (res.ok ? res.json() : null));
     })
     .catch((error) => {
       console.error("Login failed:", error);
-      return null; // Final fallback
+      return null;
     });
 };
 
@@ -73,9 +93,7 @@ export const login = (email, password) => {
 export const register = (user) => {
   return fetch(`${apiUrl}/register`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
   })
     .then(async (res) => {
@@ -98,10 +116,8 @@ export const register = (user) => {
  * @returns {Promise<object|null>} - Logged-in user data or null
  */
 export const tryGetLoggedInUser = () => {
-  const token = localStorage.getItem("authToken");
-  if (!token) {
-    return Promise.reject("No auth token found.");
-  }
+  const token = getToken();
+  if (!token) return Promise.reject("No auth token found.");
 
   return fetch("/api/Auth/me", {
     headers: { Authorization: `Bearer ${token}` },
@@ -117,22 +133,9 @@ export const logout = () => {
   return Promise.resolve();
 };
 
-/**
- * ✅ Check if the JWT is expired
- * @param {string} token
- * @returns {boolean}
- */
-export const isJwtExpired = (token) => {
-  try {
-    const decoded = parseJwt(token);
-    if (!decoded?.exp) return true;
-    const now = Math.floor(Date.now() / 1000);
-    return decoded.exp < now;
-  } catch (err) {
-    console.error("Error checking token expiration:", err);
-    return true;
-  }
-};
+/* ============================================================================
+ * 🔥 EMAIL & ACCOUNT MANAGEMENT
+ * ========================================================================== */
 
 /**
  * 🔥 Resend email verification link
@@ -142,9 +145,7 @@ export const isJwtExpired = (token) => {
 export const resendVerificationEmail = (email) => {
   return fetch(`${apiUrl}/resend-verification`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   })
     .then((res) => {
@@ -157,6 +158,11 @@ export const resendVerificationEmail = (email) => {
     });
 };
 
+/**
+ * ✅ Update user account details
+ * @param {object} updateData
+ * @returns {Promise<string>} - Success message
+ */
 export const updateAccount = (updateData) => {
   const token = getToken();
   return fetch(`${apiUrl}/update-account`, {
@@ -182,12 +188,9 @@ export const updateAccount = (updateData) => {
  */
 export const deactivateAccount = () => {
   const token = getToken();
-
   return fetch(`${apiUrl}/deactivate-account`, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   }).then((res) => {
     if (!res.ok) {
       return res.text().then((msg) => {
@@ -198,6 +201,10 @@ export const deactivateAccount = () => {
   });
 };
 
+/* ============================================================================
+ * 🔐 PASSWORD RESET
+ * ========================================================================== */
+
 /**
  * 🔐 Request a password reset email
  * @param {string} email - User's email
@@ -206,9 +213,7 @@ export const deactivateAccount = () => {
 export const requestPasswordReset = (email) => {
   return fetch(`${apiUrl}/request-password-reset`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   })
     .then((res) => {
@@ -232,9 +237,7 @@ export const requestPasswordReset = (email) => {
 export const resetPassword = (token, newPassword, confirmPassword) => {
   return fetch(`${apiUrl}/reset-password`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       token,
       newPassword,

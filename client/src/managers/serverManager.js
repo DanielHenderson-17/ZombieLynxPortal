@@ -1,3 +1,12 @@
+/* ============================================================================
+ * ✅ FETCH SERVER DATA BY NAME
+ * ========================================================================== */
+
+/**
+ * ✅ Fetch data for a specific game server by name
+ * @param {string} serverName - Name of the server (e.g., "Ark:SE")
+ * @returns {Promise<object[]>} - Server data array or empty array on error
+ */
 export async function fetchServerData(serverName) {
   const endpoints = {
     "Ark:SE": "/api/server/ark-se",

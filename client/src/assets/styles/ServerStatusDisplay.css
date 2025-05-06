@@ -1,79 +1,62 @@
 .server-status-display {
   height: 80vh;
 }
-
 .server-status-tab {
   background-color: #292e38;
 }
-
 .server-status-container {
   padding: 20px;
 }
-
 .server-status-title {
   font-size: 1.5rem;
   font-weight: bold;
 }
-
 .server-status-img {
   width: 30px;
 }
-
 .server-item {
   height: 50px !important;
 }
-
 .server-status-tab .nav-link {
   background-color: #282a2d;
 }
-
 .server-status-bg {
   background: linear-gradient(145deg, #121214, #1a1a1d);
   border-radius: 5px;
 }
-
 .server-status-tab .nav-link:hover {
   background-color: #dc3545;
 }
-
 .server-status-tab .nav-link.active {
   background-color: #dc3545;
   color: white;
 }
-
 .server-status-table {
   border-collapse: collapse;
 }
-
 .server-status-table th,
 .server-status-table td {
   padding: 10px;
   text-align: center;
 }
-
 .server-status-table th {
   font-weight: bold;
 }
-
 .vote-connect-button {
   background-color: #292e38;
 }
-
 .vote-connect-button:hover {
   background-color: #dc3545;
 }
-
 @media (max-width: 768px) {
   .server-status-table th,
   .server-status-table td {
     padding: 9px;
   }
-
   .status-title {
     font-size: 0.8rem;
   }
 }
-
 @media (min-width: 2900px) {
   .server-status-tab {
     margin: 0 10px !important;

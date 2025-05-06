@@ -2,12 +2,22 @@ const DISCORD_AUTH_URL = "https://discord.com/oauth2/authorize";
 const REDIRECT_URL = `${window.location.origin}/discord-callback.html`;
 const API_BASE_URL = "https://localhost:5001/api/Discord";
 
-// Set JWT token in Local Storage
+/* ============================================================================
+ * ✅ TOKEN UTILITIES
+ * ========================================================================== */
+
+/**
+ * ✅ Retrieve JWT token from localStorage
+ * @returns {string|null}
+ */
 export const getMainJwtToken = () => {
   return localStorage.getItem("authToken");
 };
 
-// Check if JWT token is valid
+/**
+ * ✅ Validate if the JWT token is still valid
+ * @returns {boolean}
+ */
 export const isMainJwtValid = () => {
   const token = getMainJwtToken();
   if (!token) return false;
@@ -16,6 +26,14 @@ export const isMainJwtValid = () => {
   return payload.exp * 1000 > Date.now();
 };
 
+/* ============================================================================
+ * ✅ DISCORD ACCOUNT MANAGEMENT
+ * ========================================================================== */
+
+/**
+ * ✅ Get the currently linked Discord account
+ * @returns {Promise<object|null>}
+ */
 export const getLinkedDiscordAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
 
@@ -26,13 +44,9 @@ export const getLinkedDiscordAccount = () => {
     },
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else if (res.status === 404) {
-        return null;
-      } else {
-        throw new Error(`Unexpected error: ${res.status}`);
-      }
+      if (res.ok) return res.json();
+      if (res.status === 404) return null;
+      throw new Error(`Unexpected error: ${res.status}`);
     })
     .catch((err) => {
       console.error(err);
@@ -40,6 +54,10 @@ export const getLinkedDiscordAccount = () => {
     });
 };
 
+/**
+ * ✅ Get the Discord Client ID from the backend
+ * @returns {Promise<string|null>}
+ */
 export const fetchDiscordClientId = () => {
   return fetch(`${API_BASE_URL}/get-api-key`, {
     method: "GET",
@@ -51,15 +69,17 @@ export const fetchDiscordClientId = () => {
       if (!res.ok) throw new Error("Failed to retrieve Discord Client ID.");
       return res.json();
     })
-    .then((data) => {
-      return data.clientId;
-    })
+    .then((data) => data.clientId)
     .catch((err) => {
       console.error("❌ Error fetching Discord Client ID:", err);
       return null;
     });
 };
 
+/**
+ * ✅ Link Discord account using popup authentication flow
+ * @param {Function} onSuccess - Callback on success
+ */
 export const linkDiscordAccount = (onSuccess) => {
   fetchDiscordClientId().then((clientId) => {
     if (!clientId) {
@@ -67,7 +87,6 @@ export const linkDiscordAccount = (onSuccess) => {
       return;
     }
 
-    // Open Discord login popup window and redirect to Discord OAuth page for authentication
     const discordLoginUrl =
       `${DISCORD_AUTH_URL}?client_id=${clientId}` +
       `&redirect_uri=${encodeURIComponent(REDIRECT_URL)}` +
@@ -80,11 +99,9 @@ export const linkDiscordAccount = (onSuccess) => {
       "width=600,height=800"
     );
 
-    // Handle Discord auth response from popup window
     const handleMessage = (event) => {
       if (event.origin !== window.location.origin) return;
 
-      // Extract Discord user details from the auth response
       const { type, discordId, discordName, discordImgUrl } = event.data;
       if (type === "DISCORD_AUTH_SUCCESS" && discordId) {
         const discordData = {
@@ -104,7 +121,6 @@ export const linkDiscordAccount = (onSuccess) => {
           .then((res) => {
             if (res.ok) {
               if (onSuccess) onSuccess();
-
               if (discordWindow && !discordWindow.closed) {
                 discordWindow.close();
               }
@@ -123,6 +139,11 @@ export const linkDiscordAccount = (onSuccess) => {
   });
 };
 
+/**
+ * ✅ Unlink the Discord account
+ * @param {Function} onSuccess - Callback on success
+ * @returns {Promise<void>}
+ */
 export const unlinkDiscordAccount = (onSuccess) => {
   return fetch(`${API_BASE_URL}/unlink-discord`, {
     method: "PUT",

@@ -5,26 +5,21 @@
   width: 350px;
   margin-top: 20px;
 }
-
 .aboutArrow {
   width: 75px;
 }
-
 .about-container {
   height: 100vh;
 }
-
 @media (max-width: 768px) {
   .about-container {
     height: 100%;
   }
-
   .explanation-img {
     width: 250px;
     margin-top: 0px;
   }
 }
-
 @media (min-width: 2900px) {
   .server-status-title {
     font-size: 5rem !important;

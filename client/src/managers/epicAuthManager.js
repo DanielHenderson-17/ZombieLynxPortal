@@ -2,20 +2,39 @@ const API_BASE_URL = "https://localhost:5001/api/Epic";
 const DISCORD_API_BASE_URL = "https://localhost:5001/api/Discord";
 const EPIC_AUTH_URL = `${window.location.origin}/epic-auth.html`;
 
-// ✅ Get JWT Token from Local Storage
+/* ============================================================================
+ * ✅ TOKEN UTILITIES
+ * ========================================================================== */
+
+/**
+ * ✅ Retrieve JWT token from localStorage
+ * @returns {string|null}
+ */
 export const getMainJwtToken = () => localStorage.getItem("authToken");
 
-// ✅ Check if JWT Token is Valid
+/**
+ * ✅ Check if the JWT token is valid
+ * @returns {boolean}
+ */
 export const isMainJwtValid = () => {
   const token = getMainJwtToken();
   if (!token) return false;
+
   const payload = JSON.parse(atob(token.split(".")[1]));
   return payload.exp * 1000 > Date.now();
 };
 
-// ✅ Check if Discord is Linked (required for Epic)
+/* ============================================================================
+ * ✅ LINKED ACCOUNT CHECKS
+ * ========================================================================== */
+
+/**
+ * ✅ Check if Discord is linked (required for Epic linking)
+ * @returns {Promise<object|null>}
+ */
 export const getLinkedDiscordAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
+
   return fetch(`${DISCORD_API_BASE_URL}/linked`, {
     method: "GET",
     headers: { Authorization: `Bearer ${getMainJwtToken()}` },
@@ -27,9 +46,13 @@ export const getLinkedDiscordAccount = () => {
     });
 };
 
-// ✅ Check if Epic is Linked
+/**
+ * ✅ Check if Epic account is linked
+ * @returns {Promise<object|null>}
+ */
 export const getLinkedEpicAccount = () => {
   if (!isMainJwtValid()) return Promise.resolve(null);
+
   return fetch(`${API_BASE_URL}/linked`, {
     method: "GET",
     headers: { Authorization: `Bearer ${getMainJwtToken()}` },
@@ -41,7 +64,13 @@ export const getLinkedEpicAccount = () => {
     });
 };
 
-// ✅ Link Epic Account via Popup
+/* ============================================================================
+ * ✅ LINKING & UNLINKING
+ * ========================================================================== */
+
+/**
+ * ✅ Open popup to link Epic account
+ */
 export const openEpicAuthWindow = () => {
   const epicWindow = window.open(
     EPIC_AUTH_URL,
@@ -54,11 +83,9 @@ export const openEpicAuthWindow = () => {
     return;
   }
 
-  // Listen for messages from the popup
   const handleMessage = (event) => {
     if (event.origin !== window.location.origin) return;
 
-    // Extract Epic user details from the auth response
     const { type, eosId, epicName } = event.data;
     if (type === "EPIC_AUTH_SUCCESS" && eosId) {
       const epicData = {
@@ -91,7 +118,11 @@ export const openEpicAuthWindow = () => {
   window.addEventListener("message", handleMessage);
 };
 
-// ✅ Unlink Epic Account
+/**
+ * ✅ Unlink Epic account
+ * @param {Function} onSuccess - Callback on success
+ * @returns {Promise<void>}
+ */
 export const unlinkEpicAccount = (onSuccess) => {
   return fetch(`${API_BASE_URL}/unlink-epic`, {
     method: "PUT",
@@ -105,4 +136,5 @@ export const unlinkEpicAccount = (onSuccess) => {
   });
 };
 
+// Allow access to auth window globally
 window.openEpicAuthWindow = openEpicAuthWindow;
