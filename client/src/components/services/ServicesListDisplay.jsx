@@ -2,7 +2,10 @@ import "../../assets/styles/ServicesListDisplay.css";
 
 export default function ServicesListDisplay() {
   return (
-    <div className="mt-3 mb-3 pt-5 col-11 mx-auto zlg-services">
+    <div
+      className="mt-3 mb-3 pt-5 col-11 mx-auto zlg-services"
+      data-aos="fade-up"
+    >
       {/* Services Header */}
       <h3 className="text-start text-danger server-status-title mb-3">
         ZLG <span className="text-white ms-2">SERVICES</span>

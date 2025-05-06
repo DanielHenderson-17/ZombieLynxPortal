@@ -1,6 +1,6 @@
 .stats-container {
   height: 100%;
-  background-color: #13151a !important;
+  background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
 
 @media (max-width: 767.98px) {

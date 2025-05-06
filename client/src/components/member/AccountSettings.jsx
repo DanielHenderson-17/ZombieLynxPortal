@@ -2,16 +2,11 @@ import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
 import PrivacySettings from "./PrivacySettings";
 import LinkedAccountsSettings from "./LinkedAccountsSettings";
+import { settingsTabs } from "../../utils/settingsTabs";
 import "../../assets/styles/settings.css";
 
 export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState("General");
-
-  const tabs = [
-    { name: "General", icon: "bi-gear" },
-    { name: "Privacy", icon: "bi-shield-lock" },
-    { name: "Accounts", icon: "bi-person-badge" },
-  ];
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -31,7 +26,7 @@ export default function AccountSettings() {
       {/* Sidebar for Desktop */}
       <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0 overflow-auto">
         <div>
-          {tabs.map((tab) => (
+          {settingsTabs.map((tab) => (
             <div
               key={tab.name}
               className={`text-decoration-none ${
@@ -60,7 +55,7 @@ export default function AccountSettings() {
       {/* Bottom Nav for Mobile */}
       <div className="d-lg-none fixed-bottom bg-dark text-white bottom-nav">
         <div className="d-flex justify-content-around pt-2 pb-1 my-1">
-          {tabs.map((tab) => (
+          {settingsTabs.map((tab) => (
             <div
               key={tab.name}
               className={`text-decoration-none text-white ${

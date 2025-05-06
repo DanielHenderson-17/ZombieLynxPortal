@@ -5,6 +5,10 @@ import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import { getUserMembership } from "../../managers/userProfileManager";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
+import {
+  getMembershipTier,
+  getTierGradient,
+} from "../../utils/subscriptionUtils";
 import zlgCoin from "../../assets/images/zlgCoin.png";
 import buyPoints from "../../assets/images/buyPoints.png";
 
@@ -13,18 +17,8 @@ export default function ProfileInfo({ loggedInUser }) {
   const [userPoints, setUserPoints] = useState(0);
   const [membership, setMembership] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
-
-  const rawTier = membership?.sub?.split(":")[0];
-  const tier = ["Gold", "Diamond", "Vibranium"].includes(rawTier)
-    ? rawTier
-    : "Standard";
-
-  const tierGradient =
-    {
-      Gold: "linear-gradient(to top, #fad346, black)",
-      Diamond: "linear-gradient(to top, #22a2b1, black)",
-      Vibranium: "linear-gradient(to top, #cd70fd, black)",
-    }[tier] || "linear-gradient(to top, rgb(150, 6, 6), black)";
+  const tier = getMembershipTier(membership);
+  const tierGradient = getTierGradient(tier);
 
   useEffect(() => {
     const fetchLinkedAccounts = async () => {

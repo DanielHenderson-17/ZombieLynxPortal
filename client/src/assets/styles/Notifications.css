@@ -6,6 +6,7 @@
 
 .notifications-container {
   overflow-y: scroll;
+  background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
 
 .notifications-container .flex-grow-1 {
