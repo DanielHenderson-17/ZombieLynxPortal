@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getPackages } from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
+import { findSubscriptionByName } from "../../utils/subscriptionFinder";
 import "../../assets/styles/Shop.css";
 
 export default function Shop() {
@@ -20,21 +21,9 @@ export default function Shop() {
       });
   }, []);
 
-  const goldenLynx = allPackages.find(
-    (p) =>
-      p.name ===
-      "Golden Lynx Subscription (650ZP & Discord Role 1 month Recurring)"
-  );
-  const diamondLynx = allPackages.find(
-    (p) =>
-      p.name ===
-      "Diamond Lynx Subscription  (1300ZP & Discord Role 1 month Recurring)"
-  );
-  const vibraniumLynx = allPackages.find(
-    (p) =>
-      p.name ===
-      "Vibranium Lynx Subscription  (1950ZP & Discord Role 1 month Recurring)"
-  );
+  const goldenLynx = findSubscriptionByName(allPackages, "Gold");
+  const diamondLynx = findSubscriptionByName(allPackages, "Diamond");
+  const vibraniumLynx = findSubscriptionByName(allPackages, "Vibranium");
 
   return (
     <div className="container mt-4 pt-5">

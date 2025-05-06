@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
 import "../../assets/styles/ServerStatusDisplay.css";
 import { fetchServerData } from "../../managers/serverManager";
+import { serverTabs } from "../../utils/serverTabs";
+import { copyToClipboard } from "../../utils/clipboard";
 
 export default function ServerStatusDisplay() {
-  const servers = [
-    { id: 1, name: "Ark:SE", tabId: "tabs-1-1", sectionId: "ArkSE" },
-    { id: 2, name: "Ark:SA", tabId: "tabs-1-2", sectionId: "arkSA" },
-    { id: 3, name: "Eco", tabId: "tabs-1-3", sectionId: "ecos" },
-    { id: 4, name: "Minecraft", tabId: "tabs-1-4", sectionId: "minecrafts" },
-    { id: 5, name: "Empyrion", tabId: "tabs-1-7", sectionId: "empyrions" },
-  ];
-
-  const [activeServer, setActiveServer] = useState(servers[0]);
+  const [activeServer, setActiveServer] = useState(serverTabs[0]);
   const [serverDataCache, setServerDataCache] = useState({});
 
   // Fetch the active server's data once on mount
@@ -38,17 +32,11 @@ export default function ServerStatusDisplay() {
   // Get the active server's data from the cache
   const activeServerData = serverDataCache[activeServer.name] || [];
 
-  // Helper function to copy text to clipboard
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Copied to clipboard!");
-    });
-  };
-
   return (
     <div
       className="col-11 mx-auto server-status-display"
       id="ServerStatusDisplay"
+      data-aos="fade-up"
     >
       {/* Server Status Header */}
       <h3 className="text-start text-danger server-status-title mb-3">
@@ -58,7 +46,7 @@ export default function ServerStatusDisplay() {
 
       {/* Tab Navigation */}
       <ul className="nav nav-tabs mt-3 d-flex justify-content-between col-12 border-0 mb-0 p-0">
-        {servers.map((server) => (
+        {serverTabs.map((server) => (
           <li
             key={server.id}
             className="nav-item col server-status-tab mx-1 rounded-2 text-center fw-bold my-md-0 my-1"
@@ -77,7 +65,7 @@ export default function ServerStatusDisplay() {
 
       {/* Tab Content */}
       <div className="tab-content mt-0 mx-1">
-        {servers.map((server) => (
+        {serverTabs.map((server) => (
           <div
             key={server.id}
             className={`tab-pane ${

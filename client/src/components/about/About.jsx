@@ -2,7 +2,10 @@ import "../../assets/styles/About.css";
 
 export default function About() {
   return (
-    <div className="col-12 pt-1 about-container pt-md-5 pt-2">
+    <div
+      className="col-12 pt-1 about-container pt-md-5 pt-2"
+      data-aos="fade-up"
+    >
       <div className="col-11 mx-auto mt-4">
         <h3 className="text-start text-danger server-status-title mb-3">
           IT PAYS <span className="text-white ms-2">TO PLAY</span>

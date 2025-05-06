@@ -12,6 +12,8 @@ import { Spinner } from "reactstrap";
 import ApplicationViews from "./components/ApplicationViews";
 import { CartProvider } from "./contexts/CartContext";
 import "../src/assets/styles/App.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(undefined);
@@ -27,6 +29,10 @@ function App() {
       .catch(() => {
         setLoggedInUser(null);
       });
+  }, []);
+
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
   }, []);
 
   // ✅ Check for token expiration on route change

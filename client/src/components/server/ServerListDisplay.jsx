@@ -1,74 +1,13 @@
 import { useState } from "react";
+import { getCategoryBadgeClass } from "../../utils/serverCategoryUtils";
+import { servers } from "../../utils/serversData";
 import "../../assets/styles/ServerListDisplay.css";
 
 export default function ServerListDisplay() {
-  function getCategoryBadgeClass(category) {
-    switch (category) {
-      case "MMO Survival":
-        return "badge-mmo-survival";
-      case "Sandbox Simulation":
-        return "badge-sandbox-simulation";
-      case "Sandbox":
-        return "badge-sandbox";
-      case "Space Survival":
-        return "badge-space-survival";
-      default:
-        return "bg-secondary";
-    }
-  }
-
-  const servers = [
-    {
-      id: 1,
-      title: "ARK: SURVIVAL EVOLVED",
-      thumbImg: "/src/assets/images/ark-thumb.png",
-      mainImg: "/src/assets/images/ark-main.png",
-      category: "MMO Survival",
-      description:
-        "We host 12 cross Ark servers that feature vote rewards, login points, and weekly events.",
-    },
-    {
-      id: 2,
-      title: "ARK: SURVIVAL ASCENDED",
-      thumbImg: "/src/assets/images/arkSA-thumb.png",
-      mainImg: "/src/assets/images/arkSA-main.png",
-      category: "MMO Survival",
-      description:
-        "Ark: Survival Evolved remastered on Unreal Engine 5. Benefits include vote rewards and an in-game shop.",
-    },
-    {
-      id: 3,
-      title: "ECO: GLOBAL SURVIVAL",
-      thumbImg: "/src/assets/images/eco-thumb.png",
-      mainImg: "/src/assets/images/eco-main.png",
-      category: "Sandbox Simulation",
-      description:
-        "Eco is a sandbox simulation game where you work together to prevent a meteor from destroying the planet.",
-    },
-    {
-      id: 4,
-      title: "MINECRAFT: JAVA EDITION",
-      thumbImg: "/src/assets/images/minecraft-thumb.png",
-      mainImg: "/src/assets/images/minecraft-main.png",
-      category: "Sandbox",
-      description:
-        "We host Survival, Creative, BedWars, Parkour, and many other servers. Earn points and vote rewards, with an in-game shop.",
-    },
-    {
-      id: 5,
-      title: "EMPYRION: GALACTIC SURVIVAL",
-      thumbImg: "/src/assets/images/empyrion-thumb.png",
-      mainImg: "/src/assets/images/empyrion-main.png",
-      category: "Space Survival",
-      description:
-        "Empyrion is our longest-running server with a loyal player base. Explore the infinite universe of Reforged Eden.",
-    },
-  ];
-
   const [activeServer, setActiveServer] = useState(servers[0]);
 
   return (
-    <div className="zlg-servers" id="ServerListDisplay">
+    <div className="zlg-servers" id="ServerListDisplay" data-aos="fade-up">
       <div className="mt-3 mb-5 pb-5 zlg-server-list col-11 mx-auto">
         <h3 className="text-start text-danger server-status-title mb-3">
           ZLG <span className="text-white ms-2">SERVERS</span>
