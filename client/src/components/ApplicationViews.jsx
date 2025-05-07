@@ -16,7 +16,7 @@ import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
 import AccountSettings from "../components/member/AccountSettings";
 import LoginSuccess from "./auth/LoginSuccess";
-import NavBar from "./NavBar";
+import NavBar from "../components/Nav/NavBar";
 import PrivacyPolicy from "../components/legal/PrivacyPolicy";
 import Rules from "../components/legal/Rules";
 

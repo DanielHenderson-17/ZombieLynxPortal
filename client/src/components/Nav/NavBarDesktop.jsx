@@ -1,0 +1,172 @@
+import { Link, useNavigate } from "react-router-dom";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
+import { formatDiscordName } from "../../utils/formatDiscordName";
+import zlgCoin from "../../assets/images/zlgCoin.png";
+import buyPoints from "../../assets/images/buyPoints.png";
+import addPoints from "../../assets/images/addPoints.png";
+
+export default function NavBarDesktop({
+  loggedInUser,
+  steamAccount,
+  discordAccount,
+  unreadNotifications,
+  cartCount,
+  userPoints,
+  handleLogout,
+  randomSeed,
+  showDropdown,
+  setShowDropdown,
+  dropdownRef,
+}) {
+  const navigate = useNavigate();
+
+  return (
+    <div className="d-none d-lg-flex align-items-center justify-content-end position-relative col-2">
+      <Link
+        to={`/shop`}
+        className="mb-1"
+        data-bs-toggle="tooltip"
+        title="Shop"
+        data-bs-placement="bottom"
+      >
+        <img src={addPoints} alt="" className="me-4 addPoints" />
+      </Link>
+      <Link
+        to={`https://www.zlg.gg/discord`}
+        data-bs-toggle="tooltip"
+        title="Discord"
+        data-bs-placement="bottom"
+      >
+        <i className="fa-brands fa-discord text-white fs-3 me-4"></i>
+      </Link>
+      <Link
+        to="/#ServerListDisplay"
+        data-bs-toggle="tooltip"
+        title="Go to Servers"
+        data-bs-placement="bottom"
+        className="me-3"
+      >
+        <i className="fa-solid fa-gamepad text-white fs-3"></i>
+      </Link>
+      {!loggedInUser ? (
+        <div
+          className="p-0 d-flex justify-content-center align-items-center login-btn"
+          onClick={() => navigate("/login")}
+        >
+          <p className="my-0 me-3 text-white">Login</p>
+          <i className="bi bi-person-circle fs-2 text-white"></i>
+        </div>
+      ) : (
+        <div className="d-flex justify-content-between align-items-center col-10 ms-2">
+          <Link
+            to="/member/notifications"
+            className="nav-link ps-2 pe-2 position-relative border-start border-secondary"
+          >
+            <i className="fa-solid fa-envelope text-white fs-6 me-2"></i>
+            {unreadNotifications > 0 && (
+              <span className="cart-badge rounded-circle text-white bg-danger">
+                {unreadNotifications}
+              </span>
+            )}
+          </Link>
+
+          <Link
+            to="/shop/cart"
+            className="nav-link pe-2 ps-0 border-end border-secondary position-relative"
+          >
+            <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
+            {cartCount > 0 && (
+              <span className="cart-badge rounded-circle text-white bg-danger">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+
+          <div className="m-0 text-center col-8 my-2 ps-3">
+            <h5 className="text-white text-center mb-1 navbar-first-name">
+              <span
+                className={
+                  (discordAccount?.discordName
+                    ? formatDiscordName(discordAccount.discordName)
+                    : loggedInUser?.firstName || "Guest"
+                  ).length > 12
+                    ? "small-username"
+                    : ""
+                }
+              >
+                {discordAccount?.discordName
+                  ? capitalizeFirstLetter(
+                      formatDiscordName(discordAccount.discordName)
+                    )
+                  : loggedInUser?.firstName || "Guest"}
+              </span>
+            </h5>
+
+            <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
+              <img src={zlgCoin} alt="" className="zlg-coin3" />
+              <div className="text-container points-container">
+                <p className="mb-0">{userPoints}</p>
+              </div>
+              <Link to="/shop" className="text-secondary buy-points3">
+                <img src={buyPoints} alt="" />
+              </Link>
+            </div>
+          </div>
+
+          <img
+            src={
+              discordAccount?.discordImgUrl ||
+              steamAccount?.steamImgUrl ||
+              `https://picsum.photos/seed/${randomSeed}/40/40`
+            }
+            alt="Profile"
+            className="profile-img rounded-circle mx-3"
+            onClick={() => setShowDropdown(!showDropdown)}
+          />
+
+          {showDropdown && (
+            <div
+              ref={dropdownRef}
+              className="dropdown-menu show profile-menu"
+              style={{ right: 0 }}
+            >
+              <button
+                className="dropdown-item text-white d-flex justify-content-between"
+                onClick={() => navigate("/member")}
+              >
+                <p className="m-0">My Profile</p>
+                <i className="bi bi-person-circle text-white"></i>
+              </button>
+
+              <button
+                className="dropdown-item text-white d-flex justify-content-between"
+                onClick={() => navigate("/member/accountsettings")}
+              >
+                <p className="m-0">Settings</p>
+                <i className="bi bi-gear text-white"></i>
+              </button>
+
+              <button
+                className="dropdown-item text-white d-flex justify-content-between"
+                onClick={() =>
+                  window.open("https://www.zlg.gg/discord", "_blank")
+                }
+              >
+                <p className="m-0">Discord</p>
+                <i className="bi bi-discord text-white"></i>
+              </button>
+
+              <button
+                className="dropdown-item text-white d-flex justify-content-between"
+                onClick={handleLogout}
+              >
+                <p className="m-0">Logout</p>
+                <i className="bi bi-box-arrow-right"></i>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
