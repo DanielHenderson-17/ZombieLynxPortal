@@ -113,7 +113,7 @@ export default function NavBarMobile({
             />
           </div>
 
-          <div className="mt-0 fs-1 d-flex justify-content-center align-items-center">
+          <div className="fs-1 d-flex justify-content-center align-items-center">
             <img
               src={`/public/${tier.toLowerCase()}.png`}
               alt={`${tier} Subscription`}
