@@ -21,7 +21,7 @@ export default function Home() {
             className="splash-background d-md-block d-none"
           />
           <img
-            src="/src/assets/images/apoc-background2.png"
+            src="/src/assets/images/apoc-background4.png"
             alt=""
             className="splash-background d-md-none d-block"
           />
@@ -31,7 +31,7 @@ export default function Home() {
               <img
                 src="/src/assets/images/zlg-logo-main.png"
                 alt=""
-                className="ms-3 d-md-block d-none"
+                className="ms-3 d-block"
               />
               <div className="us">
                 <div className="d-md-flex d-block justify-content-start pt-3 pb-md-4 pb-0 mt-3 ms-md-3 m-0 mission-statement">
