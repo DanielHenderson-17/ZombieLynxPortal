@@ -20,10 +20,11 @@
 }
 
 .dropdown-menu {
-  background-color: rgba(0, 0, 0, 0.856);
-  right: 0;
-  left: auto;
-  border-bottom: 2px solid #b31818;
+  margin-top: 475px;
+  background-color: #18181b;
+  right: -60px !important;
+  width: 350px;
+  border-bottom: 5px solid #b31818;
 }
 
 .navbar-toggler-icon {
@@ -62,10 +63,6 @@
 .mobile-menu {
   z-index: 1050;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-}
-
-.profile-menu {
-  margin-top: 170px;
 }
 
 .profile-menu .dropdown-item:hover {

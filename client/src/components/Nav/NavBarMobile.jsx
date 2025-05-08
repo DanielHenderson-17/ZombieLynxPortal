@@ -132,14 +132,23 @@ export default function NavBarMobile({
           </h6>
 
           {/* Points Display */}
-          <div className="points d-flex align-items-center justify-content-start mb-5 pt-1 ps-2 mx-auto">
-            <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-6 col-4 position-relative points-container h-100 mx-auto">
-              <img src={zlgCoin} alt="" className="zlg-coin" />
-              <div className="text-container border border-secondary p-0 rounded-end-5">
+          <div className="points d-flex align-items-center justify-content-start mb-5 pt-2 ps-2 mx-auto">
+            <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-4 col-4 position-relative points-container h-100 mx-auto">
+              <img
+                src={zlgCoin}
+                alt=""
+                className="zlg-coin"
+                style={{ width: "42px", height: "42px", top: "-3px" }}
+              />
+              <div className="text-container border border-secondary p-0 rounded-5">
                 <span>{userPoints}</span>
               </div>
               <Link to="/shop" className="text-secondary buy-points">
-                <img src={buyPoints} alt="" />
+                <img
+                  src={buyPoints}
+                  alt=""
+                  style={{ width: "42px", height: "42px" }}
+                />
               </Link>
             </div>
           </div>
