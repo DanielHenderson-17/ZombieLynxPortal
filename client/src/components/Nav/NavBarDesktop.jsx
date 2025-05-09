@@ -62,7 +62,7 @@ export default function NavBarDesktop({
             to="/member/notifications"
             className="nav-link ps-2 pe-2 position-relative border-start border-secondary"
           >
-            <i className="fa-solid fa-envelope text-white fs-6 me-2"></i>
+            <i className="bi bi-bell-fill text-white fs-6 me-2"></i>
             {unreadNotifications > 0 && (
               <span className="cart-badge rounded-circle text-white bg-danger">
                 {unreadNotifications}
@@ -127,42 +127,77 @@ export default function NavBarDesktop({
           {showDropdown && (
             <div
               ref={dropdownRef}
-              className="dropdown-menu show profile-menu"
-              style={{ right: 0 }}
+              className="dropdown-menu show profile-menu text-white py-3 px-2 shadow"
             >
+              <div className="d-flex align-items-center mb-3 ps-2">
+                <img
+                  src={
+                    discordAccount?.discordImgUrl ||
+                    steamAccount?.steamImgUrl ||
+                    `https://picsum.photos/seed/${randomSeed}/40/40`
+                  }
+                  alt="Profile"
+                  className="rounded-circle me-2"
+                  style={{ width: "50px", height: "50px" }}
+                />
+                <div>
+                  <span className="fw-bold fs-5">
+                    {discordAccount?.discordName
+                      ? capitalizeFirstLetter(
+                          formatDiscordName(discordAccount.discordName)
+                        )
+                      : loggedInUser?.firstName || "Guest"}
+                  </span>
+                  <span className="d-block fs-6">{loggedInUser.email}</span>
+                </div>
+              </div>
+
+              <hr className="my-3" />
+
               <button
-                className="dropdown-item text-white d-flex justify-content-between"
+                className="dropdown-item text-white d-flex justify-content-start align-items-center"
                 onClick={() => navigate("/member")}
               >
-                <p className="m-0">My Profile</p>
-                <i className="bi bi-person-circle text-white"></i>
+                <i className="bi bi-person-circle me-3 fs-2"></i> My Profile
               </button>
 
               <button
-                className="dropdown-item text-white d-flex justify-content-between"
+                className="dropdown-item text-white d-flex justify-content-start align-items-center"
                 onClick={() => navigate("/member/accountsettings")}
               >
-                <p className="m-0">Settings</p>
-                <i className="bi bi-gear text-white"></i>
+                <i className="bi bi-gear me-3 fs-2"></i> Settings & Privacy
               </button>
 
               <button
-                className="dropdown-item text-white d-flex justify-content-between"
+                className="dropdown-item text-white d-flex justify-content-start align-items-center"
                 onClick={() =>
                   window.open("https://www.zlg.gg/discord", "_blank")
                 }
               >
-                <p className="m-0">Discord</p>
-                <i className="bi bi-discord text-white"></i>
+                <i className="bi bi-discord me-3 fs-2 text-white"></i> Zombie
+                Lynx Discord
               </button>
 
               <button
-                className="dropdown-item text-white d-flex justify-content-between"
+                className="dropdown-item text-white d-flex justify-content-start align-items-center"
                 onClick={handleLogout}
               >
-                <p className="m-0">Logout</p>
-                <i className="bi bi-box-arrow-right"></i>
+                <i className="bi bi-box-arrow-right px-1 me-2 fs-2"></i> Log Out
               </button>
+              <div className="d-flex align-items-center justify-content-around mt-4 mb-0">
+                <Link
+                  to="/privacy-policy"
+                  className="text-decoration-none text-white"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/zlg-rules"
+                  className="text-decoration-none text-white"
+                >
+                  Rules
+                </Link>
+              </div>
             </div>
           )}
         </div>

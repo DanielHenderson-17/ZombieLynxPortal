@@ -43,7 +43,6 @@ export default function Shop() {
               alt="Golden Lynx"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$4.99 / month</h4>
-            {console.log("goldenLynx", goldenLynx)}
             <button
               className="btn btn-danger mb-3 mx-2"
               onClick={() => {
