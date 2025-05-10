@@ -206,7 +206,7 @@ export default function NavBarMobile({
               className="btn btn-link text-white fs-4 text-decoration-none"
               onClick={() => {
                 handleClose();
-                window.open("https://www.zlg.gg/discord", "_blank");
+                window.open("https://discord.gg/FrWtShumut", "_blank");
               }}
             >
               Discord

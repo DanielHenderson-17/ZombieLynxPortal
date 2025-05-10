@@ -99,7 +99,7 @@
         }
 
         try {
-          const res = await fetch("https://localhost:5001/api/Epic/linked", {
+          const res = await fetch("/api/Epic/linked", {
             method: "GET",
             headers: { Authorization: "Bearer " + token },
           });
@@ -114,7 +114,7 @@
             );
 
             // ✅ Auto-link if Discord is linked
-            const discordRes = await fetch("https://localhost:5001/api/Discord/linked", {
+            const discordRes = await fetch("/api/Discord/linked", {
               method: "GET",
               headers: { Authorization: "Bearer " + token },
             });
@@ -124,7 +124,7 @@
               console.log("🔗 Discord found, attempting to auto-link Epic...");
 
               // Call link-epic if Discord exists
-              const linkRes = await fetch("https://localhost:5001/api/Epic/link-epic", {
+              const linkRes = await fetch("/api/Epic/link-epic", {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json",

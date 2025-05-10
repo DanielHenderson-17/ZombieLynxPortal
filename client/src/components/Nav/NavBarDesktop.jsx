@@ -29,7 +29,7 @@ export default function NavBarDesktop({
         <img src="/images/addPoints.png" alt="" className="me-4 addPoints" />
       </Link>
       <Link
-        to={`https://www.zlg.gg/discord`}
+        to={`https://discord.gg/FrWtShumut`}
         data-bs-toggle="tooltip"
         title="Discord"
         data-bs-placement="bottom"
@@ -168,7 +168,7 @@ export default function NavBarDesktop({
               <button
                 className="dropdown-item text-white d-flex justify-content-start align-items-center"
                 onClick={() =>
-                  window.open("https://www.zlg.gg/discord", "_blank")
+                  window.open("https://discord.gg/FrWtShumut", "_blank")
                 }
               >
                 <i className="bi bi-discord me-3 fs-2 text-white"></i> Zombie
