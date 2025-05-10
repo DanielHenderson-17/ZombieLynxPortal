@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getCategoryBadgeClass } from "../../utils/serverCategoryUtils";
 import { servers } from "../../utils/serversData";
-import "../../assets/styles/ServerListDisplay.css";
+import "./ServerListDisplay.css";
 
 export default function ServerListDisplay() {
   const [activeServer, setActiveServer] = useState(servers[0]);

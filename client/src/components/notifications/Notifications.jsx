@@ -5,7 +5,7 @@ import {
   markNotificationAsRead,
   deleteNotification,
 } from "../../managers/notificationManager";
-import "../../assets/styles/notifications.css";
+import "./Notifications.css";
 
 export default function Notification({ loggedInUser }) {
   const [notifications, setNotifications] = useState([]);

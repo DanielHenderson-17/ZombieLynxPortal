@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../../assets/styles/ServerStatusDisplay.css";
+import "./ServerStatusDisplay.css";
 import { fetchServerData } from "../../managers/serverManager";
 import { serverTabs } from "../../utils/serverTabs";
 import { copyToClipboard } from "../../utils/clipboard";
@@ -105,8 +105,8 @@ export default function ServerStatusDisplay() {
                         <img
                           src={
                             server.isOnline
-                              ? "/src/assets/images/online.png"
-                              : "/src/assets/images/offline.png"
+                              ? "/images/online.png"
+                              : "/images/offline.png"
                           }
                           alt={server.isOnline ? "Online" : "Offline"}
                           className="status-icon"

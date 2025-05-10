@@ -1,4 +1,4 @@
-import "../../assets/styles/ServicesListDisplay.css";
+import "./ServicesListDisplay.css";
 
 export default function ServicesListDisplay() {
   return (
@@ -22,7 +22,7 @@ export default function ServicesListDisplay() {
             </span>
             <img
               className="col-6"
-              src="/src/assets/images/normallynx.png"
+              src="/images/normallynx.png"
               alt="Single Payment"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">One Time Payment</h4>
@@ -79,7 +79,7 @@ export default function ServicesListDisplay() {
             <span className="subscription-badge golden-badge">Golden Lynx</span>
             <img
               className="col-6"
-              src="/src/assets/images/goldenlynx.png"
+              src="/images/goldenlynx.png"
               alt="Golden Lynx"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$4.99 / month</h4>
@@ -130,7 +130,7 @@ export default function ServicesListDisplay() {
             </span>
             <img
               className="col-6"
-              src="/src/assets/images/diamondlynx.png"
+              src="/images/diamondlynx.png"
               alt="Diamond Lynx"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$9.99 / month</h4>
@@ -181,7 +181,7 @@ export default function ServicesListDisplay() {
             </span>
             <img
               className="col-6"
-              src="/src/assets/images/vibraniumlynx.png"
+              src="/images/vibraniumlynx.png"
               alt="Vibranium Lynx"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$14.99 / month</h4>

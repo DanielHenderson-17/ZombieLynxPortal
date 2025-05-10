@@ -3,7 +3,7 @@ import GeneralSettings from "./GeneralSettings";
 import PrivacySettings from "./PrivacySettings";
 import LinkedAccountsSettings from "./LinkedAccountsSettings";
 import { settingsTabs } from "../../utils/settingsTabs";
-import "../../assets/styles/settings.css";
+import "./Settings.css";
 
 export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState("General");

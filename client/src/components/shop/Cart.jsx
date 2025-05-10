@@ -10,7 +10,7 @@ import {
   addPackageToBasket,
 } from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
-import "../../assets/styles/Cart.css";
+import "./Cart.css";
 
 export default function Cart() {
   const { cartItems, updateQuantity, removeItem, clearCart } = useCart();

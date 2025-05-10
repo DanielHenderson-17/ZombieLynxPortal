@@ -1,6 +1,6 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import "../../assets/styles/Member.css";
+import "./Member.css";
 import ProfileInfo from "./ProfileInfo.jsx";
 import MemberNav from "./MemberNav";
 

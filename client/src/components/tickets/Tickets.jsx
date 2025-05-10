@@ -4,7 +4,7 @@ import ClosedTickets from "./ClosedTickets";
 import NewTicket from "./NewTicket";
 import SingleTicket from "./SingleTicket";
 import EditTicket from "./EditTicket";
-import "../../assets/styles/tickets.css";
+import "./Tickets.css";
 import { useEffect, useState } from "react";
 import { getOpenTickets } from "../../managers/ticketManager";
 

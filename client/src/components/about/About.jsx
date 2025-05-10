@@ -1,4 +1,4 @@
-import "../../assets/styles/About.css";
+import "./About.css";
 
 export default function About() {
   return (
@@ -19,10 +19,14 @@ export default function About() {
             <span className="text-danger me-2 fw-bold">1.</span>
             Play Our ZLG Games!
           </h4>
-          <img src="/temp1.png" alt="" className="explanation-img mb-5" />
+          <img
+            src="/images/temp1.png"
+            alt=""
+            className="explanation-img mb-5"
+          />
         </div>
         <img
-          src="/src/assets/images/aboutArrow.png"
+          src="/images/aboutArrow.png"
           className="aboutArrow d-none d-md-block"
           alt=""
         />
@@ -31,10 +35,14 @@ export default function About() {
             <span className="text-danger me-2 fw-bold">2.</span>
             Earn or Purchase ZLG Points!
           </h4>
-          <img src="/temp2.png" alt="" className="explanation-img mb-5" />
+          <img
+            src="/images/temp2.png"
+            alt=""
+            className="explanation-img mb-5"
+          />
         </div>
         <img
-          src="/src/assets/images/aboutArrow.png"
+          src="/images/aboutArrow.png"
           className="aboutArrow d-none d-md-block"
           alt=""
         />
@@ -44,7 +52,7 @@ export default function About() {
             Spend Points in Any Game!*
           </h4>
           <img
-            src="/temp3.png"
+            src="/images/temp3.png"
             alt=""
             className="explanation-img mb-md-5 mb-4"
           />

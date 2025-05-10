@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { register } from "../../managers/authManager";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
-import zlglogo from "../../assets/images/zlglogo.png";
 import { fetchDiscordClientId } from "../../managers/discordAuthManager";
 import { validatePassword } from "../../utils/validatePassword";
-import "../../assets/styles/Login.css";
+import "./Login.css";
 import { formatDiscordName } from "../../utils/formatDiscordName";
 
 export default function Register() {
@@ -115,7 +114,7 @@ export default function Register() {
         className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 text-center"
         style={{ maxWidth: "500px", opacity: 0.6 }}
       >
-        <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
+        <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
         <h5 className="mt-4 waiting-text">
           Waiting for Discord authentication...
         </h5>
@@ -126,7 +125,7 @@ export default function Register() {
 
   return (
     <div className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11">
-      <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
+      <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
       <h4 className="register-title">Create a new account for</h4>
       <div className="d-flex justify-content-center align-items-center mb-2 register-user">
         <img

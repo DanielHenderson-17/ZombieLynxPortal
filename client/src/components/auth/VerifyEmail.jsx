@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import zlglogo from "../../assets/images/zlglogo.png";
 
 export default function VerifyEmail() {
   const location = useLocation();
@@ -53,7 +52,11 @@ export default function VerifyEmail() {
       className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 text-center"
       style={{ maxWidth: "500px", opacity: 0.95 }}
     >
-      <img src={zlglogo} alt="Zombie Lynx Logo" className="col-10 mt-3 mb-3" />
+      <img
+        src="/images/zlglogo.png"
+        alt="Zombie Lynx Logo"
+        className="col-10 mt-3 mb-3"
+      />
       <h4 className="register-title mb-4">Email Verification</h4>
 
       {status === "loading" && (

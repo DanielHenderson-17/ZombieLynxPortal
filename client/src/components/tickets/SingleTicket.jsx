@@ -275,7 +275,7 @@ export default function SingleTicket({ loggedInUser }) {
                           src={
                             msg.discordImgUrl
                               ? msg.discordImgUrl
-                              : "https://cdn.discordapp.com/embed/avatars/0.png" // Fallback avatar
+                              : "https://cdn.discordapp.com/embed/avatars/0.png"
                           }
                           alt="Profile"
                           className="message-img me-2"

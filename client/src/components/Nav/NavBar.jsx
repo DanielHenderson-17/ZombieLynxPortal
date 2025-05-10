@@ -8,8 +8,7 @@ import {
   getUserProfiles,
   getUserMembership,
 } from "../../managers/userProfileManager";
-import "../../assets/styles/NavBar.css";
-import zlgLogo from "../../assets/zlg-logo.png";
+import "./NavBar.css";
 import { getLinkedSteamAccount } from "../../managers/steamAuthManager";
 import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import { getUserNotifications } from "../../managers/notificationManager";
@@ -178,7 +177,11 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
     <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark ps-2 pe-md-4 pe-2">
       <div className="container-fluid px-md-5 px-2">
         <RRNavLink className="navbar-brand" to="/#home">
-          <img className="zlg-logo" src={zlgLogo} alt="Zombie Lynx Gaming" />
+          <img
+            className="zlg-logo"
+            src="/images/zlg-logo.png"
+            alt="Zombie Lynx Gaming"
+          />
         </RRNavLink>
 
         <NavBarDesktop
