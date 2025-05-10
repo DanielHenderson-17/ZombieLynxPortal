@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tebexio/tebex.js": "^1.7.0",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.1",
+    "react-toastify": "^11.0.5",
     "reactstrap": "^9.2.3"
   },
   "devDependencies": {
