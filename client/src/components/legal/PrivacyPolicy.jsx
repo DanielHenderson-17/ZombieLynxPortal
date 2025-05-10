@@ -541,11 +541,12 @@ export default function PrivacyPolicy() {
           <p>
             By visiting this page on our website:
             <a
-              href="https://www.zlg.gg/discord"
+              href="https://discord.gg/FrWtShumut"
               rel="external nofollow noopener"
               target="_blank"
+              className="ps-2"
             >
-              https://www.zlg.gg/discord
+              Zombie Lynx Gaming Discord
             </a>
           </p>
         </li>

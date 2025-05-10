@@ -15,11 +15,13 @@ namespace ZombieLynxPortalAPI.Controllers
     {
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
         private readonly IEmailSender _emailSender;
+        private readonly string _frontendBaseUrl;
 
-        public NotificationController(ZombieLynxPortalAPIDbContext dbContext, IEmailSender emailSender)
+        public NotificationController(ZombieLynxPortalAPIDbContext dbContext, IEmailSender emailSender, IConfiguration config)
         {
             _dbContext = dbContext;
             _emailSender = emailSender;
+            _frontendBaseUrl = config["FrontendBaseUrl"];
         }
 
         // ✅ Admin: Create a Notification
@@ -44,9 +46,9 @@ namespace ZombieLynxPortalAPI.Controllers
             await _dbContext.Notifications.AddAsync(notification);
             await _dbContext.SaveChangesAsync();
 
-            var unsubscribeFooter = @"
+            var unsubscribeFooter = $@"
                 <p style='font-size:10px;color:gray;margin-top:30px;'>
-                To manage your marketing email preferences, click <a href='http://localhost:5174/member/accountsettings'>here</a>.
+                To manage your marketing email preferences, click <a href='{_frontendBaseUrl}/member/accountsettings'>here</a>.
                 </p>";
 
             if (dto.IsGlobal)

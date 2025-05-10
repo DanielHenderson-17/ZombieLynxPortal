@@ -161,14 +161,17 @@ builder.Services.AddDbContext<MinecraftLinkPointsDbContext>((serviceProvider, op
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost",
-        policy => policy
-            .SetIsOriginAllowed(origin =>
-                new Uri(origin).Host == "localhost")
+    options.AddPolicy("AllowFrontend", policy =>
+        policy.WithOrigins(
+                "http://localhost:5174",
+                "https://zlg.gg"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials());
+            .AllowCredentials()
+    );
 });
+
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -312,14 +315,14 @@ app.Use(async (context, next) =>
 
 
 // app.UseHttpsRedirection();
-app.UseCors("AllowLocalhost");
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
 // ✅ Bind to all network interfaces
 app.Urls.Add("http://0.0.0.0:5001");
-// app.Urls.Add("http://0.0.0.0:5000");
+app.Urls.Add("http://0.0.0.0:5000");
 app.Urls.Add("https://localhost:5001");
 
 
