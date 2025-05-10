@@ -1,5 +1,5 @@
-const API_BASE_URL = "https://localhost:5001/api/Minecraft";
-const DISCORD_API_BASE_URL = "https://localhost:5001/api/Discord";
+const API_BASE_URL = "/api/Minecraft";
+const DISCORD_API_BASE_URL = "/api/Discord";
 const MINECRAFT_AUTH_URL = `${window.location.origin}/minecraft-auth.html`;
 
 /* ============================================================================

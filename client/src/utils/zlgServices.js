@@ -91,7 +91,7 @@ const servicesData = () => ({
         ],
         description: "Discord Shoutout",
         benefits: ["This is a one-time donation", "Discord Shoutout"],
-        image: "/src/assets/images/normallynx.png",
+        image: "/images/normallynx.png",
       },
       {
         id: "golden",
@@ -110,7 +110,7 @@ const servicesData = () => ({
           "Private Discord Channel",
           "650 ZP Every Month!",
         ],
-        image: "/src/assets/images/goldenlynx.png",
+        image: "/images/goldenlynx.png",
       },
       {
         id: "diamond",
@@ -129,7 +129,7 @@ const servicesData = () => ({
           "Private Discord Channel",
           "1300 ZP Every Month!",
         ],
-        image: "/src/assets/images/diamondlynx.png",
+        image: "/images/diamondlynx.png",
       },
       {
         id: "vibranium",
@@ -148,7 +148,7 @@ const servicesData = () => ({
           "Private Discord Channel",
           "1950 ZP Every Month!",
         ],
-        image: "/src/assets/images/vibraniumlynx.png",
+        image: "/images/vibraniumlynx.png",
       },
     ],
   },
@@ -168,7 +168,7 @@ const servicesData = () => ({
         ],
         description: "Discord Shoutout",
         benefits: ["This is a one-time donation", "Discord Shoutout"],
-        image: "/src/assets/images/normallynx.png",
+        image: "/images/normallynx.png",
       },
       {
         id: "golden",
@@ -188,7 +188,7 @@ const servicesData = () => ({
           "Private Discord Channel",
           "10x Ingots, 5x Pearls/Diamonds",
         ],
-        image: "/src/assets/images/goldenlynx.png",
+        image: "/images/goldenlynx.png",
       },
       {
         id: "diamond",
@@ -208,7 +208,7 @@ const servicesData = () => ({
           "Private Discord Channel",
           "15x Ingots, 7x Pearls/Diamonds",
         ],
-        image: "/src/assets/images/diamondlynx.png",
+        image: "/images/diamondlynx.png",
       },
       {
         id: "vibranium",
@@ -228,7 +228,7 @@ const servicesData = () => ({
           "Private Discord Channel",
           "20x Ingots, 10x Pearls/Diamonds",
         ],
-        image: "/src/assets/images/vibraniumlynx.png",
+        image: "/images/vibraniumlynx.png",
       },
     ],
   },

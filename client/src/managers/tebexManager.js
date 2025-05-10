@@ -46,7 +46,7 @@ export const getPackages = () => {
  * @returns {Promise<object>}
  */
 export const createBasket = (items, token) => {
-  return fetch("/api/tebex/create-basket", {
+  return fetch(`${_apiUrl}/create-basket`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export const createBasket = (items, token) => {
  * @returns {Promise<object>}
  */
 export const authenticateBasket = (ident, token) => {
-  return fetch("/api/tebex/authenticate-basket", {
+  return fetch(`${_apiUrl}/authenticate-basket`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export const authenticateBasket = (ident, token) => {
  * @returns {Promise<object>}
  */
 export const addPackageToBasket = async (ident, item, token) => {
-  const response = await fetch(`/api/tebex/add-package/${ident}`, {
+  const response = await fetch(`${_apiUrl}/add-package/${ident}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

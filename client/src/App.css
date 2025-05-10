@@ -47,20 +47,20 @@
   height: 100vh !important;
 }
 .main-content {
-  background-image: url("/src/assets/images/Main-bg.png");
+  background-image: url("/images/Main-bg.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 body {
-  background-image: url("/src/assets/images/Main-bg.png");
+  background-image: url("/images/Main-bg.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 @media (max-width: 768px) {
   .main-content {
-    background-image: url("/src/assets/images/Main-bg.png") !important;
+    background-image: url("/images/Main-bg.png") !important;
     background-size: fill !important;
   }
 }
