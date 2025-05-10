@@ -4,7 +4,6 @@ import { resetPassword } from "../../managers/authManager";
 import { Input, FormGroup, Button, FormFeedback } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import zlglogo from "../../assets/images/zlglogo.png";
 import { validatePassword } from "../../utils/validatePassword";
 
 export default function ResetPassword() {
@@ -59,7 +58,7 @@ export default function ResetPassword() {
         className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
         onSubmit={handleSubmit}
       >
-        <img src={zlglogo} alt="" className="col-10 mt-3 mb-3" />
+        <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
         <h4>Set a New Password</h4>
         <hr />
 

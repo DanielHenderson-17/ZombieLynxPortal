@@ -9,8 +9,6 @@ import {
   getMembershipTier,
   getTierGradient,
 } from "../../utils/subscriptionUtils";
-import zlgCoin from "../../assets/images/zlgCoin.png";
-import buyPoints from "../../assets/images/buyPoints.png";
 
 export default function ProfileInfo({ loggedInUser }) {
   const [discordAccount, setDiscordAccount] = useState(null);
@@ -65,7 +63,7 @@ export default function ProfileInfo({ loggedInUser }) {
             {/* Discord Name */}
             <h3 className="text-white d-flex mb-0 member-name align-items-center">
               <img
-                src={`/public/${tier.toLowerCase()}.png`}
+                src={`/${tier.toLowerCase()}.png`}
                 alt={`${tier} Subscription`}
                 className="subscription-icon me-2"
                 style={{ width: "25px", height: "25px" }}
@@ -98,12 +96,12 @@ export default function ProfileInfo({ loggedInUser }) {
             {/* Points*/}
             <div className="points d-flex align-items-center justify-content-start mt-2 pt-1 ps-2">
               <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-6 col-8 position-relative points-container h-100">
-                <img src={zlgCoin} alt="" className="zlg-coin" />
+                <img src="/images/zlgCoin.png" alt="" className="zlg-coin" />
                 <div className="text-container border border-secondary p-0 rounded-end-5">
                   <span>{userPoints}</span>
                 </div>
                 <Link to="/shop" className="text-secondary buy-points">
-                  <img src={buyPoints} alt="" />
+                  <img src="/images/buyPoints.png" alt="" />
                 </Link>
               </div>
             </div>

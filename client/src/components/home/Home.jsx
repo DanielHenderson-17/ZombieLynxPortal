@@ -1,4 +1,4 @@
-import "../../assets/styles/Home.css";
+import "./Home.css";
 import ServerListDisplay from "../server/ServerListDisplay";
 import ServerStatusDisplay from "../server/ServerStatusDisplay";
 import ServicesListDisplay from "../services/ServicesListDisplay";
@@ -16,12 +16,12 @@ export default function Home() {
       <div className="splash-main-container mt-0 bg-dark w">
         <div className="d-flex splash-container justify-content-start align-items-center col-12 ps-md-5 position-relative">
           <img
-            src="/src/assets/images/apoc-background3.png"
+            src="/images/apoc-background3.png"
             alt=""
             className="splash-background d-md-block d-none"
           />
           <img
-            src="/src/assets/images/apoc-background4.png"
+            src="/images/apoc-background4.png"
             alt=""
             className="splash-background d-md-none d-block"
           />
@@ -29,7 +29,7 @@ export default function Home() {
           <div className="splash-logo col-md-5 col-12 text-start ms-md-3 m-0 d-flex justify-content-start align-items-center">
             <div>
               <img
-                src="/src/assets/images/zlg-logo-main.png"
+                src="/images/zlg-logo-main.png"
                 alt=""
                 className="ms-3 d-block"
               />

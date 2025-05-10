@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getPackages } from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
 import { findSubscriptionByName } from "../../utils/subscriptionFinder";
-import "../../assets/styles/Shop.css";
+import "./Shop.css";
 
 export default function Shop() {
   const [allPackages, setAllPackages] = useState([]);
@@ -39,7 +39,7 @@ export default function Shop() {
             <span className="subscription-badge golden-badge">Golden Lynx</span>
             <img
               className="col-6"
-              src="/src/assets/images/goldenlynx.png"
+              src="/images/goldenlynx.png"
               alt="Golden Lynx"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$4.99 / month</h4>
@@ -95,7 +95,7 @@ export default function Shop() {
             </span>
             <img
               className="col-6"
-              src="/src/assets/images/diamondlynx.png"
+              src="/images/diamondlynx.png"
               alt="Diamond Lynx"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$9.99 / month</h4>
@@ -150,7 +150,7 @@ export default function Shop() {
             </span>
             <img
               className="col-6"
-              src="/src/assets/images/vibraniumlynx.png"
+              src="/images/vibraniumlynx.png"
               alt="Vibranium Lynx"
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$14.99 / month</h4>

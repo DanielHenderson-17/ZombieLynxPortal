@@ -6,7 +6,7 @@ import MinecraftRules from "./MinecraftRules";
 import RustRules from "./RustRules";
 import EmpyrionRules from "./EmpyrionRules";
 import EcoRules from "./EcoRules";
-import "../../assets/styles/Rules.css";
+import "./Rules.css";
 
 export default function Rules() {
   const tabs = [

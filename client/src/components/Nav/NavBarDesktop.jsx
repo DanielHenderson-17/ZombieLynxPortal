@@ -1,9 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
-import zlgCoin from "../../assets/images/zlgCoin.png";
-import buyPoints from "../../assets/images/buyPoints.png";
-import addPoints from "../../assets/images/addPoints.png";
 
 export default function NavBarDesktop({
   loggedInUser,
@@ -29,7 +26,7 @@ export default function NavBarDesktop({
         title="Shop"
         data-bs-placement="bottom"
       >
-        <img src={addPoints} alt="" className="me-4 addPoints" />
+        <img src="/images/addPoints.png" alt="" className="me-4 addPoints" />
       </Link>
       <Link
         to={`https://www.zlg.gg/discord`}
@@ -103,12 +100,12 @@ export default function NavBarDesktop({
             </h5>
 
             <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
-              <img src={zlgCoin} alt="" className="zlg-coin3" />
+              <img src="/images/zlgCoin.png" alt="" className="zlg-coin3" />
               <div className="text-container points-container">
                 <p className="mb-0">{userPoints}</p>
               </div>
               <Link to="/shop" className="text-secondary buy-points3">
-                <img src={buyPoints} alt="" />
+                <img src="/images/buyPoints.png" alt="" />
               </Link>
             </div>
           </div>

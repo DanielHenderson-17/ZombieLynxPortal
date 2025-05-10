@@ -89,10 +89,10 @@ export default function OpenTickets({ onTicketChange }) {
                 </button>
               </Link>
             </div>
-            <img src="/public/kaeneko.png" alt="" className="kaeneko" />
+            <img src="/images/Kaeneko.png" alt="" className="kaeneko" />
           </div>
           <div className="d-block d-md-none no-tickets justify-content-center align-items-center h-100">
-            <img src="/public/kaeneko.png" alt="" className="kaeneko" />
+            <img src="/images/Kaeneko.png" alt="" className="kaeneko" />
             <div>
               <p className="mt-2 pt-2 text-white fs-4">
                 You have no open tickets.

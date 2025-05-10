@@ -8,8 +8,6 @@ import {
   getMembershipTier,
   getTierGradient,
 } from "../../utils/subscriptionUtils";
-import zlgCoin from "../../assets/images/zlgCoin.png";
-import buyPoints from "../../assets/images/buyPoints.png";
 
 export default function NavBarMobile({
   loggedInUser,
@@ -26,8 +24,17 @@ export default function NavBarMobile({
   const [userLoading, setUserLoading] = useState(true);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
-  const tier = getMembershipTier(membership);
+  const tier = getMembershipTier(membership || {});
   const tierGradient = getTierGradient(tier);
+
+  const tierIcons = {
+    Gold: "/images/gold.png",
+    Diamond: "/images/diamond.png",
+    Vibranium: "/images/vibranium.png",
+    Standard: "/images/standard.png",
+  };
+
+  const tierIcon = tierIcons[tier];
 
   const avatarSrc =
     discordAccount?.discordImgUrl ||
@@ -115,7 +122,7 @@ export default function NavBarMobile({
 
           <div className="fs-1 d-flex justify-content-center align-items-center">
             <img
-              src={`/public/${tier.toLowerCase()}.png`}
+              src={tierIcon}
               alt={`${tier} Subscription`}
               className="subscription-icon me-2"
               style={{ width: "30px", height: "30px" }}
@@ -135,7 +142,7 @@ export default function NavBarMobile({
           <div className="points d-flex align-items-center justify-content-start mb-5 pt-2 ps-2 mx-auto">
             <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-4 col-4 position-relative points-container h-100 mx-auto">
               <img
-                src={zlgCoin}
+                src="/images/zlgCoin.png"
                 alt=""
                 className="zlg-coin"
                 style={{ width: "42px", height: "42px", top: "-3px" }}
@@ -145,7 +152,7 @@ export default function NavBarMobile({
               </div>
               <Link to="/shop" className="text-secondary buy-points">
                 <img
-                  src={buyPoints}
+                  src="/images/buyPoints.png"
                   alt=""
                   style={{ width: "42px", height: "42px" }}
                 />

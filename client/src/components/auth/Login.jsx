@@ -2,9 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../managers/authManager";
 import { Button, FormGroup, Input } from "reactstrap";
-import zlglogo from "../../assets/images/zlglogo.png";
-import loadingGif from "/public/runninglynx.gif";
-import "../../assets/styles/Login.css";
+import "./Login.css";
 
 export default function Login({ setLoggedInUser }) {
   const navigate = useNavigate();
@@ -33,7 +31,11 @@ export default function Login({ setLoggedInUser }) {
   if (showLoginAnimation) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
-        <img src={loadingGif} alt="Logging in..." className="running-lynx" />
+        <img
+          src="/images/runninglynx.gif"
+          alt="Logging in..."
+          className="running-lynx"
+        />
       </div>
     );
   }
@@ -43,7 +45,11 @@ export default function Login({ setLoggedInUser }) {
       className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
       onSubmit={handleSubmit}
     >
-      <img src={zlglogo} alt="ZLG Logo" className="col-10 mt-3 mb-3" />
+      <img
+        src="/images/zlglogo.png"
+        alt="ZLG Logo"
+        className="col-10 mt-3 mb-3"
+      />
       <h4>Welcome Back</h4>
       <hr />
 

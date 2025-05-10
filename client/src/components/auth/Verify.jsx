@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { resendVerificationEmail } from "../../managers/authManager";
-import zlglogo from "../../assets/images/zlglogo.png";
 
 export default function Verify() {
   const [email, setEmail] = useState("");
@@ -34,7 +33,11 @@ export default function Verify() {
       className="container register-container confirm-email rounded-3 p-4 shadow col-md-6 col-11 text-center"
       style={{ maxWidth: "500px", opacity: 0.95 }}
     >
-      <img src={zlglogo} alt="Zombie Lynx Logo" className="col-10 mt-3 mb-3" />
+      <img
+        src="/images/zlglogo.png"
+        alt="Zombie Lynx Logo"
+        className="col-10 mt-3 mb-3"
+      />
       <h4 className="register-title mb-4">Confirm Your Email</h4>
       <p className="mb-3">
         Thank you for registering! Please check your email!

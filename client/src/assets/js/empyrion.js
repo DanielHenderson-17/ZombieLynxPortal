@@ -46,10 +46,10 @@ function printEmpyrion(serverId, data) {
   const onlineDot = document.createElement("img");
 
   if (data.is_online === "1") {
-    onlineDot.src = "./assets/images/online.png"; // Display online.png for online servers
+    onlineDot.src = "/images/online.png";
     onlineDot.alt = "Online";
   } else {
-    onlineDot.src = "./assets/images/online.png"; // Display offline.png for offline servers
+    onlineDot.src = "/images/online.png";
     onlineDot.alt = "Offline";
   }
   statusCell.appendChild(onlineDot);
