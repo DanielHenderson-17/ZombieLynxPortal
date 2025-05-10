@@ -318,7 +318,13 @@ app.Use(async (context, next) =>
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapFallbackToFile("index.html");
+
 app.MapControllers();
+
 
 // ✅ Bind to all network interfaces
 app.Urls.Add("http://0.0.0.0:5001");
