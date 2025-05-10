@@ -1,6 +1,6 @@
 const DISCORD_AUTH_URL = "https://discord.com/oauth2/authorize";
 const REDIRECT_URL = `${window.location.origin}/discord-callback.html`;
-const API_BASE_URL = "https://localhost:5001/api/Discord";
+const API_BASE_URL = "/api/Discord";
 
 /* ============================================================================
  * ✅ TOKEN UTILITIES

@@ -1,6 +1,6 @@
 const STEAM_OPENID_URL = "https://steamcommunity.com/openid/login";
 const REDIRECT_URL = `${window.location.origin}/steam-callback.html`;
-const API_BASE_URL = "https://localhost:5001/api/Steam";
+const API_BASE_URL = "/api/Steam";
 
 /* ============================================================================
  * ✅ TOKEN UTILITIES
@@ -167,7 +167,7 @@ export const linkSteamAccount = (onSuccess) => {
     }
   };
 
-  window.addEventListener("message", handleMessage); // ✅ must come before popup opens
+  window.addEventListener("message", handleMessage);
 
   const steamLoginUrl =
     `${STEAM_OPENID_URL}?openid.ns=http://specs.openid.net/auth/2.0` +

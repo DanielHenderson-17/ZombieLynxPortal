@@ -75,7 +75,7 @@ export const login = (email, password) => {
       if (!data?.token) return null;
 
       saveToken(data.token);
-      return fetch("/api/Auth/me", {
+      return fetch(`${apiUrl}/me`, {
         headers: { Authorization: `Bearer ${data.token}` },
       }).then((res) => (res.ok ? res.json() : null));
     })
@@ -119,7 +119,7 @@ export const tryGetLoggedInUser = () => {
   const token = getToken();
   if (!token) return Promise.reject("No auth token found.");
 
-  return fetch("/api/Auth/me", {
+  return fetch(`${apiUrl}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   }).then((res) => (res.ok ? res.json() : Promise.reject("Invalid token")));
 };

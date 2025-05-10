@@ -23,10 +23,6 @@
       href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap"
       rel="stylesheet"
     />
-
-    <!-- External Script -->
-    <script defer src="/src/managers/epicAuthManager.js" type="module"></script>
-
     <style>
       html, body {
         height: 100vh;
@@ -37,7 +33,7 @@
         font-family: 'Jockey One', sans-serif;
       }
       body {
-        background-image: url("epic-bg.png");
+        background-image: url("/images/epic-bg.png");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
@@ -55,7 +51,7 @@
 
   <body>
     <img
-      src="epic-logo.png"
+      src="/images/epic-logo.png"
       alt=""
       class="mx-auto text-center d-flex justify-content-center mt-5 mb-3 col-3"
     />
@@ -93,7 +89,7 @@
     </div>
 
     <script>
-                  async function checkEpicStatus() {
+        async function checkEpicStatus() {
         const token = localStorage.getItem("authToken");
         if (!token) {
           document.getElementById("status-title").innerText = "No Discord Linked";

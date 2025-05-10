@@ -1,5 +1,5 @@
-const API_BASE_URL = "https://localhost:5001/api/Epic";
-const DISCORD_API_BASE_URL = "https://localhost:5001/api/Discord";
+const API_BASE_URL = "/api/Epic";
+const DISCORD_API_BASE_URL = "/api/Discord";
 const EPIC_AUTH_URL = `${window.location.origin}/epic-auth.html`;
 
 /* ============================================================================
