@@ -104,124 +104,163 @@ export default function NavBarMobile({
         </div>
 
         <div className="text-center">
-          <div
-            className="hexagon mx-auto mb-1"
-            style={{
-              background: tierGradient,
-              width: "160px",
-              height: "160px",
-            }}
-          >
-            <img
-              src={avatarSrc}
-              alt="User Avatar"
-              className="profile-img"
-              style={{ width: "160px", height: "160px" }}
-            />
-          </div>
-
-          <div className="fs-1 d-flex justify-content-center align-items-center">
-            <img
-              src={tierIcon}
-              alt={`${tier} Subscription`}
-              className="subscription-icon me-2"
-              style={{ width: "30px", height: "30px" }}
-            />
-            <span>
-              {userLoading
-                ? "Loading..."
-                : capitalizeFirstLetter(formatDiscordName(displayName))}
-            </span>
-          </div>
-
-          <h6 className="text-secondary my-2 fs-6">
-            {loggedInUser?.email || "Please log in to view your email."}
-          </h6>
-
-          {/* Points Display */}
-          <div className="points d-flex align-items-center justify-content-start mb-5 pt-2 ps-2 mx-auto">
-            <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-4 col-4 position-relative points-container h-100 mx-auto">
-              <img
-                src="/images/zlgCoin.png"
-                alt=""
-                className="zlg-coin"
-                style={{ width: "42px", height: "42px", top: "-3px" }}
-              />
-              <div className="text-container border border-secondary p-0 rounded-5">
-                <span>{userPoints}</span>
-              </div>
-              <Link to="/shop" className="text-secondary buy-points">
+          {loggedInUser ? (
+            <>
+              <div
+                className="hexagon mx-auto mb-1"
+                style={{
+                  background: tierGradient,
+                  width: "130px",
+                  height: "130px",
+                }}
+              >
                 <img
-                  src="/images/buyPoints.png"
-                  alt=""
-                  style={{ width: "42px", height: "42px" }}
+                  src={avatarSrc}
+                  alt="User Avatar"
+                  className="profile-img"
+                  style={{ width: "123px", height: "123px" }}
                 />
-              </Link>
-            </div>
-          </div>
-          <hr className="col-8 mx-auto mb-4" />
+              </div>
 
-          <div className="d-grid gap-4 px-5 pt-1">
-            <button
-              className="btn btn-link text-white fs-4 text-decoration-none"
-              onClick={() => {
-                handleClose();
-                navigate("/member");
-              }}
-            >
-              My Profile
-            </button>
+              <div className="fs-1 d-flex justify-content-center align-items-center">
+                <img
+                  src={tierIcon}
+                  alt={`${tier} Subscription`}
+                  className="subscription-icon me-2"
+                  style={{ width: "30px", height: "30px" }}
+                />
+                <span>
+                  {userLoading
+                    ? "Loading..."
+                    : capitalizeFirstLetter(formatDiscordName(displayName))}
+                </span>
+              </div>
 
-            <button
-              className="btn btn-link text-white fs-4 text-decoration-none"
-              onClick={() => {
-                handleClose();
-                navigate("/shop");
-              }}
-            >
-              Shop
-            </button>
+              <h6 className="text-secondary my-2 fs-6">
+                {loggedInUser?.email || "Please log in to view your email."}
+              </h6>
 
-            <button
-              className="btn btn-link text-white fs-4 text-decoration-none"
-              onClick={() => {
-                handleClose();
-                navigate("/member/notifications");
-              }}
-            >
-              Notifications
-            </button>
+              {/* Points Display */}
+              <div className="points d-flex align-items-center justify-content-start mb-5 pt-2 ps-2 mx-auto">
+                <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-5 col-4 position-relative points-container h-100 mx-auto">
+                  <img
+                    src="/images/zlgCoin.png"
+                    alt=""
+                    className="zlg-coin"
+                    style={{ width: "42px", height: "42px", top: "-3px" }}
+                  />
+                  <div className="text-container border border-secondary p-0 rounded-5">
+                    <span>{userPoints}</span>
+                  </div>
+                  <Link to="/shop" className="text-secondary buy-points">
+                    <img
+                      src="/images/buyPoints.png"
+                      alt=""
+                      style={{ width: "42px", height: "42px" }}
+                    />
+                  </Link>
+                </div>
+              </div>
+              <hr className="col-8 mx-auto mb-3" />
 
-            <button
-              className="btn btn-link text-white fs-4 text-decoration-none"
-              onClick={() => {
-                handleClose();
-                navigate("/shop/cart");
-              }}
-            >
-              Cart
-            </button>
+              <div className="d-grid gap-3 px-5 pt-1">
+                <button
+                  className="btn btn-link text-white fs-5 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/member");
+                  }}
+                >
+                  My Profile
+                </button>
 
-            <button
-              className="btn btn-link text-white fs-4 text-decoration-none"
-              onClick={() => {
-                handleClose();
-                window.open("https://discord.gg/FrWtShumut", "_blank");
-              }}
-            >
-              Discord
-            </button>
+                <button
+                  className="btn btn-link text-white fs-5 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/shop");
+                  }}
+                >
+                  Shop
+                </button>
 
-            <button
-              className="btn btn-link text-danger fs-4 text-decoration-none"
-              onClick={() => {
-                handleLogout();
-                handleClose();
-              }}
-            >
-              Logout
-            </button>
-          </div>
+                <button
+                  className="btn btn-link text-white fs-5 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/member/notifications");
+                  }}
+                >
+                  Notifications
+                </button>
+
+                <button
+                  className="btn btn-link text-white fs-5 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/shop/cart");
+                  }}
+                >
+                  Cart
+                </button>
+
+                <button
+                  className="btn btn-link text-white fs-5 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    window.open("https://discord.gg/FrWtShumut", "_blank");
+                  }}
+                >
+                  Discord
+                </button>
+
+                <button
+                  className="btn btn-link text-danger fs-5 text-decoration-none"
+                  onClick={() => {
+                    handleLogout();
+                    handleClose();
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="mb-4">Welcome, Guest</h3>
+              <div className="d-grid gap-4 px-5">
+                <button
+                  className="btn btn-link text-white fs-4 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/shop");
+                  }}
+                >
+                  Shop
+                </button>
+
+                <button
+                  className="btn btn-link text-white fs-4 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    window.open("https://discord.gg/FrWtShumut", "_blank");
+                  }}
+                >
+                  Discord
+                </button>
+
+                <button
+                  className="btn btn-link text-primary fs-4 text-decoration-none"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/login");
+                  }}
+                >
+                  Login
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

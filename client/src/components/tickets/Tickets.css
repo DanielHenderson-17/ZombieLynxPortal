@@ -121,6 +121,10 @@ hr {
     overflow-y: hidden;
     padding-bottom: 100px;
   }
+  .kaeneko {
+    height: 300px !important;
+    margin-top: 30px;
+  }
   .ticket-container {
     overflow-y: scroll;
   }

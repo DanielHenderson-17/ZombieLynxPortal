@@ -3,7 +3,7 @@ import "./About.css";
 export default function About() {
   return (
     <div
-      className="col-12 pt-1 about-container pt-md-5 pt-2"
+      className="col-12 pt-1 about-container pt-md-5 pt-5"
       data-aos="fade-up"
     >
       <div className="col-11 mx-auto mt-4">
