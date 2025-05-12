@@ -92,3 +92,11 @@ Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTIN
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+ToDo:
+popout menu to shop
+bot not creating or closing tickets ? maybe token?
+change tebex route on steam login
+clear cart after purchase? Works for me
+gray out button for promo
+checkout rules container whitespace
