@@ -91,7 +91,7 @@ export default function OpenTickets({ onTicketChange }) {
             </div>
             <img src="/images/Kaeneko.png" alt="" className="kaeneko" />
           </div>
-          <div className="d-block d-md-none no-tickets justify-content-center align-items-center h-100">
+          <div className="d-block d-md-none no-tickets justify-content-center align-items-center">
             <img src="/images/Kaeneko.png" alt="" className="kaeneko" />
             <div>
               <p className="mt-2 pt-2 text-white fs-4">

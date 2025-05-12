@@ -52,7 +52,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-md-around justify-content-center col-11 mx-auto zlg-about">
+        <div className="d-flex justify-content-md-around justify-content-center col-11 mx-auto zlg-about pt-1">
           {/* Active Admins */}
           <div className="d-md-flex d-block justify-content-center custom-col-3-75 rounded-3 p-md-3 p-0">
             <div className="me-md-3 me-0 d-flex justify-content-center align-items-center">

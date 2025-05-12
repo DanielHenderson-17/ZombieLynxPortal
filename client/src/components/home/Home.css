@@ -29,7 +29,7 @@
 }
 .splash-logo {
   z-index: 2;
-  height: 80vh !important;
+  height: 80vh;
 }
 .splash-logo img {
   height: 130px;
@@ -56,10 +56,10 @@
     margin-top: 5px !important;
   }
   .mission-statement {
-    margin-top: 400px !important;
+    margin-top: 0px !important;
   }
   .zlg-about {
-    margin-top: 465px;
+    margin-top: 94%;
   }
   .custom-col-3-75 {
     flex: 0 0 33%;
@@ -70,12 +70,12 @@
     margin-top: 10px;
   }
   .splash-container {
-    height: 300px;
+    height: 38%;
   }
   .splash-logo img {
     width: 90%;
     margin: 0 auto;
-    margin-top: 500px;
+    margin-top: 0px;
     height: 75%;
   }
   .splash-background {
@@ -104,6 +104,9 @@
     position: absolute;
     top: 0;
     left: 0;
+  }
+  .splash-logo {
+    height: 100% !important;
   }
   .splash-logo img {
     width: 95%;

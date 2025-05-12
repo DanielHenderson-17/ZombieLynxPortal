@@ -13,6 +13,7 @@ using ZombieLynxPortalAPI.Services.Ark;
 using ZombieLynxPortalAPI.Services.Minecraft;
 using ZombieLynxPortalAPI.Data.Ark;
 using ZombieLynxPortalAPI.Services.Email;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -318,6 +319,14 @@ app.Use(async (context, next) =>
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// ✅ Force .NET to serve from the correct wwwroot folder
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+    RequestPath = ""
+});
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

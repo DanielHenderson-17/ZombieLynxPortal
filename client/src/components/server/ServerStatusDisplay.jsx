@@ -34,7 +34,7 @@ export default function ServerStatusDisplay() {
 
   return (
     <div
-      className="col-11 mx-auto server-status-display"
+      className="col-11 mx-auto server-status-display mb-5"
       id="ServerStatusDisplay"
       data-aos="fade-up"
     >
