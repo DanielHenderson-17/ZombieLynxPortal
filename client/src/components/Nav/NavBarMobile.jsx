@@ -4,6 +4,7 @@ import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import { getUserMembership } from "../../managers/userProfileManager";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
+import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
 import {
   getMembershipTier,
   getTierGradient,
@@ -150,7 +151,7 @@ export default function NavBarMobile({
                     style={{ width: "42px", height: "42px", top: "-3px" }}
                   />
                   <div className="text-container border border-secondary p-0 rounded-5">
-                    <span>{userPoints}</span>
+                    <span>{formatNumberWithCommas(userPoints)}</span>
                   </div>
                   <Link to="/shop" className="text-secondary buy-points">
                     <img
