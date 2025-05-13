@@ -25,7 +25,7 @@ export default function AdminPanel() {
   }, []);
 
   const formatTierIcon = (timedString) => {
-    let tier = "Standard"; // Default fallback
+    let tier = "Standard";
 
     if (timedString && typeof timedString === "string") {
       const [parsedTier] = timedString.split(":");
