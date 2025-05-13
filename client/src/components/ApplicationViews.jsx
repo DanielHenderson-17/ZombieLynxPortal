@@ -15,6 +15,7 @@ import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
 import AccountSettings from "../components/member/AccountSettings";
+import AdminPanel from "../components/admin/AdminPanel";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "../components/Nav/NavBar";
 import PrivacyPolicy from "../components/legal/PrivacyPolicy";
@@ -85,6 +86,19 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<CreateNotification loggedInUser={loggedInUser} />}
           />
           <Route path="accountsettings" element={<AccountSettings />} />
+          <Route
+            path="admin/users"
+            element={
+              <AuthorizedRoute loggedInUser={loggedInUser}>
+                {loggedInUser?.role === "Admin" ? (
+                  <AdminPanel />
+                ) : (
+                  <p className="text-danger m-3">Access denied.</p>
+                )}
+              </AuthorizedRoute>
+            }
+          />
+
           <Route
             index
             element={<p>Select a module from the navigation above.</p>}

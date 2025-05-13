@@ -350,6 +350,69 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok("User access granted.");
         }
 
+        // GET: api/Auth/all-user-data
+        [HttpGet("all-user-data")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUserData()
+        {
+            var users = await _context.Users
+                .Include(u => u.Profile)
+                .ToListAsync();
+
+            var userData = new List<object>();
+
+            foreach (var user in users)
+            {
+                if (user.Profile == null)
+                    continue;
+
+                var member = await _context.ZLGMembers
+                    .FirstOrDefaultAsync(m => m.UserProfileId == user.Profile.Id);
+
+                if (member == null || string.IsNullOrWhiteSpace(member.DiscordId))
+                    continue;
+
+                userData.Add(new
+                {
+                    user.Id,
+                    user.Email,
+                    user.Role,
+                    user.Verified,
+                    user.Active,
+                    Profile = new
+                    {
+                        user.Profile.FirstName,
+                        user.Profile.LastName
+                    },
+                    ZLGMember = new
+                    {
+                        member.Id,
+                        member.SteamId,
+                        member.SteamName,
+                        member.SteamImgUrl,
+                        member.DiscordId,
+                        member.DiscordName,
+                        member.DiscordImgUrl,
+                        member.EosId,
+                        member.EpicName,
+                        member.EpicImgUrl,
+                        member.MinecraftUuid,
+                        member.MinecraftUsername,
+                        member.MinecraftAvatarUrl,
+                        member.PermissionGroups,
+                        member.TimedPermissionGroups,
+                        member.Points,
+                        member.MinecraftLinked,
+                        member.ASELinked,
+                        member.ASALinked,
+                        member.RustLinked
+                    }
+                });
+            }
+
+            return Ok(userData);
+        }
+
         // GET: api/Auth/me
         [HttpGet("me")]
         [Authorize]
