@@ -70,6 +70,30 @@ export const getUserProfilesWithRoles = () => {
 };
 
 /**
+ * 🛡️ Fetch all users + ZLGMember data (Admin only)
+ * @returns {Promise<Array>}
+ */
+export const getAllUserData = () => {
+  const token = getToken();
+
+  return fetch(`/api/auth/all-user-data`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok)
+        throw new Error("Unauthorized or failed to fetch user data.");
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Admin user data fetch error:", error);
+      throw error;
+    });
+};
+
+/**
  * 🔼 Promote a user to Admin
  * @param {string} userId
  * @returns {Promise<void>}

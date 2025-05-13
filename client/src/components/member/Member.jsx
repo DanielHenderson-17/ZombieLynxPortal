@@ -21,7 +21,7 @@ export default function Member({ loggedInUser }) {
         className="d-none d-md-flex flex-column align-items-center bg-dark py-4 pb-2 pt-5 member-sidebar"
         style={{ minWidth: "120px", maxWidth: "160px" }}
       >
-        <MemberNav />
+        <MemberNav loggedInUser={loggedInUser} />
       </aside>
 
       {/* Main content area */}
@@ -33,7 +33,7 @@ export default function Member({ loggedInUser }) {
 
               {/* Horizontal nav - mobile only */}
               <div className="d-flex d-md-none justify-content-around w-100 mt-3">
-                <MemberNav isMobile={true} />
+                <MemberNav isMobile={true} loggedInUser={loggedInUser} />
               </div>
             </div>
           </div>

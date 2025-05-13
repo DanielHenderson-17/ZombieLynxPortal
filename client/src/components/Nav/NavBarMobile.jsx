@@ -94,7 +94,7 @@ export default function NavBarMobile({
         className={`mobile-slide-menu position-fixed top-0 end-0 vh-100 vw-100 bg-dark text-white overflow-auto ${
           open && !isAnimatingOut ? "show" : ""
         } ${isAnimatingOut ? "hide" : ""}`}
-        style={{ zIndex: 1050 }}
+        style={{ zIndex: 1050, overflowY: "auto" }}
       >
         <div className="d-flex justify-content-end p-4">
           <button
@@ -213,6 +213,18 @@ export default function NavBarMobile({
                 >
                   Discord
                 </button>
+
+                {loggedInUser?.role === "Admin" && (
+                  <button
+                    className="btn btn-link text-white fs-5 text-decoration-none"
+                    onClick={() => {
+                      handleClose();
+                      navigate("/member/admin/users");
+                    }}
+                  >
+                    Admin Panel
+                  </button>
+                )}
 
                 <button
                   className="btn btn-link text-danger fs-5 text-decoration-none"
