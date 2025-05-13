@@ -14,6 +14,7 @@ const tierIcons = {
 export default function AdminPanel() {
   const [users, setUsers] = useState([]);
   const [confirmId, setConfirmId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     getAllUserData()
@@ -39,7 +40,7 @@ export default function AdminPanel() {
       <img
         src={src}
         alt={tier}
-        title={tier}
+        title={timedString || "No subscription"}
         style={{ width: 20, height: 20 }}
       />
     );
@@ -62,9 +63,37 @@ export default function AdminPanel() {
       .finally(() => setConfirmId(null));
   };
 
+  const filteredUsers = users.filter((u) => {
+    const s = searchTerm.toLowerCase();
+    const z = u.zlgMember;
+    return (
+      z?.discordName?.toLowerCase().includes(s) ||
+      z?.steamName?.toLowerCase().includes(s) ||
+      z?.minecraftUsername?.toLowerCase().includes(s)
+    );
+  });
+
   return (
     <div className="notifications-container pt-5 px-3">
-      {users.map((u) => (
+      <div className="mb-4 d-flex align-items-center gap-2">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search Discord, Steam, or Minecraft name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {searchTerm && (
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => setSearchTerm("")}
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      {filteredUsers.map((u) => (
         <div
           key={u.id}
           className="border-bottom border-secondary p-3 mb-3 d-flex align-items-center justify-content-between flex-wrap admin-user-card"
@@ -151,7 +180,6 @@ export default function AdminPanel() {
         </div>
       ))}
 
-      {/* Modal */}
       {confirmId && (
         <div className="modal fade show d-block" tabIndex="-1" role="dialog">
           <div className="modal-dialog modal-dialog-centered" role="document">
@@ -191,6 +219,7 @@ export default function AdminPanel() {
           </div>
         </div>
       )}
+
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
