@@ -37,22 +37,6 @@ export default function AdminPanel() {
       .catch(() => toast.error("Failed to load admin user data."));
   }, [refreshFlag]);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      const dropdowns = document.querySelectorAll(".admin-dropdown-menu");
-      const clickedInside = Array.from(dropdowns).some((dropdown) =>
-        dropdown.contains(e.target)
-      );
-
-      if (!clickedInside) {
-        setDropdownOpenId(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const formatTierIcon = (timedString) => {
     let tier = "Standard";
 
@@ -92,6 +76,7 @@ export default function AdminPanel() {
   };
 
   const handleEditPoints = (user) => {
+    console.log("🛠 handleEditPoints triggered for:", user);
     setDropdownOpenId(null);
     setSelectedUser({
       userProfileId: user.zlgMember.userProfileId,
