@@ -151,3 +151,16 @@ export const updateMarketingConsent = (allowMarketingEmails) => {
     res.ok ? res.text() : Promise.reject("Failed to update marketing consent")
   );
 };
+
+export const updateUserPoints = (userProfileId, points) => {
+  return fetch(`${_apiUrl}/edit-points`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      UserProfileId: userProfileId,
+      Points: points,
+    }),
+  }).then((res) =>
+    res.ok ? res.text() : Promise.reject("Failed to update user points")
+  );
+};

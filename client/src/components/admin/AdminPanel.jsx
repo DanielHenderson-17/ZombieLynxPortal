@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getAllUserData, promoteUser } from "../../managers/userProfileManager";
+import {
+  getAllUserData,
+  promoteUser,
+  updateUserPoints,
+} from "../../managers/userProfileManager";
 import { formatDiscordName } from "../../utils/formatDiscordName";
 import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
 import { toast, ToastContainer } from "react-toastify";
@@ -17,6 +21,11 @@ export default function AdminPanel() {
   const [confirmId, setConfirmId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [editedPoints, setEditedPoints] = useState(0);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [refreshFlag, setRefreshFlag] = useState(false);
 
   useEffect(() => {
     getAllUserData()
@@ -24,7 +33,7 @@ export default function AdminPanel() {
         setUsers(data);
       })
       .catch(() => toast.error("Failed to load admin user data."));
-  }, []);
+  }, [refreshFlag]);
 
   const formatTierIcon = (timedString) => {
     let tier = "Standard";
@@ -62,6 +71,38 @@ export default function AdminPanel() {
       })
       .catch(() => toast.error("Failed to promote user."))
       .finally(() => setConfirmId(null));
+  };
+
+  const handleEditPoints = (user) => {
+    console.log("🧩 Full user object passed to handleEditPoints:", user);
+
+    setSelectedUser({
+      userProfileId: user.zlgMember.userProfileId,
+      discordName: user.zlgMember?.discordName,
+      points: user.zlgMember?.points ?? 0,
+    });
+    setEditedPoints(user.zlgMember?.points ?? 0);
+    setShowEditModal(true);
+  };
+
+  const handleConfirmPointsUpdate = () => {
+    if (!selectedUser) return;
+
+    console.log("🧪 Confirm Clicked");
+    console.log("👉 selectedUser.userProfileId:", selectedUser.userProfileId);
+    console.log("👉 editedPoints:", editedPoints);
+
+    updateUserPoints(selectedUser.userProfileId, editedPoints)
+      .then((result) => {
+        console.log("✅ updateUserPoints success:", result);
+        toast.success("Points updated!");
+        setShowConfirmModal(false);
+        setRefreshFlag((prev) => !prev); // 🔄 trigger re-fetch
+      })
+      .catch((err) => {
+        console.error("❌ updateUserPoints failed:", err);
+        toast.error("Failed to update points.");
+      });
   };
 
   const filteredUsers = users
@@ -239,13 +280,7 @@ export default function AdminPanel() {
                       minWidth: "120px",
                     }}
                   >
-                    <button
-                      className="dropdown-item text-white"
-                      onClick={() => {
-                        console.log("Edit Points clicked for", u.id);
-                        setDropdownOpenId(null);
-                      }}
-                    >
+                    <button onClick={() => handleEditPoints(u)}>
                       Edit Points
                     </button>
                   </div>
@@ -288,6 +323,109 @@ export default function AdminPanel() {
                     onClick={() => handlePromote(confirmId)}
                   >
                     Yes, Promote
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showEditModal && selectedUser && (
+          <div className="modal d-block" tabIndex="-1" role="dialog">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title text-white">
+                    Edit Points: {selectedUser.discordName}
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body text-center">
+                  <div className="d-flex justify-content-center align-items-center gap-2">
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => setEditedPoints((p) => Math.max(0, p - 1))}
+                    >
+                      −
+                    </button>
+                    <input
+                      type="number"
+                      className="form-control text-center"
+                      style={{ maxWidth: "100px" }}
+                      value={editedPoints}
+                      onChange={(e) =>
+                        setEditedPoints(parseInt(e.target.value) || 0)
+                      }
+                    />
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => setEditedPoints((p) => p + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setShowEditModal(false);
+                      setShowConfirmModal(true);
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {showConfirmModal && selectedUser && (
+          <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+              <div className="modal-content bg-dark text-white">
+                <div className="modal-header">
+                  <h5 className="modal-title">Confirm Point Update</h5>
+                  <button
+                    type="button"
+                    className="btn-close btn-close-white"
+                    aria-label="Close"
+                    onClick={() => setShowConfirmModal(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p className="mb-0">
+                    Are you sure you want to set{" "}
+                    <strong>{selectedUser.discordName}</strong>&apos;s points to{" "}
+                    <strong>{editedPoints}</strong>?
+                  </p>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowConfirmModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={handleConfirmPointsUpdate}
+                  >
+                    Confirm
                   </button>
                 </div>
               </div>

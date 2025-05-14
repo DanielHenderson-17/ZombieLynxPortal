@@ -387,6 +387,7 @@ namespace ZombieLynxPortalAPI.Controllers
                     ZLGMember = new
                     {
                         member.Id,
+                        member.UserProfileId,
                         member.SteamId,
                         member.SteamName,
                         member.SteamImgUrl,
