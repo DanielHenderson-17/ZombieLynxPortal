@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
+import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
 
 export default function NavBarDesktop({
   loggedInUser,
@@ -102,7 +103,7 @@ export default function NavBarDesktop({
             <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-md-10 col-12 mx-md-auto ms-0 position-relative">
               <img src="/images/zlgCoin.png" alt="" className="zlg-coin3" />
               <div className="text-container points-container">
-                <p className="mb-0">{userPoints}</p>
+                <p className="mb-0">{formatNumberWithCommas(userPoints)}</p>
               </div>
               <Link to="/shop" className="text-secondary buy-points3">
                 <img src="/images/buyPoints.png" alt="" />

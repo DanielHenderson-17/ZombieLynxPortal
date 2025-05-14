@@ -159,5 +159,22 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok("Marketing email preference updated.");
         }
+
+        // Admin-only  Update Points for a user
+        [HttpPut("edit-points")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditPoints([FromBody] EditPointsDTO dto)
+        {
+            var member = await _context.ZLGMembers
+                .FirstOrDefaultAsync(m => m.UserProfileId == dto.UserProfileId);
+
+            if (member == null)
+                return NotFound("Member not found.");
+
+            member.Points = dto.Points;
+            await _context.SaveChangesAsync();
+
+            return Ok("Points updated successfully.");
+        }
     }
 }

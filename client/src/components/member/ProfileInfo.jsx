@@ -5,6 +5,7 @@ import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
 import { getUserMembership } from "../../managers/userProfileManager";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
+import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
 import {
   getMembershipTier,
   getTierGradient,
@@ -98,7 +99,7 @@ export default function ProfileInfo({ loggedInUser }) {
               <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-6 col-8 position-relative points-container h-100">
                 <img src="/images/zlgCoin.png" alt="" className="zlg-coin" />
                 <div className="text-container border border-secondary p-0 rounded-end-5">
-                  <span>{userPoints}</span>
+                  <span>{formatNumberWithCommas(userPoints)}</span>
                 </div>
                 <Link to="/shop" className="text-secondary buy-points">
                   <img src="/images/buyPoints.png" alt="" />
