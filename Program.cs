@@ -340,12 +340,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // ✅ Force .NET to serve from the correct wwwroot folder
-// app.UseStaticFiles(new StaticFileOptions
-// {
-//     FileProvider = new PhysicalFileProvider(
-//         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
-//     RequestPath = ""
-// });
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+    RequestPath = ""
+});
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
