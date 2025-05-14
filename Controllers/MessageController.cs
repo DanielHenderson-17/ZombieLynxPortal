@@ -6,6 +6,7 @@ using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.DTOs;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -25,7 +26,7 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public IActionResult GetMessagesForTicket(int ticketId)
         {
-            Console.WriteLine($"Fetching messages for Ticket ID: {ticketId}");
+            Log.Information("📨 Fetching messages for Ticket ID: {TicketId}", ticketId);
 
             var messages = _dbContext.Messages
                 .Where(m => m.MessageGroupId == ticketId)
@@ -45,7 +46,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (!messages.Any())
             {
-                Console.WriteLine("No messages found. Returning an empty list.");
+                Log.Information("📭 No messages found for Ticket ID: {TicketId}", ticketId);
                 return Ok(new List<object>());
             }
 
@@ -63,7 +64,7 @@ namespace ZombieLynxPortalAPI.Controllers
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine($"User ID from token: {userId}");
+            Log.Information("✉️ Posting message. User ID from token: {UserId}", userId);
 
             var userProfile = _dbContext.UserProfiles.FirstOrDefault(up => up.UserId.ToString() == userId);
 

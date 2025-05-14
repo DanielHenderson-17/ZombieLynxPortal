@@ -3,6 +3,7 @@ using ZombieLynxPortalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Services.Ark;
 using ZombieLynxPortalAPI.Services.Minecraft;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Tebex
 {
@@ -53,15 +54,15 @@ namespace ZombieLynxPortalAPI.Services.Tebex
                 }
             }
 
-            Console.WriteLine($"🧩 Parsed group: {group ?? "(none)"}");
-            Console.WriteLine($"🪙 Parsed points: {points}");
+            Log.Information($"🧩 Parsed group: {group ?? "(none)"}");
+            Log.Information($"🪙 Parsed points: {points}");
 
             var member = await _dbContext.ZLGMembers
                 .FirstOrDefaultAsync(m => m.UserProfileId == dto.UserProfileId);
 
             if (member == null)
             {
-                Console.WriteLine($"❌ No ZLGMember found for UserProfileId: {dto.UserProfileId}");
+                Log.Information($"❌ No ZLGMember found for UserProfileId: {dto.UserProfileId}");
                 return;
             }
 
@@ -69,7 +70,7 @@ namespace ZombieLynxPortalAPI.Services.Tebex
             {
                 var expiration = DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-dd");
                 member.TimedPermissionGroups = $"{group}:{expiration}";
-                Console.WriteLine($"✅ Applied timed permission group: {group} (expires {expiration})");
+                Log.Information($"✅ Applied timed permission group: {group} (expires {expiration})");
 
                 await _arkSubSync.ApplyTimedSubscriptionAsync(dto.UserProfileId, group, DateTime.UtcNow.AddDays(30));
                 await _asaSubSync.ApplyTimedSubscriptionAsync(dto.UserProfileId, group, DateTime.UtcNow.AddDays(30));
@@ -79,11 +80,11 @@ namespace ZombieLynxPortalAPI.Services.Tebex
             if (points > 0)
             {
                 member.Points += points;
-                Console.WriteLine($"✅ Added {points} points. New total: {member.Points}");
+                Log.Information($"✅ Added {points} points. New total: {member.Points}");
             }
 
             await _dbContext.SaveChangesAsync();
-            Console.WriteLine("💾 Changes saved to ZLGMember.");
+            Log.Information("💾 Changes saved to ZLGMember.");
         }
     }
 }

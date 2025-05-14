@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.Models;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Ark
 {
@@ -25,7 +26,6 @@ namespace ZombieLynxPortalAPI.Services.Ark
             await SyncMinecraftAsync();
 
             await _mainDbContext.SaveChangesAsync();
-            Console.WriteLine("💾 Sync complete and changes saved.");
         }
 
         private async Task SyncASEAsync()
@@ -42,8 +42,6 @@ namespace ZombieLynxPortalAPI.Services.Ark
                 .Select(g => g.OrderByDescending(r => r.CreatedAt).First())
                 .ToList();
 
-            Console.WriteLine($"🔎 Found {pendingRows.Count} pending rows in ArkShop PointsSyncQueue.");
-
             foreach (var row in pendingRows)
             {
                 var member = await _mainDbContext.ZLGMembers
@@ -59,7 +57,6 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
                 arkContext.PointsSyncQueue.RemoveRange(allForThisSteamId);
 
-                Console.WriteLine($"✅ Synced SteamId {row.SteamId} → Points: {row.Points} (cleared queue rows)");
             }
 
             await arkContext.SaveChangesAsync();
@@ -85,12 +82,10 @@ namespace ZombieLynxPortalAPI.Services.Ark
                 if (asaPlayer != null)
                 {
                     asaPlayer.Points = member.Points;
-                    Console.WriteLine($"🔁 Synced ASA → EosId: {member.EosId} → Points: {member.Points}");
                 }
             }
 
             await asaContext.SaveChangesAsync();
-            Console.WriteLine("✅ ASA points sync complete.");
         }
 
         private async Task SyncMinecraftAsync()
@@ -113,12 +108,10 @@ namespace ZombieLynxPortalAPI.Services.Ark
                 if (mcUser != null)
                 {
                     mcUser.coins = member.Points;
-                    Console.WriteLine($"🟫 Synced Minecraft → UUID: {member.MinecraftUuid} → Coins: {member.Points}");
                 }
             }
 
             await mcContext.SaveChangesAsync();
-            Console.WriteLine("✅ Minecraft coins sync complete.");
         }
     }
 }

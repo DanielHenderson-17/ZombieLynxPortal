@@ -14,6 +14,26 @@ using ZombieLynxPortalAPI.Services.Minecraft;
 using ZombieLynxPortalAPI.Data.Ark;
 using ZombieLynxPortalAPI.Services.Email;
 using Microsoft.Extensions.FileProviders;
+using Serilog;
+using Serilog.Events;
+
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Default", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Fatal)
+    .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Fatal)
+    .Enrich.FromLogContext()
+    // .WriteTo.Console()
+    .WriteTo.File(
+        "Logs/log-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+    )
+    .CreateLogger();
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +44,8 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
+builder.Host.UseSerilog();
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -309,7 +328,7 @@ app.Use(async (context, next) =>
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"💥 Unhandled exception: {ex.Message}");
+        Log.Error(ex, "💥 Unhandled exception during request.");
         await context.Response.WriteAsync("Something went wrong.");
     }
 });
@@ -321,12 +340,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // ✅ Force .NET to serve from the correct wwwroot folder
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
-    RequestPath = ""
-});
+// app.UseStaticFiles(new StaticFileOptions
+// {
+//     FileProvider = new PhysicalFileProvider(
+//         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+//     RequestPath = ""
+// });
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

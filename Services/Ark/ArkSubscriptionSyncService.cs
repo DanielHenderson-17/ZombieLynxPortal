@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MySql.EntityFrameworkCore.Extensions;
 using ZombieLynxPortalAPI.Data;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Ark
 {
@@ -24,13 +25,11 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
             if (member == null || string.IsNullOrWhiteSpace(member.SteamId))
             {
-                Console.WriteLine($"❌ Cannot sync subscription – member not found or missing SteamId.");
                 return;
             }
 
             if (!ulong.TryParse(member.SteamId, out var steamId))
             {
-                Console.WriteLine($"❌ Invalid SteamId format: {member.SteamId}");
                 return;
             }
 
@@ -47,14 +46,11 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
             if (player == null)
             {
-                Console.WriteLine($"⚠️ No ArkPermissions player found for SteamId: {steamId}");
                 return;
             }
 
             player.TimedPermissionGroups = formatted;
             await arkPermsContext.SaveChangesAsync();
-
-            Console.WriteLine($"✅ Synced Ark timed sub: SteamId {steamId} → {formatted}");
         }
     }
 }
