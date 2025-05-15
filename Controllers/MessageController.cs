@@ -26,12 +26,10 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public IActionResult GetMessagesForTicket(int ticketId)
         {
-            Log.Information("📨 Fetching messages for Ticket ID: {TicketId}", ticketId);
-
             var messages = _dbContext.Messages
                 .Where(m => m.MessageGroupId == ticketId)
                 .OrderBy(m => m.CreatedAt)
-                .ToList() // ✅ Fetch from DB first to allow C# processing
+                .ToList()
                 .Select(m => new
                 {
                     m.Id,
@@ -64,7 +62,6 @@ namespace ZombieLynxPortalAPI.Controllers
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Log.Information("✉️ Posting message. User ID from token: {UserId}", userId);
 
             var userProfile = _dbContext.UserProfiles.FirstOrDefault(up => up.UserId.ToString() == userId);
 
