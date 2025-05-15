@@ -16,6 +16,7 @@ using ZombieLynxPortalAPI.Services.Email;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Serilog.Events;
+using ZombieLynxPortalAPI.Services.Notifications;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -70,6 +71,9 @@ builder.Services.AddHostedService<MinecraftPointsSyncWorker>();
 builder.Services.AddScoped<MinecraftSubscriptionSyncService>();
 // Add Email Sender Service
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+// Add services for Notifications
+builder.Services.AddScoped<TebexNotificationService>();
+
 
 
 // Configure PostgreSQL

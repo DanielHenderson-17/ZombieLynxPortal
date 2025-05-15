@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.Services.Tebex;
 using Serilog;
+using ZombieLynxPortalAPI.Services.Notifications;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -22,17 +23,19 @@ namespace ZombieLynxPortalAPI.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClient;
         private readonly TebexOrderProcessor _orderProcessor;
+        private readonly TebexNotificationService _notificationService;
 
 
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
 
-        public TebexController(HttpClient httpClient, IConfiguration configuration, IHttpClientFactory httpClientFactory, ZombieLynxPortalAPIDbContext dbContext, TebexOrderProcessor orderProcessor)
+        public TebexController(HttpClient httpClient, IConfiguration configuration, IHttpClientFactory httpClientFactory, ZombieLynxPortalAPIDbContext dbContext, TebexOrderProcessor orderProcessor, TebexNotificationService notificationService)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
             _dbContext = dbContext;
             _orderProcessor = orderProcessor;
+            _notificationService = notificationService;
         }
 
         // ✅ Ping to check controller is active
@@ -367,46 +370,14 @@ namespace ZombieLynxPortalAPI.Controllers
                 }
 
                 // 🧠 Extract ident from order ID
-                var ident = userProfileIdFromCustom.HasValue
-                    ? await _dbContext.TebexBaskets
-                        .Where(b => b.UserProfileId == userProfileIdFromCustom.Value)
-                        .OrderByDescending(b => b.CreatedAt)
-                        .Select(b => b.Ident)
-                        .FirstOrDefaultAsync()
-                    : null;
-
-                if (!string.IsNullOrEmpty(ident))
+                if (!string.IsNullOrEmpty(message) && userProfileIdFromCustom.HasValue)
                 {
-                    var basket = await _dbContext.TebexBaskets
-                        .FirstOrDefaultAsync(b => b.Ident == ident);
-
-                    if (basket != null)
+                    await _notificationService.SendNotificationAsync(new TebexPaymentNotificationDTO
                     {
-                        var notifyPayload = new
-                        {
-                            message,
-                            userProfileId = basket.UserProfileId
-                        };
-
-                        var content = new StringContent(JsonSerializer.Serialize(notifyPayload), Encoding.UTF8, "application/json");
-                        string baseUrl = _configuration["BaseApiUrl"];
-                        var notifyResponse = await _httpClient.PostAsync($"{baseUrl}/api/notification/tebex-payment-notify", content);
-
-                        if (notifyResponse.IsSuccessStatusCode)
-                        {
-                            Log.Information("✅ Notification successfully sent to user.");
-                        }
-                        else
-                        {
-                            Log.Information($"❌ Failed to send notification. Status: {notifyResponse.StatusCode}");
-                        }
-                    }
-                    else
-                    {
-                        Log.Information($"❌ No TebexBasket found for ident: {ident}");
-                    }
+                        Message = message,
+                        UserProfileId = userProfileIdFromCustom.Value
+                    });
                 }
-
 
             }
 
