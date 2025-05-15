@@ -297,6 +297,15 @@ namespace ZombieLynxPortalAPI.Controllers
                 var subject = payload.Subject;
 
                 string orderId = subject.GetProperty("transaction_id").GetString();
+                var alreadyProcessed = await _dbContext.ProcessedTransactions
+                    .AnyAsync(t => t.TransactionId == orderId);
+
+                if (alreadyProcessed)
+                {
+                    Log.Warning($"⛔ Duplicate transaction detected: {orderId}. Skipping.");
+                    return Ok();
+                }
+
                 var price = subject.GetProperty("price");
                 decimal amount = price.GetProperty("amount").GetDecimal();
                 string currency = price.GetProperty("currency").GetString();
@@ -334,8 +343,8 @@ namespace ZombieLynxPortalAPI.Controllers
 
                             if (!userProfileIdFromCustom.HasValue)
                             {
-                                Log.Information("❌ No user_id found in payment webhook. Skipping processing.");
-                                return BadRequest("Missing user_id");
+                                Log.Warning("❌ No user_id found in payment webhook. Skipping processing gracefully.");
+                                return Ok();
                             }
 
                             await _orderProcessor.ProcessOrderAsync(new TebexOrderActionDTO
@@ -345,6 +354,14 @@ namespace ZombieLynxPortalAPI.Controllers
                                 Quantity = quantity,
                                 Custom = product.GetProperty("custom").GetString() ?? ""
                             });
+                            _dbContext.ProcessedTransactions.Add(new ProcessedTransaction
+                            {
+                                TransactionId = orderId,
+                                ProcessedAt = DateTime.UtcNow
+                            });
+
+                            await _dbContext.SaveChangesAsync();
+                            Log.Information($"🧾 Logged processed transaction: {orderId}");
                         }
                     }
                 }
@@ -389,6 +406,8 @@ namespace ZombieLynxPortalAPI.Controllers
                         Log.Information($"❌ No TebexBasket found for ident: {ident}");
                     }
                 }
+
+
             }
 
             return Ok();
