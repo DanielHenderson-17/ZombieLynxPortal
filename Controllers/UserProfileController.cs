@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.DTOs;
 using System.Security.Claims;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -165,16 +166,43 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditPoints([FromBody] EditPointsDTO dto)
         {
+            var editorUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var editorProfile = await _context.UserProfiles
+                .FirstOrDefaultAsync(up => up.UserId.ToString() == editorUserId);
+
+            if (editorProfile == null)
+                return Unauthorized("Admin user profile not found.");
+
+            var editorMember = await _context.ZLGMembers
+                .FirstOrDefaultAsync(m => m.UserProfileId == editorProfile.Id);
+
             var member = await _context.ZLGMembers
+                .Include(m => m.UserProfile)
+                .ThenInclude(up => up.User)
                 .FirstOrDefaultAsync(m => m.UserProfileId == dto.UserProfileId);
 
             if (member == null)
-                return NotFound("Member not found.");
+                return NotFound("Target member not found.");
+
+            if (member.Points != dto.OldPoints)
+                return BadRequest("Point mismatch. Please refresh and try again.");
+
+            var editorDiscord = editorMember?.DiscordName ?? "(Unknown Editor)";
+            var targetDiscord = member.DiscordName ?? "(Unknown Target)";
+
+            Log.Information("{EditorDiscord} edited points for {TargetDiscord} from {Old} to {New} at {Time}",
+                editorDiscord,
+                targetDiscord,
+                dto.OldPoints,
+                dto.Points,
+                DateTime.UtcNow);
 
             member.Points = dto.Points;
             await _context.SaveChangesAsync();
 
             return Ok("Points updated successfully.");
         }
+
     }
 }

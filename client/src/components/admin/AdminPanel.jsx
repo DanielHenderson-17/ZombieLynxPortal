@@ -91,12 +91,16 @@ export default function AdminPanel() {
   const handleConfirmPointsUpdate = () => {
     if (!selectedUser) return;
 
-    updateUserPoints(selectedUser.userProfileId, editedPoints)
+    updateUserPoints(
+      selectedUser.userProfileId,
+      selectedUser.points,
+      editedPoints
+    )
       .then((result) => {
         console.log("✅ updateUserPoints success:", result);
         toast.success("Points updated!");
         setShowConfirmModal(false);
-        setRefreshFlag((prev) => !prev); // 🔄 trigger re-fetch
+        setRefreshFlag((prev) => !prev);
       })
       .catch((err) => {
         console.error("❌ updateUserPoints failed:", err);
