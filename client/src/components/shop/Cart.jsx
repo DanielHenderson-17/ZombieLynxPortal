@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getToken } from "../../managers/authManager";
 import { checkBasketComplete } from "../../utils/checkBasketComplete";
+import PostPurchaseModal from "./PostPurchaseModal";
 import {
   createBasket,
   authenticateBasket,
@@ -20,6 +21,7 @@ export default function Cart() {
   const [pulsingItemId, setPulsingItemId] = useState(null);
   const [checkoutErrorMessage, setCheckoutErrorMessage] = useState(null);
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
+  const [showPostPurchaseModal, setShowPostPurchaseModal] = useState(false);
 
   const singleItems = cartItems.single;
   const subscription = cartItems.subscription;
@@ -53,6 +55,7 @@ export default function Cart() {
           clearCart();
           setBasketIdent(null);
           setCheckoutStarted(false);
+          setShowPostPurchaseModal(true);
         }
       } catch (err) {
         console.error("Polling failed or timed out:", err);
@@ -393,6 +396,10 @@ export default function Cart() {
         </div>
       </div>
       <ToastContainer position="top-center" autoClose={2000} theme="dark" />
+      <PostPurchaseModal
+        show={showPostPurchaseModal}
+        onClose={() => setShowPostPurchaseModal(false)}
+      />
     </div>
   );
 }

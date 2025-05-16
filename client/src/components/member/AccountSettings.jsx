@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import GeneralSettings from "./GeneralSettings";
 import PrivacySettings from "./PrivacySettings";
 import LinkedAccountsSettings from "./LinkedAccountsSettings";
@@ -7,6 +8,15 @@ import "./Settings.css";
 
 export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState("General");
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tabFromUrl = params.get("tab");
+    if (tabFromUrl && settingsTabs.some((t) => t.name === tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [location.search]);
 
   const renderTabContent = () => {
     switch (activeTab) {
