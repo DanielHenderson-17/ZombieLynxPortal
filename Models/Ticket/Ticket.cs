@@ -41,6 +41,5 @@ namespace ZombieLynxPortalAPI.Models
         public ICollection<Message> Messages { get; set; }
         public ulong? DiscordChannelId { get; set; }
         public ulong? DiscordUserId { get; set; }
-
     }
 }
