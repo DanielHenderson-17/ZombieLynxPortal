@@ -248,7 +248,7 @@ export default function Cart() {
                       />
                       <span className="text-start">{item.package.name}</span>
                     </div>
-                    <div className="col-md-3 d-flex justify-content-end align-items-center d-none d-md-block">
+                    <div className="col-md-3 d-md-flex justify-content-end align-items-center d-none">
                       <button
                         className="btn btn-sm btn-outline-secondary"
                         onClick={() => {
@@ -297,7 +297,7 @@ export default function Cart() {
                         <i className="bi bi-trash-fill fs-5"></i>
                       </button>
                     </div>
-                    <div className="d-flex justify-content-end align-items-center  mt-3">
+                    <div className="d-md-flex d-none justify-content-end align-items-center mt-3">
                       <div className="col-md-3 d-flex justify-content-end align-items-center d-md-none me-3">
                         <button
                           className="btn btn-sm btn-outline-secondary py-0"

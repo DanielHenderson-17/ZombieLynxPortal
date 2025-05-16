@@ -4,6 +4,8 @@ import {
   promoteUser,
   updateUserPoints,
 } from "../../managers/userProfileManager";
+import EditPointsModal from "./EditPointsModal";
+import ConfirmPointsModal from "./ConfirmPointsModal";
 import { formatDiscordName } from "../../utils/formatDiscordName";
 import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
 import { toast, ToastContainer } from "react-toastify";
@@ -74,11 +76,12 @@ export default function AdminPanel() {
   };
 
   const handleEditPoints = (user) => {
-    console.log("🧩 Full user object passed to handleEditPoints:", user);
-
+    console.log("🛠 handleEditPoints triggered for:", user);
+    setDropdownOpenId(null);
     setSelectedUser({
       userProfileId: user.zlgMember.userProfileId,
       discordName: user.zlgMember?.discordName,
+      discordImgUrl: user.zlgMember?.discordImgUrl,
       points: user.zlgMember?.points ?? 0,
     });
     setEditedPoints(user.zlgMember?.points ?? 0);
@@ -88,16 +91,16 @@ export default function AdminPanel() {
   const handleConfirmPointsUpdate = () => {
     if (!selectedUser) return;
 
-    console.log("🧪 Confirm Clicked");
-    console.log("👉 selectedUser.userProfileId:", selectedUser.userProfileId);
-    console.log("👉 editedPoints:", editedPoints);
-
-    updateUserPoints(selectedUser.userProfileId, editedPoints)
+    updateUserPoints(
+      selectedUser.userProfileId,
+      selectedUser.points,
+      editedPoints
+    )
       .then((result) => {
         console.log("✅ updateUserPoints success:", result);
         toast.success("Points updated!");
         setShowConfirmModal(false);
-        setRefreshFlag((prev) => !prev); // 🔄 trigger re-fetch
+        setRefreshFlag((prev) => !prev);
       })
       .catch((err) => {
         console.error("❌ updateUserPoints failed:", err);
@@ -331,106 +334,32 @@ export default function AdminPanel() {
         )}
 
         {showEditModal && selectedUser && (
-          <div className="modal d-block" tabIndex="-1" role="dialog">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title text-white">
-                    Edit Points: {selectedUser.discordName}
-                  </h5>
-                  <button
-                    type="button"
-                    className="close"
-                    onClick={() => setShowEditModal(false)}
-                  >
-                    <span>&times;</span>
-                  </button>
-                </div>
-                <div className="modal-body text-center">
-                  <div className="d-flex justify-content-center align-items-center gap-2">
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => setEditedPoints((p) => Math.max(0, p - 1))}
-                    >
-                      −
-                    </button>
-                    <input
-                      type="number"
-                      className="form-control text-center"
-                      style={{ maxWidth: "100px" }}
-                      value={editedPoints}
-                      onChange={(e) =>
-                        setEditedPoints(parseInt(e.target.value) || 0)
-                      }
-                    />
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => setEditedPoints((p) => p + 1)}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => setShowEditModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                      setShowEditModal(false);
-                      setShowConfirmModal(true);
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <EditPointsModal
+            user={{
+              ...selectedUser,
+              discordImgUrl:
+                users.find(
+                  (u) =>
+                    u.zlgMember?.userProfileId === selectedUser.userProfileId
+                )?.zlgMember?.discordImgUrl || "",
+            }}
+            editedPoints={editedPoints}
+            setEditedPoints={setEditedPoints}
+            onClose={() => setShowEditModal(false)}
+            onSave={() => {
+              setShowEditModal(false);
+              setShowConfirmModal(true);
+            }}
+          />
         )}
+
         {showConfirmModal && selectedUser && (
-          <div className="modal fade show d-block" tabIndex="-1" role="dialog">
-            <div className="modal-dialog modal-dialog-centered" role="document">
-              <div className="modal-content bg-dark text-white">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirm Point Update</h5>
-                  <button
-                    type="button"
-                    className="btn-close btn-close-white"
-                    aria-label="Close"
-                    onClick={() => setShowConfirmModal(false)}
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <p className="mb-0">
-                    Are you sure you want to set{" "}
-                    <strong>{selectedUser.discordName}</strong>&apos;s points to{" "}
-                    <strong>{editedPoints}</strong>?
-                  </p>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setShowConfirmModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-success"
-                    onClick={handleConfirmPointsUpdate}
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ConfirmPointsModal
+            user={selectedUser}
+            editedPoints={editedPoints}
+            onClose={() => setShowConfirmModal(false)}
+            onConfirm={handleConfirmPointsUpdate}
+          />
         )}
 
         <ToastContainer

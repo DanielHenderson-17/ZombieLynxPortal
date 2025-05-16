@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.Data.Ark;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -165,7 +166,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 try
                 {
                     await connection.OpenAsync();
-                    Console.WriteLine($"🔍 Searching for DiscordId: '{discordId}' in MySQL");
+                    Log.Information("🔍 Searching for DiscordId: '{DiscordId}' in MySQL", discordId);
 
                     string query = "SELECT EosId, SteamName FROM discordlinker WHERE BINARY CAST(DiscordId AS CHAR) = CAST(@DiscordId AS CHAR)";
                     using (var command = new MySqlCommand(query, connection))
@@ -177,14 +178,14 @@ namespace ZombieLynxPortalAPI.Controllers
                             {
                                 eosId = reader.IsDBNull(0) ? null : reader.GetString(0);
                                 steamName = reader.IsDBNull(1) ? null : reader.GetString(1);
-                                Console.WriteLine($"✅ Match Found! EosId: {eosId}, SteamName: {steamName}");
+                                Log.Information("✅ Match Found! EosId: {EosId}, SteamName: {SteamName}", eosId, steamName);
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("❌ MySQL Query Error: " + ex.Message);
+                    Log.Error(ex, "❌ MySQL Query Error");
                 }
             }
 

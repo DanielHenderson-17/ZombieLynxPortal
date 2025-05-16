@@ -6,6 +6,7 @@ using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.DTOs;
 using System.Security.Claims;
 using ZombieLynxPortalAPI.Services.Email;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -32,7 +33,7 @@ namespace ZombieLynxPortalAPI.Controllers
             if (dto == null || string.IsNullOrWhiteSpace(dto.Message))
                 return BadRequest("Invalid notification data.");
 
-            Console.WriteLine($"DTO Received: {System.Text.Json.JsonSerializer.Serialize(dto)}");
+            Log.Information("📥 DTO Received: {DtoJson}", System.Text.Json.JsonSerializer.Serialize(dto));
 
             var notification = new Notification
             {
@@ -247,7 +248,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 dto.Message
             );
 
-            Console.WriteLine($"📨 Tebex payment notification and email sent to UserProfileId {userProfile.Id} with message:\n{dto.Message}");
+            Log.Information("📨 Tebex payment notification and email sent to UserProfileId {UserProfileId} with message:\n{Message}", userProfile.Id, dto.Message);
 
             return Ok(new { notification.Id, notification.Message, notification.Subject });
         }

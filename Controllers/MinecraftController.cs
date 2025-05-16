@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.DTOs;
 using ZombieLynxPortalAPI.Models;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -173,7 +174,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 try
                 {
                     await connection.OpenAsync();
-                    Console.WriteLine($"🔍 Checking MySQL for Discord ID: {discordId}");
+                    Log.Information("🔍 Checking MySQL for Discord ID: {DiscordId}", discordId);
 
                     string query = "SELECT uuid FROM discordsrv_accounts WHERE BINARY discord = @DiscordId";
                     using (var command = new MySqlCommand(query, connection))
@@ -185,18 +186,18 @@ namespace ZombieLynxPortalAPI.Controllers
                             if (await reader.ReadAsync())
                             {
                                 uuid = reader.IsDBNull(0) ? null : reader.GetString(0);
-                                Console.WriteLine($"✅ Found UUID: {uuid}");
+                                Log.Information("✅ Found UUID: {Uuid}", uuid);
                             }
                             else
                             {
-                                Console.WriteLine("⚠️ No UUID found for this Discord ID.");
+                                Log.Warning("⚠️ No UUID found for Discord ID: {DiscordId}", discordId);
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("❌ MySQL Query Error: " + ex.Message);
+                    Log.Error(ex, "❌ MySQL Query Error");
                 }
             }
 
@@ -219,7 +220,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("❌ Error fetching Minecraft profile: " + ex.Message);
+                    Log.Error(ex, "Your message with context: {Uuid}", uuid);
                     return (null, null);
                 }
             }

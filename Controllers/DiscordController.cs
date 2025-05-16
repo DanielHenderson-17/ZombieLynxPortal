@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.DTOs;
 using ZombieLynxPortalAPI.Models;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -30,7 +31,7 @@ namespace ZombieLynxPortalAPI.Controllers
         [HttpGet("get-api-key")]
         public IActionResult GetDiscordApiKey()
         {
-            Console.WriteLine("🔑 Discord Client ID requested.");
+            Log.Information("🔑 Discord Client ID requested.");
             var discordClientId = _configuration["DiscordApiKey:ClientId"];
 
             if (string.IsNullOrEmpty(discordClientId))

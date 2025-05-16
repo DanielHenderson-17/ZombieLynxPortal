@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MySql.EntityFrameworkCore.Extensions;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.Models.Minecraft;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Minecraft
 {
@@ -25,7 +26,6 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
 
             if (member == null || string.IsNullOrWhiteSpace(member.MinecraftUuid))
             {
-                Console.WriteLine($"❌ Cannot sync subscription – member not found or missing MinecraftUuid.");
                 return;
             }
 
@@ -52,7 +52,6 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
             if (permission != null)
             {
                 permission.Expiry = expirationEpoch;
-                Console.WriteLine($"🔁 Updated Minecraft permission {lowercaseGroup} for UUID {member.MinecraftUuid}.");
             }
             else
             {
@@ -66,11 +65,9 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
                     Expiry = expirationEpoch,
                     Contexts = ""
                 });
-                Console.WriteLine($"➕ Added new Minecraft permission {lowercaseGroup} for UUID {member.MinecraftUuid}.");
             }
 
             await mcPermsContext.SaveChangesAsync();
-            Console.WriteLine($"✅ Synced Minecraft timed sub: UUID {member.MinecraftUuid} → {lowercaseGroup} (expires {expirationEpoch})");
         }
     }
 }

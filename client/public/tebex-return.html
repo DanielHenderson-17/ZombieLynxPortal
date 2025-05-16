@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Processing...</title>
+    <script>
+      window.onload = () => {
+        // Optionally notify the parent window (if opened from a popup)
+        if (window.opener) {
+          window.opener.postMessage("TEBEX_AUTH_COMPLETE", "*");
+        }
+
+        // Close the window after a brief delay
+        setTimeout(() => window.close(), 500);
+      };
+    </script>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: #121212;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    Redirecting and closing window...
+  </body>
+</html>

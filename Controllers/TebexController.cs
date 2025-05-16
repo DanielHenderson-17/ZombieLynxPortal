@@ -10,8 +10,8 @@ using ZombieLynxPortalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.Services.Tebex;
-
-
+using Serilog;
+using ZombieLynxPortalAPI.Services.Notifications;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -23,17 +23,19 @@ namespace ZombieLynxPortalAPI.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClient;
         private readonly TebexOrderProcessor _orderProcessor;
+        private readonly TebexNotificationService _notificationService;
 
 
         private readonly ZombieLynxPortalAPIDbContext _dbContext;
 
-        public TebexController(HttpClient httpClient, IConfiguration configuration, IHttpClientFactory httpClientFactory, ZombieLynxPortalAPIDbContext dbContext, TebexOrderProcessor orderProcessor)
+        public TebexController(HttpClient httpClient, IConfiguration configuration, IHttpClientFactory httpClientFactory, ZombieLynxPortalAPIDbContext dbContext, TebexOrderProcessor orderProcessor, TebexNotificationService notificationService)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
             _dbContext = dbContext;
             _orderProcessor = orderProcessor;
+            _notificationService = notificationService;
         }
 
         // ✅ Ping to check controller is active
@@ -70,16 +72,16 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public async Task<IActionResult> CreateBasket([FromBody] BasketRequestDTO request)
         {
-            Console.WriteLine("🔥 CreateBasket DTO endpoint HIT!");
+            Log.Information("🔥 CreateBasket DTO endpoint HIT!");
 
             var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];
             if (string.IsNullOrEmpty(webstoreIdentifier))
                 return BadRequest("Tebex Webstore Identifier is not configured.");
 
-            Console.WriteLine("🛠️ Incoming basket request:");
+            Log.Information("🛠️ Incoming basket request:");
             foreach (var item in request.Items)
             {
-                Console.WriteLine($"- Package ID: {item.PackageId}, Qty: {item.Quantity}");
+                Log.Information($"- Package ID: {item.PackageId}, Qty: {item.Quantity}");
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -88,7 +90,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (userProfile == null)
             {
-                Console.WriteLine("❌ Could not find UserProfile for current user.");
+                Log.Information("❌ Could not find UserProfile for current user.");
                 return BadRequest("User profile not found.");
             }
 
@@ -105,7 +107,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var resultJson = await response.Content.ReadAsStringAsync();
 
-            Console.WriteLine($"✅ Tebex Response ({response.StatusCode}):\n" + resultJson);
+            Log.Information($"✅ Tebex Response ({response.StatusCode}):\n" + resultJson);
 
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, "Failed to create basket on Tebex.");
@@ -123,11 +125,11 @@ namespace ZombieLynxPortalAPI.Controllers
                 });
 
                 await _dbContext.SaveChangesAsync();
-                Console.WriteLine($"🧾 Saved TebexBasket: {ident} linked to UserProfileId {userProfile.Id}");
+                Log.Information($"🧾 Saved TebexBasket: {ident} linked to UserProfileId {userProfile.Id}");
             }
             else
             {
-                Console.WriteLine("❌ Basket ident missing from Tebex response.");
+                Log.Information("❌ Basket ident missing from Tebex response.");
             }
 
             return Content(resultJson, "application/json");
@@ -138,7 +140,7 @@ namespace ZombieLynxPortalAPI.Controllers
         public async Task<IActionResult> AuthenticateBasket([FromBody] string ident)
         {
             var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];
-            var returnUrl = "https://google.com";
+            var returnUrl = "https://zlg.gg/tebex-return.html";
 
             var authUrl = $"https://headless.tebex.io/api/accounts/{webstoreIdentifier}/baskets/{ident}/auth?returnUrl={Uri.EscapeDataString(returnUrl)}";
 
@@ -160,7 +162,7 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public async Task<IActionResult> AddPackageToBasket([FromRoute] string ident, [FromBody] BasketItemDTO item)
         {
-            Console.WriteLine("📦 AddPackageToBasket endpoint hit!");
+            Log.Information("📦 AddPackageToBasket endpoint hit!");
 
             var client = _httpClientFactory.CreateClient();
 
@@ -171,7 +173,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (userProfile == null)
             {
-                Console.WriteLine("❌ Could not find UserProfile for current user.");
+                Log.Information("❌ Could not find UserProfile for current user.");
                 return BadRequest("User profile not found.");
             }
 
@@ -189,7 +191,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
                 if (price == 0)
                 {
-                    Console.WriteLine("🚫 Attempted to add more than one of a free package.");
+                    Log.Information("🚫 Attempted to add more than one of a free package.");
                     return BadRequest("Free packages can only be added once.");
                 }
             }
@@ -210,7 +212,7 @@ namespace ZombieLynxPortalAPI.Controllers
             };
 
             var payloadJson = JsonSerializer.Serialize(tebexPayload, new JsonSerializerOptions { WriteIndented = true });
-            Console.WriteLine("➡ Sending to Tebex:\n" + payloadJson);
+            Log.Information("➡ Sending to Tebex:\n" + payloadJson);
 
             var jsonContent = new StringContent(payloadJson);
             jsonContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -218,7 +220,7 @@ namespace ZombieLynxPortalAPI.Controllers
             var response = await client.PostAsync(postUrl, jsonContent);
             var resultJson = await response.Content.ReadAsStringAsync();
 
-            Console.WriteLine($"✅ Package Added Response ({response.StatusCode}):\n{resultJson}");
+            Log.Information($"✅ Package Added Response ({response.StatusCode}):\n{resultJson}");
 
             if ((int)response.StatusCode == 400)
             {
@@ -227,7 +229,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
                 if (detail != null && detail.Contains("purchased too many times"))
                 {
-                    Console.WriteLine("🚫 Package has been purchased too many times. Rejecting.");
+                    Log.Information("🚫 Package has been purchased too many times. Rejecting.");
                     return BadRequest(new
                     {
                         error = "limit_reached",
@@ -245,7 +247,7 @@ namespace ZombieLynxPortalAPI.Controllers
             var basketResponse = await client.GetAsync(getUrl);
             var basketJson = await basketResponse.Content.ReadAsStringAsync();
 
-            Console.WriteLine($"🧾 Basket Lookup Response ({basketResponse.StatusCode}):\n{basketJson}");
+            Log.Information($"🧾 Basket Lookup Response ({basketResponse.StatusCode}):\n{basketJson}");
 
             return Content(basketJson, "application/json");
         }
@@ -277,8 +279,8 @@ namespace ZombieLynxPortalAPI.Controllers
         {
             using var reader = new StreamReader(Request.Body);
             string rawJson = await reader.ReadToEndAsync();
-            Console.WriteLine("📦 Raw JSON Payload:");
-            Console.WriteLine(rawJson);
+            Log.Information("📦 Raw JSON Payload:");
+            Log.Information(rawJson);
 
             // Deserialize manually
             var payload = JsonSerializer.Deserialize<TebexBaseWebhookDTO>(rawJson, new JsonSerializerOptions
@@ -286,7 +288,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 PropertyNameCaseInsensitive = true
             });
 
-            Console.WriteLine($"✅ Webhook received! Type: {payload.Type}, ID: {payload.Id}");
+            Log.Information($"✅ Webhook received! Type: {payload.Type}, ID: {payload.Id}");
 
             if (payload.Type == "validation.webhook")
             {
@@ -298,12 +300,21 @@ namespace ZombieLynxPortalAPI.Controllers
                 var subject = payload.Subject;
 
                 string orderId = subject.GetProperty("transaction_id").GetString();
+                var alreadyProcessed = await _dbContext.ProcessedTransactions
+                    .AnyAsync(t => t.TransactionId == orderId);
+
+                if (alreadyProcessed)
+                {
+                    Log.Warning($"⛔ Duplicate transaction detected: {orderId}. Skipping.");
+                    return Ok();
+                }
+
                 var price = subject.GetProperty("price");
                 decimal amount = price.GetProperty("amount").GetDecimal();
                 string currency = price.GetProperty("currency").GetString();
 
-                Console.WriteLine($"💸 Order ID: {orderId}");
-                Console.WriteLine($"💰 Amount: {amount} {currency}");
+                Log.Information($"💸 Order ID: {orderId}");
+                Log.Information($"💰 Amount: {amount} {currency}");
 
                 string message = $"✅ Order ID: {orderId}\n - Amount: ${amount}";
 
@@ -316,7 +327,7 @@ namespace ZombieLynxPortalAPI.Controllers
                         int packageId = product.GetProperty("id").GetInt32();
                         int quantity = product.GetProperty("quantity").GetInt32();
 
-                        Console.WriteLine($"📦 Package ID: {packageId}, Quantity: {quantity}");
+                        Log.Information($"📦 Package ID: {packageId}, Quantity: {quantity}");
 
                         if (product.TryGetProperty("variables", out var variables))
                         {
@@ -329,14 +340,14 @@ namespace ZombieLynxPortalAPI.Controllers
                                     int.TryParse(optionProp.GetString(), out var parsedId))
                                 {
                                     userProfileIdFromCustom = parsedId;
-                                    Console.WriteLine($"👤 Extracted user_id from variable_data: {userProfileIdFromCustom}");
+                                    Log.Information($"👤 Extracted user_id from variable_data: {userProfileIdFromCustom}");
                                 }
                             }
 
                             if (!userProfileIdFromCustom.HasValue)
                             {
-                                Console.WriteLine("❌ No user_id found in payment webhook. Skipping processing.");
-                                return BadRequest("Missing user_id");
+                                Log.Warning("❌ No user_id found in payment webhook. Skipping processing gracefully.");
+                                return Ok();
                             }
 
                             await _orderProcessor.ProcessOrderAsync(new TebexOrderActionDTO
@@ -346,55 +357,35 @@ namespace ZombieLynxPortalAPI.Controllers
                                 Quantity = quantity,
                                 Custom = product.GetProperty("custom").GetString() ?? ""
                             });
+                            _dbContext.ProcessedTransactions.Add(new ProcessedTransaction
+                            {
+                                TransactionId = orderId,
+                                ProcessedAt = DateTime.UtcNow
+                            });
+
+                            await _dbContext.SaveChangesAsync();
+                            Log.Information($"🧾 Logged processed transaction: {orderId}");
                         }
                     }
                 }
 
                 // 🧠 Extract ident from order ID
-                var ident = userProfileIdFromCustom.HasValue
-                    ? await _dbContext.TebexBaskets
-                        .Where(b => b.UserProfileId == userProfileIdFromCustom.Value)
-                        .OrderByDescending(b => b.CreatedAt)
-                        .Select(b => b.Ident)
-                        .FirstOrDefaultAsync()
-                    : null;
-
-                if (!string.IsNullOrEmpty(ident))
+                if (!string.IsNullOrEmpty(message) && userProfileIdFromCustom.HasValue)
                 {
-                    var basket = await _dbContext.TebexBaskets
-                        .FirstOrDefaultAsync(b => b.Ident == ident);
-
-                    if (basket != null)
+                    await _notificationService.SendNotificationAsync(new TebexPaymentNotificationDTO
                     {
-                        var notifyPayload = new
-                        {
-                            message,
-                            userProfileId = basket.UserProfileId
-                        };
-
-                        var content = new StringContent(JsonSerializer.Serialize(notifyPayload), Encoding.UTF8, "application/json");
-                        string baseUrl = _configuration["BaseApiUrl"];
-                        var notifyResponse = await _httpClient.PostAsync($"{baseUrl}/api/notification/tebex-payment-notify", content);
-
-                        if (notifyResponse.IsSuccessStatusCode)
-                        {
-                            Console.WriteLine("✅ Notification successfully sent to user.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"❌ Failed to send notification. Status: {notifyResponse.StatusCode}");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"❌ No TebexBasket found for ident: {ident}");
-                    }
+                        Message = message,
+                        UserProfileId = userProfileIdFromCustom.Value
+                    });
                 }
+
             }
 
             return Ok();
         }
 
+
+        // *** KEEP FOR VALIDATION OF WEBHOOK ***
         //Webhook validation Tebex
         // [HttpPost("payment-complete")]
         // [AllowAnonymous]
@@ -402,28 +393,21 @@ namespace ZombieLynxPortalAPI.Controllers
         // {
         //     using var reader = new StreamReader(Request.Body);
         //     var rawJson = await reader.ReadToEndAsync();
-
-        //     Console.WriteLine("📦 Raw JSON Payload:");
-        //     Console.WriteLine(rawJson);
-
+        //     Log.Information("📦 Raw JSON Payload:");
+        //     Log.Information(rawJson);
         //     using var doc = JsonDocument.Parse(rawJson);
         //     var root = doc.RootElement;
-
         //     if (root.TryGetProperty("type", out var typeProp) &&
         //         typeProp.GetString() == "validation.webhook" &&
         //         root.TryGetProperty("id", out var idProp))
         //     {
         //         var id = idProp.GetString();
-        //         Console.WriteLine($"✅ Validation webhook received. ID: {id}");
-
+        //         Log.Information($"✅ Validation webhook received. ID: {id}");
         //         var result = new { id = id };
         //         return new JsonResult(result);
         //     }
-
-        //     Console.WriteLine("✅ Received non-validation webhook or invalid payload.");
+        //     Log.Information("✅ Received non-validation webhook or invalid payload.");
         //     return Ok();
         // }
-
-
     }
 }

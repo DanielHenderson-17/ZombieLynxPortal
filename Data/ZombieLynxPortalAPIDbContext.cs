@@ -26,6 +26,8 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<EmailVerification> EmailVerifications { get; set; }
         public DbSet<PreviouslyLinkedAccount> PreviouslyLinkedAccounts { get; set; }
         public DbSet<PasswordReset> PasswordResets { get; set; }
+        public DbSet<ProcessedTransaction> ProcessedTransactions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

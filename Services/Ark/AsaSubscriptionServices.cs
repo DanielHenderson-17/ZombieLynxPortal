@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MySql.EntityFrameworkCore.Extensions;
 using ZombieLynxPortalAPI.Data;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Ark
 {
@@ -24,7 +25,6 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
             if (member == null || string.IsNullOrWhiteSpace(member.EosId))
             {
-                Console.WriteLine($"❌ Cannot sync subscription – member not found or missing EosId.");
                 return;
             }
 
@@ -41,14 +41,11 @@ namespace ZombieLynxPortalAPI.Services.Ark
 
             if (player == null)
             {
-                Console.WriteLine($"⚠️ No ASA permissions player found for EosId: {member.EosId}");
                 return;
             }
 
             player.TimedPermissionGroups = formatted;
             await asaPermsContext.SaveChangesAsync();
-
-            Console.WriteLine($"✅ Synced ASA timed sub: EosId {member.EosId} → {formatted}");
         }
     }
 }

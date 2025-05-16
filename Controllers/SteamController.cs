@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.DTOs;
 using ZombieLynxPortalAPI.Models;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace ZombieLynxPortalAPI.Controllers
         [HttpGet("get-api-key")]
         public IActionResult GetSteamApiKey()
         {
-            Console.WriteLine("🔑 Steam API Key requested.");
+            Log.Information("🔑 Steam API Key requested.");
             var steamApiKey = _configuration["SteamApiKey:ApiKey"];
             return Ok(new { apiKey = steamApiKey });
         }

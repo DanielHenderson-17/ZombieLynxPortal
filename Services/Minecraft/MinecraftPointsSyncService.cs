@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Data;
 using ZombieLynxPortalAPI.Models;
 using ZombieLynxPortalAPI.Services;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Minecraft
 {
@@ -26,7 +27,6 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
             await SyncASAAsync();
 
             await _mainDbContext.SaveChangesAsync();
-            Console.WriteLine("💾 All syncs complete and changes saved.");
         }
 
         private async Task SyncMinecraftAsync()
@@ -43,8 +43,6 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
                 .Select(g => g.OrderByDescending(r => r.CreatedAt).First())
                 .ToList();
 
-            Console.WriteLine($"🔎 Found {pendingRows.Count} pending rows in Minecraft PointsSyncQueue.");
-
             foreach (var row in pendingRows)
             {
                 var member = await _mainDbContext.ZLGMembers
@@ -60,7 +58,6 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
 
                 mcContext.PointsSyncQueue.RemoveRange(allForThisUuid);
 
-                Console.WriteLine($"✅ Synced UUID {row.Uuid} → Points: {row.Points} (cleared queue rows)");
             }
 
             await mcContext.SaveChangesAsync();
@@ -86,12 +83,10 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
                 if (arkPlayer != null)
                 {
                     arkPlayer.Points = member.Points;
-                    Console.WriteLine($"🔁 Synced ASE → SteamId: {member.SteamId} → Points: {member.Points}");
                 }
             }
 
             await aseContext.SaveChangesAsync();
-            Console.WriteLine("✅ ASE points sync complete.");
         }
 
         private async Task SyncASAAsync()
@@ -114,12 +109,11 @@ namespace ZombieLynxPortalAPI.Services.Minecraft
                 if (asaPlayer != null)
                 {
                     asaPlayer.Points = member.Points;
-                    Console.WriteLine($"🔁 Synced ASA → EosId: {member.EosId} → Points: {member.Points}");
                 }
             }
 
             await asaContext.SaveChangesAsync();
-            Console.WriteLine("✅ ASA points sync complete.");
+
         }
     }
 }

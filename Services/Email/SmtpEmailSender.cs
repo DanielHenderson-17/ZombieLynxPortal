@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Email
 {
@@ -27,8 +28,6 @@ namespace ZombieLynxPortalAPI.Services.Email
                 Credentials = new NetworkCredential(smtpUser, smtpPass),
                 EnableSsl = true
             };
-            Console.WriteLine($"SMTP config loaded: {smtpHost}, {smtpPort}, {smtpUser}, {fromEmail}");
-
             var mailMessage = new MailMessage
             {
                 From = new MailAddress(fromEmail),

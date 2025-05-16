@@ -21,13 +21,28 @@ namespace ZombieLynxPortalAPI.Controllers
         private readonly IConfiguration _configuration;
         private readonly string _frontendBaseUrl;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(ZombieLynxPortalAPIDbContext context, IConfiguration configuration, IEmailSender emailSender)
+        public AuthController(
+            ZombieLynxPortalAPIDbContext context,
+            IConfiguration configuration,
+            IEmailSender emailSender,
+            ILogger<AuthController> logger)
         {
             _context = context;
             _configuration = configuration;
             _frontendBaseUrl = _configuration["Frontend:BaseUrl"];
             _emailSender = emailSender;
+            _logger = logger;
+        }
+
+        // GET: api/Auth/ping
+        [HttpGet("ping")]
+        [AllowAnonymous]
+        public IActionResult Ping()
+        {
+            _logger.LogInformation("🛸 AuthController is alive and received a ping.");
+            return Ok("AuthController is alive");
         }
 
         // POST: api/Auth/Register
@@ -35,8 +50,9 @@ namespace ZombieLynxPortalAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
-            Console.WriteLine("Incoming registration data:");
-            Console.WriteLine($"Email: {dto.Email}, FirstName: {dto.FirstName}, LastName: {dto.LastName}, DiscordId: {dto.DiscordId}");
+            _logger.LogInformation("Incoming registration data: Email: {Email}, FirstName: {FirstName}, LastName: {LastName}, DiscordId: {DiscordId}",
+                dto.Email, dto.FirstName, dto.LastName, dto.DiscordId);
+
 
             if (dto.Password != dto.ConfirmPassword)
                 return BadRequest("Passwords do not match.");
@@ -173,7 +189,7 @@ namespace ZombieLynxPortalAPI.Controllers
                     }
 
                     await _context.SaveChangesAsync();
-                    Console.WriteLine($"✅ Updated {existingTickets.Count} tickets and created UserTickets.");
+                    _logger.LogInformation("✅ Updated {Count} tickets and created UserTickets.", existingTickets.Count);
                 }
             }
 
