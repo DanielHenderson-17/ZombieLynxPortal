@@ -18,6 +18,37 @@
   color: #adadad;
   font-size: 0.95rem !important;
 }
+.modal-dialog.custom-top-modal {
+  transform: translateY(-124%) !important;
+  z-index: 1055 !important;
+}
+.modal.show.d-block {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1055;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.zlg-extra-wide-modal {
+  width: 95vw;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+.server-info-modal {
+  width: 100vh !important;
+  padding: 0 !important;
+}
+.server-info-modal .modal-body {
+  padding: 0 !important;
+}
+.server-info-card {
+  background-color: #2e343a;
+}
 .server-list-item {
   cursor: pointer;
   display: flex;
