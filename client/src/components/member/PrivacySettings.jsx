@@ -3,6 +3,8 @@ import {
   getUserProfiles,
   updateMarketingConsent,
 } from "../../managers/userProfileManager";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PrivacySettings() {
   const [allowMarketingEmails, setAllowMarketingEmails] = useState(true);
@@ -29,10 +31,14 @@ export default function PrivacySettings() {
     setSaving(true);
     try {
       await updateMarketingConsent(newValue);
+      toast.success("Your privacy preferences have been updated!", {
+        autoClose: 3000,
+      });
     } catch (err) {
       console.error(err);
       setError("Failed to update preferences.");
       setAllowMarketingEmails(!newValue);
+      toast.error("Error updating preferences.");
     } finally {
       setSaving(false);
     }
@@ -79,6 +85,11 @@ export default function PrivacySettings() {
           </>
         )}
       </section>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

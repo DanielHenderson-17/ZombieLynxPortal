@@ -20,6 +20,8 @@ import { truncateText } from "../../utils/truncateText.js";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 import { pollMessages } from "../../utils/pollMessages.js";
 import { scrollToBottom } from "../../utils/scrollToBottom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SingleTicket({ loggedInUser }) {
   const { ticketId } = useParams();
@@ -109,25 +111,32 @@ export default function SingleTicket({ loggedInUser }) {
     }
   };
 
-  // Close ticket
   const handleCloseTicket = async () => {
     try {
       await closeTicketAPI(ticketId);
-      navigate("/member/tickets/closed-tickets");
+      toast.success("Ticket closed. Thank you!", { autoClose: 3000 });
+      setTimeout(() => {
+        navigate("/member/tickets/closed-tickets");
+      }, 3000);
     } catch (error) {
       console.error("Error closing ticket:", error);
-      setError("Failed to close the ticket. Please try again.");
+      toast.error("Failed to close the ticket.");
     }
   };
 
-  // Restore ticket
   const handleRestoreTicket = async () => {
     try {
       await restoreTicketAPI(ticketId);
-      navigate("/member/tickets/open-tickets");
+      toast.success(
+        "Your ticket has been reopened. We will be with your shortly!",
+        { autoClose: 3000 }
+      );
+      setTimeout(() => {
+        navigate("/member/tickets/open-tickets");
+      }, 3000);
     } catch (error) {
       console.error("Error restoring ticket:", error);
-      setError("Failed to restore the ticket. Please try again.");
+      toast.error("Failed to restore the ticket.");
     }
   };
 
@@ -362,6 +371,11 @@ export default function SingleTicket({ loggedInUser }) {
         </div>
       </div>
       {error && <p className="text-danger mt-3">{error}</p>}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

@@ -12,11 +12,16 @@ import "./Notifications.css";
 export default function Notification({ loggedInUser }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Fetch notifications for the logged-in user and sort them by isRead status (unread notifications first)
   useEffect(() => {
     fetchNotifications();
+
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   const fetchNotifications = async () => {
@@ -35,7 +40,6 @@ export default function Notification({ loggedInUser }) {
     }
   };
 
-  // ✅ Mark notification as read by ID and refetch notifications to update the UI with the new status
   const handleMarkAsRead = async (id) => {
     try {
       await markNotificationAsRead(id);
@@ -54,7 +58,6 @@ export default function Notification({ loggedInUser }) {
     }
   };
 
-  // ✅ Delete a notification (Admin only) by ID and refetch notifications to update the UI with the new status
   const handleDeleteNotification = async (id) => {
     try {
       await deleteNotification(id);
@@ -67,7 +70,11 @@ export default function Notification({ loggedInUser }) {
   };
 
   return (
-    <div className="notifications-container pt-5 px-3">
+    <div
+      className={`notifications-container fade-container ${
+        isVisible ? "fade-in" : "fade-start"
+      } pt-5 px-3`}
+    >
       {loggedInUser?.role === "Admin" && (
         <div className="d-flex justify-content-end">
           <button

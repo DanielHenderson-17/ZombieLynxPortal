@@ -183,7 +183,7 @@ export default function CreateNotification() {
         </div>
       </form>
       <ToastContainer
-        position="top-right"
+        position="bottom-right"
         autoClose={3000}
         style={{ zIndex: "10000" }}
       />

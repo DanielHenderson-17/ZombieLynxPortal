@@ -8,6 +8,7 @@ import "./Settings.css";
 
 export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState("General");
+  const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -16,6 +17,12 @@ export default function AccountSettings() {
     if (tabFromUrl && settingsTabs.some((t) => t.name === tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
+
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [location.search]);
 
   const renderTabContent = () => {
@@ -32,7 +39,11 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="d-flex flex-lg-row settings-container text-white">
+    <div
+      className={`d-flex flex-lg-row fade-container settings-container text-white ${
+        isVisible ? "fade-in" : "fade-start"
+      }`}
+    >
       {/* Sidebar for Desktop */}
       <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0 overflow-auto">
         <div>

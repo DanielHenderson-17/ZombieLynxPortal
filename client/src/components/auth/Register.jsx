@@ -20,6 +20,7 @@ export default function Register() {
   const [discordImgUrl, setDiscordImgUrl] = useState(null);
   const [discordLinked, setDiscordLinked] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -57,6 +58,13 @@ export default function Register() {
       }, 1000);
     });
   }, [navigate]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleDiscordMessage = (event) => {
@@ -111,8 +119,9 @@ export default function Register() {
   if (!discordId) {
     return (
       <div
-        className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 text-center"
-        style={{ maxWidth: "500px", opacity: 0.6 }}
+        className={`container register-container fade-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 ${
+          isVisible ? "fade-in" : "fade-start"
+        }`}
       >
         <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
         <h5 className="mt-4 waiting-text">

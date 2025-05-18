@@ -84,7 +84,7 @@ export default function ServicesListDisplay() {
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$4.99 / month</h4>
             <a
-              href="https://zombie-lynx-gaming.tebex.io/category/subscriptions"
+              href="https://zlg.gg/shop"
               className="btn btn-dark mb-3 mx-2"
               target="_blank"
               rel="noopener noreferrer"
@@ -135,7 +135,7 @@ export default function ServicesListDisplay() {
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$9.99 / month</h4>
             <a
-              href="https://zombie-lynx-gaming.tebex.io/category/subscriptions"
+              href="https://zlg.gg/shop"
               className="btn btn-dark mb-3 mx-2"
               target="_blank"
               rel="noopener noreferrer"
@@ -186,7 +186,7 @@ export default function ServicesListDisplay() {
             />
             <h4 className="text-center fs-5 mt-2 mb-3">$14.99 / month</h4>
             <a
-              href="https://zombie-lynx-gaming.tebex.io/category/subscriptions"
+              href="https://zlg.gg/shop"
               className="btn btn-dark mb-3 mx-2"
               target="_blank"
               rel="noopener noreferrer"

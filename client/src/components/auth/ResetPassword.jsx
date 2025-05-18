@@ -16,6 +16,14 @@ export default function ResetPassword() {
   const [passwordError, setPasswordError] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!token) {
@@ -55,7 +63,9 @@ export default function ResetPassword() {
   return (
     <>
       <form
-        className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
+        className={`container login-container fade-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 ${
+          isVisible ? "fade-in" : "fade-start"
+        }`}
         onSubmit={handleSubmit}
       >
         <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />

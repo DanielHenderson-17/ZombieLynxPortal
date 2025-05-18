@@ -10,6 +10,14 @@ export default function Shop() {
   const [allPackages, setAllPackages] = useState([]);
   const { cartItems, addItem, updateQuantity, removeItem } = useCart();
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     getPackages()
@@ -26,7 +34,11 @@ export default function Shop() {
   const vibraniumLynx = findSubscriptionByName(allPackages, "Vibranium");
 
   return (
-    <div className="container mt-4 pt-5">
+    <div
+      className={`container mt-4 pt-5 fade-container ${
+        isVisible ? "fade-in" : "fade-start"
+      }`}
+    >
       <h3 className="text-start text-danger server-status-title mb-3">
         ZLG <span className="text-white ms-2">Subscriptions</span>
         <span className="server-status-line"></span>

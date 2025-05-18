@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTicket, getTicketOptions } from "../../managers/ticketManager";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getAllUsers } from "../../managers/userProfileManager";
 
 export default function NewTicket({ loggedInUser }) {
@@ -82,11 +84,17 @@ export default function NewTicket({ loggedInUser }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission to create a new ticket and redirect to the open tickets page on success or display an error message on failure
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createTicket({ ...formData, createdBy: loggedInUser.id });
+      const createdTicket = await createTicket({
+        ...formData,
+        createdBy: loggedInUser.id,
+      });
+
+      const ticketId = createdTicket?.id;
+      if (!ticketId) throw new Error("Ticket ID not returned.");
+
       setFormData({
         subject: "",
         category: "",
@@ -95,10 +103,15 @@ export default function NewTicket({ loggedInUser }) {
         description: "",
         assignedUserIds: [],
       });
-      alert("Ticket created. Redirecting...");
-      navigate("/member/tickets/open-tickets");
+
+      toast.success("Ticket created! Redirecting...", { autoClose: 3000 });
+
+      setTimeout(() => {
+        navigate(`/member/tickets/ticket/${ticketId}`);
+      }, 3000);
     } catch (error) {
       console.error("Error creating ticket:", error);
+      toast.error("Failed to create ticket.");
     }
   };
 
@@ -208,6 +221,11 @@ export default function NewTicket({ loggedInUser }) {
           </button>
         </div>
       </form>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

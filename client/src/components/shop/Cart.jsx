@@ -22,6 +22,7 @@ export default function Cart() {
   const [checkoutErrorMessage, setCheckoutErrorMessage] = useState(null);
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
   const [showPostPurchaseModal, setShowPostPurchaseModal] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const singleItems = cartItems.single;
   const subscription = cartItems.subscription;
@@ -30,6 +31,13 @@ export default function Cart() {
     (sum, item) => sum + item.package.total_price * item.quantity,
     subscription ? subscription.total_price : 0
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const pollForCompletion = async () => {
@@ -171,7 +179,11 @@ export default function Cart() {
   };
 
   return (
-    <div className="container text-white rounded">
+    <div
+      className={`container text-white rounded fade-container ${
+        isVisible ? "fade-in" : "fade-start"
+      }`}
+    >
       <h3 className="text-start text-danger server-status-title mb-0 mt-5 pt-5">
         Your <span className="text-white ms-2">Cart</span>
         <span className="server-status-line"></span>
