@@ -20,6 +20,7 @@ import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "../components/Nav/NavBar";
 import PrivacyPolicy from "../components/legal/PrivacyPolicy";
 import Rules from "../components/legal/Rules";
+import DiscordRedirect from "../components/discord/DiscordRedirect";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
@@ -30,6 +31,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
     "/register",
     "/forgot-password",
     "/reset-password",
+    "/discord",
   ];
 
   return (
@@ -42,6 +44,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
+        <Route path="discord" element={<DiscordRedirect />} />
         <Route
           path="login"
           element={<Login setLoggedInUser={setLoggedInUser} />}

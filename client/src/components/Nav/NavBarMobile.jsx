@@ -209,7 +209,7 @@ export default function NavBarMobile({
                   className="btn btn-link text-white fs-5 text-decoration-none"
                   onClick={() => {
                     handleClose();
-                    window.open("https://discord.gg/FrWtShumut", "_blank");
+                    window.open("/discord", "_blank");
                   }}
                 >
                   Discord
@@ -256,7 +256,7 @@ export default function NavBarMobile({
                   className="btn btn-link text-white fs-4 text-decoration-none"
                   onClick={() => {
                     handleClose();
-                    window.open("https://discord.gg/FrWtShumut", "_blank");
+                    window.open("/discord", "_blank");
                   }}
                 >
                   Discord
