@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import {
   getUserNotifications,
@@ -26,6 +28,7 @@ export default function Notification({ loggedInUser }) {
       );
       setNotifications(sortedData);
     } catch (error) {
+      toast.error("Error fetching notifications.");
       console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
@@ -37,7 +40,6 @@ export default function Notification({ loggedInUser }) {
     try {
       await markNotificationAsRead(id);
       fetchNotifications();
-      // 👇 Notify NavBar to refresh
       localStorage.setItem("zlg-notifications-updated", Date.now().toString());
       window.dispatchEvent(
         new StorageEvent("storage", {
@@ -45,20 +47,21 @@ export default function Notification({ loggedInUser }) {
           newValue: Date.now().toString(),
         })
       );
+      toast.success("Marked as read.");
     } catch (error) {
+      toast.error("Error marking as read.");
       console.error("Error marking notification as read:", error);
     }
   };
 
   // ✅ Delete a notification (Admin only) by ID and refetch notifications to update the UI with the new status
   const handleDeleteNotification = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this notification?")) {
-      return;
-    }
     try {
       await deleteNotification(id);
+      toast.success("Notification deleted.");
       fetchNotifications();
     } catch (error) {
+      toast.error("Error deleting notification.");
       console.error("Error deleting notification:", error);
     }
   };
@@ -126,6 +129,7 @@ export default function Notification({ loggedInUser }) {
           ))}
         </ul>
       )}
+      <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 }
