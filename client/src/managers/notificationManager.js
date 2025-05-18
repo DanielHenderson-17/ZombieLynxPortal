@@ -41,8 +41,6 @@ export const getUserNotifications = () => {
  * @returns {Promise<object>}
  */
 export const createNotification = (notification) => {
-  console.log("Notification payload:", notification);
-
   return fetch(_apiUrl, {
     method: "POST",
     headers: getAuthHeaders(),

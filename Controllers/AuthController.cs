@@ -447,13 +447,17 @@ namespace ZombieLynxPortalAPI.Controllers
             if (user == null)
                 return NotFound("User not found.");
 
+            var zlgMember = await _context.ZLGMembers
+                .FirstOrDefaultAsync(z => z.UserProfileId == user.Profile.Id);
+
             return Ok(new
             {
                 user.Id,
                 user.Email,
                 user.Role,
                 user.Profile.FirstName,
-                user.Profile.LastName
+                user.Profile.LastName,
+                zlgMember?.PromoReceivedDate
             });
         }
 

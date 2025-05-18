@@ -9,6 +9,7 @@ import {
   createBasket,
   authenticateBasket,
   addPackageToBasket,
+  markPromoClaimed,
 } from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
 import "./Cart.css";
@@ -64,6 +65,15 @@ export default function Cart() {
           setBasketIdent(null);
           setCheckoutStarted(false);
           setShowPostPurchaseModal(true);
+          if (singleItems.some((item) => item.package.id === 6036704)) {
+            markPromoClaimed(6036704, token)
+              .then((res) => {
+                if (!res.ok) console.error("❌ Promo claim failed");
+              })
+              .catch((err) => {
+                console.error("❌ Error marking promo claim:", err);
+              });
+          }
         }
       } catch (err) {
         console.error("Polling failed or timed out:", err);

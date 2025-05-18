@@ -35,6 +35,30 @@ export const getPackages = () => {
     });
 };
 
+export const markPromoClaimed = (packageId, token) => {
+  return fetch("/api/tebex/promo-claimed", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ packageId }),
+  });
+};
+
+export const getPromoStatus = (token) => {
+  return fetch("/api/tebex/promo-status", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Failed to fetch promo status");
+    }
+    return res.json();
+  });
+};
+
 /* ============================================================================
  * ✅ BASKET OPERATIONS
  * ========================================================================== */

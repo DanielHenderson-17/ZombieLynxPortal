@@ -105,8 +105,6 @@
           });
 
           const data = await res.json();
-          console.log("📡 API Response Status:", res.status);
-          console.log("📡 API Response Data:", data);
 
           if (!data || !data.eosId) {
             console.warn(
@@ -121,7 +119,7 @@
             const discordData = await discordRes.json();
 
             if (discordData?.discordId) {
-              console.log("🔗 Discord found, attempting to auto-link Epic...");
+
 
               // Call link-epic if Discord exists
               const linkRes = await fetch("/api/Epic/link-epic", {
@@ -133,7 +131,6 @@
               });
 
               if (linkRes.ok) {
-                console.log("✅ Epic account successfully linked. Reloading...");
                 location.reload();
               } else {
                 console.error("❌ Auto-link failed, showing manual instructions.");
@@ -142,7 +139,6 @@
                 document.getElementById("link-epic-btn").addEventListener("click", openEpicAuthWindow);
               }
             } else {
-              console.log("⚠️ No Discord linked - Showing instructions.");
               document.getElementById("status-title").innerText = "Link Your Epic Account";
               document.getElementById("epic-link-container").classList.remove("d-none");
               document.getElementById("link-epic-btn").addEventListener("click", openEpicAuthWindow);

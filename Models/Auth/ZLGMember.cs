@@ -63,7 +63,6 @@ namespace ZombieLynxPortalAPI.Models
         public bool ASELinked { get; set; } = false;
         public bool ASALinked { get; set; } = false;
         public bool RustLinked { get; set; } = false;
-
-
+        public DateTime? PromoReceivedDate { get; set; }
     }
 }

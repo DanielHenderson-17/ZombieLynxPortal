@@ -84,7 +84,6 @@ export default function AdminPanel() {
   };
 
   const handleEditPoints = (user) => {
-    console.log("🛠 handleEditPoints triggered for:", user);
     setDropdownOpenId(null);
     setSelectedUser({
       userProfileId: user.zlgMember.userProfileId,
@@ -105,7 +104,7 @@ export default function AdminPanel() {
       editedPoints
     )
       .then((result) => {
-        console.log("✅ updateUserPoints success:", result);
+        if (!result) return null;
         toast.success("Points updated!");
         setShowConfirmModal(false);
         setRefreshFlag((prev) => !prev);

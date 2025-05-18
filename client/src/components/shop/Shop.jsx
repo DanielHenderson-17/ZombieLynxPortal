@@ -4,13 +4,21 @@ import "react-toastify/dist/ReactToastify.css";
 import { getPackages } from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
 import { findSubscriptionByName } from "../../utils/subscriptionFinder";
+import {
+  PROMO_PACKAGE_ID,
+  isPromoLocked,
+  getPromoUnlockDate,
+} from "../../utils/promoLockUtils";
+import { getPromoStatus } from "../../managers/tebexManager";
+import { getToken } from "../../managers/authManager";
 import "./Shop.css";
 
-export default function Shop() {
+export default function Shop({ loggedInUser }) {
   const [allPackages, setAllPackages] = useState([]);
   const { cartItems, addItem, updateQuantity, removeItem } = useCart();
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
   const [isVisible, setIsVisible] = useState(false);
+  const [promoReceivedDate, setPromoReceivedDate] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -29,9 +37,18 @@ export default function Shop() {
       });
   }, []);
 
+  useEffect(() => {
+    const token = getToken();
+    getPromoStatus(token)
+      .then((res) => setPromoReceivedDate(res.promoReceivedDate))
+      .catch((err) => console.error("Failed to fetch promo status:", err));
+  }, []);
+
   const goldenLynx = findSubscriptionByName(allPackages, "Gold");
   const diamondLynx = findSubscriptionByName(allPackages, "Diamond");
   const vibraniumLynx = findSubscriptionByName(allPackages, "Vibranium");
+
+  if (!loggedInUser) return null;
 
   return (
     <div
@@ -230,7 +247,19 @@ export default function Shop() {
                     dangerouslySetInnerHTML={{ __html: pkg.description }}
                   />
                   <p className="fw-bold">Price: ${pkg.total_price}</p>
-                  {!cartItems.single.find((i) => i.package.id === pkg.id) ? (
+                  {!cartItems.single.find((i) => i.package.id === pkg.id) &&
+                  pkg.id === PROMO_PACKAGE_ID &&
+                  isPromoLocked(promoReceivedDate) ? (
+                    <button
+                      className="btn btn-secondary w-100"
+                      disabled
+                      title={`Redeemable on ${getPromoUnlockDate(
+                        promoReceivedDate
+                      )}`}
+                    >
+                      Redeemable on {getPromoUnlockDate(promoReceivedDate)}
+                    </button>
+                  ) : !cartItems.single.find((i) => i.package.id === pkg.id) ? (
                     <button
                       className="btn btn-success w-100"
                       onClick={() => {

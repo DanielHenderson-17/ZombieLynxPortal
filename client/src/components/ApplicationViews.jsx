@@ -108,7 +108,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="shop"
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
-              <Shop />
+              <Shop loggedInUser={loggedInUser} />
             </AuthorizedRoute>
           }
         />
