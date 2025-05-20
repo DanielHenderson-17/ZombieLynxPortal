@@ -4,8 +4,6 @@ export const checkBasketComplete = async (ident, token) => {
   let attempts = 0;
 
   while (attempts < maxAttempts) {
-    console.log(`🔁 Checking basket status... attempt ${attempts + 1}`);
-
     const res = await fetch(`/api/tebex/basket/${ident}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -13,7 +11,6 @@ export const checkBasketComplete = async (ident, token) => {
     if (res.ok) {
       const { data } = await res.json();
       if (data.complete === true) {
-        console.log("✅ Confirmed complete basket from polling!");
         return true;
       }
     }

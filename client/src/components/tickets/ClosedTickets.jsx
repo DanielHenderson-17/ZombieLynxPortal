@@ -6,6 +6,8 @@ import {
 } from "../../managers/ticketManager";
 import { truncateText } from "../../utils/truncateText";
 import { getGameImage } from "../../utils/gameFormatter";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ClosedTickets({ onTicketChange }) {
   const [tickets, setTickets] = useState([]);
@@ -40,16 +42,18 @@ export default function ClosedTickets({ onTicketChange }) {
     return () => clearTimeout(timeout);
   }, [fetching]);
 
-  // Handle restoring a ticket
   const handleRestoreTicket = async (ticketId) => {
     try {
       await restoreTicketAPI(ticketId);
+      toast.success("Ticket reopened.", { autoClose: 3000 });
+
       setTickets((prevTickets) =>
         prevTickets.filter((ticket) => ticket.id !== ticketId)
       );
       onTicketChange();
     } catch (error) {
       console.error("Error restoring ticket:", error);
+      toast.error("Failed to restore the ticket.");
     }
   };
 
@@ -164,6 +168,11 @@ export default function ClosedTickets({ onTicketChange }) {
           </tbody>
         </table>
       )}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

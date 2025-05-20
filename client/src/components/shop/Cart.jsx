@@ -4,10 +4,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getToken } from "../../managers/authManager";
 import { checkBasketComplete } from "../../utils/checkBasketComplete";
+import PostPurchaseModal from "./PostPurchaseModal";
 import {
   createBasket,
   authenticateBasket,
   addPackageToBasket,
+  markPromoClaimed,
 } from "../../managers/tebexManager";
 import { useCart } from "../../contexts/CartContext";
 import "./Cart.css";
@@ -20,6 +22,8 @@ export default function Cart() {
   const [pulsingItemId, setPulsingItemId] = useState(null);
   const [checkoutErrorMessage, setCheckoutErrorMessage] = useState(null);
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
+  const [showPostPurchaseModal, setShowPostPurchaseModal] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const singleItems = cartItems.single;
   const subscription = cartItems.subscription;
@@ -28,6 +32,13 @@ export default function Cart() {
     (sum, item) => sum + item.package.total_price * item.quantity,
     subscription ? subscription.total_price : 0
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const pollForCompletion = async () => {
@@ -53,6 +64,16 @@ export default function Cart() {
           clearCart();
           setBasketIdent(null);
           setCheckoutStarted(false);
+          setShowPostPurchaseModal(true);
+          if (singleItems.some((item) => item.package.id === 6036704)) {
+            markPromoClaimed(6036704, token)
+              .then((res) => {
+                if (!res.ok) console.error("❌ Promo claim failed");
+              })
+              .catch((err) => {
+                console.error("❌ Error marking promo claim:", err);
+              });
+          }
         }
       } catch (err) {
         console.error("Polling failed or timed out:", err);
@@ -168,7 +189,11 @@ export default function Cart() {
   };
 
   return (
-    <div className="container text-white rounded">
+    <div
+      className={`container text-white rounded fade-container ${
+        isVisible ? "fade-in" : "fade-start"
+      }`}
+    >
       <h3 className="text-start text-danger server-status-title mb-0 mt-5 pt-5">
         Your <span className="text-white ms-2">Cart</span>
         <span className="server-status-line"></span>
@@ -393,6 +418,10 @@ export default function Cart() {
         </div>
       </div>
       <ToastContainer position="top-center" autoClose={2000} theme="dark" />
+      <PostPurchaseModal
+        show={showPostPurchaseModal}
+        onClose={() => setShowPostPurchaseModal(false)}
+      />
     </div>
   );
 }

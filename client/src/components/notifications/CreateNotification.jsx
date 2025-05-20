@@ -3,6 +3,8 @@ import {
   createNotification,
   getAllUsersAndId,
 } from "../../managers/notificationManager";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateNotification() {
@@ -13,7 +15,6 @@ export default function CreateNotification() {
   const [allUsers, setAllUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   // Fetch all users on component mount and set the allUsers and filteredUsers state variables to the fetched users
@@ -55,16 +56,19 @@ export default function CreateNotification() {
   // Handle form submission by checking if the message is empty or if no users are selected for a targeted notification, then create a notification with the message, isGlobal, and targetUserIds state variables
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!message.trim()) {
-      setError("Message cannot be empty.");
+      toast.error("Message cannot be empty.");
       return;
     }
+
     if (!isGlobal && targetUserIds.length === 0) {
-      setError(
+      toast.error(
         "You must select at least one user for a targeted notification."
       );
       return;
     }
+
     try {
       await createNotification({
         message,
@@ -72,18 +76,19 @@ export default function CreateNotification() {
         targetUserIds,
         subject,
       });
-      window.alert("Notification created successfully!");
-      navigate("/member/notifications", { replace: true });
-      window.location.reload();
+      toast.success("Notification created successfully!");
+
+      setTimeout(() => {
+        navigate("/member/notifications", { replace: true });
+      }, 4000);
     } catch (err) {
+      toast.error("Failed to create notification.");
       console.error("Error creating notification:", err);
-      setError("Failed to create notification.");
     }
   };
 
   return (
     <div className="create-notification-container">
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <form className="col-12" onSubmit={handleSubmit}>
         <div className="form-group">
           <label className="text-start col-md-8 col-11 pt-2 mt-4">
@@ -177,6 +182,11 @@ export default function CreateNotification() {
           </button>
         </div>
       </form>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

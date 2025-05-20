@@ -50,17 +50,17 @@ export default function LinkedAccountsSettings() {
 
         if (steamData?.steamId) {
           linked.push({ name: "Steam", ...steamData });
-          console.log("Steam account linked:", steamAccount);
+          if (!steamAccount) return null;
         }
 
         if (minecraftData?.minecraftUuid) {
           linked.push({ name: "Minecraft", ...minecraftData });
-          console.log("Minecraft account linked:", minecraftAccount);
+          if (!minecraftAccount) return null;
         }
 
         if (epicData?.eosId) {
           linked.push({ name: "Epic", ...epicData });
-          console.log("Epic account linked:", epicAccount);
+          if (!epicAccount) return null;
         }
 
         setLinkedAccounts(linked);

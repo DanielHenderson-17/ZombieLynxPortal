@@ -106,9 +106,6 @@
           });
 
           const data = await res.json();
-          console.log("📡 API Response Status:", res.status);
-          console.log("📡 API Response Data:", data);
-
           if (!data || !data.minecraftUuid) {
             document.getElementById("status-title").innerText = "Link Your Minecraft Account";
             document.getElementById("minecraft-link-container").classList.remove("d-none");

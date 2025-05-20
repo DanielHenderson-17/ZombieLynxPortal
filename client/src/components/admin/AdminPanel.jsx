@@ -28,6 +28,7 @@ export default function AdminPanel() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [refreshFlag, setRefreshFlag] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     getAllUserData()
@@ -36,6 +37,13 @@ export default function AdminPanel() {
       })
       .catch(() => toast.error("Failed to load admin user data."));
   }, [refreshFlag]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   const formatTierIcon = (timedString) => {
     let tier = "Standard";
@@ -76,7 +84,6 @@ export default function AdminPanel() {
   };
 
   const handleEditPoints = (user) => {
-    console.log("🛠 handleEditPoints triggered for:", user);
     setDropdownOpenId(null);
     setSelectedUser({
       userProfileId: user.zlgMember.userProfileId,
@@ -97,7 +104,7 @@ export default function AdminPanel() {
       editedPoints
     )
       .then((result) => {
-        console.log("✅ updateUserPoints success:", result);
+        if (!result) return null;
         toast.success("Points updated!");
         setShowConfirmModal(false);
         setRefreshFlag((prev) => !prev);
@@ -125,7 +132,11 @@ export default function AdminPanel() {
     });
 
   return (
-    <div className="admin-container pt-5">
+    <div
+      className={`admin-container fade-container pt-5 ${
+        isVisible ? "fade-in" : "fade-start"
+      }`}
+    >
       {/* Fixed search bar */}
       <div className=" pb-0 bg-dark">
         <div className="d-flex align-items-center gap-2 admin-search-bar">

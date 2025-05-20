@@ -1,10 +1,27 @@
 import { useState } from "react";
 import { getCategoryBadgeClass } from "../../utils/serverCategoryUtils";
 import { servers } from "../../utils/serversData";
+import ASEModalContent from "./details/ASEModalContent";
+import ASAModalContent from "./details/ASAModalContent";
+import MinecraftModalContent from "./details/MinecraftModalContent";
+import EcoModalContent from "./details/EcoModalContent";
+import EmpyrionModalContent from "./details/EmpyrionModalContent";
 import "./ServerListDisplay.css";
 
 export default function ServerListDisplay() {
   const [activeServer, setActiveServer] = useState(servers[0]);
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const modalComponents = {
+    1: ASEModalContent,
+    2: ASAModalContent,
+    3: EcoModalContent,
+    4: MinecraftModalContent,
+    5: EmpyrionModalContent,
+    // etc.
+  };
+
+  const ModalContentComponent = modalComponents[activeServer.id];
 
   return (
     <div className="zlg-servers" id="ServerListDisplay" data-aos="fade-up">
@@ -73,14 +90,59 @@ export default function ServerListDisplay() {
                   </span>
                 </div>
 
-                <p className="mt-3 server-description-text text-start pe-2">
+                <p className="mt-3 server-description-text text-start pe-2 mb-0">
                   {activeServer.description}
                 </p>
+                <div className="text-end pe-2 mb-2 pb-1">
+                  <button
+                    className="btn btn-outline-light mt-2"
+                    onClick={() => setShowInfoModal(true)}
+                  >
+                    Server Info
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {showInfoModal && (
+        <>
+          <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+            <div
+              className="modal-dialog modal-dialog-centered modal-dialog-scrollable zlg-extra-wide-modal"
+              role="document"
+            >
+              <div className="modal-content bg-dark text-white server-info-modal">
+                <div className="modal-header">
+                  <h5 className="modal-title">{activeServer.title}</h5>
+                  <button
+                    type="button"
+                    className="btn-close btn-close-white"
+                    onClick={() => setShowInfoModal(false)}
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  {ModalContentComponent && <ModalContentComponent />}
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowInfoModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Optional: modal backdrop */}
+          <div className="modal-backdrop fade show"></div>
+        </>
+      )}
     </div>
   );
 }

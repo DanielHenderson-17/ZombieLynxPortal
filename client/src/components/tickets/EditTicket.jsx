@@ -5,6 +5,8 @@ import {
   editTicket,
   getTicketOptions,
 } from "../../managers/ticketManager";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function EditTicket({ loggedInUser }) {
   const { ticketId } = useParams();
@@ -87,15 +89,18 @@ export default function EditTicket({ loggedInUser }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await editTicket(ticketId, formData);
-      alert("Ticket updated successfully!");
-      navigate("/member/tickets/open-tickets");
+      toast.success("Ticket updated successfully!", { autoClose: 3000 });
+
+      setTimeout(() => {
+        navigate("/member/tickets/open-tickets");
+      }, 3000);
     } catch (error) {
       console.error("Error editing ticket:", error);
+      toast.error("Failed to update ticket.");
     }
   };
 
@@ -202,6 +207,11 @@ export default function EditTicket({ loggedInUser }) {
           </button>
         </div>
       </form>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

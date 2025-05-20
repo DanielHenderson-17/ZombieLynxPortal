@@ -158,6 +158,14 @@ export default function ServerStatusDisplay() {
                   ))}
                 </tbody>
               </table>
+              <p className="col-12 text-end mt-2 pb-5">
+                <a
+                  href="https://docs.google.com/spreadsheets/d/1rPNzdXZXS9HyZKKXuqDCLD-UzksvRTLKeplzDUZ5SvY/edit?usp=sharing"
+                  className="col-12 text-decoration-none text-white"
+                >
+                  Steam Favorites Info
+                </a>
+              </p>
             </section>
           </div>
         ))}

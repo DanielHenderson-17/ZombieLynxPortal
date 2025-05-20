@@ -10,6 +10,7 @@ import { getOpenTickets } from "../../managers/ticketManager";
 
 export default function Tickets({ loggedInUser }) {
   const [openTicketCount, setOpenTicketCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
 
   const fetchOpenTicketCount = async () => {
@@ -23,10 +24,19 @@ export default function Tickets({ loggedInUser }) {
 
   useEffect(() => {
     fetchOpenTicketCount();
+
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="d-flex flex-column flex-lg-row ticket-container">
+    <div
+      className={`d-flex flex-column flex-lg-row fade-container ticket-container ${
+        isVisible ? "fade-in" : "fade-start"
+      }`}
+    >
       {/* Sidebar for Desktop Navigation */}
       <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0">
         <div>
@@ -43,6 +53,7 @@ export default function Tickets({ loggedInUser }) {
             </button>
           </Link>
           <hr className="mb-4" />
+
           {/* Open Tickets Button */}
           <Link
             to="/member/tickets/open-tickets"

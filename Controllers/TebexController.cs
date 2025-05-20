@@ -384,6 +384,63 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok();
         }
 
+        [HttpPut("promo-claimed")]
+        [Authorize]
+        public async Task<IActionResult> MarkPromoClaimed([FromBody] PromoClaimDTO dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+                return Unauthorized();
+
+            var userProfile = await _dbContext.UserProfiles
+                .FirstOrDefaultAsync(up => up.UserId.ToString() == userId);
+
+            if (userProfile == null)
+                return NotFound("User profile not found.");
+
+            var zlgMember = await _dbContext.ZLGMembers
+                .FirstOrDefaultAsync(z => z.UserProfileId == userProfile.Id);
+
+            if (zlgMember == null)
+                return NotFound("ZLG member not found.");
+
+            if (dto.PackageId == 6036704)
+            {
+                zlgMember.PromoReceivedDate = DateTime.UtcNow;
+                await _dbContext.SaveChangesAsync();
+                return Ok("Promo timestamp updated.");
+            }
+
+            return BadRequest("Not a recognized promo package.");
+        }
+
+        [HttpGet("promo-status")]
+        [Authorize]
+        public async Task<IActionResult> GetPromoStatus()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+                return Unauthorized();
+
+            var userProfile = await _dbContext.UserProfiles
+                .FirstOrDefaultAsync(up => up.UserId.ToString() == userId);
+
+            if (userProfile == null)
+                return NotFound("User profile not found.");
+
+            var zlgMember = await _dbContext.ZLGMembers
+                .FirstOrDefaultAsync(z => z.UserProfileId == userProfile.Id);
+
+            if (zlgMember == null)
+                return NotFound("ZLG member not found.");
+
+            return Ok(new
+            {
+                promoReceivedDate = zlgMember.PromoReceivedDate
+            });
+        }
 
         // *** KEEP FOR VALIDATION OF WEBHOOK ***
         //Webhook validation Tebex

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import {
   getUserNotifications,
@@ -10,11 +12,16 @@ import "./Notifications.css";
 export default function Notification({ loggedInUser }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Fetch notifications for the logged-in user and sort them by isRead status (unread notifications first)
   useEffect(() => {
     fetchNotifications();
+
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   const fetchNotifications = async () => {
@@ -26,18 +33,17 @@ export default function Notification({ loggedInUser }) {
       );
       setNotifications(sortedData);
     } catch (error) {
+      toast.error("Error fetching notifications.");
       console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Mark notification as read by ID and refetch notifications to update the UI with the new status
   const handleMarkAsRead = async (id) => {
     try {
       await markNotificationAsRead(id);
       fetchNotifications();
-      // 👇 Notify NavBar to refresh
       localStorage.setItem("zlg-notifications-updated", Date.now().toString());
       window.dispatchEvent(
         new StorageEvent("storage", {
@@ -45,26 +51,30 @@ export default function Notification({ loggedInUser }) {
           newValue: Date.now().toString(),
         })
       );
+      toast.success("Marked as read.");
     } catch (error) {
+      toast.error("Error marking as read.");
       console.error("Error marking notification as read:", error);
     }
   };
 
-  // ✅ Delete a notification (Admin only) by ID and refetch notifications to update the UI with the new status
   const handleDeleteNotification = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this notification?")) {
-      return;
-    }
     try {
       await deleteNotification(id);
+      toast.success("Notification deleted.");
       fetchNotifications();
     } catch (error) {
+      toast.error("Error deleting notification.");
       console.error("Error deleting notification:", error);
     }
   };
 
   return (
-    <div className="notifications-container pt-5 px-3">
+    <div
+      className={`notifications-container fade-container ${
+        isVisible ? "fade-in" : "fade-start"
+      } pt-5 px-3`}
+    >
       {loggedInUser?.role === "Admin" && (
         <div className="d-flex justify-content-end">
           <button
@@ -126,6 +136,7 @@ export default function Notification({ loggedInUser }) {
           ))}
         </ul>
       )}
+      <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 }

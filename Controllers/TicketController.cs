@@ -264,6 +264,8 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             var userProfile = _dbContext.UserProfiles.FirstOrDefault(up => up.UserId.ToString() == userId);
+            var zlgMember = _dbContext.ZLGMembers.FirstOrDefault(z => z.UserProfileId == userProfile.Id);
+
 
             if (userProfile == null)
             {
@@ -280,7 +282,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 Status = "Open",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                UserProfileId = userProfile.Id
+                UserProfileId = userProfile.Id,
+                DiscordUserId = ulong.TryParse(zlgMember?.DiscordId, out var parsedId) ? parsedId : 0,
             };
 
             using var transaction = _dbContext.Database.BeginTransaction();

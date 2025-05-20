@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { getOpenTickets, closeTicketAPI } from "../../managers/ticketManager";
 import { getGameImage } from "../../utils/gameFormatter";
 import { truncateText } from "../../utils/truncateText";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function OpenTickets({ onTicketChange }) {
   const [tickets, setTickets] = useState([]);
@@ -41,16 +43,18 @@ export default function OpenTickets({ onTicketChange }) {
     navigate(`/member/tickets/ticket/${ticketId}`);
   };
 
-  // Handle closing a ticket
   const handleCloseTicket = async (ticketId) => {
     try {
       await closeTicketAPI(ticketId);
+      toast.success("Ticket closed.", { autoClose: 3000 });
+
       setTickets((prevTickets) =>
         prevTickets.filter((ticket) => ticket.id !== ticketId)
       );
       onTicketChange();
     } catch (error) {
       console.error("Error closing ticket:", error);
+      toast.error("Failed to close the ticket.");
     }
   };
 
@@ -203,6 +207,11 @@ export default function OpenTickets({ onTicketChange }) {
           </tbody>
         </table>
       )}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

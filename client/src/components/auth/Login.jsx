@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../managers/authManager";
 import { Button, FormGroup, Input } from "reactstrap";
@@ -12,6 +12,7 @@ export default function Login({ setLoggedInUser }) {
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
   const location = useLocation();
   const from = location.state?.from?.pathname || "/member";
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,6 +29,13 @@ export default function Login({ setLoggedInUser }) {
     });
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (showLoginAnimation) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
@@ -42,7 +50,9 @@ export default function Login({ setLoggedInUser }) {
 
   return (
     <form
-      className="container login-container rounded-3 p-4 shadow mt-5 col-md-6 col-11"
+      className={`container login-container fade-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 ${
+        isVisible ? "fade-in" : "fade-start"
+      }`}
       onSubmit={handleSubmit}
     >
       <img

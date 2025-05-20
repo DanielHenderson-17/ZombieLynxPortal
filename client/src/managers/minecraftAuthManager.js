@@ -83,7 +83,6 @@ export const linkMinecraftAccount = (onSuccess) => {
     .then((res) => {
       if (res.ok) {
         if (onSuccess) onSuccess();
-        console.log("✅ Minecraft account linked successfully.");
       } else {
         console.error("❌ Failed to link Minecraft account.");
       }
