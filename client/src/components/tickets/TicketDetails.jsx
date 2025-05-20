@@ -57,14 +57,21 @@ export default function TicketDetails({
           </div>
 
           {/* Subject */}
-          <h5 className="text-white m-0 text-start">
-            {truncateText(ticket.subject, 25)}
+          <h5 className="text-white m-0 text-start d-none d-md-block">
+            {truncateText(ticket.subject, 50)}
+          </h5>
+          <h5 className="text-white m-0 text-start d-block d-md-none">
+            {truncateText(ticket.subject, 20)}
           </h5>
 
           {/* Description */}
-          <p className="text-light mb-0 mt-1 text-start">
-            {truncateText(ticket.description, 30)}
+          <p className="text-light mb-0 mt-1 text-start d-none d-md-block">
+            {truncateText(ticket.description, 50)}
           </p>
+          <p className="text-light mb-0 mt-1 text-start d-block d-md-none">
+            {truncateText(ticket.description, 20)}
+          </p>
+
           {/* Server */}
           <p className="text-white mb-0 mt-1 text-start">
             {truncateText(ticket.server, 30)}
@@ -76,14 +83,28 @@ export default function TicketDetails({
           {ticket.status === "Open" ? (
             <button
               className="btn btn-danger btn-sm"
-              onClick={() => handleCloseTicket(ticketId, navigate)}
+              onClick={() => {
+                if (
+                  window.confirm("Are you sure you want to close this ticket?")
+                ) {
+                  handleCloseTicket(ticketId, navigate);
+                }
+              }}
             >
               Close <i className="bi bi-x-circle ms-1"></i>
             </button>
           ) : (
             <button
               className="btn btn-primary btn-sm"
-              onClick={() => handleRestoreTicket(ticketId, navigate)}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to restore this ticket?"
+                  )
+                ) {
+                  handleRestoreTicket(ticketId, navigate);
+                }
+              }}
             >
               Restore <i className="bi bi-arrow-counterclockwise ms-1"></i>
             </button>
@@ -99,14 +120,26 @@ export default function TicketDetails({
         {ticket.status === "Open" ? (
           <button
             className="btn btn-danger btn-sm col-12"
-            onClick={() => handleCloseTicket(ticketId, navigate)}
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to close this ticket?")
+              ) {
+                handleCloseTicket(ticketId, navigate);
+              }
+            }}
           >
             Close <i className="bi bi-x-circle ms-1"></i>
           </button>
         ) : (
           <button
             className="btn btn-primary btn-sm col-12"
-            onClick={() => handleRestoreTicket(ticketId, navigate)}
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to restore this ticket?")
+              ) {
+                handleRestoreTicket(ticketId, navigate);
+              }
+            }}
           >
             Restore <i className="bi bi-arrow-counterclockwise ms-1"></i>
           </button>
