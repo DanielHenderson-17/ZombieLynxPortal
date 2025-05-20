@@ -215,13 +215,13 @@ export default function OpenTickets({ onTicketChange }) {
                   <td className="text-start col-1 position-relative border-0">
                     <div className="d-flex justify-content-end pe-2">
                       <button
-                        className="btn btn-primary btn-sm ticket-button me-2"
+                        className="btn btn-danger btn-sm ticket-button"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCloseTicket(ticket.id);
                         }}
                       >
-                        <i className="bi bi-arrow-counterclockwise"></i>
+                        <i className="bi bi-x-circle"></i>
                       </button>
                     </div>
                     <small className="position-absolute ticket-id">
