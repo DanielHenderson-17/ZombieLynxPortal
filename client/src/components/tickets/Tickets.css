@@ -5,13 +5,11 @@
   transform: translateY(-10px);
   transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
 }
-
 .ticket-details-wrapper.slide-down {
   max-height: 120px;
   opacity: 1;
   transform: translateY(0);
 }
-
 .ticket-details-wrapper.slide-up {
   max-height: 0;
   opacity: 0;
@@ -19,13 +17,11 @@
   padding: 0 !important;
   margin: 0 !important;
 }
-
 .toggle-arrow {
   border-radius: 20px;
   padding: 2px 10px;
   font-size: 1rem;
 }
-
 .toggle-arrow:hover {
   border: 1px solid rgb(29, 29, 29);
 }
@@ -143,9 +139,8 @@ hr {
 }
 
 .message-container.with-details {
-  height: 52vh;
+  height: 51vh;
 }
-
 .message-container.no-details {
   height: 63vh;
 }
