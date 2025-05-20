@@ -79,7 +79,7 @@ export default function TicketDetails({
         </div>
 
         {/* Div 3 - Close / Restore */}
-        <div className="d-md-flex d-none flex-column justify-content-between align-items-end pt-0">
+        <div className="d-md-flex d-none flex-column justify-content-between align-items-end pt-0 mt-4">
           {ticket.status === "Open" ? (
             <button
               className="btn btn-danger btn-sm"
