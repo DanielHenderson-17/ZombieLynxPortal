@@ -177,18 +177,17 @@ hr {
     height: 70px;
   }
   .message-container.with-details {
-    height: 42vh;
+    height: 40vh;
   }
 
   .message-container.no-details {
     height: 57vh;
   }
   .ticket-details-wrapper.slide-down {
-    max-height: 140px;
+    max-height: 160px;
     opacity: 1;
     transform: translateY(0);
   }
-
   .kaeneko {
     height: 300px !important;
     margin-top: 30px;
@@ -208,7 +207,7 @@ hr {
   .messages {
     min-height: 275px !important;
     height: 100% !important;
-    /* overflow-y: hidden; */
+    overflow-x: hidden;
   }
   .message-container {
     margin-top: 0 !important;
