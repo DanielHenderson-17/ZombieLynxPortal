@@ -184,7 +184,7 @@ hr {
     height: 57vh;
   }
   .ticket-details-wrapper.slide-down {
-    max-height: 160px;
+    max-height: 200px;
     opacity: 1;
     transform: translateY(0);
   }
