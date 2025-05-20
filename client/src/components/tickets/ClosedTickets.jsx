@@ -8,6 +8,8 @@ import { truncateText } from "../../utils/truncateText";
 import { getGameImage } from "../../utils/gameFormatter";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { formatDiscordName } from "../../utils/formatDiscordName";
+import { categoryFormatter } from "../../utils/categoryFormatter";
 
 export default function ClosedTickets({ onTicketChange }) {
   const [tickets, setTickets] = useState([]);
@@ -81,9 +83,9 @@ export default function ClosedTickets({ onTicketChange }) {
       ) : (
         <table className="table table-dark table-striped align-middle">
           <thead className="thead-dark ticket-header">
-            <tr>
+            <tr className="d-none d-lg-table-row">
               <th className="text-center col-1 d-none d-lg-table-cell">Game</th>
-              <th className="text-start col-md-4 col-8 ticket-topic-title">
+              <th className="text-start col-md-4 col-1 ticket-topic-title">
                 Topic
               </th>
 
@@ -102,52 +104,76 @@ export default function ClosedTickets({ onTicketChange }) {
                   key={ticket.id}
                   onClick={() => handleTicketClick(ticket.id)}
                   style={{ cursor: "pointer" }}
+                  className="border border-light"
                 >
-                  <td className="text-start col-1 d-none d-lg-table-cell single-ticket">
-                    <span className="text-warning fw-bold mx-auto">
-                      <img
-                        className="gameImg ms-1"
-                        src={getGameImage(ticket.game)}
-                        alt=""
-                      />
-                    </span>
+                  <td className="text-center d-lg-table-cell single-ticket col-1 p-0 border-0">
+                    <img
+                      className="gameImg3 ms-1"
+                      src={getGameImage(ticket.game)}
+                      alt=""
+                    />
                   </td>
-                  <td className="text-start col-4">
+                  <td className="text-start col-md-4 col-2 p-0 pt-1 border-0">
                     <div className="ticket-topic">
-                      <strong className="text-white">
-                        {truncateText(ticket.subject, 35)}
-                      </strong>
-                      <div className="d-flex">
-                        <strong className="sub-text col-12">
-                          {ticket.category}
-                        </strong>
+                      <div className="d-flex flex-wrap gap-2">
+                        {ticket.assignedUsers.map((user, index) => (
+                          <div
+                            key={index}
+                            className="d-flex flex-column align-items-start rounded"
+                            style={{ fontSize: "0.85rem" }}
+                          >
+                            <span className="d-flex align-items-center">
+                              <img
+                                src={
+                                  user.zlgMember?.discordImgUrl ||
+                                  "https://cdn.discordapp.com/embed/avatars/0.png"
+                                }
+                                alt="Avatar"
+                                className="me-2 rounded-circle"
+                                style={{ width: "30px", height: "30px" }}
+                              />
+                              <span className="me-1">
+                                {formatDiscordName(
+                                  user.zlgMember?.discordName
+                                ) || `${user.firstName} ${user.lastName}`}
+                              </span>
+                              <span className="text-secondary">
+                                -{" "}
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: categoryFormatter(ticket.category),
+                                  }}
+                                ></span>
+                                -{" "}
+                                <small className="sub-text d-none d-md-inline">
+                                  {new Date(ticket.createdAt).toLocaleString()}
+                                </small>
+                              </span>
+                            </span>
+                          </div>
+                        ))}
                       </div>
                       <div className="d-md-none d-flex">
-                        <img
-                          className="gameImg2 me-2 my-auto"
-                          src={getGameImage(ticket.game)}
-                          alt=""
-                        />
-                        <small>{ticket.server}</small>
+                        <small>{truncateText(ticket.server, 20)}</small>
                       </div>
-                      <small className="sub-text">
-                        {new Date(ticket.createdAt).toLocaleString()}
-                      </small>
-                      <br />
-                      <small className="sub-text">
-                        {ticket.assignedUsers
-                          .map((user) => `${user.firstName}`)
-                          .join(", ")}
-                      </small>
+                      <strong className="text-white">
+                        {truncateText(ticket.subject, 20)}
+                      </strong>
+
+                      <div className="d-none d-md-flex m-0 p-0">
+                        <strong className="sub-text col-12">
+                          {truncateText(ticket.description)}
+                        </strong>
+                      </div>
                     </div>
                   </td>
 
-                  <td className="text-start col-2 d-none d-lg-table-cell ticket-server">
+                  <td className="text-start col-2 d-none d-lg-table-cell ticket-server border-0">
                     <span className="text-white fw-bold">
                       {truncateText(ticket.server, 50)}
                     </span>
                   </td>
-                  <td className="text-start col-1 position-relative">
+                  <td className="text-start col-1 position-relative border-0">
                     <div className="d-flex justify-content-end pe-2">
                       <button
                         className="btn btn-primary btn-sm ticket-button me-2"

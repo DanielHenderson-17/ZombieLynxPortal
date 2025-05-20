@@ -47,16 +47,19 @@ hr {
   height: 60px;
 }
 .gameImg2 {
-  height: 15px;
+  height: 30px;
 }
 .gameImg3 {
-  height: 100px;
+  height: 80px;
 }
 .ticket-nav {
   display: block;
   height: auto;
   background-color: #343a40;
   color: white;
+}
+.border-light {
+  border: 1px solid #343a40 !important;
 }
 .bottom-nav {
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
@@ -120,6 +123,9 @@ hr {
   .ticket-body1 {
     overflow-y: hidden;
     padding-bottom: 100px;
+  }
+  .gameImg3 {
+    height: 70px;
   }
   .kaeneko {
     height: 300px !important;

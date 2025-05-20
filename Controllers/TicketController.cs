@@ -46,7 +46,16 @@ namespace ZombieLynxPortalAPI.Controllers
                         .Select(ut => new
                         {
                             ut.UserProfile.FirstName,
-                            ut.UserProfile.LastName
+                            ut.UserProfile.LastName,
+                            ZlgMember = _dbContext.ZLGMembers
+                                .Where(z => z.UserProfileId == ut.UserProfile.Id)
+                                .Select(z => new
+                                {
+                                    z.DiscordName,
+                                    z.DiscordId,
+                                    z.DiscordImgUrl
+                                })
+                                .FirstOrDefault()
                         })
                         .ToList()
                 });
@@ -88,7 +97,16 @@ namespace ZombieLynxPortalAPI.Controllers
                         .Select(ut => new
                         {
                             ut.UserProfile.FirstName,
-                            ut.UserProfile.LastName
+                            ut.UserProfile.LastName,
+                            ZlgMember = _dbContext.ZLGMembers
+                                .Where(z => z.UserProfileId == ut.UserProfile.Id)
+                                .Select(z => new
+                                {
+                                    z.DiscordName,
+                                    z.DiscordId,
+                                    z.DiscordImgUrl
+                                })
+                                .FirstOrDefault()
                         })
                         .ToList()
                 });
@@ -379,10 +397,20 @@ namespace ZombieLynxPortalAPI.Controllers
                 ticket.UpdatedAt,
                 AssignedUsers = ticket.UserTickets.Select(ut => new
                 {
-                    ut.UserProfile.User.Id,
+                    ut.UserProfile.Id,
                     ut.UserProfile.FirstName,
-                    ut.UserProfile.LastName
+                    ut.UserProfile.LastName,
+                    ZlgMember = _dbContext.ZLGMembers
+                        .Where(z => z.UserProfileId == ut.UserProfile.Id)
+                        .Select(z => new
+                        {
+                            z.DiscordName,
+                            z.DiscordId,
+                            z.DiscordImgUrl
+                        })
+                        .FirstOrDefault()
                 }).ToList(),
+
                 AssignedAdmins = ticket.AdminTickets.Select(at => new
                 {
                     at.Admin.User.Id,
