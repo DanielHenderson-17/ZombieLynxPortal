@@ -125,7 +125,7 @@ export default function NavBarDesktop({
           {showDropdown && (
             <div
               ref={dropdownRef}
-              className="dropdown-menu show profile-menu text-white py-3 px-2 shadow"
+              className="dropdown-menu show profile-menu text-white py-3 px-2 shadow fade-in2"
             >
               <div className="d-flex align-items-center mb-3 ps-2">
                 <img
@@ -172,6 +172,12 @@ export default function NavBarDesktop({
               >
                 <i className="bi bi-discord me-3 fs-2 text-white"></i> Zombie
                 Lynx Discord
+              </button>
+              <button
+                className="dropdown-item text-white d-flex justify-content-start align-items-center"
+                onClick={() => navigate("/member/admin/users")}
+              >
+                <i className="bi bi-people-fill me-3 fs-2 text-white"></i> Admin
               </button>
 
               <button

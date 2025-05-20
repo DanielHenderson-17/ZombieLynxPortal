@@ -5,7 +5,7 @@ export default function MemberNav({ isMobile = false, loggedInUser }) {
     `text-decoration-none d-flex ${
       isMobile ? "flex-row align-items-center" : "flex-column"
     } 
-         ${isMobile ? "gap-2" : ""} ${isMobile ? "mx-2" : "mb-4"} 
+         ${isMobile ? "gap-2" : ""} ${isMobile ? "mx-1" : "mb-4"} 
          ${isActive ? "text-white" : "text-secondary"}`;
 
   return (

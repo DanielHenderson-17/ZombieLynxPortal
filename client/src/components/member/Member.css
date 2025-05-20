@@ -1,5 +1,5 @@
-.member {
-  height: 98%;
+.fade-container2 {
+  height: 100% !important;
   overflow-y: hidden;
 }
 .active-icon svg {
@@ -28,6 +28,7 @@
 }
 .member-content {
   height: 70vh;
+  background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
 .modal-backdrop {
   position: fixed;
