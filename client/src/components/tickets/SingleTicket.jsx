@@ -197,13 +197,24 @@ export default function SingleTicket({ loggedInUser }) {
               </small>
 
               {/* Assigned Users */}
-              <div className="mt-1 text-start h-100">
+              <div className="mt-1 text-start d-flex flex-wrap gap-2">
                 {ticket.assignedUsers.map((user, index) => (
                   <span
                     key={index}
-                    className="badge bg-secondary me-2 single-ticket-users"
+                    className="d-flex align-items-center text-white rounded"
+                    style={{ fontSize: "0.85rem" }}
                   >
-                    {user.firstName}
+                    <img
+                      src={
+                        user.zlgMember?.discordImgUrl ||
+                        "https://cdn.discordapp.com/embed/avatars/0.png"
+                      }
+                      alt="Discord Avatar"
+                      className="me-2 rounded-circle"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                    {formatDiscordName(user.zlgMember?.discordName) ||
+                      `${user.firstName} ${user.lastName}`}
                   </span>
                 ))}
               </div>
