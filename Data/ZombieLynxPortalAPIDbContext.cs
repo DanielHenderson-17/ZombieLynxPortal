@@ -62,9 +62,9 @@ namespace ZombieLynxPortalAPI.Data
                 SteamId = "76561198021051513",
                 SteamName = "AdminSteam",
                 SteamImgUrl = null,
-                DiscordId = "1167715864339030016",
-                DiscordName = "zombielynxgaming",
-                DiscordImgUrl = "https://cdn.discordapp.com/avatars/1167715864339030016/a9e52c811d7724ba08fbba1c4e30154d.png",
+                DiscordId = "1167715864339030015",
+                DiscordName = "AdminDiscord",
+                DiscordImgUrl = "https://picsum.photos/seed/100/40/40",
                 EosId = "eos-admin-id",
                 EpicName = "AdminEpic",
                 EpicImgUrl = null,
@@ -74,7 +74,6 @@ namespace ZombieLynxPortalAPI.Data
                 PermissionGroups = "Default,Admins",
                 TimedPermissionGroups = null,
                 Points = 0,
-
             });
 
             // ✅ Seed Ticket

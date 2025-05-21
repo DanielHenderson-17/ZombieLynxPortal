@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../managers/authManager";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 
 export default function Login({ setLoggedInUser }) {
@@ -44,13 +46,17 @@ export default function Login({ setLoggedInUser }) {
       body: JSON.stringify({ email }),
     })
       .then((res) => res.text())
-      .then((msg) => setResendStatus({ success: msg, error: "" }))
-      .catch(() =>
+      .then((msg) => {
+        setShowUnverifiedModal(false);
+        setResendStatus({ success: msg, error: "" });
+        toast.success("Verification email sent!");
+      })
+      .catch(() => {
         setResendStatus({
           success: "",
           error: "Failed to resend verification email.",
-        })
-      );
+        });
+      });
   };
 
   useEffect(() => {
@@ -194,6 +200,7 @@ export default function Login({ setLoggedInUser }) {
           </div>
         </div>
       )}
+      <ToastContainer position="top-center" autoClose={3000} />
     </>
   );
 }
