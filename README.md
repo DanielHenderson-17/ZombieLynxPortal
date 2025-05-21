@@ -2,6 +2,8 @@
 
 Welcome to the official web portal of **Zombie Lynx Gaming (ZLG)** — a centralized platform for game integration, community tools, and cross-title rewards. This project enables users to link their gaming accounts (Discord, Steam, etc.) and access exclusive perks across multiple games through a unified ZLG profile. The entire system is self hosted on my home server stack using a reverse proxy via Cloudflare and Nginx.
 
+**https://zlg.gg**
+
 <img src="screenshots/overview.png" alt="" width=""/>
 
 ---
