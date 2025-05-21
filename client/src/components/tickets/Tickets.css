@@ -1,5 +1,40 @@
+.ticket-details-wrapper {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+.ticket-details-wrapper.slide-down {
+  max-height: 120px;
+  opacity: 1;
+  transform: translateY(0);
+}
+.ticket-details-wrapper.slide-up {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.toggle-arrow {
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 1rem;
+}
+.toggle-arrow:hover {
+  border: 1px solid rgb(29, 29, 29);
+}
+.single-img {
+  height: 100px;
+  width: 100px;
+}
 .ticket {
   min-width: 100% !important;
+}
+.ticket-box,
+.ticket-details-arrow button {
+  background-color: #13151a !important;
 }
 .ticket-id {
   bottom: 5px;
@@ -25,11 +60,12 @@
 }
 .ticket-main {
   background: linear-gradient(145deg, #1a1d20, #1d2027);
+  overflow-y: hidden;
 }
 .description {
   color: white;
-  min-height: 192px !important;
-  max-height: 192px !important;
+  /* min-height: 192px !important;
+  max-height: 192px !important; */
   overflow-y: hidden;
   background-color: #13151a;
   border-radius: 5px;
@@ -98,7 +134,15 @@ hr {
   overflow-y: scroll;
 }
 .message-container {
-  height: 100%;
+  width: 100%;
+  transition: height 0.4s ease;
+}
+
+.message-container.with-details {
+  height: 51vh;
+}
+.message-container.no-details {
+  height: 63vh;
 }
 .message-box {
   height: 100%;
@@ -127,6 +171,18 @@ hr {
   .gameImg3 {
     height: 70px;
   }
+  .message-container.with-details {
+    height: 40vh;
+  }
+
+  .message-container.no-details {
+    height: 57vh;
+  }
+  .ticket-details-wrapper.slide-down {
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+  }
   .kaeneko {
     height: 300px !important;
     margin-top: 30px;
@@ -137,25 +193,19 @@ hr {
   .subject-font {
     font-size: 1.25rem;
   }
-  .single-details {
-    height: 400px !important;
-  }
-  .single-row {
-    height: 780px !important;
-  }
   .message-box {
-    margin-top: 30px;
-    height: 340px !important;
+    margin-top: 0px;
+    height: 100%;
     padding: 5px !important;
     overflow-y: scroll;
   }
   .messages {
     min-height: 275px !important;
     height: 100% !important;
-    overflow-y: hidden;
+    overflow-x: hidden;
   }
   .message-container {
-    height: 430px !important;
+    margin-top: 0 !important;
   }
 }
 @media (min-width: 768px) {
@@ -165,7 +215,10 @@ hr {
 }
 @media (max-width: 768px) {
   .ticket-container {
-    height: 65vh;
+    height: 63vh;
+  }
+  .single-ticket-date {
+    font-size: 0.6rem !important;
   }
 }
 @media (min-width: 2900px) {
@@ -202,7 +255,7 @@ hr {
     padding-left: 20px !important;
   }
   .single-ticket span img {
-    height: 250px !important;
+    /* height: 250px !important; */
   }
   .ticket-id {
     bottom: 5px;

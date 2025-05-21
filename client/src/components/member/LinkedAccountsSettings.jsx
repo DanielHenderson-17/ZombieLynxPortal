@@ -20,9 +20,9 @@ import {
 } from "../../managers/epicAuthManager";
 
 export default function LinkedAccountsSettings() {
-  const [steamAccount, setSteamAccount] = useState(null);
-  const [minecraftAccount, setMinecraftAccount] = useState(null);
-  const [epicAccount, setEpicAccount] = useState(null);
+  const [, setSteamAccount] = useState(null);
+  const [, setMinecraftAccount] = useState(null);
+  const [, setEpicAccount] = useState(null);
   const [linkedAccounts, setLinkedAccounts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -50,18 +50,19 @@ export default function LinkedAccountsSettings() {
 
         if (steamData?.steamId) {
           linked.push({ name: "Steam", ...steamData });
-          if (!steamAccount) return null;
+          setSteamAccount(steamData);
         }
 
         if (minecraftData?.minecraftUuid) {
           linked.push({ name: "Minecraft", ...minecraftData });
-          if (!minecraftAccount) return null;
+          setMinecraftAccount(minecraftData);
         }
 
         if (epicData?.eosId) {
           linked.push({ name: "Epic", ...epicData });
-          if (!epicAccount) return null;
+          setEpicAccount(epicData);
         }
+        console.log("Linked Accounts:", linked);
 
         setLinkedAccounts(linked);
       } catch (err) {

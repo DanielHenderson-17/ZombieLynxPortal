@@ -1,102 +1,132 @@
-# Zombie Lynx Portal API
+# 🧟 Zombie Lynx Gaming Web Portal
 
-## Overview
+Welcome to the official web portal of **Zombie Lynx Gaming (ZLG)** — a centralized platform for game integration, community tools, and cross-title rewards. This project enables users to link their gaming accounts (Discord, Steam, etc.) and access exclusive perks across multiple games through a unified ZLG profile. The entire system is self hosted on my home server stack using a reverse proxy via Cloudflare and Nginx.
 
-Zombie Lynx Portal API is a .NET/React application that serves as a ticket and notification portal for players using Steam, Discord, and Epic. Users can login to the portal and submit a ticket and have an ongoing conversation for real issues that may occur throughout their time at Zombie Lynx Gaming. Zombie Lynx Portal API serves as a customer service portal as well as an admin portal. Admins can assign users to tickets and issue notifications to one, many, or all users of the platform.
+<img src="screenshots/overview.png" alt="" width=""/>
 
-### Screenshots
+---
 
-Below are some screenshots showcasing the features of the Zombie Lynx Portal:
+## 🔑 Authentication & Registration
 
-- **Create Ticket**  
-  ![Create Ticket](screenshots/createticket.png)
+- Supports login and registration using **Discord OAuth** and **Steam OpenID**.
+- Also supports **email/password authentication** for standard login flow.
+- JWT-based session management for secure, stateless authentication.
 
-- **Notifications**  
-  ![Notifications](screenshots/notifications.png)
+<img src="screenshots/auth.png" alt="" width=""/>
 
-- **Single Ticket View**  
-  ![Single Ticket](screenshots/singleticket.png)
+---
 
-- **Tickets Overview**  
-  ![Tickets Overview](screenshots/tickets.png)
+## 🎮 Game Account Linking & Profile Perks
 
-## Features
+- Users can **link multiple game accounts** (e.g. Steam, Minecraft, Epic) to their ZLG profile.
+- Linking accounts unlocks **in-game perks and points synchronization**:
+  - Earn points in **Ark: Survival Evolved** based on in-game actions.
+  - Spend those points in **Minecraft** if your account is linked.
+- Integrated **soft delete** feature: users can deactivate their ZLG account safely.
+- Profile settings include:
+  - Opt in/out of marketing emails.
+  - Change password.
+  - View and manage connected accounts.
 
-- Ticket management system for player support
-- Notification system integrated with Steam, Discord, and Epic
-- User authentication and authorization
-- RESTful API endpoints for seamless integration
+<img src="screenshots/profile-linking.png" alt="" width="500"/>
+<img src="screenshots/email.png" alt="" width="500"/>
 
-## Technologies Used
+---
 
-- .NET Core for the backend API
-- React for the frontend
-- Entity Framework Core for database management
-- JWT Authentication
-- OpenID Login Integration with Steam, Discord, and Epic APIs (Discord and Epic coming soon!)
+## 🛒 Webstore Integration (Tebex)
 
-## What I Learned
+- Fully implemented webstore using **Tebex.js** with the **Headless Tebex API**.
+- Subscription and purchase data sync directly to ZLG user profiles.
+- Purchases trigger confirmation emails with itemized HTML layouts.
 
-During the development of the Zombie Lynx Portal API, I deepened my understanding of:
+<img src="screenshots/shop1.png" alt="" width="600"/>
+<img src="screenshots/shop2.png" alt="" width="600"/>
+<img src="screenshots/shop3.png" alt="" width="600"/>
 
-- **OpenID**: Explored how OpenID works for secure user authentication and how to integrate it with third-party services like Steam.
-- **JWT**: Gained a comprehensive understanding of JWT (JSON Web Tokens), including how to generate, sign, validate, and use them effectively for user authentication and authorization.
+---
 
-## Goals for the Future
+## 📨 Email Notifications
 
-Looking ahead, here are some planned features and enhancements:
+- Integrated `IEmailSender` service.
+- Sends transactional HTML emails:
+  - Purchase confirmations
+  - Subscription notices
+  - Password resets
+- Full opt-out management in the user profile.
 
-- **Connect to Discord.js**: Integrate the portal with Discord for richer community engagement and notifications.
-- **Add a Shop**: Connect to existing in game shop for better UI/UX experience.
-- **Integrate Stats Portal**: Connect to existing stats portal for single location solution for Zombie Lynx Gaming.
-- **Data Analytics**: Track Admin response and resolution time and deliver in graphs per Admin.
-- **Normalize Database Design** Check for redundancies in db design to improve integrity.
-- **Unit Tests for all endpoints** Create simple unit testing to test all endpoints moving forward.
+---
 
-## Getting Started
+## 🧾 Ticket System & Discord Integration
 
-To get started with the Zombie Lynx Portal API, follow these steps:
+- Discord-based ticketing system integrated with the **Zombie Lynx Discord Bot** using `Discord.Net`.
+- Real-time updates between the **Discord server** and **web portal** via **WebSocket**:
+  - View live ticket updates
+  - Reopen or close tickets
+  - Add/remove users from ticket channels
+- Supports full lifecycle management:
 
-1. Clone the repository:
+  - Ticket creation
+  - Channel generation in Discord
+  - Message syncing with frontend panel
 
-   ```bash
-   git clone git@github.com:DanielHenderson-17/ZombieLynxPortal.git
+<img src="screenshots/tickets.png" alt="" width="600"/>
 
-   ```
+---
 
-2. Navigate to the project directory:
+## 🖥 Server Monitoring & Status
 
-   ```bash
-   cd ZombieLynxPortalAPI
-   ```
+- View live server stats using external APIs:
+  - **Ark:SE**, **Ark:SA**
+  - **Minecraft**
+  - **Empyrion**
+  - **Eco**
+- Results displayed on the portal dashboard for transparency and player tracking.
 
-3. Install the required dependencies:
+<img src="screenshots/server-status.png" alt="" width="600"/>
 
-   ```bash
-   dotnet restore
-   npm install
-   ```
+---
 
-4. Update the configuration files with your API keys and connection strings.
+## ⚙️ Tech Stack & Architecture
 
-5. Run the application:
-   ```bash
-   dotnet run
-   npm start
-   ```
+- **Frontend**: React.js with custom-built components and hooks.
+- **Backend**: ASP.NET Core with WebSocket support and REST APIs.
+- **Databases**:
+  - PostgreSQL (main database)
+  - MySQL (external game-specific DBs)
+- **EF Core** for ORM and migrations.
+- **Nginx and Cloudflare** Reverse Proxy
+- Custom **SQL triggers** ensure real-time point syncing across services and databases.
 
-## Contributing
+---
 
-Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) before submitting a pull request.
+## 🛠 Admin Tools
 
-## License
+- Fully functional admin dashboard:
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+  - Adjust user points manually
+  - Promote or demote account statuses
+  - View system logs and linked accounts
 
-ToDo:
-popout menu to shop
-bot not creating or closing tickets ? maybe token?
-change tebex route on steam login
-clear cart after purchase? Works for me
-gray out button for promo
-checkout rules container whitespace
+<img src="screenshots/admin.png" alt="" width="600"/>
+
+---
+
+## 🧠 What I Learned
+
+Throughout this capstone project, I gained hands-on experience with:
+
+- **Self-hosting and deployment** using Nginx as a reverse proxy and Cloudflare for DNS management, HTTPS enforcement, and security features.
+- Navigating the **complexity of OAuth callback URIs** across platforms like Discord and Steam, ensuring proper redirection and token flow in multi-environment setups.
+- Building dynamic user interfaces in React using a wide range of **component libraries and custom Node packages**, handling state transitions, modals, forms, and real-time WebSocket updates.
+- Managing and integrating **multiple databases** (PostgreSQL and MySQL) with EF Core, and using **SQL triggers** to sync game data across services in real-time.
+- Architecting a **modular and scalable full-stack application**, balancing maintainability with performance across React frontend and .NET backend services.
+
+These challenges provided valuable insights into real-world system design, integration across platforms, and the importance of clean code structure and extensibility.
+
+---
+
+## 🎯 Future Goals
+
+- Integrate **per-game statistics tracking** and display within user profiles.
+- Add a **Battle Pass system** to reward players for consistent gameplay.
+- Expand server coverage and cross-game syncing features.

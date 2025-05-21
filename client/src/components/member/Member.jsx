@@ -21,7 +21,9 @@ export default function Member({ loggedInUser }) {
   }, [location.pathname, navigate]);
 
   return (
-    <div className={`fade-container ${isVisible ? "fade-in" : ""}`}>
+    <div
+      className={`fade-container2 member-main ${isVisible ? "fade-in" : ""}`}
+    >
       <div className="d-flex px-0 mt-md-5 mt-3 member">
         {/* Sidebar - desktop only */}
         <aside
@@ -32,7 +34,7 @@ export default function Member({ loggedInUser }) {
         </aside>
 
         {/* Main content area */}
-        <div className="member-layout col px-3 mt-5 h-100">
+        <div className="member-layout col px-3 mt-5 h-100 ">
           <div className="position-relative">
             <div className="member-container mt-md-0 mt-5 rounded-top-2">
               <div className="member-header d-flex flex-column align-items-start pb-0">

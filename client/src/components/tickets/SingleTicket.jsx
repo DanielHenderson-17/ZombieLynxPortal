@@ -1,26 +1,20 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useRef, useEffect, useState } from "react";
-import {
-  getTicketById,
-  closeTicketAPI,
-  restoreTicketAPI,
-} from "../../managers/ticketManager";
-import {
-  getMessagesByTicketId,
-  sendMessage,
-} from "../../managers/messageManager";
-import { formatLongDateTime } from "../../utils/longDateTime";
-import { renderMessageContent } from "../../utils/renderMessageContent.js";
-import { formatShortDate } from "../../utils/shortDateTime";
-import { formatDiscordName } from "../../utils/formatDiscordName";
-import { categoryFormatter } from "../../utils/categoryFormatter.js";
-import { getGameImage } from "../../utils/gameFormatter";
+import TicketDetails from "./TicketDetails";
+import TicketMessages from "./TicketMessages";
+import { useMessagePolling } from "../../hooks/useMessagePolling";
+import { useAutoScrollToBottom } from "../../hooks/useAutoScrollToBottom.js";
+import { getTicketById } from "../../managers/ticketManager";
+import { getMessagesByTicketId } from "../../managers/messageManager";
 import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
-import { truncateText } from "../../utils/truncateText.js";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
-import { pollMessages } from "../../utils/pollMessages.js";
-import { scrollToBottom } from "../../utils/scrollToBottom";
-import { toast, ToastContainer } from "react-toastify";
+import {
+  handleSendMessage,
+  handleKeyPress,
+  handleCloseTicket,
+  handleRestoreTicket,
+  handleRefreshMessages,
+} from "../../utils/ticketHandler.js";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function SingleTicket({ loggedInUser }) {
@@ -33,355 +27,96 @@ export default function SingleTicket({ loggedInUser }) {
   const navigate = useNavigate();
   const [discordAccount, setDiscordAccount] = useState(null);
   const messagesEndRef = useRef(null);
+  const [showTicketDetails, setShowTicketDetails] = useState(true);
 
-  // Fetch ticket, messages, and users
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAll = async () => {
       try {
-        const ticketData = await getTicketById(ticketId);
+        const [ticketData, messageData, discordData] = await Promise.all([
+          getTicketById(ticketId),
+          getMessagesByTicketId(ticketId),
+          getLinkedDiscordAccount(),
+        ]);
+
         setTicket(ticketData);
-
-        const messageData = await getMessagesByTicketId(ticketId);
         setMessages(messageData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch ticket details or messages.");
-      }
-    };
-
-    fetchData();
-  }, [ticketId, loggedInUser.role, refreshKey]);
-
-  // Fetch Steam account and update every minute
-  useEffect(() => {
-    const fetchDiscordAccount = async () => {
-      try {
-        const updatedDiscordAccount = await getLinkedDiscordAccount();
-        if (updatedDiscordAccount) {
-          setDiscordAccount(updatedDiscordAccount);
+        if (discordData) {
+          setDiscordAccount(discordData);
         }
       } catch (error) {
-        console.error("❌ Error fetching Discord account:", error);
+        console.error("❌ Error fetching ticket/messages/Discord:", error);
+        setError("Failed to fetch ticket, messages, or Discord info.");
       }
     };
 
-    fetchDiscordAccount();
-    const intervalId = setInterval(fetchDiscordAccount, 60000);
+    fetchAll();
+    const intervalId = setInterval(fetchAll, 60000);
 
     return () => clearInterval(intervalId);
-  }, [loggedInUser, refreshKey]);
+  }, [ticketId, loggedInUser.role, refreshKey]);
 
-  // Poll messages
-  useEffect(() => {
-    if (!ticketId) return;
-
-    const stopPolling = pollMessages(ticketId, setMessages, 10000);
-
-    return () => stopPolling();
-  }, [ticketId]);
-
-  useEffect(() => {
-    scrollToBottom(messagesEndRef);
-  }, [messages]);
-
-  // Send message
-  const handleSendMessage = async () => {
-    if (newMessage.trim() === "") return;
-
-    try {
-      await sendMessage({
-        messageGroupId: ticketId,
-        content: newMessage,
-        imgUrl: null,
-      });
-
-      const updatedMessages = await getMessagesByTicketId(ticketId);
-      setMessages(updatedMessages);
-      setNewMessage("");
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setError("Failed to send message.");
-    }
-  };
-
-  // Send message on Enter key press
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSendMessage();
-    }
-  };
-
-  const handleCloseTicket = async () => {
-    try {
-      await closeTicketAPI(ticketId);
-      toast.success("Ticket closed. Thank you!", { autoClose: 3000 });
-      setTimeout(() => {
-        navigate("/member/tickets/closed-tickets");
-      }, 3000);
-    } catch (error) {
-      console.error("Error closing ticket:", error);
-      toast.error("Failed to close the ticket.");
-    }
-  };
-
-  const handleRestoreTicket = async () => {
-    try {
-      await restoreTicketAPI(ticketId);
-      toast.success(
-        "Your ticket has been reopened. We will be with your shortly!",
-        { autoClose: 3000 }
-      );
-      setTimeout(() => {
-        navigate("/member/tickets/open-tickets");
-      }, 3000);
-    } catch (error) {
-      console.error("Error restoring ticket:", error);
-      toast.error("Failed to restore the ticket.");
-    }
-  };
-
-  const handleRefreshMessages = () => {
-    setRefreshKey((prevKey) => prevKey + 1);
-  };
+  useMessagePolling(ticketId, setMessages);
+  useAutoScrollToBottom(messagesEndRef, [messages]);
 
   if (!ticket) {
     return <p>Loading ticket details...</p>;
   }
 
   return (
-    <div className="text-white container-fluid mt-0 pt-3 h-100">
-      <div className="row single-row h-100 pb-3">
-        {/* Left Column: Ticket Details */}
-        <div className="col-md-4 single-details h-100 mb-3">
-          <div className="d-flex pt-2">
-            {/* Game Image */}
-            <div className="col-4">
-              <img
-                className="img-fluid single-img rounded col-12"
-                src={getGameImage(ticket.game)}
-                alt={ticket.game}
-              />
-              <div className="d-flex justify-content-end">
-                <small className="text-secondary fst-italic single-ticket-id">
-                  Ticket #{ticket.id}
-                </small>
-              </div>
-            </div>
-
-            <div className="ms-3 single-ticket-details">
-              <h5 className="text-start mt-0">
-                {truncateText(ticket.subject, 40)}
-              </h5>
-              {/* Server Name */}
-              <h6 className="text-start single-ticket-server-name">
-                {truncateText(ticket.server, 20)}
-              </h6>
-
-              {/* Category */}
-              <div className="d-flex align-items-center">
-                <div className="d-flex align-items-center col-10">
-                  <div
-                    className="text-start me-1 single-ticket-category"
-                    dangerouslySetInnerHTML={{
-                      __html: categoryFormatter(ticket.category),
-                    }}
-                  ></div>
-                  <span className="text-start">{ticket.category}</span>
-                </div>
-              </div>
-
-              {/* Updated At */}
-              <small className="text-secondary text-start d-block mt-2 mb-2">
-                <i className="bi bi-calendar-date me-2"></i>
-                {formatLongDateTime(ticket.updatedAt)}
-              </small>
-
-              {/* Assigned Users */}
-              <div className="mt-1 text-start d-flex flex-wrap gap-2">
-                {ticket.assignedUsers.map((user, index) => (
-                  <span
-                    key={index}
-                    className="d-flex align-items-center text-white rounded"
-                    style={{ fontSize: "0.85rem" }}
-                  >
-                    <img
-                      src={
-                        user.zlgMember?.discordImgUrl ||
-                        "https://cdn.discordapp.com/embed/avatars/0.png"
-                      }
-                      alt="Discord Avatar"
-                      className="me-2 rounded-circle"
-                      style={{ width: "20px", height: "20px" }}
-                    />
-                    {formatDiscordName(user.zlgMember?.discordName) ||
-                      `${user.firstName} ${user.lastName}`}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-          {/* Description */}
-          <div className="text-start mt-md-2 mt-3">
-            <div className="d-flex justify-content-between align-items-center">
-              <small className="single-ticket-description">Description:</small>
-              <button
-                className="btn btn-link p-0 ms-2"
-                onClick={() =>
-                  navigate(`/member/tickets/ticket/${ticket.id}/edit`)
-                }
-              >
-                <small className="bi bi-pencil text-white me-2 single-ticket-description-edit"></small>
-              </button>
-            </div>
-
-            <p className="p-2 mb-0 mt-md-1 mt-0 description single-ticket-description-text shadow">
-              {ticket.description}
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="d-flex justify-content-end mt-3 pt-0">
-            {ticket.status === "Open" ? (
-              <button className="btn btn-danger" onClick={handleCloseTicket}>
-                Close <i className="bi bi-x-circle ms-2"></i>
-              </button>
-            ) : (
-              <>
-                <button
-                  className="btn btn-primary me-2"
-                  onClick={handleRestoreTicket}
-                >
-                  Restore <i className="bi bi-arrow-counterclockwise ms-2"></i>
-                </button>
-              </>
-            )}
-          </div>
+    <div className="text-white container-fluid mt-0 pt-3 h-100 px-1">
+      <div className="pb-2">
+        {/* Toggleable Ticket Details */}
+        <div
+          className={`ticket-details-wrapper ${
+            showTicketDetails ? "slide-down" : "slide-up"
+          }`}
+        >
+          <TicketDetails
+            ticket={ticket}
+            ticketId={ticketId}
+            navigate={navigate}
+            handleCloseTicket={handleCloseTicket}
+            handleRestoreTicket={handleRestoreTicket}
+            showTicketDetails={showTicketDetails}
+            setShowTicketDetails={setShowTicketDetails}
+          />
         </div>
 
-        {/* Right Column: Messages */}
-        <div className="col-md-8 text-start mb-3 ps-md-0 ps-2 message-container mt-md-0 mt-3">
-          {!discordAccount?.discordName ? (
-            // If not logged in, show a grayed-out message box
-            <div className="text-muted p-3 bg-dark rounded text-center mt-5 messages-no-discord">
-              <p className="text-white">
-                You need to link your Discord account to send messages.
-              </p>
-              <p className="text-white">
-                Please login and then refresh messages.
-              </p>
-              {/* Refresh Button */}
-              <div className="d-flex justify-content-center p-2">
-                <button
-                  className="btn btn-secondary"
-                  onClick={handleRefreshMessages}
-                >
-                  Refresh Messages 🔄
-                </button>
-              </div>
-            </div>
-          ) : (
-            // If logged in, show the normal message UI
-            <div className="shadow border-black rounded p-0 message-box">
-              <div className="d-flex flex-column message-box-inner h-100">
-                {/* Messages Container */}
-                <div
-                  ref={messagesEndRef}
-                  className="flex-grow-1 messages mb-0 p-md-3 p-1"
-                >
-                  {messages.length > 0 ? (
-                    messages.map((msg) => (
-                      <div key={msg.id} className="mb-3 d-flex">
-                        <img
-                          src={
-                            msg.discordImgUrl
-                              ? msg.discordImgUrl
-                              : "https://cdn.discordapp.com/embed/avatars/0.png"
-                          }
-                          alt="Profile"
-                          className="message-img me-2"
-                        />
-                        <div>
-                          <div className="d-flex align-items-center">
-                            <strong className="me-2 messages-username">
-                              {capitalizeFirstLetter(
-                                formatDiscordName(msg.discordUserName)
-                              ) || "Unknown User"}
-                            </strong>
-                            <small className="text-secondary">
-                              {formatShortDate(msg.createdAt)}
-                            </small>
-                          </div>
-
-                          <div className="mb-0">
-                            {renderMessageContent(msg.content, messages)}
-                            {/* ✅ Render Images if Present */}
-                            {msg.imgUrlsJson &&
-                              (typeof msg.imgUrlsJson === "string"
-                                ? JSON.parse(msg.imgUrlsJson)
-                                : msg.imgUrlsJson
-                              )?.length > 0 && (
-                                <div className="mt-2">
-                                  {(typeof msg.imgUrlsJson === "string"
-                                    ? JSON.parse(msg.imgUrlsJson)
-                                    : msg.imgUrlsJson
-                                  ).map((imageUrl, index) => (
-                                    <img
-                                      key={index}
-                                      src={imageUrl}
-                                      alt={`Attachment ${index + 1}`}
-                                      className="img-fluid rounded mt-1 mx-1"
-                                      style={{
-                                        maxWidth: "100%",
-                                        maxHeight: "300px",
-                                      }}
-                                    />
-                                  ))}
-                                </div>
-                              )}
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No messages yet.</p>
-                  )}
-                </div>
-
-                {/* Input and Send Button */}
-                {ticket.status === "Open" && (
-                  <div className="d-flex">
-                    <input
-                      type="text"
-                      className="form-control me-2 message-input"
-                      placeholder={
-                        ticket.status === "Open"
-                          ? "Type a message..."
-                          : "Ticket is closed"
-                      }
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (ticket.status === "Open") {
-                          handleKeyPress(e);
-                        }
-                      }}
-                      disabled={ticket.status !== "Open"}
-                    />
-                    <button
-                      className="btn btn-primary message-button"
-                      onClick={handleSendMessage}
-                      disabled={ticket.status !== "Open"}
-                    >
-                      Send
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+        {/* Arrow toggle button */}
+        <div className="d-flex justify-content-center mb-2 ticket-details-arrow">
+          <button
+            className="toggle-arrow py-0 px-1 col-12 rounded-0"
+            onClick={() => setShowTicketDetails((prev) => !prev)}
+          >
+            <i
+              className={`bi ${
+                showTicketDetails ? "bi-chevron-up" : "bi-chevron-down"
+              }`}
+            ></i>
+          </button>
         </div>
+
+        {/* Ticket Messages */}
+        <TicketMessages
+          ticket={ticket}
+          messages={messages}
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          setMessages={setMessages}
+          discordAccount={discordAccount}
+          setError={setError}
+          ticketId={ticketId}
+          handleSendMessage={handleSendMessage}
+          handleKeyPress={handleKeyPress}
+          handleRefreshMessages={handleRefreshMessages}
+          setRefreshKey={setRefreshKey}
+          messagesEndRef={messagesEndRef}
+          showTicketDetails={showTicketDetails}
+        />
       </div>
+
       {error && <p className="text-danger mt-3">{error}</p>}
+
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
