@@ -27,6 +27,10 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<PreviouslyLinkedAccount> PreviouslyLinkedAccounts { get; set; }
         public DbSet<PasswordReset> PasswordResets { get; set; }
         public DbSet<ProcessedTransaction> ProcessedTransactions { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Vote> Votes { get; set; }
+        public DbSet<VoteResult> VoteResults { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -311,6 +315,23 @@ namespace ZombieLynxPortalAPI.Data
                 .HasOne(pr => pr.User)
                 .WithMany()
                 .HasForeignKey(pr => pr.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Vote>()
+                .HasOne(v => v.Game)
+                .WithMany()
+                .HasForeignKey(v => v.GameId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<VoteResult>()
+                .HasOne(vr => vr.Vote)
+                .WithMany()
+                .HasForeignKey(vr => vr.VoteId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<VoteResult>()
+                .HasOne(vr => vr.ZLGMember)
+                .WithMany()
+                .HasForeignKey(vr => vr.ZLGMemberId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

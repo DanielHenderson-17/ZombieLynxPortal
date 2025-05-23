@@ -14,6 +14,8 @@ import Shop from "../components/shop/Shop";
 import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
+import Votes from "../components/vote/Votes";
+import CreateVote from "../components/vote/CreateVote";
 import AccountSettings from "../components/member/AccountSettings";
 import AdminPanel from "../components/admin/AdminPanel";
 import LoginSuccess from "./auth/LoginSuccess";
@@ -88,6 +90,8 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             path="notifications/create"
             element={<CreateNotification loggedInUser={loggedInUser} />}
           />
+          <Route path="vote" element={<Votes loggedInUser={loggedInUser} />} />
+          <Route path="vote/create" element={<CreateVote />} />
           <Route path="accountsettings" element={<AccountSettings />} />
           <Route
             path="admin/users"

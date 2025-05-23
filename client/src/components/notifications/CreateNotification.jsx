@@ -15,6 +15,7 @@ export default function CreateNotification() {
   const [allUsers, setAllUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
   // Fetch all users on component mount and set the allUsers and filteredUsers state variables to the fetched users
@@ -29,6 +30,13 @@ export default function CreateNotification() {
       }
     };
     fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   // Filter users based on the search query and set the filteredUsers state variable to the filtered users array and the searchQuery state variable to the search query
@@ -88,69 +96,95 @@ export default function CreateNotification() {
   };
 
   return (
-    <div className="create-notification-container">
-      <form className="col-12" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="text-start col-md-8 col-11 pt-2 mt-4">
-            Subject:
-            <textarea
-              className="col-md-8 col-11 p-2"
-              placeholder="Enter the subject of your notification"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              rows="2"
-              style={{ width: "100%", margin: "10px 0" }}
-              required
-            ></textarea>
-          </label>
+    <div
+      className={`notifications-container fade-container pb-5 ${
+        isVisible ? "fade-in" : "fade-start"
+      } pt-5 px-3`}
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="p-md-4 p-1 rounded col-md-6 col-12 mx-auto"
+      >
+        <h2 className="text-white mb-4">Create Notification</h2>
+
+        {/* Subject */}
+        <div className="mb-3 input-group">
+          <span className="input-group-text bg-dark text-white border border-secondary">
+            <i className="bi bi-card-text"></i>
+          </span>
+          <textarea
+            className="form-control bg-dark text-white border border-secondary"
+            placeholder="Notification Subject"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            rows="1"
+            required
+          />
         </div>
 
-        <div className="form-group">
-          <label className="text-start col-md-8 col-11 pt-2 mt-4">
-            Message:
-            <textarea
-              className="col-md-8 col-11 p-2"
-              placeholder="Enter your notification here and then select the users you want to send it to."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              rows="4"
-              style={{ width: "100%", margin: "10px 0" }}
-              required
-            ></textarea>
-          </label>
+        {/* Message */}
+        <div className="mb-3 input-group">
+          <span className="input-group-text bg-dark text-white border border-secondary align-items-start">
+            <i className="bi bi-chat-dots-fill"></i>
+          </span>
+          <textarea
+            className="form-control bg-dark text-white border border-secondary"
+            placeholder="Enter your notification message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows="4"
+            required
+          />
         </div>
-        <div className="text-start col-md-8 col-11 mx-auto ps-2 d-flex justify-content-between">
-          <label>
+
+        {/* Target Audience: Global or Specific */}
+        <div className="mb-3 d-flex justify-content-between bg-dark text-white px-3 py-2 rounded border border-secondary">
+          <div className="form-check">
             <input
-              className="text-start me-2"
+              className="form-check-input me-2"
               type="radio"
+              name="audience"
               value="true"
               checked={isGlobal}
               onChange={() => setIsGlobal(true)}
+              id="globalRadio"
             />
-            All Users
-          </label>
-          <label>
+            <label className="form-check-label" htmlFor="globalRadio">
+              All Users
+            </label>
+          </div>
+          <div className="form-check">
             <input
-              className="me-2 text-start"
+              className="form-check-input me-2"
               type="radio"
+              name="audience"
               value="false"
               checked={!isGlobal}
               onChange={() => setIsGlobal(false)}
+              id="specificRadio"
             />
-            Specific Users
-          </label>
+            <label className="form-check-label" htmlFor="specificRadio">
+              Specific Users
+            </label>
+          </div>
         </div>
+
+        {/* User Search and Selection */}
         {!isGlobal && (
-          <div className="mt-2 text-start col-md-8 col-11 mx-auto ">
-            <input
-              type="text"
-              className="form-control my-2 search-users"
-              placeholder="Type to search users by name or email"
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-            <div className="user-selection mb-2">
+          <div className="mb-3">
+            <div className="mb-2 input-group">
+              <span className="input-group-text bg-dark text-white border border-secondary">
+                <i className="bi bi-search"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control bg-dark text-white border border-secondary"
+                placeholder="Search users by name or email"
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+            </div>
+            <div className="bg-dark text-white p-2 rounded border border-secondary">
               {filteredUsers.map((user) => (
                 <div key={user.profileId} className="form-check">
                   <input
@@ -162,7 +196,7 @@ export default function CreateNotification() {
                     onChange={() => handleCheckboxChange(user.profileId)}
                   />
                   <label
-                    className="form-check-label"
+                    className="form-check-label text-start"
                     htmlFor={`user-${user.profileId}`}
                   >
                     {user.firstName} {user.lastName} ({user.email})
@@ -172,16 +206,19 @@ export default function CreateNotification() {
             </div>
           </div>
         )}
-        <div className="d-flex justify-content-end col-md-8 col-11 mx-auto">
+
+        {/* Submit Button */}
+        <div className="d-flex justify-content-end">
           <button
             type="submit"
-            className="d-flex align-items-center btn btn-success mb-3 me-0 mt-3 create-notification-btn"
+            className="btn btn-success d-flex align-items-center gap-2"
           >
-            <i className="bi bi-plus"></i>
-            <p className="m-0 p-0">Create Notification</p>
+            <i className="bi bi-send-fill"></i>
+            <span>Create Notification</span>
           </button>
         </div>
       </form>
+
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
