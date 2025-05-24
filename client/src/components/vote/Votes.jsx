@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { getActiveVotes, submitVote } from "../../managers/voteManager";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import VotesMobileNav from "./VotesMobileNav";
+import "./Vote.css";
 
 export default function Votes({ loggedInUser }) {
   const navigate = useNavigate();
@@ -20,18 +22,10 @@ export default function Votes({ loggedInUser }) {
         });
         setVotes(sorted);
       })
-
       .catch((err) => {
         console.error("Failed to fetch votes:", err);
       });
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 50);
     return () => clearTimeout(timer);
   }, []);
 
@@ -55,28 +49,32 @@ export default function Votes({ loggedInUser }) {
 
   return (
     <div
-      className={`notifications-container fade-container ${
+      className={`notifications-container fade-container pb-5 ${
         isVisible ? "fade-in" : "fade-start"
-      } pt-5 px-3`}
+      } pt-md-1 pt-0 px-3`}
     >
-      <div className="d-flex justify-content-end align-items-center">
+      <div className="d-md-flex d-none justify-content-between align-items-center mb-4">
+        <h3 className="text-white facebook-header m-0 mt-2 ms-1 d-none d-md-block">
+          Votes
+        </h3>
         {loggedInUser?.role === "Admin" && (
-          <div className="d-flex justify-content-end">
-            <button
-              className="create-notification-btn d-flex align-items-center mb-4 p-2 rounded-2 border-0 btn btn-success"
-              onClick={() => navigate("/member/vote/create")}
-            >
-              <i className="bi bi-plus"></i>
-              <p className="m-0 p-0">Create Vote</p>
-            </button>
-          </div>
+          <button
+            className="btn btn-success d-flex justify-content-center align-items-center mt-2 me-1"
+            style={{ width: "38px", height: "38px" }}
+            onClick={() => navigate("/member/vote/create")}
+          >
+            <i className="bi bi-plus fs-5 text-white"></i>
+          </button>
         )}
       </div>
 
       {votes.length === 0 ? (
-        <p className="text-white">There are currently no active votes.</p>
+        <p className="text-white mt-5">There are currently no active votes.</p>
       ) : (
         <ul className="list-unstyled pb-5 mb-5">
+          <h3 className="text-white m-0 facebook-header text-start my-2 d-md-none d-block">
+            Votes
+          </h3>
           {votes.map((vote) => (
             <li
               key={vote.id}
@@ -128,7 +126,12 @@ export default function Votes({ loggedInUser }) {
           ))}
         </ul>
       )}
+
       <ToastContainer position="bottom-right" autoClose={3000} />
+
+      {loggedInUser?.role === "Admin" && (
+        <VotesMobileNav loggedInUser={loggedInUser} />
+      )}
     </div>
   );
 }

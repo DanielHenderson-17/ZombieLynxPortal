@@ -59,22 +59,27 @@ export default function CreateVote() {
 
   return (
     <div
-      className={`notifications-container fade-container ${
+      className={`notifications-container fade-container pb-5 ${
         isVisible ? "fade-in" : "fade-start"
-      } pt-5 px-3`}
+      } pt-md-5 pt-0 px-3`}
     >
+      <h3
+        className="text-white facebook-header text-start text-md-center px-0 py-2 m-0"
+        style={{ minHeight: "3rem" }}
+      >
+        Create Vote
+      </h3>
       <form
         onSubmit={handleSubmit}
         className="p-md-4 p-1 rounded col-md-6 col-12 mx-auto"
       >
-        <h2 className="text-white mb-4">Create Vote</h2>
         {/* Game Selection */}
         <div className="mb-3 input-group">
-          <span className="input-group-text bg-dark text-white border border-secondary">
+          <span className="input-group-text bg-dark text-white border border-black">
             <i className="fa-solid fa-gamepad"></i>
           </span>
           <select
-            className="form-select bg-dark text-white border border-secondary"
+            className="form-select bg-dark text-white border border-black"
             name="gameId"
             value={form.gameId}
             onChange={handleChange}
@@ -92,13 +97,13 @@ export default function CreateVote() {
         </div>
         {/* Vote Title */}
         <div className="mb-3 input-group">
-          <span className="input-group-text bg-dark text-white border border-secondary">
+          <span className="input-group-text bg-dark text-white border border-black">
             <i className="bi bi-check-square-fill"></i>
           </span>
           <input
             type="text"
             name="title"
-            className="form-control bg-dark text-white border border-secondary"
+            className="form-control bg-dark text-white border border-black"
             value={form.title}
             onChange={handleChange}
             placeholder="Vote title"
@@ -107,12 +112,12 @@ export default function CreateVote() {
         </div>
         {/* Description */}
         <div className="mb-3 input-group">
-          <span className="input-group-text bg-dark text-white border border-secondary align-items-start">
+          <span className="input-group-text bg-dark text-white border border-black align-items-start">
             <i className="bi bi-chat-dots-fill"></i>
           </span>
           <textarea
             name="description"
-            className="form-control bg-dark text-white border border-secondary"
+            className="form-control bg-dark text-white border border-black"
             value={form.description}
             onChange={handleChange}
             placeholder="Description"
@@ -121,7 +126,7 @@ export default function CreateVote() {
         </div>
         {/* Expiration Date */}
         <div className="mb-3 input-group d-flex align-items-center">
-          <span className="input-group-text bg-dark text-white border border-secondary">
+          <span className="input-group-text bg-dark text-white border border-black">
             <i className="bi bi-calendar2-date-fill"></i>
           </span>
           <DatePicker
@@ -132,7 +137,7 @@ export default function CreateVote() {
             timeIntervals={15}
             timeCaption="Time"
             dateFormat="MMMM d, yyyy h:mm aa"
-            className="form-control rounded-end-2 rounded-start-0 bg-dark text-white border border-secondary"
+            className="form-control rounded-end-2 rounded-start-0 bg-dark text-white border border-black"
             minDate={new Date()}
             placeholderText="Choose expiration date"
             popperPlacement="top-start"
@@ -140,7 +145,7 @@ export default function CreateVote() {
           <span className="ms-2 text-secondary">: Optional</span>
         </div>
         {/* Submit Button */}
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-start">
           <button
             type="submit"
             className="btn btn-success d-flex align-items-center gap-2"

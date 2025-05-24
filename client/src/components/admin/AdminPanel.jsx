@@ -133,7 +133,7 @@ export default function AdminPanel() {
 
   return (
     <div
-      className={`admin-container fade-container pt-5 ${
+      className={`admin-container fade-container pt-md-1 ${
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
@@ -159,7 +159,7 @@ export default function AdminPanel() {
       </div>
 
       {/* Scrollable users list */}
-      <div className="admin-scroll-area px-3 py-3">
+      <div className="admin-scroll-area px-3 pb-3 pt-0">
         {filteredUsers.map((u) => (
           <div
             key={u.id}

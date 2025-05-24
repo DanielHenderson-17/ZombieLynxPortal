@@ -1,3 +1,6 @@
+.navbar-mobile-main-menu {
+  z-index: 20000 !important;
+}
 .fade-in2 {
   opacity: 0;
   animation: fadeInAnim2 0.3s ease forwards;

@@ -1,3 +1,6 @@
+.notifications-float-nav {
+  top: 80% !important;
+}
 .notifications-container,
 .create-notification-container {
   background-color: #13151a !important;

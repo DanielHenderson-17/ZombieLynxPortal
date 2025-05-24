@@ -2,15 +2,15 @@
   height: 100% !important;
   overflow-y: hidden;
 }
+.member-mobile-nav {
+  border-top: 1px solid rgb(20, 20, 20);
+}
 .active-icon svg {
   transform: scale(1.15);
   transition: transform 0.2s ease;
 }
 .member-sidebar {
   height: 100vh;
-}
-.member-layout {
-  overflow-y: hidden;
 }
 .member-container {
   background: linear-gradient(145deg, #121314, #1a1a1d);
@@ -181,7 +181,7 @@
     padding-bottom: 20px;
   }
   .member-content {
-    height: 63vh;
+    height: 71vh;
   }
   .member-layout {
     margin-top: 0px !important;

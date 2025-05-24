@@ -16,13 +16,14 @@ import Notifications from "../components/notifications/Notifications";
 import CreateNotification from "../components/notifications/CreateNotification";
 import Votes from "../components/vote/Votes";
 import CreateVote from "../components/vote/CreateVote";
-import AccountSettings from "../components/member/AccountSettings";
+
 import AdminPanel from "../components/admin/AdminPanel";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "../components/Nav/NavBar";
 import PrivacyPolicy from "../components/legal/PrivacyPolicy";
 import Rules from "../components/legal/Rules";
 import DiscordRedirect from "../components/discord/DiscordRedirect";
+import AccountSettings from "./settings/AccountSettings";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
@@ -92,7 +93,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           />
           <Route path="vote" element={<Votes loggedInUser={loggedInUser} />} />
           <Route path="vote/create" element={<CreateVote />} />
-          <Route path="accountsettings" element={<AccountSettings />} />
+          <Route path="settings/*" element={<AccountSettings />} />
           <Route
             path="admin/users"
             element={

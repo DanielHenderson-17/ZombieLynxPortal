@@ -8,6 +8,7 @@ import {
   deleteNotification,
 } from "../../managers/notificationManager";
 import "./Notifications.css";
+import NotificationsMobileNav from "./NotificationsMobileNav";
 
 export default function Notification({ loggedInUser }) {
   const [notifications, setNotifications] = useState([]);
@@ -73,19 +74,23 @@ export default function Notification({ loggedInUser }) {
     <div
       className={`notifications-container fade-container ${
         isVisible ? "fade-in" : "fade-start"
-      } pt-5 px-3`}
+      } pt-md-1 pt-0 px-3`}
     >
-      {loggedInUser?.role === "Admin" && (
-        <div className="d-flex justify-content-end">
+      <div className="d-md-flex d-none justify-content-between align-items-center mb-4">
+        <h3 className="text-white facebook-header m-0 mt-2 ms-1 d-none d-md-block">
+          Notifications
+        </h3>
+        {loggedInUser?.role === "Admin" && (
           <button
-            className="create-notification-btn d-flex align-items-center mb-4 p-2 rounded-2 border-0 btn btn-success"
+            className="btn btn-success d-flex justify-content-center align-items-center mt-2 me-1"
+            style={{ width: "38px", height: "38px" }}
             onClick={() => navigate("/member/notifications/create")}
           >
-            <i className="bi bi-plus"></i>
-            <p className="m-0 p-0">Create Notification</p>
+            <i className="bi bi-plus fs-5 text-white"></i>
           </button>
-        </div>
-      )}
+        )}
+      </div>
+
       {loading ? (
         <p>Loading...</p>
       ) : notifications.length === 0 ? (
@@ -94,6 +99,9 @@ export default function Notification({ loggedInUser }) {
         </p>
       ) : (
         <ul className="list-unstyled pb-5 mb-5">
+          <h3 className="text-white m-0 facebook-header text-start my-2 d-md-none d-block">
+            Notifications
+          </h3>
           {notifications.map((notification) => (
             <li
               key={notification.id}
@@ -137,6 +145,9 @@ export default function Notification({ loggedInUser }) {
         </ul>
       )}
       <ToastContainer position="bottom-right" autoClose={3000} />
+      {loggedInUser?.role === "Admin" && (
+        <NotificationsMobileNav loggedInUser={loggedInUser} />
+      )}
     </div>
   );
 }
