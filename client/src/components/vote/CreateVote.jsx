@@ -11,6 +11,8 @@ export default function CreateVote() {
   const navigate = useNavigate();
   const [games, setGames] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
+  const [titleTooLong, setTitleTooLong] = useState(false);
+  const [descriptionTooLong, setDescriptionTooLong] = useState(false);
   const [form, setForm] = useState({
     gameId: "",
     title: "",
@@ -35,14 +37,30 @@ export default function CreateVote() {
   }, []);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "title") {
+      setTitleTooLong(value.length > 20);
+    }
+    if (name === "description") {
+      setDescriptionTooLong(value.length > 90);
+    }
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (form.title.length > 20) {
+      toast.error("Title cannot be longer than 20 characters.");
+      return;
+    }
+    if (form.description.length > 90) {
+      toast.error("Description cannot be longer than 90 characters.");
+      return;
+    }
+
     try {
-      await createVote({
+      const newVote = await createVote({
         gameId: parseInt(form.gameId),
         title: form.title,
         description: form.description,
@@ -50,7 +68,7 @@ export default function CreateVote() {
       });
 
       toast.success("Vote created.");
-      navigate("/member/vote");
+      navigate(`/member/vote/${newVote.id}`);
     } catch (err) {
       toast.error("Failed to create vote.");
       console.error("Vote create error:", err);
@@ -96,34 +114,83 @@ export default function CreateVote() {
           </select>
         </div>
         {/* Vote Title */}
-        <div className="mb-3 input-group">
-          <span className="input-group-text bg-dark text-white border border-black">
-            <i className="bi bi-check-square-fill"></i>
-          </span>
-          <input
-            type="text"
-            name="title"
-            className="form-control bg-dark text-white border border-black"
-            value={form.title}
-            onChange={handleChange}
-            placeholder="Vote title"
-            required
-          />
+        <div className="mb-4 position-relative">
+          <div className="input-group">
+            <span className="input-group-text bg-dark text-white border border-black">
+              <i className="bi bi-check-square-fill"></i>
+            </span>
+            <input
+              type="text"
+              name="title"
+              className="form-control bg-dark text-white border border-black pe-5"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Vote title"
+              required
+              style={{ paddingRight: "3.5rem" }}
+              onFocus={(e) => {
+                e.target.nextSibling?.classList.add("opacity-50");
+              }}
+              onBlur={(e) => {
+                e.target.nextSibling?.classList.remove("opacity-50");
+              }}
+            />
+            <span className="d-none" />
+          </div>
+          <small
+            className={`position-absolute bottom-0 end-0 me-2 mb-1 ${
+              titleTooLong ? "text-danger" : "text-secondary"
+            }`}
+            style={{
+              fontSize: "0.75rem",
+              pointerEvents: "none",
+              zIndex: 100,
+              backgroundColor: "#212529",
+              padding: "0 4px",
+            }}
+          >
+            {form.title.length}/20
+          </small>
         </div>
         {/* Description */}
-        <div className="mb-3 input-group">
-          <span className="input-group-text bg-dark text-white border border-black align-items-start">
-            <i className="bi bi-chat-dots-fill"></i>
-          </span>
-          <textarea
-            name="description"
-            className="form-control bg-dark text-white border border-black"
-            value={form.description}
-            onChange={handleChange}
-            placeholder="Description"
-            rows={5}
-          />
+        <div className="mb-4 position-relative">
+          <div className="input-group">
+            <span className="input-group-text bg-dark text-white border border-black align-items-start">
+              <i className="bi bi-chat-dots-fill"></i>
+            </span>
+            <textarea
+              name="description"
+              className="form-control bg-dark text-white border border-black pe-5"
+              value={form.description}
+              onChange={handleChange}
+              placeholder="Description"
+              rows={5}
+              style={{ paddingRight: "3.5rem" }}
+              onFocus={(e) => {
+                e.target.nextSibling?.classList.add("opacity-50");
+              }}
+              onBlur={(e) => {
+                e.target.nextSibling?.classList.remove("opacity-50");
+              }}
+            />
+            <span className="d-none" />
+          </div>
+          <small
+            className={`position-absolute bottom-0 end-0 me-2 mb-1 ${
+              descriptionTooLong ? "text-danger" : "text-secondary"
+            }`}
+            style={{
+              fontSize: "0.75rem",
+              pointerEvents: "none",
+              zIndex: 100,
+              backgroundColor: "#212529",
+              padding: "0 4px",
+            }}
+          >
+            {form.description.length}/90
+          </small>
         </div>
+
         {/* Expiration Date */}
         <div className="mb-3 input-group d-flex align-items-center">
           <span className="input-group-text bg-dark text-white border border-black">
@@ -145,7 +212,7 @@ export default function CreateVote() {
           <span className="ms-2 text-secondary">: Optional</span>
         </div>
         {/* Submit Button */}
-        <div className="d-flex justify-content-start">
+        <div className="d-flex justify-content-end">
           <button
             type="submit"
             className="btn btn-success d-flex align-items-center gap-2"

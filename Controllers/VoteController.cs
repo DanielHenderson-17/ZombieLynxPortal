@@ -106,6 +106,7 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok("Vote submitted successfully.");
         }
         // ✅ GET: /api/vote/{id}/results
+        [Authorize]
         [HttpGet("{id}/results")]
         public async Task<IActionResult> GetVoteResults(int id)
         {
@@ -124,6 +125,24 @@ namespace ZombieLynxPortalAPI.Controllers
             var againstCount = results.Count(r => !r.VotedFor);
             var total = results.Count;
 
+            // 🧠 Determine logged in user's vote
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid.TryParse(userIdClaim, out var userId);
+
+            var zlgMember = await _dbContext.ZLGMembers
+                .Include(m => m.UserProfile)
+                .FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
+
+            bool? userVotedFor = null;
+
+            if (zlgMember != null)
+            {
+                userVotedFor = await _dbContext.VoteResults
+                    .Where(vr => vr.VoteId == id && vr.ZLGMemberId == zlgMember.Id)
+                    .Select(vr => (bool?)vr.VotedFor)
+                    .FirstOrDefaultAsync();
+            }
+
             return Ok(new
             {
                 vote.Id,
@@ -133,6 +152,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 Platform = vote.Game.Platform,
                 vote.CreatedAt,
                 vote.ExpiresAt,
+                UserVote = userVotedFor, // ✅ Include user's vote
                 Results = new
                 {
                     For = forCount,
@@ -141,6 +161,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 }
             });
         }
+
+
         [Authorize(Roles = "Admin")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateVote([FromBody] CreateVoteRequest request)

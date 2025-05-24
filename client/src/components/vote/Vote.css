@@ -5,3 +5,56 @@
 ::placeholder {
   color: #ffffff !important;
 }
+
+.chart-text {
+  top: 39%;
+  left: 54%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  gap: 0rem;
+}
+
+.vote-header {
+  background-color: #212529;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .vote-header {
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    height: 100%;
+    align-items: flex-start !important;
+  }
+}
+
+/* Mobile defaults */
+.vote-img img {
+  width: 90px;
+}
+
+.vote-title {
+  font-size: 1.5rem;
+}
+
+.vote-description {
+  font-size: 1rem;
+}
+
+/* Desktop overrides */
+@media (min-width: 768px) {
+  .vote-img img {
+    width: 200px !important;
+  }
+
+  .vote-title {
+    font-size: 2.25rem;
+  }
+
+  .vote-description {
+    font-size: 1.25rem;
+  }
+}
