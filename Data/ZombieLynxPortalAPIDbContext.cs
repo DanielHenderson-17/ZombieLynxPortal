@@ -27,6 +27,10 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<PreviouslyLinkedAccount> PreviouslyLinkedAccounts { get; set; }
         public DbSet<PasswordReset> PasswordResets { get; set; }
         public DbSet<ProcessedTransaction> ProcessedTransactions { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Vote> Votes { get; set; }
+        public DbSet<VoteResult> VoteResults { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -62,9 +66,9 @@ namespace ZombieLynxPortalAPI.Data
                 SteamId = "76561198021051513",
                 SteamName = "AdminSteam",
                 SteamImgUrl = null,
-                DiscordId = "1167715864339030016",
-                DiscordName = "zombielynxgaming",
-                DiscordImgUrl = "https://cdn.discordapp.com/avatars/1167715864339030016/a9e52c811d7724ba08fbba1c4e30154d.png",
+                DiscordId = "1167715864339030015",
+                DiscordName = "AdminDiscord",
+                DiscordImgUrl = "https://picsum.photos/seed/100/40/40",
                 EosId = "eos-admin-id",
                 EpicName = "AdminEpic",
                 EpicImgUrl = null,
@@ -74,7 +78,6 @@ namespace ZombieLynxPortalAPI.Data
                 PermissionGroups = "Default,Admins",
                 TimedPermissionGroups = null,
                 Points = 0,
-
             });
 
             // ✅ Seed Ticket
@@ -312,6 +315,23 @@ namespace ZombieLynxPortalAPI.Data
                 .HasOne(pr => pr.User)
                 .WithMany()
                 .HasForeignKey(pr => pr.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Vote>()
+                .HasOne(v => v.Game)
+                .WithMany()
+                .HasForeignKey(v => v.GameId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<VoteResult>()
+                .HasOne(vr => vr.Vote)
+                .WithMany()
+                .HasForeignKey(vr => vr.VoteId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<VoteResult>()
+                .HasOne(vr => vr.ZLGMember)
+                .WithMany()
+                .HasForeignKey(vr => vr.ZLGMemberId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

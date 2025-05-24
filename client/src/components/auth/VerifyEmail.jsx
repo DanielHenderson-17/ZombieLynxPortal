@@ -48,28 +48,30 @@ export default function VerifyEmail() {
   }, [location, navigate]);
 
   return (
-    <div
-      className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 text-center"
-      style={{ maxWidth: "500px", opacity: 0.95 }}
-    >
-      <img
-        src="/images/zlglogo.png"
-        alt="Zombie Lynx Logo"
-        className="col-10 mt-3 mb-3"
-      />
-      <h4 className="register-title mb-4">Email Verification</h4>
+    <div className="mt-5 pt-5">
+      <div
+        className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11 text-center"
+        style={{ maxWidth: "500px", opacity: 0.95 }}
+      >
+        <img
+          src="/images/zlglogo.png"
+          alt="Zombie Lynx Logo"
+          className="col-10 mt-3 mb-3"
+        />
+        <h4 className="register-title mb-4">Email Verification</h4>
 
-      {status === "loading" && (
-        <p className="text-muted">Verifying your email, please wait...</p>
-      )}
+        {status === "loading" && (
+          <p className="text-muted">Verifying your email, please wait...</p>
+        )}
 
-      {status === "success" && (
-        <div className="alert alert-success">{message}</div>
-      )}
+        {status === "success" && (
+          <div className="alert alert-success">{message}</div>
+        )}
 
-      {status === "error" && (
-        <div className="alert alert-danger">{message}</div>
-      )}
+        {status === "error" && (
+          <div className="alert alert-danger">{message}</div>
+        )}
+      </div>
     </div>
   );
 }

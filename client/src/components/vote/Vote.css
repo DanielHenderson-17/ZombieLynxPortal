@@ -1,0 +1,7 @@
+.react-datepicker-wrapper {
+  width: 60%;
+}
+
+::placeholder {
+  color: #ffffff !important;
+}

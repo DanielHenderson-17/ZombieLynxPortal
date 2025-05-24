@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getAllUsers } from "../../managers/userProfileManager";
 
 export default function NewTicket({ loggedInUser }) {
+  const [isVisible, setIsVisible] = useState(false);
   const [options, setOptions] = useState({
     games: [],
     gamesWithServers: {},
@@ -43,6 +44,12 @@ export default function NewTicket({ loggedInUser }) {
       return;
     }
   }, [loggedInUser, navigate]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Fetch ticket options and user data on component mount to populate the form select fields with the available options and users in the system
   useEffect(() => {
@@ -120,7 +127,17 @@ export default function NewTicket({ loggedInUser }) {
   }
 
   return (
-    <div className="new-ticket-form col-md-6 col-10 mx-auto mt-5 pt-1 text-start">
+    <div
+      className={`notifications-container fade-container pb-5 ${
+        isVisible ? "fade-in" : "fade-start"
+      } pt-md-5 pt-0 px-3`}
+    >
+      <h3
+        className="text-white facebook-header text-start px-0 py-2 m-0"
+        style={{ minHeight: "3rem" }}
+      >
+        Create Ticket
+      </h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="subject" className="form-label text-white">
@@ -212,7 +229,7 @@ export default function NewTicket({ loggedInUser }) {
             required
           />
         </div>
-        <div className="text-end">
+        <div className="text-md-end text-start">
           <button
             type="submit"
             className="btn btn-success create-ticket-submit"

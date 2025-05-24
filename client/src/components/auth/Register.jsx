@@ -103,15 +103,14 @@ export default function Register() {
 
       register(newUser)
         .then((data) => {
-          if (data.token) {
-            navigate("/verify");
+          if (data?.message?.toLowerCase().includes("already in use")) {
+            setRegistrationFailure("Email is already in use.");
           } else {
-            setRegistrationFailure(true);
+            navigate("/verify");
           }
         })
         .catch((error) => {
-          console.error("Registration error:", error);
-          setRegistrationFailure(true);
+          setRegistrationFailure(error.message || "Registration failed.");
         });
     }
   };

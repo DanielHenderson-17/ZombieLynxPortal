@@ -64,7 +64,7 @@ export default function SingleTicket({ loggedInUser }) {
 
   return (
     <div className="text-white container-fluid mt-0 pt-3 h-100 px-1">
-      <div className="pb-2">
+      <div className="pb-2 h-100">
         {/* Toggleable Ticket Details */}
         <div
           className={`ticket-details-wrapper ${

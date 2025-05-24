@@ -186,7 +186,7 @@ export default function GeneralSettings() {
         </div>
       </section>
       {/* ❌ Deactivate Account */}
-      <section className="mb-5 pb-5">
+      <section className="mb-5 pb-5 px-md-0 px-2">
         <div className="row align-items-center mx-md-3 mx-2 pb-5">
           <h4 className="settings-section-header text-start mb-2 border-bottom border-secondary ps-0 pb-2 text-danger">
             Deactivate Zombie Lynx Account
@@ -220,7 +220,7 @@ export default function GeneralSettings() {
       {showDeactivateModal && (
         <div className="modal fade show d-block" tabIndex="-1" role="dialog">
           <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content bg-dark border border-secondary text-white">
+            <div className="modal-content bg-dark text-white">
               <div className="modal-header">
                 <h5 className="modal-title">Are you sure?</h5>
                 <button

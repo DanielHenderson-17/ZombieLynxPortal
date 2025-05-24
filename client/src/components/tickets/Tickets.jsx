@@ -7,6 +7,7 @@ import EditTicket from "./EditTicket";
 import "./Tickets.css";
 import { useEffect, useState } from "react";
 import { getOpenTickets } from "../../managers/ticketManager";
+import TicketMobileNav from "./TicketMobileNav";
 
 export default function Tickets({ loggedInUser }) {
   const [openTicketCount, setOpenTicketCount] = useState(0);
@@ -40,16 +41,15 @@ export default function Tickets({ loggedInUser }) {
       {/* Sidebar for Desktop Navigation */}
       <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0">
         <div>
-          {/* New Ticket Button */}
+          {/* Create Ticket Button */}
           <Link
             to="/member/tickets/new-ticket"
             className={`d-flex justify-content-start text-decoration-none ${
               location.pathname === "/member/tickets/new-ticket" ? "active" : ""
             }`}
           >
-            <button className="btn d-block d-flex align-items-center col-6 text-start mb-3 btn-success create-ticket">
-              <i className="bi bi-plus-circle me-2"></i>
-              <p className="m-0 p-0">Create</p>
+            <button className="btn btn-success d-flex justify-content-center align-items-center ps-1 pe-2 py-1">
+              <i className="bi bi-plus fs-5 text-white"></i>Create Ticket
             </button>
           </Link>
           <hr className="mb-4" />
@@ -126,54 +126,7 @@ export default function Tickets({ loggedInUser }) {
       </div>
 
       {/* Bottom Navigation for Mobile */}
-      <div className="d-lg-none fixed-bottom bg-dark text-white bottom-nav">
-        <div className="d-flex justify-content-around pt-2 pb-1 my-1">
-          {/* New Ticket Button */}
-          <Link
-            to="/member/tickets/new-ticket"
-            className={`text-decoration-none text-white ${
-              location.pathname === "/member/tickets/new-ticket" ? "active" : ""
-            }`}
-          >
-            <div className="d-flex flex-column align-items-center">
-              <i className="bi bi-plus-circle fs-4"></i>
-            </div>
-          </Link>
-
-          {/* Open Tickets Button */}
-          <Link
-            to="/member/tickets/open-tickets"
-            className={`text-decoration-none text-white ${
-              location.pathname === "/member/tickets/open-tickets"
-                ? "active"
-                : ""
-            }`}
-          >
-            <div className="d-flex flex-column align-items-center position-relative">
-              <i className="bi bi-inbox fs-4 mt-1"></i>
-              {openTicketCount > 0 && (
-                <span className="badge bg-primary position-absolute top-0 start-50 translate-middle">
-                  {openTicketCount}
-                </span>
-              )}
-            </div>
-          </Link>
-
-          {/* Closed Tickets Button */}
-          <Link
-            to="/member/tickets/closed-tickets"
-            className={`text-decoration-none text-white ${
-              location.pathname === "/member/tickets/closed-tickets"
-                ? "active"
-                : ""
-            }`}
-          >
-            <div className="d-flex flex-column align-items-center">
-              <i className="bi bi-trash3 fs-4"></i>
-            </div>
-          </Link>
-        </div>
-      </div>
+      <TicketMobileNav openTicketCount={openTicketCount} />
     </div>
   );
 }

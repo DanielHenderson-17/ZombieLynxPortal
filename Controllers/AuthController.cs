@@ -193,8 +193,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 }
             }
 
-            var token = GenerateJwtToken(user);
-
             return Ok(new
             {
                 user.Id,
@@ -205,7 +203,6 @@ namespace ZombieLynxPortalAPI.Controllers
                 zlgMember.DiscordId,
                 zlgMember.DiscordName,
                 zlgMember.DiscordImgUrl,
-                Token = token
             });
         }
 
@@ -446,6 +443,9 @@ namespace ZombieLynxPortalAPI.Controllers
 
             if (user == null)
                 return NotFound("User not found.");
+
+            if (!user.Verified)
+                return Unauthorized("Email not verified.");
 
             var zlgMember = await _context.ZLGMembers
                 .FirstOrDefaultAsync(z => z.UserProfileId == user.Profile.Id);

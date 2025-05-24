@@ -27,6 +27,9 @@ export const getToken = () => {
  */
 export const parseJwt = (token) => {
   try {
+    if (!token || typeof token !== "string" || token.split(".").length !== 3) {
+      return null;
+    }
     return JSON.parse(atob(token.split(".")[1]));
   } catch (e) {
     console.error("Failed to parse JWT:", e);
@@ -40,15 +43,11 @@ export const parseJwt = (token) => {
  * @returns {boolean}
  */
 export const isJwtExpired = (token) => {
-  try {
-    const decoded = parseJwt(token);
-    if (!decoded?.exp) return true;
-    const now = Math.floor(Date.now() / 1000);
-    return decoded.exp < now;
-  } catch (err) {
-    console.error("Error checking token expiration:", err);
-    return true;
-  }
+  const decoded = parseJwt(token);
+  if (!decoded?.exp) return true;
+
+  const now = Math.floor(Date.now() / 1000);
+  return decoded.exp < now;
 };
 
 /* ============================================================================
@@ -67,21 +66,24 @@ export const login = (email, password) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   })
-    .then((res) => {
-      if (!res.ok) return null;
-      return res.json();
-    })
-    .then((data) => {
-      if (!data?.token) return null;
+    .then(async (res) => {
+      if (!res.ok) {
+        const errorText = await res.text();
+        return { error: errorText }; // <-- forward the error
+      }
+      const data = await res.json();
+      if (!data?.token) return { error: "Invalid response from server." };
 
       saveToken(data.token);
       return fetch(`${apiUrl}/me`, {
         headers: { Authorization: `Bearer ${data.token}` },
-      }).then((res) => (res.ok ? res.json() : null));
+      }).then((res) =>
+        res.ok ? res.json() : { error: "Failed to fetch user info." }
+      );
     })
     .catch((error) => {
       console.error("Login failed:", error);
-      return null;
+      return { error: "Network error." };
     });
 };
 
@@ -97,13 +99,25 @@ export const register = (user) => {
     body: JSON.stringify(user),
   })
     .then(async (res) => {
-      const data = await res.json();
+      const contentType = res.headers.get("content-type");
+
       if (res.ok) {
-        saveToken(data.token);
-        return data;
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          return data;
+        } else {
+          return { message: await res.text() };
+        }
       }
-      console.error("Server Response:", data);
-      throw new Error(data.message || "Registration failed.");
+
+      // Handle error response
+      if (contentType && contentType.includes("application/json")) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Registration failed.");
+      } else {
+        const errorText = await res.text();
+        throw new Error(errorText || "Registration failed.");
+      }
     })
     .catch((error) => {
       console.error("Registration error:", error);
