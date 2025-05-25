@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import "highcharts/highcharts-3d";
+import { getVoteChartOptions } from "../../utils/chartOptions";
 import { getVoteResults } from "../../managers/voteManager";
 import { getVoteGameImage } from "../../utils/voteGame";
-import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { truncateText } from "../../utils/truncateText";
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function SingleVote() {
   const { voteId } = useParams();
@@ -43,54 +44,18 @@ export default function SingleVote() {
   const percentAgainst = 100 - percentFor;
   const winningSide = votesFor >= votesAgainst ? "yes" : "no";
 
-  const chartData = {
-    labels: ["Yes", "No"],
-    datasets: [
-      {
-        data: [votesFor, votesAgainst],
-        backgroundColor: ["#198754", "#dc3545"],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const chartOptions = {
-    cutout: "70%",
-    layout: {
-      padding: {
-        bottom: 30,
-      },
-    },
-    plugins: {
-      legend: {
-        display: true,
-        position: "bottom",
-        labels: {
-          color: "#fff",
-          padding: 30,
-        },
-      },
-      tooltip: {
-        callbacks: {
-          label: (context) =>
-            `${context.label}: ${context.raw} (${Math.round(
-              (context.raw / totalVotes) * 100
-            )}%)`,
-        },
-      },
-    },
-  };
+  const chartOptions = getVoteChartOptions(votesFor, votesAgainst);
 
   return (
     <div
-      className={`fade-container pb-0 pt-3 text-white d-flex align-items-center mx-auto col-md-10 col-12  ${
+      className={`fade-container pb-0 pt-3 text-white d-flex align-items-center mx-auto col-md-10 col-12 ${
         isVisible ? "fade-in" : "fade-start"
       } pt-md-5 pt-0 px-2`}
     >
-      <div className="px-0 pt-md-5 mt-md-0 mt-0 rounded-3 col-12 mx-auto bg-md-dark d-md-flex d-block align-items-center px-md-5">
+      <div className="px-0  mt-md-0 mt-0 rounded-3 col-md-9 col-12 mx-auto bg-md-dark d-md-flex d-block align-items-center">
         <div
-          className="d-flex flex-row mb-md-5 mb-md-4 mb-1 vote-header col-12 col-md-6 rounded-3 bg-dark shadow"
-          style={{ gap: ".2rem" }}
+          className="d-flex mb-1 vote-header col-12 col-md-7 rounded-3 bg-dark shadow"
+          style={{ gap: ".2rem", height: "100%" }}
         >
           <div className="text-center p-2 p-md-0 vote-img">
             <img
@@ -127,6 +92,7 @@ export default function SingleVote() {
             )}
           </div>
         </div>
+
         {vote.userVote !== null && (
           <div className="d-flex d-md-none mt-0 justify-content-between align-items-start mx-1">
             <p className="text-white mb-0 mt-1">
@@ -143,39 +109,27 @@ export default function SingleVote() {
             </p>
           </div>
         )}
-        <div
-          className="position-relative pt-md-2 pt-0"
-          style={{
-            width: "90%",
-            maxWidth: "450px",
-            margin: "0 auto",
-          }}
-        >
-          <Doughnut data={chartData} options={chartOptions} />
+
+        <div className="vote-chart-wrapper position-relative mx-auto col-5">
+          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
           <div
             className={`position-absolute translate-middle d-flex align-items-center justify-content-center chart-text ${
               winningSide === "yes" ? "text-success" : "text-danger"
             }`}
           >
-            {/* Text stack */}
             <div
               className="d-flex flex-column text-center"
               style={{ lineHeight: 1.2 }}
             >
-              <div style={{ fontSize: "2.5rem" }}>
+              <div style={{ fontSize: "2rem" }}>
                 {winningSide === "yes"
                   ? `${percentFor}%`
                   : `${percentAgainst}%`}
               </div>
-              <div style={{ fontSize: "1.5rem" }}>
-                {winningSide === "yes" ? "In Favor" : "Against"}
-              </div>
             </div>
-
-            {/* Arrow */}
             <div>
               <i
-                className={`fs-1 bi ${
+                className={`fs-3 bi ${
                   winningSide === "yes" ? "bi-arrow-up" : "bi-arrow-down"
                 }`}
                 style={{
