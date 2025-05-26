@@ -26,8 +26,9 @@ export default function DiscordRules() {
         <li>
           <strong>No spamming</strong>
           <p>
-            Do not send many small messages rapidly. Disrupting chat through
-            spamming is not allowed.
+            Don&apos;t send a lot of small messages right after each other. Do
+            not disrupt chat by spamming. This also includes excessively
+            protesting a decision by ZLG.
           </p>
         </li>
 
@@ -48,7 +49,8 @@ export default function DiscordRules() {
           <strong>No staff disrespect or accusations</strong>
           <p>
             Staff work hard to provide a great experience. Disrespect or
-            accusations against staff will not be tolerated.
+            accusations against staff will not be tolerated. This includes
+            excessive arguments or attempts to undermine staff decisions.
           </p>
         </li>
 
@@ -87,8 +89,10 @@ export default function DiscordRules() {
         <li>
           <strong>Bad Publicity</strong>
           <p>
-            Speaking negatively about ZLG to incite players to leave will result
-            in an immediate ban.
+            Members are prohibited from speaking negatively about ZLG in a way
+            that incites others to leave ZLG servers or services. This includes
+            speculation on others behalf (stirring the pot). This will be an
+            immediate ban.
           </p>
         </li>
 

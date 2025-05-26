@@ -100,73 +100,79 @@ export default function GeneralSettings() {
             Profile Information
           </h4>
         </div>
-        <div className="d-flex justify-content-between flex-wrap mx-0">
+        <div className="d-md-flex d-block justify-content-around flex-wrap mx-0">
           {/* Name */}
-          <div className="name col-6 text-start mt-2">
+          <div className="name col-md-5 col-11 text-start mt-2">
             {/* FirstName */}
-            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
-              <label className="form-label col-md-3 col-12 m-md-0 mb-1">
-                First Name
-              </label>
+            <div className="mb-3 input-group mx-3">
+              <span className="input-group-text bg-dark text-white border border-black">
+                <i className="bi bi-person-fill"></i>
+              </span>
               <input
-                className="form-control col"
+                className="form-control bg-dark text-white border border-black"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
+                placeholder="First name"
               />
             </div>
+
             {/* Last Name */}
-            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
-              <label className="form-label col-md-3 col-12 m-md-0 mb-1">
-                Last Name
-              </label>
+            <div className="mb-3 input-group mx-3">
+              <span className="input-group-text bg-dark text-white border border-black">
+                <i className="bi bi-person-fill"></i>
+              </span>
               <input
-                className="form-control"
+                className="form-control bg-dark text-white border border-black"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
+                placeholder="Last name"
               />
             </div>
           </div>
 
           {/* Password */}
-          <div className="password col-6 text-start mt-2">
-            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
-              <label className="form-label col-md-4 col-12 m-md-0 mb-1">
-                Current Password
-              </label>
+          <div className="password col-md-5 col-11 text-start mt-2">
+            <div className="mb-3 input-group mx-3">
+              <span className="input-group-text bg-dark text-white border border-black">
+                <i className="bi bi-lock-fill"></i>
+              </span>
               <input
-                className="form-control"
-                name="currentPassword"
                 type="password"
+                name="currentPassword"
+                className="form-control bg-dark text-white border border-black"
                 value={formData.currentPassword}
                 onChange={handleChange}
+                placeholder="Current password"
               />
             </div>
 
-            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
-              <label className="form-label col-md-4 col-12 m-md-0 mb-1">
-                New Password
-              </label>
+            <div className="mb-3 input-group mx-3">
+              <span className="input-group-text bg-dark text-white border border-black">
+                <i className="bi bi-lock-fill"></i>
+              </span>
               <input
-                className="form-control"
-                name="newPassword"
                 type="password"
+                name="newPassword"
+                className="form-control bg-dark text-white border border-black"
                 value={formData.newPassword}
                 onChange={handleChange}
+                placeholder="New password"
               />
             </div>
 
-            <div className="mb-3 mx-3 d-md-flex d-block align-items-center">
-              <label className="form-label col-md-4 col-12 m-md-0 mb-1">
-                Confirm Password
-              </label>
+            <div className="mb-4 input-group mx-3">
+              <span className="input-group-text bg-dark text-white border border-black">
+                <i className="bi bi-lock-fill"></i>
+              </span>
               <input
-                className="form-control"
-                name="confirmNewPassword"
                 type="password"
+                name="confirmNewPassword"
+                className="form-control bg-dark text-white border border-black"
                 value={formData.confirmNewPassword}
                 onChange={handleChange}
+                placeholder="Confirm password"
               />
             </div>
           </div>
