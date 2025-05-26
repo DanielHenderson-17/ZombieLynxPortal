@@ -123,10 +123,10 @@
     height: 40px;
   }
   .rainbow-spin-wrapper::before {
-    top: -300%;
-    left: -300%;
-    width: 700%;
-    height: 1000%;
+    top: -550%;
+    left: -450%;
+    width: 990%;
+    height: 1200%;
     animation: spin 6s linear infinite;
     z-index: 0;
   }
