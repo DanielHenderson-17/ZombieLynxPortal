@@ -79,9 +79,13 @@ namespace ZombieLynxPortalAPI.Services.Tebex
 
             if (points > 0)
             {
-                member.Points += points;
-                Log.Information($"✅ Added {points} points. New total: {member.Points}");
+                var originalPoints = member.Points;
+                var addedPoints = points;
+                member.Points = originalPoints + addedPoints;
+
+                Log.Information($"💰 Adding Tebex points: {originalPoints} + {addedPoints} = {member.Points} for user {member.UserProfileId}");
             }
+
 
             await _dbContext.SaveChangesAsync();
             Log.Information("💾 Changes saved to ZLGMember.");

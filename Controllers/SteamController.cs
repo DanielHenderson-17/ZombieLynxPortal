@@ -95,6 +95,8 @@ namespace ZombieLynxPortalAPI.Controllers
             var zlgMember = await _dbContext.ZLGMembers
                 .FirstOrDefaultAsync(m => m.UserProfileId == userProfile.Id);
 
+            bool isNewMember = false;
+
             if (zlgMember == null)
             {
                 zlgMember = new ZLGMember
@@ -102,6 +104,7 @@ namespace ZombieLynxPortalAPI.Controllers
                     UserProfileId = userProfile.Id
                 };
                 _dbContext.ZLGMembers.Add(zlgMember);
+                isNewMember = true;
             }
 
             zlgMember.SteamId = incomingSteamId;
@@ -126,11 +129,18 @@ namespace ZombieLynxPortalAPI.Controllers
 
                     if (arkPlayer != null)
                     {
-                        zlgMember.Points += arkPlayer.Points;
+                        var originalPoints = zlgMember.Points;
+                        var addedPoints = arkPlayer.Points;
+
+                        zlgMember.Points = originalPoints + addedPoints;
+
+                        Log.Information($"💰 Linking ARK points: {originalPoints} + {addedPoints} = {zlgMember.Points} for user {zlgMember.UserProfileId}");
                     }
                 }
+
                 zlgMember.ASELinked = true;
             }
+
             await _dbContext.SaveChangesAsync();
 
             return Ok("Steam account linked successfully.");
