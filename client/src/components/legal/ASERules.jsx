@@ -130,9 +130,11 @@ export default function ASERules() {
           <strong>Server Wipe</strong>
           <ol type="a">
             <li>
-              After the first 4 months, a wipe vote may be called monthly.
-              Requires 70% approval to pass. If passed, wipe occurs 1 week
-              later, and during that week, raid rules (Section 3) are suspended.
+              Our intention is to wipe every 4 months or so but sometimes that
+              changes on certain factors. If population lowers or a ton of new
+              people join we may call a vote. Requires 70% approval to pass. If
+              passed, wipe occurs 1 week later, and during that week, raid rules
+              (Section 3) are suspended.
             </li>
           </ol>
         </li>
