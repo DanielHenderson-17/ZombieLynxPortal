@@ -139,7 +139,7 @@ export default function AdminPanel() {
     >
       {/* Fixed search bar */}
       <div className=" pb-0 bg-dark">
-        <div className="d-flex justify-content-center justify-content-md-start align-items-center gap-2 admin-search-bar col-12 ps-md-1 ps-0">
+        <div className="d-flex justify-content-center justify-content-md-start align-items-center gap-2 admin-search-bar col-12 px-md-3 ps-0">
           <div className="rainbow-spin-wrapper mt-2">
             <input
               type="text"
@@ -148,6 +148,7 @@ export default function AdminPanel() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+            <i className="bi bi-search rainbow-search-icon"></i>
           </div>
 
           {searchTerm && (
