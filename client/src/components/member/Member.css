@@ -12,6 +12,11 @@
 .member-sidebar {
   height: 100vh;
 }
+.member-desktop-active {
+  background-color: #343a40 !important;
+  border-left: 5px solid #dc3545;
+  color: #ffffff !important;
+}
 .member-container {
   background: linear-gradient(145deg, #121314, #1a1a1d);
   outline: 1px solid #000000;

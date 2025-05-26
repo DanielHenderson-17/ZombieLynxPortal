@@ -12,3 +12,7 @@
   background: linear-gradient(145deg, #1a1d20, #1d2027);
   overflow-y: scroll;
 }
+
+.modal-dialog {
+  max-width: 90vw;
+}
