@@ -19,7 +19,9 @@
 .ticket-float-closed {
   transform: translateY(-50%) translateX(100%);
 }
-
+.new-ticket-container {
+  overflow-y: hidden !important;
+}
 .ticket-float-toggle {
   position: absolute;
   left: -16px;

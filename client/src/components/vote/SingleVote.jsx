@@ -1,0 +1,152 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import "highcharts/highcharts-3d";
+import { getVoteChartOptions } from "../../utils/chartOptions";
+import { getVoteResults } from "../../managers/voteManager";
+import { getVoteGameImage } from "../../utils/voteGame";
+import { truncateText } from "../../utils/truncateText";
+
+export default function SingleVote() {
+  const { voteId } = useParams();
+  const [vote, setVote] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    getVoteResults(voteId)
+      .then((data) => {
+        setVote(data);
+      })
+      .catch((err) => {
+        setError("Failed to load vote results.");
+        console.error(err);
+      })
+      .finally(() => setLoading(false));
+  }, [voteId]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <div className="text-white">Loading vote...</div>;
+  if (error) return <div className="text-danger">{error}</div>;
+  if (!vote || !vote.results)
+    return <div className="text-white">No results.</div>;
+
+  const { for: votesFor, against: votesAgainst, totalVotes } = vote.results;
+  const percentFor = Math.round((votesFor / totalVotes) * 100);
+  const percentAgainst = 100 - percentFor;
+  const winningSide = votesFor >= votesAgainst ? "yes" : "no";
+
+  const chartOptions = getVoteChartOptions(votesFor, votesAgainst);
+
+  return (
+    <div
+      className={`fade-container pb-0 pt-3 text-white d-flex align-items-center mx-auto col-md-10 col-12 ${
+        isVisible ? "fade-in" : "fade-start"
+      } pt-md-5 pt-0 px-2`}
+    >
+      <div className="px-0  mt-md-0 mt-0 rounded-3 col-md-9 col-12 mx-auto bg-md-dark d-md-flex d-block align-items-center">
+        <div
+          className="d-flex mb-1 vote-header col-12 col-md-7 rounded-3 bg-dark shadow"
+          style={{ gap: ".2rem", height: "100%" }}
+        >
+          <div className="text-center p-2 p-md-0 vote-img">
+            <img
+              src={getVoteGameImage(vote.game)}
+              alt={vote.game}
+              className="rounded-1"
+            />
+          </div>
+
+          <div style={{ flex: 4 }} className="text-start pe-1 vote-text">
+            <h2 className="mb-md-2 mb-1 mt-md-2 mt-0 vote-title">
+              {vote.title}
+            </h2>
+            <p className="mb-0 vote-description">
+              {truncateText(vote.description, 95)}
+            </p>
+            {vote.userVote !== null && (
+              <div className="d-none d-md-block mt-2 align-self-bottom">
+                <p className="text-white mb-0">
+                  Your vote:{" "}
+                  <span
+                    className={vote.userVote ? "text-success" : "text-danger"}
+                  >
+                    {vote.userVote ? "✅" : "❌"}
+                  </span>
+                </p>
+                <p className="mt-1 p-0">
+                  Total Votes :{" "}
+                  <span className="text-success fw-bold">{votesFor}</span> /{" "}
+                  <span className="text-danger fw-bold">{votesAgainst}</span>{" "}
+                  <span className="fw-bold">({totalVotes})</span>
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {vote.userVote !== null && (
+          <div className="d-flex d-md-none mt-0 justify-content-between align-items-start mx-1">
+            <p className="text-white mb-0 mt-1">
+              Your vote:{" "}
+              <span className={vote.userVote ? "text-success" : "text-danger"}>
+                {vote.userVote ? "✅" : "❌"}
+              </span>
+            </p>
+            <p className="mt-1 p-0">
+              Total Votes :{" "}
+              <span className="text-success fw-bold">{votesFor}</span> /{" "}
+              <span className="text-danger fw-bold">{votesAgainst}</span>{" "}
+              <span className="fw-bold">({totalVotes})</span>
+            </p>
+          </div>
+        )}
+
+        <div className="vote-chart-wrapper position-relative mx-auto col-5">
+          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+          <div
+            className={`position-absolute translate-middle d-flex align-items-center justify-content-center chart-text ${
+              winningSide === "yes" ? "text-success" : "text-danger"
+            }`}
+          >
+            <div
+              className="d-flex flex-column text-center"
+              style={{ lineHeight: 1.2 }}
+            >
+              <div style={{ fontSize: "2rem" }}>
+                {winningSide === "yes"
+                  ? `${percentFor}%`
+                  : `${percentAgainst}%`}
+              </div>
+            </div>
+            <div>
+              <i
+                className={`fs-3 bi ${
+                  winningSide === "yes" ? "bi-arrow-up" : "bi-arrow-down"
+                }`}
+                style={{
+                  color: winningSide === "yes" ? "#198754" : "#dc3545",
+                }}
+              ></i>
+            </div>
+          </div>
+          {vote.expiresAt && (
+            <p className="text-secondary text-center mt-0">
+              {new Date(vote.expiresAt) < new Date()
+                ? "Vote Has Ended"
+                : `Vote Ends: ${new Date(vote.expiresAt).toLocaleString()}`}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

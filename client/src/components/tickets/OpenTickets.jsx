@@ -13,7 +13,6 @@ export default function OpenTickets({ onTicketChange }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
@@ -76,41 +75,21 @@ export default function OpenTickets({ onTicketChange }) {
 
   return (
     <div className="col-12 h-100 ticket-body1 border border-0">
-      <div
-        className="d-md-none d-flex justify-content-between align-items-center px-3 py-2 m-0"
-        style={{ minHeight: "3rem" }}
-      >
-        {showSearch ? (
-          <>
-            <input
-              type="text"
-              className="form-control form-control-sm p-1 me-2"
-              placeholder="Search open tickets..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              autoFocus
-            />
-            <i
-              className="bi bi-x fs-5 text-white"
-              role="button"
-              onClick={() => {
-                setShowSearch(false);
-                setSearchTerm("");
-              }}
-            ></i>
-          </>
-        ) : (
-          <>
-            <h3 className="text-white m-0 facebook-header">Open Tickets</h3>
-            <i
-              className="bi bi-search fs-5 text-white"
-              role="button"
-              onClick={() => setShowSearch(true)}
-            ></i>
-          </>
-        )}
+      <div className="px-3 pt-3">
+        <h3 className="text-white facebook-header text-start m-0">
+          Open Tickets
+        </h3>
+        <div className="rainbow-spin-wrapper mt-md-3 my-2 w-100">
+          <input
+            type="text"
+            className="rainbow-spin-input"
+            placeholder="Search for a ticket..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <i className="bi bi-search rainbow-search-icon"></i>
+        </div>
       </div>
-
       {tickets.length === 0 ? (
         <div className="mt-md-5 mt-0">
           <div className="d-md-flex d-none no-tickets justify-content-center align-items-center h-100">

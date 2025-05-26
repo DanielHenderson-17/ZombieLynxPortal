@@ -5,3 +5,77 @@
 ::placeholder {
   color: #ffffff !important;
 }
+
+.vote-chart {
+  max-width: 400px;
+}
+
+.chart-text {
+  top: 50%;
+  left: 53%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  gap: 0rem;
+}
+
+.vote-header {
+  background-color: #292e33;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border: 1px solid rgb(24, 23, 23);
+  min-height: 100% !important;
+}
+
+.vote-img img {
+  width: 90px;
+}
+
+.vote-title {
+  font-size: 1.5rem;
+}
+
+.vote-description {
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .vote-img img {
+    width: 200px !important;
+    border-radius: 0 !important;
+  }
+  .vote-header {
+    background-color: transparent;
+    box-shadow: none;
+    height: 100%;
+    align-items: flex-start !important;
+  }
+  .vote-text {
+    padding-left: 10px;
+  }
+
+  .vote-title {
+    font-size: 2.25rem;
+  }
+
+  .vote-description {
+    font-size: 1.25rem;
+  }
+  .vote-chart {
+    max-width: 300px !important;
+  }
+  .chart-text2 {
+    margin-bottom: 50px;
+  }
+}
+
+.vote-chart-wrapper {
+  width: 100%;
+  max-width: 450px;
+  min-height: 350px;
+}
+
+@media (max-width: 576px) {
+  .vote-chart-wrapper {
+    max-width: 300px;
+    min-height: 300px;
+  }
+}

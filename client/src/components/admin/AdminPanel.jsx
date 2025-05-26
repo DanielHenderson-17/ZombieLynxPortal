@@ -139,14 +139,18 @@ export default function AdminPanel() {
     >
       {/* Fixed search bar */}
       <div className=" pb-0 bg-dark">
-        <div className="d-flex align-items-center gap-2 admin-search-bar">
-          <input
-            type="text"
-            className="form-control m-3"
-            placeholder="Search Discord, Steam, or Minecraft name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="d-flex justify-content-center justify-content-md-start align-items-center gap-2 admin-search-bar col-12 px-md-3 ps-0">
+          <div className="rainbow-spin-wrapper mt-2">
+            <input
+              type="text"
+              className="rainbow-spin-input"
+              placeholder="Search Discord, Steam, or Minecraft name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <i className="bi bi-search rainbow-search-icon"></i>
+          </div>
+
           {searchTerm && (
             <button
               className="btn btn-outline-secondary"

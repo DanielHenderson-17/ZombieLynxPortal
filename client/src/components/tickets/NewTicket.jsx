@@ -13,9 +13,7 @@ export default function NewTicket({ loggedInUser }) {
     categories: [],
     users: [],
   });
-
   const [availableServers, setAvailableServers] = useState([]);
-
   const [formData, setFormData] = useState({
     subject: "",
     category: "",
@@ -24,26 +22,25 @@ export default function NewTicket({ loggedInUser }) {
     description: "",
     assignedUserIds: [],
   });
-
   const [loading, setLoading] = useState(true);
+  const [subjectTooLong, setSubjectTooLong] = useState(false);
+  const [descriptionTooLong, setDescriptionTooLong] = useState(false);
 
   const navigate = useNavigate();
 
-  // User validation on component mount to ensure user is logged in and has the correct role to create a ticket
   useEffect(() => {
     if (!loggedInUser) {
       alert("You must be logged in to create a ticket.");
       navigate("/login");
       return;
     }
-
-    // Optionally, validate role if needed
     if (loggedInUser.role !== "User" && loggedInUser.role !== "Admin") {
       alert("You do not have permission to create a ticket.");
       navigate("/");
       return;
     }
   }, [loggedInUser, navigate]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -51,13 +48,11 @@ export default function NewTicket({ loggedInUser }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Fetch ticket options and user data on component mount to populate the form select fields with the available options and users in the system
   useEffect(() => {
     const fetchOptions = async () => {
       try {
         const ticketOptions = await getTicketOptions();
         const users = await getAllUsers();
-
         setOptions({
           games: Object.keys(ticketOptions.gamesWithServers),
           gamesWithServers: ticketOptions.gamesWithServers,
@@ -73,11 +68,9 @@ export default function NewTicket({ loggedInUser }) {
         setLoading(false);
       }
     };
-
     fetchOptions();
   }, []);
 
-  // Update available servers when the game changes in the form data state object and reset the server field to an empty string if the game changes to a new game without servers or if the game is cleared out in the form data state object (e.g., when the game select field is reset to its default value)
   useEffect(() => {
     if (formData.game) {
       setAvailableServers(options.gamesWithServers[formData.game] || []);
@@ -85,14 +78,24 @@ export default function NewTicket({ loggedInUser }) {
     }
   }, [formData.game, options.gamesWithServers]);
 
-  // Handle input changes in the form fields and update the form data state object accordingly
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "subject") setSubjectTooLong(value.length > 20);
+    if (name === "description") setDescriptionTooLong(value.length > 90);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.subject.length > 20) {
+      toast.error("Subject cannot be longer than 20 characters.");
+      return;
+    }
+    if (formData.description.length > 90) {
+      toast.error("Description cannot be longer than 90 characters.");
+      return;
+    }
+
     try {
       const createdTicket = await createTicket({
         ...formData,
@@ -111,20 +114,15 @@ export default function NewTicket({ loggedInUser }) {
         assignedUserIds: [],
       });
 
-      toast.success("Ticket created! Redirecting...", { autoClose: 3000 });
-
-      setTimeout(() => {
-        navigate(`/member/tickets/ticket/${ticketId}`);
-      }, 3000);
+      toast.success("Ticket created! Redirecting...");
+      setTimeout(() => navigate(`/member/tickets/ticket/${ticketId}`), 3000);
     } catch (error) {
       console.error("Error creating ticket:", error);
       toast.error("Failed to create ticket.");
     }
   };
 
-  if (loading) {
-    return <p className="text-white">Loading...</p>;
-  }
+  if (loading) return <p className="text-white">Loading...</p>;
 
   return (
     <div
@@ -133,57 +131,61 @@ export default function NewTicket({ loggedInUser }) {
       } pt-md-5 pt-0 px-3`}
     >
       <h3
-        className="text-white facebook-header text-start px-0 py-2 m-0"
+        className="text-white facebook-header text-start text-md-center px-0 py-2 m-0"
         style={{ minHeight: "3rem" }}
       >
         Create Ticket
       </h3>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="subject" className="form-label text-white">
-            Subject
-          </label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleChange}
-            className="form-control"
-            required
-          />
-        </div>
-        <div className="mb-3 d-flex gap-3">
-          <div className="flex-fill">
-            <label htmlFor="category" className="form-label text-white">
-              Category
-            </label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
+
+      <form
+        onSubmit={handleSubmit}
+        className="p-md-4 p-1 rounded col-md-6 col-12 mx-auto"
+      >
+        {/* Subject */}
+        <div className="mb-4 position-relative">
+          <div className="input-group">
+            <span className="input-group-text bg-dark text-white border border-black">
+              <i className="bi bi-ticket-fill"></i>
+            </span>
+            <input
+              type="text"
+              name="subject"
+              className="form-control bg-dark text-white border border-black pe-5"
+              value={formData.subject}
               onChange={handleChange}
-              className="form-select"
+              placeholder="Ticket subject"
               required
-            >
-              <option value="">Select a category</option>
-              {options.categories.map((category, index) => (
-                <option key={index} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+              style={{ paddingRight: "3.5rem" }}
+            />
+            <span className="d-none" />
           </div>
-          <div className="flex-fill">
-            <label htmlFor="game" className="form-label text-white">
-              Game
-            </label>
+          <small
+            className={`position-absolute bottom-0 end-0 me-2 mb-1 ${
+              subjectTooLong ? "text-danger" : "text-secondary"
+            }`}
+            style={{
+              fontSize: "0.75rem",
+              pointerEvents: "none",
+              zIndex: 100,
+              backgroundColor: "#212529",
+              padding: "0 4px",
+            }}
+          >
+            {formData.subject.length}/20
+          </small>
+        </div>
+
+        {/* Game, Category, Server */}
+        <div className="mb-3 d-flex flex-column gap-3">
+          <div className="input-group">
+            <span className="input-group-text bg-dark text-white border border-black">
+              <i className="fa-solid fa-gamepad"></i>
+            </span>
             <select
-              id="game"
               name="game"
+              className="form-select bg-dark text-white border border-black"
               value={formData.game}
               onChange={handleChange}
-              className="form-select"
               required
             >
               <option value="">Select a game</option>
@@ -194,16 +196,36 @@ export default function NewTicket({ loggedInUser }) {
               ))}
             </select>
           </div>
-          <div className="flex-fill">
-            <label htmlFor="server" className="form-label text-white">
-              Server
-            </label>
+
+          <div className="input-group">
+            <span className="input-group-text bg-dark text-white border border-black">
+              <i className="bi bi-tags-fill"></i>
+            </span>
             <select
-              id="server"
+              name="category"
+              className="form-select bg-dark text-white border border-black"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select a category</option>
+              {options.categories.map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="input-group">
+            <span className="input-group-text bg-dark text-white border border-black">
+              <i className="bi bi-hdd-network-fill"></i>
+            </span>
+            <select
               name="server"
+              className="form-select bg-dark text-white border border-black"
               value={formData.server}
               onChange={handleChange}
-              className="form-select"
               required
               disabled={!formData.game}
             >
@@ -216,33 +238,52 @@ export default function NewTicket({ loggedInUser }) {
             </select>
           </div>
         </div>
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label text-white">
-            Description
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="form-control description-min-height"
-            required
-          />
+
+        {/* Description */}
+        <div className="mb-4 position-relative">
+          <div className="input-group">
+            <span className="input-group-text bg-dark text-white border border-black align-items-start">
+              <i className="bi bi-chat-dots-fill"></i>
+            </span>
+            <textarea
+              name="description"
+              className="form-control bg-dark text-white border border-black pe-5"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Description"
+              rows={5}
+              style={{ paddingRight: "3.5rem" }}
+              required
+            />
+            <span className="d-none" />
+          </div>
+          <small
+            className={`position-absolute bottom-0 end-0 me-2 mb-1 ${
+              descriptionTooLong ? "text-danger" : "text-secondary"
+            }`}
+            style={{
+              fontSize: "0.75rem",
+              pointerEvents: "none",
+              zIndex: 100,
+              backgroundColor: "#212529",
+              padding: "0 4px",
+            }}
+          >
+            {formData.description.length}/90
+          </small>
         </div>
-        <div className="text-md-end text-start">
+
+        <div className="d-flex justify-content-end">
           <button
             type="submit"
-            className="btn btn-success create-ticket-submit"
+            className="btn btn-success d-flex align-items-center gap-2"
           >
-            Create Ticket
+            <i className="bi bi-send-fill"></i>Create Ticket
           </button>
         </div>
       </form>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        style={{ zIndex: "10000" }}
-      />
+
+      <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 }
