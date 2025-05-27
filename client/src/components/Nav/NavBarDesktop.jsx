@@ -19,7 +19,7 @@ export default function NavBarDesktop({
   const navigate = useNavigate();
 
   return (
-    <div className="d-none d-lg-flex align-items-center justify-content-between position-relative col-12">
+    <div className="d-none d-lg-flex align-items-center justify-content-between position-relative col-12 desktop-nav-bar">
       <Link to="/#home" className="navbar-brand col-7 text-start">
         <img
           className="zlg-logo"

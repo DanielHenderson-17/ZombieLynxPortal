@@ -1,3 +1,6 @@
+.desktop-nav-bar {
+  height: 70px;
+}
 .navbar-mobile-main-menu {
   z-index: 20000 !important;
 }

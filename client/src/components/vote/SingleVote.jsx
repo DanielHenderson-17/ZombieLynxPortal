@@ -48,7 +48,7 @@ export default function SingleVote() {
 
   return (
     <div
-      className={`fade-container pb-0 pt-3 text-white d-flex align-items-center mx-auto col-md-10 col-12 ${
+      className={`fade-container pb-0 pt-3 text-white d-flex align-items-center mx-auto col-12 ${
         isVisible ? "fade-in" : "fade-start"
       } pt-md-5 pt-0 px-2`}
     >

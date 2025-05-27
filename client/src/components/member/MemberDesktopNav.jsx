@@ -43,7 +43,7 @@ export default function MemberDesktopNav({ loggedInUser, setLoggedInUser }) {
   const navItems = [
     { to: "/member/stats", icon: "bar-chart", label: "Stats" },
     { to: "/member/tickets", icon: "ticket", label: "Tickets" },
-    { to: "/member/notifications", icon: "envelope", label: "Alerts" },
+    { to: "/member/notifications", icon: "bell", label: "Alerts" },
     { to: "/member/vote", icon: "check-square", label: "Votes" },
     { to: "/member/settings/general", icon: "gear", label: "Settings" },
     ...(loggedInUser?.role === "Admin"
