@@ -37,7 +37,7 @@ export default function NavBarMobile({ loggedInUser }) {
       {/* BOTTOM NAV: Only show if logged in */}
       {loggedInUser && (
         <div
-          className="position-fixed bottom-0 zlg-nav-bar start-0 end-0 bg-dark d-flex w-100 d-md-none pt-2 pb-1"
+          className="position-fixed bottom-0 zlg-nav-bar start-0 end-0 bg-dark d-flex w-100 d-md-none pt-2 pb-1 border-top border-black"
           style={{ zIndex: 10050 }}
         >
           {/* Stats */}
