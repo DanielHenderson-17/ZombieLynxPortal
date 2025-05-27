@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getOpenTickets, closeTicketAPI } from "../../managers/ticketManager";
 import { getGameImage } from "../../utils/gameFormatter";
 import { truncateText } from "../../utils/truncateText";
@@ -128,19 +128,6 @@ export default function OpenTickets({ onTicketChange }) {
               <p className="mt-2 pt-2 text-white fs-4">
                 You have no open tickets.
               </p>
-              <Link
-                to="/member/tickets/new-ticket"
-                className={`d-flex justify-content-center text-decoration-none ${
-                  location.pathname === "/member/tickets/new-ticket"
-                    ? "active"
-                    : ""
-                }`}
-              >
-                <button className="btn d-block d-flex align-items-center text-center mb-3 btn-success create-ticket">
-                  <i className="bi bi-plus-circle me-2"></i>
-                  <p className="m-0 p-0">Create a Ticket</p>
-                </button>
-              </Link>
             </div>
           </div>
         </div>
