@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <div className={`fade-container ${isVisible ? "fade-in" : ""}`}>
       <div
-        className="home-container col-12 mx-auto mt-md-5 mt-4 p-md-0 pt-3 px-0"
+        className="home-container col-12 mx-auto mt-4 p-md-0 pt-3 px-0"
         id="home"
       >
         {/* Splash Container */}

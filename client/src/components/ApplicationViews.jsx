@@ -29,20 +29,24 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
 
   // Routes where the NavBar should not be displayed
-  const hideNavBarRoutes = [
-    "/login",
-    "/register",
-    "/forgot-password",
-    "/reset-password",
-    "/discord",
-  ];
+  const hideDesktopNavBar =
+    location.pathname.startsWith("/member") ||
+    [
+      "/login",
+      "/register",
+      "/forgot-password",
+      "/reset-password",
+      "/discord",
+    ].includes(location.pathname);
 
   return (
     <>
       {/* Conditionally display the NavBar */}
-      {!hideNavBarRoutes.includes(location.pathname) && (
-        <NavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
-      )}
+      <NavBar
+        loggedInUser={loggedInUser}
+        setLoggedInUser={setLoggedInUser}
+        hideDesktopNavBar={hideDesktopNavBar}
+      />
 
       <Routes>
         {/* Public Routes */}
@@ -71,8 +75,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
         <Route
           path="member/*"
           element={
-            <AuthorizedRoute loggedInUser={loggedInUser}>
-              <Member loggedInUser={loggedInUser} />
+            <AuthorizedRoute
+              loggedInUser={loggedInUser}
+              setLoggedInUser={setLoggedInUser}
+            >
+              <Member
+                loggedInUser={loggedInUser}
+                setLoggedInUser={setLoggedInUser}
+              />
             </AuthorizedRoute>
           }
         >

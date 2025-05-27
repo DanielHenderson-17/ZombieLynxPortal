@@ -33,7 +33,7 @@
 @media (max-width: 768px) {
   .notifications-container,
   .create-notification-container {
-    height: 69vh;
+    height: 100%;
   }
 }
 @media (min-width: 2900px) {

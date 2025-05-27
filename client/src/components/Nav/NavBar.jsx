@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { NavLink as RRNavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { usePointsRefresher } from "../../hooks/usePointsRefresher";
 import { logout } from "../../managers/authManager";
@@ -16,7 +16,11 @@ import NavBarDesktop from "./NavBarDesktop";
 import NavBarMobile from "./NavBarMobile";
 import * as bootstrap from "bootstrap";
 
-export default function NavBar({ loggedInUser, setLoggedInUser }) {
+export default function NavBar({
+  loggedInUser,
+  setLoggedInUser,
+  hideDesktopNavBar,
+}) {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   const [steamAccount, setSteamAccount] = useState(null);
@@ -174,29 +178,23 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top p-0 mx-auto col-12 zlg-nav-bar bg-dark ps-2 pe-md-4 pe-2">
-      <div className="container-fluid px-md-5 px-2">
-        <RRNavLink className="navbar-brand" to="/#home">
-          <img
-            className="zlg-logo"
-            src="/images/zlg-logo.png"
-            alt="Zombie Lynx Gaming"
+    <nav className="navbar navbar-expand-lg zlg-nav-bar fixed-top p-0 mx-auto col-12 bg-dark ps-2 pe-md-4 pe-2">
+      <div className="container-fluid px-2">
+        {!hideDesktopNavBar && (
+          <NavBarDesktop
+            loggedInUser={loggedInUser}
+            steamAccount={steamAccount}
+            discordAccount={discordAccount}
+            unreadNotifications={unreadNotifications}
+            cartCount={cartCount}
+            userPoints={userPoints}
+            handleLogout={handleLogout}
+            randomSeed={randomSeed}
+            showDropdown={showDropdown}
+            setShowDropdown={setShowDropdown}
+            dropdownRef={dropdownRef}
           />
-        </RRNavLink>
-
-        <NavBarDesktop
-          loggedInUser={loggedInUser}
-          steamAccount={steamAccount}
-          discordAccount={discordAccount}
-          unreadNotifications={unreadNotifications}
-          cartCount={cartCount}
-          userPoints={userPoints}
-          handleLogout={handleLogout}
-          randomSeed={randomSeed}
-          showDropdown={showDropdown}
-          setShowDropdown={setShowDropdown}
-          dropdownRef={dropdownRef}
-        />
+        )}
 
         <NavBarMobile
           loggedInUser={loggedInUser}

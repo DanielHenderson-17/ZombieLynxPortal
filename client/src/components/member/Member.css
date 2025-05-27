@@ -19,7 +19,7 @@
 }
 .member-container {
   background: linear-gradient(145deg, #121314, #1a1a1d);
-  outline: 1px solid #000000;
+  border-bottom: 1px solid #201e1e;
 }
 .smaller-username {
   font-size: 1.2rem;
@@ -32,7 +32,7 @@
   height: 130px;
 }
 .member-content {
-  height: 70vh;
+  height: 86vh;
   background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
 .modal-backdrop {
@@ -180,6 +180,69 @@
   font-size: 1rem !important;
   padding: 0px 10px !important;
 }
+
+.member-desktop-wrapper {
+  width: 56px;
+  overflow: hidden;
+  transition: width 0.2s ease;
+  height: 100% !important;
+}
+
+.member-desktop-wrapper:hover,
+.member-desktop-wrapper.locked {
+  width: 160px;
+}
+
+.member-desktop-nav {
+  width: 100%;
+}
+
+.member-desktop-link {
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.member-desktop-label {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.member-desktop-wrapper:hover .member-desktop-label,
+.member-desktop-wrapper.locked .member-desktop-label {
+  opacity: 1;
+}
+
+.member-desktop-link:hover {
+  background-color: #343a40;
+  color: #ffffff !important;
+}
+/* Wrapper so both sidebar and floating menu can live in same positioning context */
+.member-nav-container {
+  position: relative;
+  height: 100%;
+}
+
+/* Floating menu panel triggered by hamburger */
+.hamburger-slideout {
+  position: absolute;
+  bottom: -10px;
+  left: 0px; /* Match your collapsed sidebar width */
+  width: 160px;
+  height: 25%;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 100;
+  border-left: 1px solid #333;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.hamburger-slideout.open {
+  transform: translateX(0);
+  pointer-events: auto;
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   .member-header {
     height: 100% !important;
