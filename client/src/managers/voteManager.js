@@ -44,6 +44,21 @@ export const getActiveVotes = () => {
 };
 
 /**
+ * ✅ Get expired votes
+ * @returns {Promise<object[]>}
+ */
+export const getExpiredVotes = () => {
+  return fetch(`${_apiUrl}/expired`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching expired votes:", error);
+      throw error;
+    });
+};
+
+/**
  * ✅ Get all available games
  * @returns {Promise<object[]>}
  */

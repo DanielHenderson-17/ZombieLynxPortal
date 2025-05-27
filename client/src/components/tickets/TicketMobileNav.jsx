@@ -20,27 +20,29 @@ export default function TicketMobileNav({ openTicketCount }) {
         ></i>
       </button>
 
+      {/* Create */}
       <Link
         to="/member/tickets/new-ticket"
-        className={`text-decoration-none d-flex flex-column align-items-center ${
+        className={`text-decoration-none d-flex flex-column align-items-center mb-2 ${
           location.pathname === "/member/tickets/new-ticket"
-            ? "text-success fs-1"
-            : "text-white"
+            ? "text-white fs-1"
+            : "text-secondary"
         }`}
       >
-        <i className="bi bi-plus-circle text-white fs-2"></i>
+        <i className="bi bi-plus-circle fs-2"></i>
         <small className="ticket-mobile-nav-title">Create</small>
       </Link>
 
+      {/* Open */}
       <Link
         to="/member/tickets/open-tickets"
-        className={`text-decoration-none my-4 d-flex flex-column align-items-center position-relative ${
+        className={`text-decoration-none d-flex flex-column align-items-center position-relative mb-2 ${
           location.pathname === "/member/tickets/open-tickets"
-            ? "text-primary"
-            : "text-white"
+            ? "text-white"
+            : "text-secondary"
         }`}
       >
-        <i className="fa-solid fa-inbox text-white fs-4"></i>
+        <i className="bi bi-inbox-fill fs-4"></i>
         <small className="ticket-mobile-nav-title">Open</small>
         {openTicketCount > 0 && (
           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
@@ -49,15 +51,16 @@ export default function TicketMobileNav({ openTicketCount }) {
         )}
       </Link>
 
+      {/* Closed */}
       <Link
         to="/member/tickets/closed-tickets"
         className={`text-decoration-none d-flex flex-column align-items-center ${
           location.pathname === "/member/tickets/closed-tickets"
-            ? "text-primary"
-            : "text-white"
+            ? "text-white"
+            : "text-secondary"
         }`}
       >
-        <i className="fa-regular fa-trash-can text-white fs-4"></i>
+        <i className="bi bi-trash3 fs-4"></i>
         <small className="ticket-mobile-nav-title">Closed</small>
       </Link>
     </div>

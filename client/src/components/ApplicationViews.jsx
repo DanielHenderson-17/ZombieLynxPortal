@@ -13,10 +13,7 @@ import Stats from "../components/stats/Stats";
 import Shop from "../components/shop/Shop";
 import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
-import CreateNotification from "../components/notifications/CreateNotification";
 import Votes from "../components/vote/Votes";
-import CreateVote from "../components/vote/CreateVote";
-import SingleVote from "../components/vote/SingleVote";
 import AdminPanel from "../components/admin/AdminPanel";
 import LoginSuccess from "./auth/LoginSuccess";
 import NavBar from "../components/Nav/NavBar";
@@ -94,19 +91,17 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           <Route path="stats" element={<Stats />} />
           {/* <Route path="shop" element={<Shop />} /> */}
           <Route
-            path="notifications"
+            path="notifications/*"
             element={<Notifications loggedInUser={loggedInUser} />}
           />
           <Route
-            path="notifications/create"
-            element={<CreateNotification loggedInUser={loggedInUser} />}
+            path="vote/*"
+            element={<Votes loggedInUser={loggedInUser} />}
           />
-          <Route path="vote" element={<Votes loggedInUser={loggedInUser} />} />
-          <Route path="vote/create" element={<CreateVote />} />
-          <Route path="vote/:voteId" element={<SingleVote />} />
+
           <Route path="settings/*" element={<AccountSettings />} />
           <Route
-            path="admin/users"
+            path="admin/*"
             element={
               <AuthorizedRoute loggedInUser={loggedInUser}>
                 {loggedInUser?.role === "Admin" ? (

@@ -65,6 +65,28 @@ export default function ClosedTickets({ onTicketChange }) {
     navigate(`/member/tickets/ticket/${ticketId}`);
   };
 
+  const filteredTickets = tickets
+    .filter((ticket) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        ticket.subject?.toLowerCase().includes(term) ||
+        ticket.description?.toLowerCase().includes(term) ||
+        ticket.server?.toLowerCase().includes(term) ||
+        ticket.game?.toLowerCase().includes(term) ||
+        ticket.category?.toLowerCase().includes(term) ||
+        ticket.id.toString().includes(term) ||
+        ticket.assignedUsers.some((user) =>
+          `${user.zlgMember?.discordName || ""} ${user.firstName || ""} ${
+            user.lastName || ""
+          }`
+            .toLowerCase()
+            .includes(term)
+        )
+      );
+    })
+    .slice()
+    .reverse();
+
   if (error) {
     return <p className="text-danger">{error}</p>;
   }
@@ -113,119 +135,97 @@ export default function ClosedTickets({ onTicketChange }) {
             </tr>
           </thead>
           <tbody>
-            {tickets
-              .filter((ticket) => {
-                const term = searchTerm.toLowerCase();
-                return (
-                  ticket.subject?.toLowerCase().includes(term) ||
-                  ticket.description?.toLowerCase().includes(term) ||
-                  ticket.server?.toLowerCase().includes(term) ||
-                  ticket.game?.toLowerCase().includes(term) ||
-                  ticket.category?.toLowerCase().includes(term) ||
-                  ticket.id.toString().includes(term) ||
-                  ticket.assignedUsers.some((user) =>
-                    `${user.zlgMember?.discordName || ""} ${
-                      user.firstName || ""
-                    } ${user.lastName || ""}`
-                      .toLowerCase()
-                      .includes(term)
-                  )
-                );
-              })
-              .slice()
-              .reverse()
-              .map((ticket) => (
-                <tr
-                  key={ticket.id}
-                  onClick={() => handleTicketClick(ticket.id)}
-                  style={{ cursor: "pointer" }}
-                  className="border border-light"
-                >
-                  <td className="text-center d-lg-table-cell single-ticket col-1 p-0 border-0">
-                    <img
-                      className="gameImg3 ms-1"
-                      src={getGameImage(ticket.game)}
-                      alt=""
-                    />
-                  </td>
-                  <td className="text-start col-md-4 col-2 p-0 pt-1 border-0">
-                    <div className="ticket-topic">
-                      <div className="d-flex flex-wrap gap-2">
-                        {ticket.assignedUsers.map((user, index) => (
-                          <div
-                            key={index}
-                            className="d-flex flex-column align-items-start rounded"
-                            style={{ fontSize: "0.85rem" }}
-                          >
-                            <span className="d-flex align-items-center">
-                              <img
-                                src={
-                                  user.zlgMember?.discordImgUrl ||
-                                  "https://cdn.discordapp.com/embed/avatars/0.png"
-                                }
-                                alt="Avatar"
-                                className="me-2 rounded-circle"
-                                style={{ width: "30px", height: "30px" }}
-                              />
-                              <span className="me-1">
-                                {formatDiscordName(
-                                  user.zlgMember?.discordName
-                                ) || `${user.firstName} ${user.lastName}`}
-                              </span>
-                              <span className="text-secondary">
-                                -{" "}
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: categoryFormatter(ticket.category),
-                                  }}
-                                ></span>
-                                -{" "}
-                                <small className="sub-text d-none d-md-inline">
-                                  {new Date(ticket.createdAt).toLocaleString()}
-                                </small>
-                              </span>
+            {filteredTickets.map((ticket) => (
+              <tr
+                key={ticket.id}
+                onClick={() => handleTicketClick(ticket.id)}
+                style={{ cursor: "pointer" }}
+                className="border border-light"
+              >
+                <td className="text-center d-lg-table-cell single-ticket col-1 p-0 border-0">
+                  <img
+                    className="gameImg3 ms-1"
+                    src={getGameImage(ticket.game)}
+                    alt=""
+                  />
+                </td>
+                <td className="text-start col-md-4 col-2 p-0 pt-1 border-0">
+                  <div className="ticket-topic">
+                    <div className="d-flex flex-wrap gap-2">
+                      {ticket.assignedUsers.map((user, index) => (
+                        <div
+                          key={index}
+                          className="d-flex flex-column align-items-start rounded"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          <span className="d-flex align-items-center">
+                            <img
+                              src={
+                                user.zlgMember?.discordImgUrl ||
+                                "https://cdn.discordapp.com/embed/avatars/0.png"
+                              }
+                              alt="Avatar"
+                              className="me-2 rounded-circle"
+                              style={{ width: "30px", height: "30px" }}
+                            />
+                            <span className="me-1">
+                              {formatDiscordName(user.zlgMember?.discordName) ||
+                                `${user.firstName} ${user.lastName}`}
                             </span>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="d-md-none d-flex">
-                        <small>{truncateText(ticket.server, 20)}</small>
-                      </div>
-                      <strong className="text-white">
-                        {truncateText(ticket.subject, 20)}
+                            <span className="text-secondary">
+                              -{" "}
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: categoryFormatter(ticket.category),
+                                }}
+                              ></span>
+                              -{" "}
+                              <small className="sub-text d-none d-md-inline">
+                                {new Date(ticket.createdAt).toLocaleString()}
+                              </small>
+                            </span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="d-md-none d-flex">
+                      <small>{truncateText(ticket.server, 20)}</small>
+                    </div>
+                    <strong className="text-white">
+                      {truncateText(ticket.subject, 20)}
+                    </strong>
+
+                    <div className="d-none d-md-flex m-0 p-0">
+                      <strong className="sub-text col-12">
+                        {truncateText(ticket.description)}
                       </strong>
-
-                      <div className="d-none d-md-flex m-0 p-0">
-                        <strong className="sub-text col-12">
-                          {truncateText(ticket.description)}
-                        </strong>
-                      </div>
                     </div>
-                  </td>
+                  </div>
+                </td>
 
-                  <td className="text-start col-2 d-none d-lg-table-cell ticket-server border-0">
-                    <span className="text-white fw-bold">
-                      {truncateText(ticket.server, 50)}
-                    </span>
-                  </td>
-                  <td className="text-start col-1 position-relative border-0">
-                    <div className="d-flex justify-content-end pe-2">
-                      <button
-                        className="btn btn-primary btn-sm ticket-button me-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRestoreTicket(ticket.id);
-                        }}
-                      >
-                        <i className="bi bi-arrow-counterclockwise"></i>
-                      </button>
-                    </div>
-                    <small className="position-absolute ticket-id">
-                      Ticket ID: {ticket.id}
-                    </small>
-                  </td>
-                </tr>
-              ))}
+                <td className="text-start col-2 d-none d-lg-table-cell ticket-server border-0">
+                  <span className="text-white fw-bold">
+                    {truncateText(ticket.server, 50)}
+                  </span>
+                </td>
+                <td className="text-start col-1 position-relative border-0">
+                  <div className="d-flex justify-content-end pe-2">
+                    <button
+                      className="btn btn-primary btn-sm ticket-button me-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRestoreTicket(ticket.id);
+                      }}
+                    >
+                      <i className="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                  </div>
+                  <small className="position-absolute ticket-id">
+                    Ticket ID: {ticket.id}
+                  </small>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

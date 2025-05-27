@@ -20,39 +20,42 @@ export default function SettingsMobileNav() {
         ></i>
       </button>
 
+      {/* General */}
       <Link
         to="/member/settings/general"
-        className={`text-decoration-none d-flex flex-column align-items-center ${
+        className={`text-decoration-none d-flex flex-column align-items-center mb-2 ${
           location.pathname === "/member/settings/general"
-            ? "text-success fs-1"
-            : "text-white"
+            ? "text-white fs-1"
+            : "text-secondary"
         }`}
       >
-        <i className="fa-solid fa-gear text-white fs-2"></i>
+        <i className="bi bi-gear-fill fs-2"></i>
         <small className="ticket-mobile-nav-title">General</small>
       </Link>
 
+      {/* Privacy */}
       <Link
         to="/member/settings/privacy"
-        className={`text-decoration-none my-4 d-flex flex-column align-items-center position-relative ${
+        className={`text-decoration-none d-flex flex-column align-items-center position-relative mb-2 ${
           location.pathname === "/member/settings/privacy"
-            ? "text-primary"
-            : "text-white"
+            ? "text-white"
+            : "text-secondary"
         }`}
       >
-        <i className="fa-solid fa-shield-halved text-white fs-4"></i>
+        <i className="bi bi-shield-lock-fill fs-4"></i>
         <small className="ticket-mobile-nav-title">Privacy</small>
       </Link>
 
+      {/* Linked Accounts */}
       <Link
         to="/member/settings/linked-accounts"
         className={`text-decoration-none d-flex flex-column align-items-center ${
           location.pathname === "/member/settings/linked-accounts"
-            ? "text-primary"
-            : "text-white"
+            ? "text-white"
+            : "text-secondary"
         }`}
       >
-        <i className="fa-solid fa-link text-white fs-4"></i>
+        <i className="bi bi-link-45deg fs-4"></i>
         <small className="ticket-mobile-nav-title">Accounts</small>
       </Link>
     </div>

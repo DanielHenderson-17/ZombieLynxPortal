@@ -45,7 +45,7 @@
 .ticket-mobile-nav-title {
   font-size: 0.7rem;
   color: rgb(197, 197, 197);
-  margin-top: 0.2rem;
+  margin-top: 0px;
 }
 .ticket-details-wrapper {
   overflow: hidden;
