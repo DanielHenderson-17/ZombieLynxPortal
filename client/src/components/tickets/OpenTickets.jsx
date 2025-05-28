@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getOpenTickets, closeTicketAPI } from "../../managers/ticketManager";
 import { getGameImage } from "../../utils/gameFormatter";
 import { truncateText } from "../../utils/truncateText";
@@ -61,6 +61,28 @@ export default function OpenTickets({ onTicketChange }) {
     }
   };
 
+  const filteredTickets = tickets
+    .filter((ticket) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        ticket.subject?.toLowerCase().includes(term) ||
+        ticket.description?.toLowerCase().includes(term) ||
+        ticket.server?.toLowerCase().includes(term) ||
+        ticket.game?.toLowerCase().includes(term) ||
+        ticket.category?.toLowerCase().includes(term) ||
+        ticket.id.toString().includes(term) ||
+        ticket.assignedUsers.some((user) =>
+          `${user.zlgMember?.discordName || ""} ${user.firstName || ""} ${
+            user.lastName || ""
+          }`
+            .toLowerCase()
+            .includes(term)
+        )
+      );
+    })
+    .slice()
+    .reverse();
+
   if (error) {
     return <p className="text-danger">{error}</p>;
   }
@@ -97,19 +119,6 @@ export default function OpenTickets({ onTicketChange }) {
               <p className="mt-5 pt-4 text-white fs-4">
                 You have no open tickets.
               </p>
-              <Link
-                to="/member/tickets/new-ticket"
-                className={`d-flex justify-content-center text-decoration-none ${
-                  location.pathname === "/member/tickets/new-ticket"
-                    ? "active"
-                    : ""
-                }`}
-              >
-                <button className="btn d-block d-flex align-items-center text-center mb-3 btn-success create-ticket">
-                  <i className="bi bi-plus-circle me-2"></i>
-                  <p className="m-0 p-0">Create a Ticket</p>
-                </button>
-              </Link>
             </div>
             <img src="/images/Kaeneko.png" alt="" className="kaeneko" />
           </div>
@@ -119,19 +128,6 @@ export default function OpenTickets({ onTicketChange }) {
               <p className="mt-2 pt-2 text-white fs-4">
                 You have no open tickets.
               </p>
-              <Link
-                to="/member/tickets/new-ticket"
-                className={`d-flex justify-content-center text-decoration-none ${
-                  location.pathname === "/member/tickets/new-ticket"
-                    ? "active"
-                    : ""
-                }`}
-              >
-                <button className="btn d-block d-flex align-items-center text-center mb-3 btn-success create-ticket">
-                  <i className="bi bi-plus-circle me-2"></i>
-                  <p className="m-0 p-0">Create a Ticket</p>
-                </button>
-              </Link>
             </div>
           </div>
         </div>
@@ -151,119 +147,97 @@ export default function OpenTickets({ onTicketChange }) {
             </tr>
           </thead>
           <tbody>
-            {tickets
-              .filter((ticket) => {
-                const term = searchTerm.toLowerCase();
-                return (
-                  ticket.subject?.toLowerCase().includes(term) ||
-                  ticket.description?.toLowerCase().includes(term) ||
-                  ticket.server?.toLowerCase().includes(term) ||
-                  ticket.game?.toLowerCase().includes(term) ||
-                  ticket.category?.toLowerCase().includes(term) ||
-                  ticket.id.toString().includes(term) ||
-                  ticket.assignedUsers.some((user) =>
-                    `${user.zlgMember?.discordName || ""} ${
-                      user.firstName || ""
-                    } ${user.lastName || ""}`
-                      .toLowerCase()
-                      .includes(term)
-                  )
-                );
-              })
-              .slice()
-              .reverse()
-              .map((ticket) => (
-                <tr
-                  key={ticket.id}
-                  onClick={() => handleTicketClick(ticket.id)}
-                  style={{ cursor: "pointer" }}
-                  className="border border-light"
-                >
-                  <td className="text-center d-lg-table-cell single-ticket col-1 p-0 border-0">
-                    <img
-                      className="gameImg3 ms-1"
-                      src={getGameImage(ticket.game)}
-                      alt=""
-                    />
-                  </td>
-                  <td className="text-start col-md-4 col-2 p-0 pt-1 border-0">
-                    <div className="ticket-topic">
-                      <div className="d-flex flex-wrap gap-2">
-                        {ticket.assignedUsers.map((user, index) => (
-                          <div
-                            key={index}
-                            className="d-flex flex-column align-items-start rounded"
-                            style={{ fontSize: "0.85rem" }}
-                          >
-                            <span className="d-flex align-items-center">
-                              <img
-                                src={
-                                  user.zlgMember?.discordImgUrl ||
-                                  "https://cdn.discordapp.com/embed/avatars/0.png"
-                                }
-                                alt="Avatar"
-                                className="me-2 rounded-circle"
-                                style={{ width: "30px", height: "30px" }}
-                              />
-                              <span className="me-1">
-                                {formatDiscordName(
-                                  user.zlgMember?.discordName
-                                ) || `${user.firstName} ${user.lastName}`}
-                              </span>
-                              <span className="text-secondary">
-                                -{" "}
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: categoryFormatter(ticket.category),
-                                  }}
-                                ></span>
-                                -{" "}
-                                <small className="sub-text d-none d-md-inline">
-                                  {new Date(ticket.createdAt).toLocaleString()}
-                                </small>
-                              </span>
+            {filteredTickets.map((ticket) => (
+              <tr
+                key={ticket.id}
+                onClick={() => handleTicketClick(ticket.id)}
+                style={{ cursor: "pointer" }}
+                className="border border-light"
+              >
+                <td className="text-center d-lg-table-cell single-ticket col-1 p-0 border-0">
+                  <img
+                    className="gameImg3 ms-1"
+                    src={getGameImage(ticket.game)}
+                    alt=""
+                  />
+                </td>
+                <td className="text-start col-md-4 col-2 p-0 pt-1 border-0">
+                  <div className="ticket-topic">
+                    <div className="d-flex flex-wrap gap-2">
+                      {ticket.assignedUsers.map((user, index) => (
+                        <div
+                          key={index}
+                          className="d-flex flex-column align-items-start rounded"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          <span className="d-flex align-items-center">
+                            <img
+                              src={
+                                user.zlgMember?.discordImgUrl ||
+                                "https://cdn.discordapp.com/embed/avatars/0.png"
+                              }
+                              alt="Avatar"
+                              className="me-2 rounded-circle"
+                              style={{ width: "30px", height: "30px" }}
+                            />
+                            <span className="me-1">
+                              {formatDiscordName(user.zlgMember?.discordName) ||
+                                `${user.firstName} ${user.lastName}`}
                             </span>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="d-md-none d-flex">
-                        <small>{truncateText(ticket.server, 20)}</small>
-                      </div>
-                      <strong className="text-white">
-                        {truncateText(ticket.subject, 20)}
+                            <span className="text-secondary">
+                              -{" "}
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: categoryFormatter(ticket.category),
+                                }}
+                              ></span>
+                              -{" "}
+                              <small className="sub-text d-none d-md-inline">
+                                {new Date(ticket.createdAt).toLocaleString()}
+                              </small>
+                            </span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="d-md-none d-flex">
+                      <small>{truncateText(ticket.server, 20)}</small>
+                    </div>
+                    <strong className="text-white">
+                      {truncateText(ticket.subject, 20)}
+                    </strong>
+
+                    <div className="d-none d-md-flex m-0 p-0">
+                      <strong className="sub-text col-12">
+                        {truncateText(ticket.description)}
                       </strong>
-
-                      <div className="d-none d-md-flex m-0 p-0">
-                        <strong className="sub-text col-12">
-                          {truncateText(ticket.description)}
-                        </strong>
-                      </div>
                     </div>
-                  </td>
+                  </div>
+                </td>
 
-                  <td className="text-start col-2 d-none d-lg-table-cell ticket-server border-0">
-                    <span className="text-white fw-bold">
-                      {truncateText(ticket.server, 50)}
-                    </span>
-                  </td>
-                  <td className="text-start col-1 position-relative border-0">
-                    <div className="d-flex justify-content-end pe-2">
-                      <button
-                        className="btn btn-danger btn-sm ticket-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCloseTicket(ticket.id);
-                        }}
-                      >
-                        <i className="bi bi-x-circle"></i>
-                      </button>
-                    </div>
-                    <small className="position-absolute ticket-id">
-                      Ticket ID: {ticket.id}
-                    </small>
-                  </td>
-                </tr>
-              ))}
+                <td className="text-start col-2 d-none d-lg-table-cell ticket-server border-0">
+                  <span className="text-white fw-bold">
+                    {truncateText(ticket.server, 50)}
+                  </span>
+                </td>
+                <td className="text-start col-1 position-relative border-0">
+                  <div className="d-flex justify-content-end pe-2">
+                    <button
+                      className="btn btn-danger btn-sm ticket-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCloseTicket(ticket.id);
+                      }}
+                    >
+                      <i className="bi bi-x-circle"></i>
+                    </button>
+                  </div>
+                  <small className="position-absolute ticket-id">
+                    Ticket ID: {ticket.id}
+                  </small>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

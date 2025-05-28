@@ -51,7 +51,7 @@ export default function Verify() {
       <form onSubmit={handleResend}>
         <input
           type="email"
-          className="form-control mb-3"
+          className="form-control mb-3 bg-dark text-white border border-secondary"
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

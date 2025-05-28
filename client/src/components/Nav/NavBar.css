@@ -1,3 +1,6 @@
+.desktop-nav-bar {
+  height: 70px;
+}
 .navbar-mobile-main-menu {
   z-index: 20000 !important;
 }
@@ -21,8 +24,7 @@
 }
 
 .zlg-nav-bar {
-  background: linear-gradient(145deg, #121214, #1a1a1d);
-  height: 80px;
+  background: linear-gradient(145deg, #141416, #212124);
 }
 
 .addPoints {

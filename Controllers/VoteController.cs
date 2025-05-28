@@ -41,6 +41,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var votes = await _dbContext.Votes
                 .Include(v => v.Game)
+                .Where(v => v.ExpiresAt == null || v.ExpiresAt > now)
                 .Select(v => new
                 {
                     v.Id,
@@ -50,7 +51,52 @@ namespace ZombieLynxPortalAPI.Controllers
                     v.Game.Platform,
                     v.CreatedAt,
                     v.ExpiresAt,
-                    HasExpired = v.ExpiresAt != null && v.ExpiresAt <= now,
+                    HasExpired = false,
+                    HasVoted = _dbContext.VoteResults.Any(vr => vr.VoteId == v.Id && vr.ZLGMemberId == zlgMember.Id),
+
+                    // ✅ This is the key: eligibility info
+                    IsEligible = v.Game.Platform.ToLower() != "steam" || !string.IsNullOrEmpty(zlgMember.SteamId),
+                    IneligibilityReason = v.Game.Platform.ToLower() == "steam" && string.IsNullOrEmpty(zlgMember.SteamId)
+                        ? $"You must have a linked {v.Game.Name} ({v.Game.Platform}) account to vote on this item."
+                        : null
+
+                })
+                .ToListAsync();
+
+            return Ok(votes);
+        }
+
+        // ✅ GET: /api/vote/expired
+        [Authorize]
+        [HttpGet("expired")]
+        public async Task<IActionResult> GetExpiredVotes()
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+                return Unauthorized("User not authenticated.");
+
+            var zlgMember = await _dbContext.ZLGMembers
+                .Include(m => m.UserProfile)
+                .FirstOrDefaultAsync(m => m.UserProfile.UserId == userId);
+
+            if (zlgMember == null)
+                return NotFound("ZLGMember not found.");
+
+            var now = DateTime.UtcNow;
+
+            var votes = await _dbContext.Votes
+                .Include(v => v.Game)
+                .Where(v => v.ExpiresAt != null && v.ExpiresAt <= now)
+                .Select(v => new
+                {
+                    v.Id,
+                    v.Title,
+                    v.Description,
+                    Game = v.Game.Name,
+                    v.Game.Platform,
+                    v.CreatedAt,
+                    v.ExpiresAt,
+                    HasExpired = true,
                     HasVoted = _dbContext.VoteResults.Any(vr => vr.VoteId == v.Id && vr.ZLGMemberId == zlgMember.Id)
                 })
                 .ToListAsync();

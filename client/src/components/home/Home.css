@@ -1,3 +1,6 @@
+.home-container {
+  margin-top: 70px !important;
+}
 .mission-text {
   font-size: 1.25rem;
 }
@@ -54,6 +57,9 @@
   .splash-main-container {
     height: 92vh;
     margin-top: 5px !important;
+  }
+  .home-container {
+    margin-top: 67px !important;
   }
   .mission-statement {
     margin-top: 0px !important;

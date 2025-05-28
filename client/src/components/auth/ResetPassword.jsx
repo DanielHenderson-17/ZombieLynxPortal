@@ -5,6 +5,7 @@ import { Input, FormGroup, Button, FormFeedback } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validatePassword } from "../../utils/validatePassword";
+import "./Login.css";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -76,6 +77,7 @@ export default function ResetPassword() {
           <Input
             type="password"
             placeholder="New Password"
+            className="bg-dark text-white border border-secondary"
             value={newPassword}
             invalid={!!passwordError || passwordMismatch}
             onChange={(e) => {
@@ -94,6 +96,7 @@ export default function ResetPassword() {
           <Input
             type="password"
             placeholder="Confirm Password"
+            className="bg-dark text-white border border-secondary"
             value={confirmPassword}
             invalid={passwordMismatch}
             onChange={(e) => {

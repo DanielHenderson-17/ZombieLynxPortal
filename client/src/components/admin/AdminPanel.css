@@ -71,10 +71,10 @@
 .rainbow-spin-wrapper::before {
   content: "";
   position: absolute;
-  top: -1450%;
-  left: -1450%;
-  width: 3000%;
-  height: 3500%;
+  top: -1810%;
+  left: -1575%;
+  width: 3250%;
+  height: 3750%;
   background: conic-gradient(
     #651515,
     #5d1010,

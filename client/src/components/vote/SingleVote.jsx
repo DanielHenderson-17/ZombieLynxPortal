@@ -48,7 +48,7 @@ export default function SingleVote() {
 
   return (
     <div
-      className={`fade-container pb-0 pt-3 text-white d-flex align-items-center mx-auto col-md-10 col-12 ${
+      className={`fade-container pb-0 pt-3 text-white d-flex align-items-center mx-auto col-12 ${
         isVisible ? "fade-in" : "fade-start"
       } pt-md-5 pt-0 px-2`}
     >
@@ -66,12 +66,22 @@ export default function SingleVote() {
           </div>
 
           <div style={{ flex: 4 }} className="text-start pe-1 vote-text">
-            <h2 className="mb-md-2 mb-1 mt-md-2 mt-0 vote-title">
+            <h3 className="mb-md-0 mb-1 mt-md-2 mt-0 vote-title d-none d-md-block">
               {vote.title}
-            </h2>
-            <p className="mb-0 vote-description">
+            </h3>
+            <h6 className="mb-md-2 mb-1 mt-md-2 mt-2 vote-title d-md-none d-block">
+              {vote.title}
+            </h6>
+            <p className="mb-md-4 mb-0 pb-md-3 pb-1 vote-description">
               {truncateText(vote.description, 95)}
             </p>
+            {vote.expiresAt && (
+              <i className="text-white text-start mt-0 d-md-none d-block vote-expiry">
+                {new Date(vote.expiresAt) < new Date()
+                  ? "Vote Has Ended"
+                  : `Vote Ends: ${new Date(vote.expiresAt).toLocaleString()}`}
+              </i>
+            )}
             {vote.userVote !== null && (
               <div className="d-none d-md-block mt-2 align-self-bottom">
                 <p className="text-white mb-0">
@@ -82,12 +92,21 @@ export default function SingleVote() {
                     {vote.userVote ? "✅" : "❌"}
                   </span>
                 </p>
-                <p className="mt-1 p-0">
+                <p className="mt-1 p-0 mb-1">
                   Total Votes :{" "}
                   <span className="text-success fw-bold">{votesFor}</span> /{" "}
                   <span className="text-danger fw-bold">{votesAgainst}</span>{" "}
                   <span className="fw-bold">({totalVotes})</span>
                 </p>
+                {vote.expiresAt && (
+                  <i className="text-white text-start mt-0 d-none d-md-block">
+                    {new Date(vote.expiresAt) < new Date()
+                      ? "Vote Has Ended"
+                      : `Vote Ends: ${new Date(
+                          vote.expiresAt
+                        ).toLocaleString()}`}
+                  </i>
+                )}
               </div>
             )}
           </div>
@@ -138,13 +157,6 @@ export default function SingleVote() {
               ></i>
             </div>
           </div>
-          {vote.expiresAt && (
-            <p className="text-secondary text-center mt-0">
-              {new Date(vote.expiresAt) < new Date()
-                ? "Vote Has Ended"
-                : `Vote Ends: ${new Date(vote.expiresAt).toLocaleString()}`}
-            </p>
-          )}
         </div>
       </div>
     </div>

@@ -153,6 +153,7 @@ export default function Register() {
             <Input
               type="text"
               placeholder="First Name"
+              className="bg-dark text-white border border-secondary"
               value={firstName}
               onChange={(e) => {
                 setFirstName(e.target.value);
@@ -165,6 +166,7 @@ export default function Register() {
             <Input
               type="text"
               placeholder="Last Name"
+              className="bg-dark text-white border border-secondary"
               value={lastName}
               onChange={(e) => {
                 setLastName(e.target.value);
@@ -178,6 +180,7 @@ export default function Register() {
         <Input
           type="email"
           placeholder="Email"
+          className="bg-dark text-white border border-secondary"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -189,6 +192,7 @@ export default function Register() {
         <Input
           type="password"
           placeholder="Password"
+          className="bg-dark text-white border border-secondary"
           invalid={!!passwordError || passwordMismatch}
           value={password}
           onChange={(e) => {
@@ -207,6 +211,7 @@ export default function Register() {
         <Input
           type="password"
           placeholder="Confirm Password"
+          className="bg-dark text-white border border-secondary"
           invalid={passwordMismatch}
           value={confirmPassword}
           onChange={(e) => {
