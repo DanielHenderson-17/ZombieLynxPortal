@@ -42,10 +42,6 @@ namespace ZombieLynxPortalAPI.Controllers
             var votes = await _dbContext.Votes
                 .Include(v => v.Game)
                 .Where(v => v.ExpiresAt == null || v.ExpiresAt > now)
-                .Where(v =>
-                    // ✅ Only include votes the user qualifies for
-                    v.Game.Platform.ToLower() != "steam" || !string.IsNullOrEmpty(zlgMember.SteamId)
-                )
                 .Select(v => new
                 {
                     v.Id,
@@ -56,7 +52,14 @@ namespace ZombieLynxPortalAPI.Controllers
                     v.CreatedAt,
                     v.ExpiresAt,
                     HasExpired = false,
-                    HasVoted = _dbContext.VoteResults.Any(vr => vr.VoteId == v.Id && vr.ZLGMemberId == zlgMember.Id)
+                    HasVoted = _dbContext.VoteResults.Any(vr => vr.VoteId == v.Id && vr.ZLGMemberId == zlgMember.Id),
+
+                    // ✅ This is the key: eligibility info
+                    IsEligible = v.Game.Platform.ToLower() != "steam" || !string.IsNullOrEmpty(zlgMember.SteamId),
+                    IneligibilityReason = v.Game.Platform.ToLower() == "steam" && string.IsNullOrEmpty(zlgMember.SteamId)
+                        ? $"You must have a linked {v.Game.Name} ({v.Game.Platform}) account to vote on this item."
+                        : null
+
                 })
                 .ToListAsync();
 

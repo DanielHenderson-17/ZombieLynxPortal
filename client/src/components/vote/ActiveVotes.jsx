@@ -79,7 +79,18 @@ export default function ActiveVotes() {
               </div>
 
               <div className="my-auto d-flex justify-content-end gap-2 me-3 col">
-                {!vote.hasVoted ? (
+                {!vote.isEligible ? (
+                  <span
+                    title={
+                      vote.ineligibilityReason ||
+                      "You are not eligible to vote on this"
+                    }
+                  >
+                    <button className="btn btn-secondary btn-sm" disabled>
+                      <i className="bi bi-lock-fill me-1"></i> Ineligible
+                    </button>
+                  </span>
+                ) : !vote.hasVoted ? (
                   <div className="w-50 d-flex justify-content-end text-end">
                     <button
                       className="btn btn-success btn-sm me-2"
