@@ -52,7 +52,7 @@ export default function SingleVote() {
         isVisible ? "fade-in" : "fade-start"
       } pt-md-5 pt-0 px-2`}
     >
-      <div className="px-0  mt-md-0 mt-0 rounded-3 col-md-9 col-12 mx-auto bg-md-dark d-md-flex d-block align-items-center">
+      <div className="px-0  mt-md-0 mt-0 rounded-3 col-md-10 col-12 mx-auto bg-md-dark d-md-flex d-block align-items-center">
         <div
           className="d-flex mb-1 vote-header col-12 col-md-7 rounded-3 bg-dark shadow"
           style={{ gap: ".2rem", height: "100%" }}
