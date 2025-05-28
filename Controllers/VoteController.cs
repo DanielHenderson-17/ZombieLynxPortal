@@ -42,6 +42,10 @@ namespace ZombieLynxPortalAPI.Controllers
             var votes = await _dbContext.Votes
                 .Include(v => v.Game)
                 .Where(v => v.ExpiresAt == null || v.ExpiresAt > now)
+                .Where(v =>
+                    // ✅ Only include votes the user qualifies for
+                    v.Game.Platform.ToLower() != "steam" || !string.IsNullOrEmpty(zlgMember.SteamId)
+                )
                 .Select(v => new
                 {
                     v.Id,
