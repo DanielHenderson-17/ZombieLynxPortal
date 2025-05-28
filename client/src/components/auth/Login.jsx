@@ -97,7 +97,9 @@ export default function Login({ setLoggedInUser }) {
         <div className="mb-4">
           <input
             type="text"
-            className={`form-control ${failedLogin ? "is-invalid" : ""}`}
+            className={`form-control bg-dark text-white border border-secondary ${
+              failedLogin ? "is-invalid" : ""
+            }`}
             placeholder="Email"
             value={email}
             onChange={(e) => {
@@ -106,11 +108,12 @@ export default function Login({ setLoggedInUser }) {
             }}
           />
         </div>
-
         <div className="mb-4">
           <input
             type="password"
-            className={`form-control ${failedLogin ? "is-invalid" : ""}`}
+            className={`form-control bg-dark text-white border border-secondary ${
+              failedLogin ? "is-invalid" : ""
+            }`}
             placeholder="Password"
             value={password}
             onChange={(e) => {

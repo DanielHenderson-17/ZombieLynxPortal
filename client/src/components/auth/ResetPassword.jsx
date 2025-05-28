@@ -75,7 +75,7 @@ export default function ResetPassword() {
         <FormGroup className="mb-4">
           <Input
             type="password"
-            placeholder="New Password"
+            placeholder="New Password bg-dark text-white border border-secondary"
             value={newPassword}
             invalid={!!passwordError || passwordMismatch}
             onChange={(e) => {
@@ -93,7 +93,7 @@ export default function ResetPassword() {
         <FormGroup className="mb-4">
           <Input
             type="password"
-            placeholder="Confirm Password"
+            placeholder="Confirm Password bg-dark text-white border border-secondary"
             value={confirmPassword}
             invalid={passwordMismatch}
             onChange={(e) => {
