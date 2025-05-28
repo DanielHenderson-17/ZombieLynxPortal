@@ -269,14 +269,31 @@ export default function CreateNotification() {
           className="modal fade show"
           tabIndex="-1"
           role="dialog"
-          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          style={{
+            display: "block",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1055,
+            overflowY: "auto",
+          }}
         >
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
+          <div
+            className="modal-dialog modal-dialog-centered"
+            role="document"
+            style={{
+              margin: "1.75rem auto",
+              width: "100%",
+              maxWidth: "500px",
+              padding: "0 1rem",
+            }}
+          >
+            <div className="modal-content bg-dark text-white border border-secondary">
               <div className="modal-header">
-                <h5 className="modal-title text-white">
-                  Send Notification to All Users
-                </h5>
+                <h5 className="modal-title">Send Notification to All Users</h5>
                 <button
                   type="button"
                   className="btn-close btn-close-white"
@@ -285,7 +302,7 @@ export default function CreateNotification() {
                 ></button>
               </div>
               <div className="modal-body">
-                <p className="text-white">
+                <p>
                   This will send a notification to{" "}
                   <strong>{allUsers.length}</strong> users! Are you sure you
                   want to proceed?
