@@ -88,8 +88,11 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             path="tickets/*"
             element={<Tickets loggedInUser={loggedInUser} />}
           />
-          <Route path="stats" element={<Stats />} />
-          {/* <Route path="shop" element={<Shop />} /> */}
+          <Route
+            path="stats/*"
+            element={<Stats loggedInUser={loggedInUser} />}
+          />
+
           <Route
             path="notifications/*"
             element={<Notifications loggedInUser={loggedInUser} />}
