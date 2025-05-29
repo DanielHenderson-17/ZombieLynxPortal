@@ -63,10 +63,24 @@ export default function Tickets({ loggedInUser }) {
                 : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex justify-content-between align-items-center">
+            <button className="btn d-block w-100 text-start mb-2 d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center open-tickets">
-                <i className="bi bi-inbox me-3 text-white"></i>
-                <p className="m-0 p-0">Open</p>
+                <i
+                  className={`bi me-3 ${
+                    location.pathname === "/member/tickets/open-tickets"
+                      ? "bi-inbox-fill text-white"
+                      : "bi-inbox text-secondary"
+                  }`}
+                ></i>
+                <p
+                  className={`m-0 p-0 ${
+                    location.pathname === "/member/tickets/open-tickets"
+                      ? "text-white"
+                      : "text-secondary"
+                  }`}
+                >
+                  Open
+                </p>
               </div>
               {openTicketCount > 0 && (
                 <span className="badge bg-primary ms-2 open-ticket-count">
@@ -85,10 +99,24 @@ export default function Tickets({ loggedInUser }) {
                 : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start text-white">
+            <button className="btn d-block w-100 text-start d-flex align-items-center">
               <div className="d-flex align-items-center closed-tickets">
-                <i className="bi bi-trash3 me-3 text-white"></i>
-                <p className="m-0 p-0">Trash</p>
+                <i
+                  className={`bi me-3 ${
+                    location.pathname === "/member/tickets/closed-tickets"
+                      ? "bi-trash3-fill text-white"
+                      : "bi-trash3 text-secondary"
+                  }`}
+                ></i>
+                <p
+                  className={`m-0 p-0 ${
+                    location.pathname === "/member/tickets/closed-tickets"
+                      ? "text-white"
+                      : "text-secondary"
+                  }`}
+                >
+                  Trash
+                </p>
               </div>
             </button>
           </Link>

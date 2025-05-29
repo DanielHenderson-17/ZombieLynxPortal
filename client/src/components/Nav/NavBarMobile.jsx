@@ -131,7 +131,7 @@ export default function NavBarMobile({ loggedInUser }) {
               <div className="d-flex flex-column align-items-center justify-content-center">
                 <i
                   className={`bi ${
-                    isActive ? "bi-envelope-fill" : "bi-envelope"
+                    isActive ? "bi-bell-fill" : "bi-bell"
                   } fs-4 ${isActive ? "text-white" : "text-secondary"}`}
                 ></i>
                 <small
