@@ -79,7 +79,9 @@ export default function SingleVote() {
               <i className="text-white text-start mt-0 d-md-none d-block vote-expiry">
                 {new Date(vote.expiresAt) < new Date()
                   ? "Vote Has Ended"
-                  : `Vote Ends: ${new Date(vote.expiresAt).toLocaleString()}`}
+                  : `Vote Ends: ${new Date(
+                      vote.expiresAt
+                    ).toLocaleString()} CST`}
               </i>
             )}
             {vote.userVote !== null && (
@@ -104,7 +106,7 @@ export default function SingleVote() {
                       ? "Vote Has Ended"
                       : `Vote Ends: ${new Date(
                           vote.expiresAt
-                        ).toLocaleString()}`}
+                        ).toLocaleString()} CST`}
                   </i>
                 )}
               </div>
