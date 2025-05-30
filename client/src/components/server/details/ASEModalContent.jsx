@@ -57,7 +57,7 @@ export default function ASEModalContent() {
         ** Server Restart: 4AM CST Daily
       </p>
       <p className="col-md-10 col-12 text-start mx-start mt-0 pt-0 server-restart">
-        ** New Player Protection: 14 Days or Level 105
+        ** New Player Protection: 3 Days (Cluster-Wide).
       </p>
 
       <div className="nk-gap" />
