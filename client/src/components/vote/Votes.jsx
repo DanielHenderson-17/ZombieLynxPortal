@@ -47,9 +47,23 @@ export default function Votes({ loggedInUser }) {
               location.pathname.includes("/member/vote/active") ? "active" : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
-              <i className="bi bi-check-square-fill me-3 text-white"></i>
-              <p className="m-0 p-0">Active</p>
+            <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
+              <i
+                className={`bi me-3 ${
+                  location.pathname.includes("/member/vote/active")
+                    ? "bi-check-square-fill text-white"
+                    : "bi-check-square text-secondary"
+                }`}
+              ></i>
+              <p
+                className={`m-0 p-0 ${
+                  location.pathname.includes("/member/vote/active")
+                    ? "text-white"
+                    : "text-secondary"
+                }`}
+              >
+                Active
+              </p>
             </button>
           </Link>
 
@@ -59,9 +73,23 @@ export default function Votes({ loggedInUser }) {
               location.pathname.includes("/member/vote/expired") ? "active" : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
-              <i className="bi bi-clock-fill me-3 text-white"></i>
-              <p className="m-0 p-0">Expired</p>
+            <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
+              <i
+                className={`bi me-3 ${
+                  location.pathname.includes("/member/vote/expired")
+                    ? "bi-clock-fill text-white"
+                    : "bi-clock text-secondary"
+                }`}
+              ></i>
+              <p
+                className={`m-0 p-0 ${
+                  location.pathname.includes("/member/vote/expired")
+                    ? "text-white"
+                    : "text-secondary"
+                }`}
+              >
+                Expired
+              </p>
             </button>
           </Link>
         </div>

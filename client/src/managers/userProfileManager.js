@@ -165,3 +165,24 @@ export const updateUserPoints = (userProfileId, oldPoints, newPoints) => {
     res.ok ? res.text() : Promise.reject("Failed to update user points")
   );
 };
+
+/**
+ * 🧩 Bulk edit points for multiple users
+ * @param {Array} edits
+ * @returns {Promise<object>}
+ */
+export const bulkEditPoints = (edits) => {
+  return fetch(`${_apiUrl}/bulk-edit-points`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ edits }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to update points in bulk.");
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Bulk points update error:", error);
+      throw error;
+    });
+};

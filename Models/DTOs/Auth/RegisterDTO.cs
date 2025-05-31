@@ -27,5 +27,8 @@ namespace ZombieLynxPortalAPI.DTOs
         [Required]
         public string DiscordImgUrl { get; set; }
         public string? Role { get; set; }
+
+        [Required]
+        public bool HasAcceptedTerms { get; set; }
     }
 }

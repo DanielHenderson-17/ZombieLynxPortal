@@ -204,5 +204,54 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok("Points updated successfully.");
         }
 
+        [HttpPut("bulk-edit-points")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BulkEditPoints([FromBody] BulkEditPointsDTO dto)
+        {
+            var editorUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var editorProfile = await _context.UserProfiles
+                .FirstOrDefaultAsync(up => up.UserId.ToString() == editorUserId);
+
+            if (editorProfile == null)
+                return Unauthorized("Admin user profile not found.");
+
+            var results = new
+            {
+                Success = new List<string>(),
+                Failed = new List<string>()
+            };
+
+            foreach (var edit in dto.Edits)
+            {
+                var member = await _context.ZLGMembers
+                    .Include(m => m.UserProfile)
+                    .ThenInclude(up => up.User)
+                    .FirstOrDefaultAsync(m => m.UserProfileId == edit.UserProfileId);
+
+                if (member == null || member.Points != edit.OldPoints)
+                {
+                    results.Failed.Add($"UserProfileId {edit.UserProfileId} failed (not found or point mismatch).");
+                    continue;
+                }
+
+                var editorDiscord = editorProfile.Id.ToString();
+                var targetDiscord = member.DiscordName ?? $"UserProfileId {edit.UserProfileId}";
+
+                Log.Information("{Editor} bulk-edited points for {Target} from {Old} to {New} at {Time}",
+                    editorDiscord,
+                    targetDiscord,
+                    edit.OldPoints,
+                    edit.Points,
+                    DateTime.UtcNow);
+
+                member.Points = edit.Points;
+                results.Success.Add($"UserProfileId {edit.UserProfileId} updated.");
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(results);
+        }
+
     }
 }

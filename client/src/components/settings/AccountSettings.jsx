@@ -32,9 +32,23 @@ export default function AccountSettings() {
               location.pathname === "/member/settings/general" ? "active" : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
-              <i className="bi bi-gear me-3 text-white"></i>
-              <p className="m-0 p-0">General</p>
+            <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
+              <i
+                className={`bi me-3 ${
+                  location.pathname === "/member/settings/general"
+                    ? "bi-gear-fill text-white"
+                    : "bi-gear text-secondary"
+                }`}
+              ></i>
+              <p
+                className={`m-0 p-0 ${
+                  location.pathname === "/member/settings/general"
+                    ? "text-white"
+                    : "text-secondary"
+                }`}
+              >
+                General
+              </p>
             </button>
           </Link>
 
@@ -44,9 +58,23 @@ export default function AccountSettings() {
               location.pathname === "/member/settings/privacy" ? "active" : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
-              <i className="bi bi-shield-lock me-3 text-white"></i>
-              <p className="m-0 p-0">Privacy</p>
+            <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
+              <i
+                className={`bi me-3 ${
+                  location.pathname === "/member/settings/privacy"
+                    ? "bi-shield-lock-fill text-white"
+                    : "bi-shield-lock text-secondary"
+                }`}
+              ></i>
+              <p
+                className={`m-0 p-0 ${
+                  location.pathname === "/member/settings/privacy"
+                    ? "text-white"
+                    : "text-secondary"
+                }`}
+              >
+                Privacy
+              </p>
             </button>
           </Link>
 
@@ -58,9 +86,23 @@ export default function AccountSettings() {
                 : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
-              <i className="bi bi-link-45deg me-3 text-white"></i>
-              <p className="m-0 p-0">Linked Accounts</p>
+            <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
+              <i
+                className={`bi me-3 ${
+                  location.pathname === "/member/settings/linked-accounts"
+                    ? "bi-link-45deg text-white"
+                    : "bi-link-45deg text-secondary"
+                }`}
+              ></i>
+              <p
+                className={`m-0 p-0 ${
+                  location.pathname === "/member/settings/linked-accounts"
+                    ? "text-white"
+                    : "text-secondary"
+                }`}
+              >
+                Linked Accounts
+              </p>
             </button>
           </Link>
         </div>

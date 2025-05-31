@@ -119,6 +119,16 @@ export default function DiscordRules() {
             prohibited.
           </p>
         </li>
+
+        <li>
+          <strong>No Cheating or Exploiting</strong>
+          <p>
+            This includes using cheats, hacks, or exploits in any game or the
+            shop managed by ZLG. If you are caught cheating, you will be banned
+            from ZLG permanently. This includes anything not intended by the
+            game developers.
+          </p>
+        </li>
       </ol>
 
       <div className="mt-4">

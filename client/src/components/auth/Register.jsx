@@ -21,6 +21,7 @@ export default function Register() {
   const [discordLinked, setDiscordLinked] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
   const navigate = useNavigate();
 
@@ -99,6 +100,7 @@ export default function Register() {
         discordId,
         discordName,
         discordImgUrl,
+        hasAcceptedTerms,
       };
 
       register(newUser)
@@ -221,6 +223,28 @@ export default function Register() {
         />
         <FormFeedback>Passwords do not match!</FormFeedback>
       </FormGroup>
+      <FormGroup check className="mb-3 d-flex justify-content-start">
+        <Input
+          type="checkbox"
+          id="termsCheckbox"
+          checked={hasAcceptedTerms}
+          onChange={(e) => setHasAcceptedTerms(e.target.checked)}
+        />
+        <label
+          htmlFor="termsCheckbox"
+          className="form-check-label text-white ps-2 text-start"
+        >
+          I accept the{" "}
+          <a href="/zlg-rules" target="_blank" rel="noopener noreferrer">
+            Terms of Service
+          </a>{" "}
+          and{" "}
+          <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
+            Privacy Policy
+          </a>
+          .
+        </label>
+      </FormGroup>
 
       <p
         style={{ color: "red" }}
@@ -233,7 +257,11 @@ export default function Register() {
         color="primary"
         onClick={handleSubmit}
         disabled={
-          !!passwordError || passwordMismatch || !password || !confirmPassword
+          !!passwordError ||
+          passwordMismatch ||
+          !password ||
+          !confirmPassword ||
+          !hasAcceptedTerms
         }
         className="mt-3 mb-2"
       >

@@ -21,6 +21,7 @@ import PrivacyPolicy from "../components/legal/PrivacyPolicy";
 import Rules from "../components/legal/Rules";
 import DiscordRedirect from "../components/discord/DiscordRedirect";
 import AccountSettings from "./settings/AccountSettings";
+import Users from "./admin/Users";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
@@ -88,8 +89,11 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             path="tickets/*"
             element={<Tickets loggedInUser={loggedInUser} />}
           />
-          <Route path="stats" element={<Stats />} />
-          {/* <Route path="shop" element={<Shop />} /> */}
+          <Route
+            path="stats/*"
+            element={<Stats loggedInUser={loggedInUser} />}
+          />
+
           <Route
             path="notifications/*"
             element={<Notifications loggedInUser={loggedInUser} />}
@@ -111,7 +115,10 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
                 )}
               </AuthorizedRoute>
             }
-          />
+          >
+            <Route index element={<Users />} />
+            <Route path="users" element={<Users />} />
+          </Route>
 
           <Route
             index

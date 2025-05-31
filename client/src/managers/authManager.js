@@ -71,15 +71,22 @@ export const login = (email, password) => {
         const errorText = await res.text();
         return { error: errorText }; // <-- forward the error
       }
+
       const data = await res.json();
       if (!data?.token) return { error: "Invalid response from server." };
 
       saveToken(data.token);
-      return fetch(`${apiUrl}/me`, {
+
+      const userInfo = await fetch(`${apiUrl}/me`, {
         headers: { Authorization: `Bearer ${data.token}` },
       }).then((res) =>
         res.ok ? res.json() : { error: "Failed to fetch user info." }
       );
+
+      return {
+        ...userInfo,
+        hasAcceptedTerms: data.hasAcceptedTerms,
+      };
     })
     .catch((error) => {
       console.error("Login failed:", error);
@@ -123,6 +130,28 @@ export const register = (user) => {
       console.error("Registration error:", error);
       throw error;
     });
+};
+
+/**
+ * ✅ Accept the terms of service for a user
+ * @param {string} email - User's email
+ * @returns {Promise<string>} - Success message
+ */
+export const acceptTerms = (email) => {
+  return fetch("/api/Auth/accept-terms", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  }).then((res) => {
+    if (!res.ok) {
+      return res.text().then((msg) => {
+        throw new Error(msg || "Failed to accept terms.");
+      });
+    }
+    return res.text();
+  });
 };
 
 /**

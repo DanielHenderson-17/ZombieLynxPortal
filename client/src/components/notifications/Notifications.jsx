@@ -53,9 +53,23 @@ export default function Notifications({ loggedInUser }) {
                 : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
-              <i className="bi bi-envelope-open-fill me-3 text-white"></i>
-              <p className="m-0 p-0">Inbox</p>
+            <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
+              <i
+                className={`bi me-3 ${
+                  location.pathname.includes("/member/notifications/inbox")
+                    ? "bi-envelope-open-fill text-white"
+                    : "bi-envelope-open text-secondary"
+                }`}
+              ></i>
+              <p
+                className={`m-0 p-0 ${
+                  location.pathname.includes("/member/notifications/inbox")
+                    ? "text-white"
+                    : "text-secondary"
+                }`}
+              >
+                Inbox
+              </p>
             </button>
           </Link>
 
@@ -68,9 +82,23 @@ export default function Notifications({ loggedInUser }) {
                 : ""
             }`}
           >
-            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
-              <i className="bi bi-archive-fill me-3 text-white"></i>
-              <p className="m-0 p-0">Read</p>
+            <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
+              <i
+                className={`bi me-3 ${
+                  location.pathname.includes("/member/notifications/read")
+                    ? "bi-archive-fill text-white"
+                    : "bi-archive text-secondary"
+                }`}
+              ></i>
+              <p
+                className={`m-0 p-0 ${
+                  location.pathname.includes("/member/notifications/read")
+                    ? "text-white"
+                    : "text-secondary"
+                }`}
+              >
+                Read
+              </p>
             </button>
           </Link>
         </div>
