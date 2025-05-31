@@ -73,7 +73,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 Profile = new UserProfile
                 {
                     FirstName = dto.FirstName,
-                    LastName = dto.LastName
+                    LastName = dto.LastName,
+                    HasAcceptedTerms = dto.HasAcceptedTerms
                 }
             };
 
@@ -342,10 +343,33 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var token = GenerateJwtToken(user);
 
-            return Ok(new { Token = token });
+            return Ok(new
+            {
+                Token = token,
+                user.Profile.HasAcceptedTerms
+            });
+
         }
 
+        [HttpPut("accept-terms")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AcceptTerms([FromBody] EmailOnlyDTO dto)
+        {
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
+            if (user == null)
+                return NotFound("User not found.");
+
+            if (user.Profile.HasAcceptedTerms)
+                return Ok("Already accepted.");
+
+            user.Profile.HasAcceptedTerms = true;
+            await _context.SaveChangesAsync();
+
+            return Ok("Terms accepted.");
+        }
 
         // POST: api/Auth/admin-only
         [HttpGet("admin-only")]

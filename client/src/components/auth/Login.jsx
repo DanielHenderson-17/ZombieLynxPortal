@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { login } from "../../managers/authManager";
+import { login, acceptTerms } from "../../managers/authManager";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
@@ -13,28 +13,48 @@ export default function Login({ setLoggedInUser }) {
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
   const [showUnverifiedModal, setShowUnverifiedModal] = useState(false);
   const [resendStatus, setResendStatus] = useState({ success: "", error: "" });
-
   const location = useLocation();
   const from = location.state?.from?.pathname || "/member";
   const [isVisible, setIsVisible] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+
+  const doLogin = () => {
+    login(email, password).then((result) => {
+      if (result?.error?.includes("verify your email")) {
+        setShowUnverifiedModal(true);
+      } else if (result?.error) {
+        setFailedLogin(true);
+      } else {
+        setLoggedInUser(result);
+        if (!result.hasAcceptedTerms) {
+          setShowTermsModal(true);
+        } else {
+          setShowLoginAnimation(true);
+          setTimeout(() => {
+            navigate(from, { replace: true });
+          }, 3000);
+        }
+      }
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(email, password).then((result) => {
-      if (result?.error) {
-        if (result.error.includes("verify your email")) {
-          setShowUnverifiedModal(true);
-        } else {
-          setFailedLogin(true);
-        }
-      } else {
-        setLoggedInUser(result);
+    doLogin();
+  };
+
+  const handleAcceptTerms = () => {
+    acceptTerms(email)
+      .then(() => {
+        setShowTermsModal(false);
         setShowLoginAnimation(true);
         setTimeout(() => {
           navigate(from, { replace: true });
         }, 3000);
-      }
-    });
+      })
+      .catch(() => {
+        toast.error("Failed to accept terms. Try again.");
+      });
   };
 
   const handleResendVerification = () => {
@@ -203,6 +223,63 @@ export default function Login({ setLoggedInUser }) {
           </div>
         </div>
       )}
+      {showTermsModal && (
+        <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content bg-dark border border-secondary text-white">
+              <div className="modal-header">
+                <h5 className="modal-title">Accept Terms of Service</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  aria-label="Close"
+                  onClick={() => setShowTermsModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  You must accept the{" "}
+                  <a
+                    href="/zlg-rules"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-underline text-white"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="/privacy-policy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-underline text-white"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  to continue.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowTermsModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleAcceptTerms}
+                >
+                  I Accept
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <ToastContainer position="top-center" autoClose={3000} />
     </>
   );

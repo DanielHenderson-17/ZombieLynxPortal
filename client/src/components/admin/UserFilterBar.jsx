@@ -50,7 +50,7 @@ export default function UserFilterBar({
           className="btn btn-success btn-sm ms-auto"
           onClick={onBulkEditClick}
         >
-          Edit Points for Selected
+          Edit Points
         </button>
       )}
     </div>
