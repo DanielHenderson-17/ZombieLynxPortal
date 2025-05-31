@@ -140,8 +140,8 @@ export default function Users() {
   return (
     <div className="notifications-container fade-container fade-in pt-md-1">
       {/* Search & Filter */}
-      <div className="pb-0 bg-dark">
-        <div className="d-flex justify-content-center justify-content-md-start align-items-center gap-2 admin-search-bar col-12 px-md-3 ps-0">
+      <div className="pb-0 user-filter-bar">
+        <div className="d-flex justify-content-center justify-content-md-start align-items-center gap-2 admin-search-bar col-12 px-md-3 px-1 user-filter-bar">
           <div className="rainbow-spin-wrapper mt-2">
             <input
               type="text"
@@ -154,21 +154,14 @@ export default function Users() {
           </div>
           {searchTerm && (
             <button
-              className="btn btn-outline-secondary"
+              className="btn btn-outline-secondary mb-0"
               onClick={() => setSearchTerm("")}
             >
               Clear
             </button>
           )}
-          <button
-            className={`btn btn-${bulkMode ? "danger" : "primary"} btn-sm`}
-            style={{ minWidth: "120px" }}
-            onClick={() => setBulkMode((prev) => !prev)}
-          >
-            {bulkMode ? "Cancel Edit" : "Edit Users"}
-          </button>
         </div>
-        <div className="px-md-3 mt-2">
+        <div className="px-md-3 mt-2 user-filter-bar d-flex align-items-center justify-content-between">
           <UserFilterBar
             platformFilter={platformFilter}
             setPlatformFilter={setPlatformFilter}
@@ -176,6 +169,13 @@ export default function Users() {
             hasSelections={hasSelections}
             onBulkEditClick={() => setShowBulkModal(true)}
           />
+          <button
+            className={`me-2 btn btn-${bulkMode ? "danger" : "primary"} btn-sm`}
+            style={{ minWidth: "90px" }}
+            onClick={() => setBulkMode((prev) => !prev)}
+          >
+            {bulkMode ? "Cancel Edit" : "Edit Users"}
+          </button>
         </div>
       </div>
 

@@ -5,24 +5,33 @@ export default function UserFilterBar({
   hasSelections,
   onBulkEditClick,
 }) {
-  const platforms = ["Steam", "Minecraft", "Epic"];
+  const platforms = [
+    { name: "Steam", icon: "/steamIcon.png" },
+    { name: "Minecraft", icon: "/minecraftIcon.png" },
+    { name: "Epic", icon: "/epicIcon.png" },
+  ];
 
   return (
-    <div className="d-flex flex-wrap gap-2 mb-3 align-items-center">
+    <div className="d-flex flex-wrap gap-2 mb-0 align-items-center mx-1 user-filter-bar">
       {/* Platform filter buttons */}
-      {platforms.map((platform) => (
+      {platforms.map(({ name, icon }) => (
         <button
-          key={platform}
-          className={`btn btn-sm ${
-            platformFilter === platform
-              ? "btn-primary"
-              : "btn-outline-secondary"
+          key={name}
+          className={`btn btn-sm d-flex align-items-center gap-2 ${
+            platformFilter === name ? "btn-primary" : "btn-outline-secondary"
           }`}
           onClick={() =>
-            setPlatformFilter((prev) => (prev === platform ? null : platform))
+            setPlatformFilter((prev) => (prev === name ? null : name))
           }
         >
-          {platform}
+          <img
+            src={icon}
+            alt={`${name} icon`}
+            width="20"
+            height="20"
+            style={{ objectFit: "contain" }}
+          />
+          <span className="d-none d-md-inline">{name}</span>
         </button>
       ))}
 

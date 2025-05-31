@@ -67,6 +67,10 @@
   isolation: isolate;
 }
 
+.user-filter-bar {
+  background-color: #1c1f24;
+}
+
 /* The animated, full circular ring */
 .rainbow-spin-wrapper::before {
   content: "";
