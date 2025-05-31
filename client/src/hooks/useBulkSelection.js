@@ -2,20 +2,26 @@ import { useState, useEffect } from "react";
 
 /**
  * Custom hook for managing bulk user selection
- * @param {Array} visibleUsers
+ * @param {Array<{id: any}>} visibleUsers
  */
 export default function useBulkSelection(visibleUsers) {
   const [selectedIds, setSelectedIds] = useState(new Set());
 
-  // Keep selection in sync when visibleUsers changes (e.g., new filter)
   useEffect(() => {
-    setSelectedIds((prev) => {
-      const updated = new Set();
-      for (const user of visibleUsers) {
-        if (prev.has(user.id)) updated.add(user.id);
+    const newVisibleIds = visibleUsers.map((u) => u.id);
+    const newSet = new Set();
+
+    // Retain only selected IDs that are still visible
+    for (const id of selectedIds) {
+      if (newVisibleIds.includes(id)) {
+        newSet.add(id);
       }
-      return updated;
-    });
+    }
+
+    // Only update state if the new set differs
+    if (newSet.size !== selectedIds.size) {
+      setSelectedIds(newSet);
+    }
   }, [visibleUsers]);
 
   const isSelected = (userId) => selectedIds.has(userId);

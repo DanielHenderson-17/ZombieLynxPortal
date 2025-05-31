@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   getAllUserData,
   promoteUser,
@@ -62,6 +62,11 @@ export default function Users() {
       );
     });
 
+  const visibleUsers = useMemo(
+    () => filteredUsers.map((u) => ({ id: u.zlgMember?.userProfileId })),
+    [filteredUsers]
+  );
+
   const {
     selectedIds,
     isSelected,
@@ -69,9 +74,7 @@ export default function Users() {
     toggleSelectAll,
     hasSelections,
     isAllSelected,
-  } = useBulkSelection(
-    filteredUsers.map((u) => ({ id: u.zlgMember?.userProfileId }))
-  );
+  } = useBulkSelection(visibleUsers);
 
   const selectedUsers = users
     .map((u) => u.zlgMember)

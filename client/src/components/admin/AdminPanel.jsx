@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
-import Users from "./Users";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import AdminPanelMobileNav from "./AdminPanelMobileNav";
 import "./AdminPanel.css";
 
@@ -38,10 +37,7 @@ export default function AdminPanel() {
 
       {/* Main Content */}
       <div className="flex-grow-1 mb-0 ticket-main">
-        <Routes>
-          <Route path="users" element={<Users />} />
-          <Route path="" element={<Users />} />
-        </Routes>
+        <Outlet />
       </div>
 
       {/* Mobile Nav */}
