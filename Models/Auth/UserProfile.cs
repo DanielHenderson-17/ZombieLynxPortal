@@ -19,5 +19,6 @@ namespace ZombieLynxPortalAPI.Models
         public User User { get; set; }
         public bool AllowMarketingEmails { get; set; } = true;
         public bool HasAcceptedTerms { get; set; } = false;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
