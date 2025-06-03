@@ -12,8 +12,12 @@ export default function PromoCard({
   const isInCart = cartItems.single.find((i) => i.package.id === pkg.id);
   const navigate = useNavigate();
 
+  if (isPromoLocked(promoReceivedDate)) {
+    return null;
+  }
+
   return (
-    <div className="buy-card2 my-3 w-100 text-white">
+    <div className="buy-card2 my-3 w-100 text-white rounded-3 shadow">
       {/* Row: Image + Text */}
       <div className="d-flex flex-row align-items-center gap-3 px-3 pt-3 pb-1">
         {/* Image */}

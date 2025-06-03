@@ -17,9 +17,9 @@ export default function Points({
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
 
   return (
-    <div className="row justify-content-start">
+    <div className="row justify-content-start bg-points rounded-3 p-2 pb-5 mb-5">
       {packages.map((pkg) => (
-        <div className="col-12 col-md-6 col-lg-4 mb-4 h-100" key={pkg.id}>
+        <div className="col-12 col-md-6 col-lg-3 mb-4 h-100" key={pkg.id}>
           <div className="card buy-card h-100">
             <img src={pkg.image} className="card-img-top" alt={pkg.name} />
             <div className="card-body">
@@ -85,7 +85,7 @@ export default function Points({
                   </button>
                 ) : (
                   <button
-                    className="btn btn-success mt-2 d-flex justify-content-start p-2"
+                    className="btn btn-success mt-2 d-flex justify-content-start px-2 py-1"
                     onClick={() => {
                       addItem(pkg, "single");
                       toast.success(`${pkg.name} added to cart!`);
