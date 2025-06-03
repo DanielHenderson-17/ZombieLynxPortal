@@ -15,6 +15,12 @@ input[type="number"] {
   color: white;
   padding: 20px 0px 0px 0px !important;
 }
+.buy-card2 {
+  background: linear-gradient(145deg, #121214, #1a1a1d);
+  outline: 1px solid #000000;
+  color: white;
+}
+
 .sub-card img {
   width: 200px;
   margin: 0 auto;
@@ -26,4 +32,27 @@ input[type="number"] {
 }
 .cart-text {
   height: 100px !important;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.shake-gift {
+  animation: shake 1s infinite ease-in-out;
+  display: inline-block;
 }

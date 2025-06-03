@@ -125,14 +125,18 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             element={<p>Select a module from the navigation above.</p>}
           />
         </Route>
+        <Route path="shop" element={<Shop loggedInUser={loggedInUser} />} />
+
+        {/* Protected Route */}
         <Route
-          path="shop"
+          path="shop/cart"
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
-              <Shop loggedInUser={loggedInUser} />
+              <Cart />
             </AuthorizedRoute>
           }
         />
+
         <Route
           path="shop/cart"
           element={

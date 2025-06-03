@@ -64,54 +64,56 @@ export default function NavBarMobileMainMenu({
       ></button>
 
       {loggedInUser && (
-        <div className="text-center my-3">
-          <div
-            className="hexagon mx-auto mb-2"
-            style={{
-              background: tierGradient,
-              width: "110px",
-              height: "110px",
-            }}
-          >
-            <img
-              src={avatarSrc}
-              alt="User Avatar"
-              className="profile-img"
-              style={{ width: "104px", height: "104px" }}
-            />
+        <div className="d-flex justify-content-start align-items-center gap-2 my-3">
+          <div>
+            <div
+              className="hexagon"
+              style={{
+                background: tierGradient,
+                width: "110px",
+                height: "110px",
+              }}
+            >
+              <img
+                src={avatarSrc}
+                alt="User Avatar"
+                className="profile-img"
+                style={{ width: "104px", height: "104px" }}
+              />
+            </div>
           </div>
 
-          <div className="fs-4 d-flex justify-content-center align-items-center gap-2">
-            <img
-              src={tierIcons[tier]}
-              alt={`${tier} Tier`}
-              style={{ width: "26px", height: "26px" }}
-            />
-            {capitalizeFirstLetter(formatDiscordName(displayName))}
-          </div>
+          <div className="d-flex flex-column justify-content-start align-items-start">
+            <div className="fs-4 d-flex align-items-center gap-2">
+              <img
+                src={tierIcons[tier]}
+                alt={`${tier} Tier`}
+                style={{ width: "26px", height: "26px" }}
+              />
+              {capitalizeFirstLetter(formatDiscordName(displayName))}
+            </div>
 
-          <div className="text-secondary small">
-            {loggedInUser?.email || "Unknown email"}
-          </div>
+            <div className="text-secondary small">
+              {loggedInUser?.email || "Unknown email"}
+            </div>
 
-          <div className="mt-1 d-flex justify-content-center align-items-center gap-2">
-            <img
-              src="/images/zlgCoin.png"
-              alt="ZLG Coin"
-              style={{ width: 25 }}
-            />
-            <strong className="fs-5">
-              {formatNumberWithCommas(userPoints)}
-            </strong>
+            <div className="mt-1 d-flex align-items-center gap-2">
+              <img
+                src="/images/zlgCoin.png"
+                alt="ZLG Coin"
+                style={{ width: 25 }}
+              />
+              <strong className="fs-5 mb-1">
+                {formatNumberWithCommas(userPoints)}
+              </strong>
+            </div>
           </div>
-
-          <hr className="bg-secondary mt-3 mb-1" />
         </div>
       )}
-
+      <hr className="bg-secondary mt-3 mb-1" />
       <nav className="d-flex flex-column gap-3">
         <button
-          className="text-white text-center bg-dark"
+          className="text-white text-start bg-dark"
           onClick={() => {
             navigate("/member/tickets");
             onClose();
@@ -120,7 +122,7 @@ export default function NavBarMobileMainMenu({
           <i className="bi bi-person-circle me-2"></i>My Profile
         </button>
         <button
-          className="text-white text-center bg-dark"
+          className="text-white text-start bg-dark"
           onClick={() => {
             navigate("/shop");
             onClose();
@@ -129,7 +131,7 @@ export default function NavBarMobileMainMenu({
           <i className="bi bi-shop-window me-2"></i>Shop
         </button>
         <button
-          className="text-white text-center bg-dark"
+          className="text-white text-start bg-dark"
           onClick={() => {
             navigate("/shop/cart");
             onClose();
@@ -139,7 +141,7 @@ export default function NavBarMobileMainMenu({
         </button>
         {loggedInUser?.role === "Admin" && (
           <button
-            className="text-white text-center bg-dark"
+            className="text-white text-start bg-dark"
             onClick={() => {
               navigate("/member/admin/users");
               onClose();
@@ -149,7 +151,7 @@ export default function NavBarMobileMainMenu({
           </button>
         )}
         <button
-          className="text-white text-center bg-dark"
+          className="text-white text-start bg-dark"
           onClick={() => {
             window.open("/discord", "_blank");
             onClose();

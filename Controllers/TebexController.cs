@@ -48,7 +48,6 @@ namespace ZombieLynxPortalAPI.Controllers
 
         // ✅ Fetch all packages from Tebex
         [HttpGet("packages")]
-        [Authorize]
         public async Task<IActionResult> GetPackages()
         {
             var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];

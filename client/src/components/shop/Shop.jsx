@@ -5,8 +5,11 @@ import { getPackages, getPromoStatus } from "../../managers/tebexManager";
 import { getToken } from "../../managers/authManager";
 import { useCart } from "../../contexts/CartContext";
 import Subscriptions from "./Subscriptions";
+import PromoCard from "./PromoCard";
 import Points from "./Points";
 import "./Shop.css";
+
+import { PROMO_PACKAGE_ID } from "../../utils/promoLockUtils";
 
 export default function Shop({ loggedInUser }) {
   const [allPackages, setAllPackages] = useState([]);
@@ -29,11 +32,12 @@ export default function Shop({ loggedInUser }) {
   }, []);
 
   useEffect(() => {
+    if (!loggedInUser) return;
     const token = getToken();
     getPromoStatus(token)
       .then((res) => setPromoReceivedDate(res.promoReceivedDate))
       .catch((err) => console.error("Failed to fetch promo status:", err));
-  }, []);
+  }, [loggedInUser]);
 
   const filteredPackages = allPackages.filter((pkg) => {
     const lower = searchTerm.toLowerCase();
@@ -51,7 +55,12 @@ export default function Shop({ loggedInUser }) {
     (pkg) => pkg.type === "single"
   );
 
-  if (!loggedInUser) return null;
+  const promoPackage = filteredSingles.find(
+    (pkg) => pkg.id === PROMO_PACKAGE_ID
+  );
+  const regularSingles = filteredSingles.filter(
+    (pkg) => pkg.id !== PROMO_PACKAGE_ID
+  );
 
   return (
     <div
@@ -59,6 +68,7 @@ export default function Shop({ loggedInUser }) {
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
+      {/* Search Bar */}
       <div className="rainbow-spin-wrapper mt-md-3 my-2 w-100 position-relative">
         <input
           type="text"
@@ -70,6 +80,21 @@ export default function Shop({ loggedInUser }) {
         <i className="bi bi-search rainbow-search-icon"></i>
       </div>
 
+      {/* Promo Card */}
+      {promoPackage && (
+        <PromoCard
+          pkg={promoPackage}
+          loggedInUser={loggedInUser}
+          promoReceivedDate={promoReceivedDate}
+          addItem={addItem}
+          toast={toast}
+          cartItems={cartItems}
+          updateQuantity={updateQuantity}
+          removeItem={removeItem}
+        />
+      )}
+
+      {/* Subscriptions */}
       <h3 className="text-start text-danger server-status-title mb-3">
         ZLG <span className="text-white ms-2">Subscriptions</span>
         <span className="server-status-line"></span>
@@ -78,20 +103,23 @@ export default function Shop({ loggedInUser }) {
         subscriptions={filteredSubscriptions}
         addItem={addItem}
         toast={toast}
+        loggedInUser={loggedInUser}
       />
 
+      {/* Points */}
       <h3 className="text-start text-danger server-status-title mb-3">
         Buy <span className="text-white ms-2">Points</span>
         <span className="server-status-line"></span>
       </h3>
       <Points
-        packages={filteredSingles}
+        packages={regularSingles}
         cartItems={cartItems}
         addItem={addItem}
         updateQuantity={updateQuantity}
         removeItem={removeItem}
         promoReceivedDate={promoReceivedDate}
         toast={toast}
+        loggedInUser={loggedInUser}
       />
 
       <ToastContainer position="top-center" autoClose={2000} theme="dark" />
