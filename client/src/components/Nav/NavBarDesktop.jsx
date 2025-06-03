@@ -56,6 +56,17 @@ export default function NavBarDesktop({
         >
           <i className="fa-solid fa-gamepad text-white fs-3"></i>
         </Link>
+        {cartCount > 0 && (
+          <Link
+            to="/shop/cart"
+            className="nav-link pe-2 ps-2 border-start border-secondary position-relative"
+          >
+            <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
+            <span className="cart-badge rounded-circle text-white bg-danger">
+              {cartCount}
+            </span>
+          </Link>
+        )}
         {!loggedInUser ? (
           <div
             className="p-0 d-flex justify-content-center align-items-center login-btn"
@@ -65,27 +76,15 @@ export default function NavBarDesktop({
             <i className="bi bi-person-circle fs-2 text-white"></i>
           </div>
         ) : (
-          <div className="d-flex justify-content-between align-items-center col-5 ms-2">
+          <div className="d-flex justify-content-between align-items-center col-5">
             <Link
               to="/member/notifications"
-              className="nav-link ps-2 pe-2 position-relative border-start border-secondary"
+              className="nav-link ps-2 pe-2 position-relative border-end border-secondary"
             >
               <i className="bi bi-bell-fill text-white fs-6 me-2"></i>
               {unreadNotifications > 0 && (
                 <span className="cart-badge rounded-circle text-white bg-danger">
                   {unreadNotifications}
-                </span>
-              )}
-            </Link>
-
-            <Link
-              to="/shop/cart"
-              className="nav-link pe-2 ps-0 border-end border-secondary position-relative me-2"
-            >
-              <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
-              {cartCount > 0 && (
-                <span className="cart-badge rounded-circle text-white bg-danger">
-                  {cartCount}
                 </span>
               )}
             </Link>

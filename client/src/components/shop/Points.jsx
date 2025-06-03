@@ -12,48 +12,90 @@ export default function Points({
   removeItem,
   promoReceivedDate,
   toast,
+  loggedInUser,
 }) {
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
 
   return (
-    <div className="row justify-content-center">
+    <div className="row justify-content-start bg-points rounded-3 p-2 pb-5 mb-5">
       {packages.map((pkg) => (
-        <div className="col-12 col-md-6 col-lg-4 mb-4 h-100" key={pkg.id}>
+        <div className="col-12 col-md-6 col-lg-3 mb-4 h-100" key={pkg.id}>
           <div className="card buy-card h-100">
             <img src={pkg.image} className="card-img-top" alt={pkg.name} />
             <div className="card-body">
-              <h6 className="card-title h-25 mb-3">{pkg.name}</h6>
+              <h5 className="card-title h-25 mb-2 text-start">{pkg.name}</h5>
               <p
-                className="card-text"
+                className="card-text text-start mb-1"
                 style={{ height: "50px" }}
                 dangerouslySetInnerHTML={{ __html: pkg.description }}
               />
-              <p className="fw-bold">Price: ${pkg.total_price}</p>
+              {(() => {
+                const [dollars, cents] = pkg.total_price.toFixed(2).split(".");
+                return (
+                  <div className="d-flex align-items-baseline text-start price-display">
+                    <span
+                      className="text-white"
+                      style={{
+                        fontSize: "0.75em",
+                        marginRight: "2px",
+                        position: "relative",
+                        top: "-.9em",
+                      }}
+                    >
+                      $
+                    </span>
+                    <span
+                      className="fw-bold"
+                      style={{ fontSize: "2rem", lineHeight: "1" }}
+                    >
+                      {dollars}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "0.9rem",
+                        position: "relative",
+                        top: "-.9em",
+                        marginLeft: "1px",
+                      }}
+                    >
+                      {cents}
+                    </span>
+                  </div>
+                );
+              })()}
 
-              {!cartItems.single.find((i) => i.package.id === pkg.id) &&
-              pkg.id === PROMO_PACKAGE_ID &&
-              isPromoLocked(promoReceivedDate) ? (
-                <button
-                  className="btn btn-secondary w-100"
-                  disabled
-                  title={`Redeemable on ${getPromoUnlockDate(
-                    promoReceivedDate
-                  )}`}
-                >
-                  Redeemable on {getPromoUnlockDate(promoReceivedDate)}
-                </button>
-              ) : !cartItems.single.find((i) => i.package.id === pkg.id) ? (
-                <button
-                  className="btn btn-success w-100"
-                  onClick={() => {
-                    addItem(pkg, "single");
-                    toast.success(`${pkg.name} added to cart!`);
-                  }}
-                >
-                  Add to Cart
-                </button>
+              {!cartItems.single.find((i) => i.package.id === pkg.id) ? (
+                !loggedInUser && pkg.name.includes("300ZP") ? (
+                  <button
+                    className="btn btn-warning mt-1 d-flex justify-content-start"
+                    disabled
+                  >
+                    Login to Claim
+                  </button>
+                ) : pkg.id === PROMO_PACKAGE_ID &&
+                  isPromoLocked(promoReceivedDate) ? (
+                  <button
+                    className="btn btn-secondary w-100"
+                    disabled
+                    title={`Redeemable on ${getPromoUnlockDate(
+                      promoReceivedDate
+                    )}`}
+                  >
+                    Redeemable on {getPromoUnlockDate(promoReceivedDate)}
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-success mt-2 d-flex justify-content-start px-2 py-1"
+                    onClick={() => {
+                      addItem(pkg, "single");
+                      toast.success(`${pkg.name} added to cart!`);
+                    }}
+                  >
+                    Add to Cart
+                  </button>
+                )
               ) : (
-                <div className="d-flex align-items-center justify-content-center mt-2">
+                <div className="d-flex align-items-center justify-content-start mt-2">
                   <button
                     className="btn btn-outline-secondary"
                     onClick={() => {
@@ -71,8 +113,8 @@ export default function Points({
                   <input
                     type="number"
                     min="1"
-                    className="form-control mx-4 text-center"
-                    style={{ maxWidth: "80px" }}
+                    className="form-control mx-2 text-center"
+                    style={{ maxWidth: "50px" }}
                     value={
                       cartItems.single.find((i) => i.package.id === pkg.id)
                         ?.quantity || 1
