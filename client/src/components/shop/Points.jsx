@@ -39,7 +39,7 @@ export default function Points({
                         fontSize: "0.75em",
                         marginRight: "2px",
                         position: "relative",
-                        top: "-.9em",
+                        top: "-1.1em",
                       }}
                     >
                       $
@@ -95,7 +95,7 @@ export default function Points({
                   </button>
                 )
               ) : (
-                <div className="d-flex align-items-center justify-content-start mt-2">
+                <div className="d-flex align-items-center justify-content-start mt-1">
                   <button
                     className="btn btn-outline-secondary"
                     onClick={() => {

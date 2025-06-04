@@ -287,7 +287,7 @@ export default function Cart() {
                       <input
                         type="number"
                         min="1"
-                        className="form-control mx-2 text-center cart-qty-input"
+                        className="form-control mx-2 text-center cart-qty-input p-1"
                         value={item.quantity}
                         onChange={(e) => {
                           const newQty = Math.max(1, parseInt(e.target.value));
