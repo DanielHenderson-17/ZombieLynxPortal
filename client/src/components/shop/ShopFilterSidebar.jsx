@@ -28,10 +28,10 @@ export default function ShopFilterSidebar({
   const [popularItems, setPopularItems] = useState([]);
 
   useEffect(() => {
-    if (!packages || packages.length === 0) return;
+    if (!packages || packages.length === 0 || popularItems.length > 0) return;
     const shuffled = [...packages].sort(() => 0.5 - Math.random());
     setPopularItems(shuffled.slice(0, 3));
-  }, []);
+  }, [packages]);
 
   return (
     <div
