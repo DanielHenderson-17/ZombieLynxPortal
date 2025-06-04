@@ -107,6 +107,11 @@ export default function Shop({ loggedInUser }) {
               setTempMaxPrice={setTempMaxPrice}
               setMinPrice={setMinPrice}
               setMaxPrice={setMaxPrice}
+              packages={regularSingles}
+              addItem={addItem}
+              toast={toast}
+              cartItems={cartItems}
+              loggedInUser={loggedInUser}
             />
           </div>
 
