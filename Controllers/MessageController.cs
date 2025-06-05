@@ -133,25 +133,5 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return NoContent();
         }
-
-        // ✅ Get number of messages from the last 60 days
-        [HttpGet("count")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult GetMessageCounts()
-        {
-            var now = DateTime.UtcNow;
-            var last30 = now.AddDays(-30);
-            var last60 = now.AddDays(-60);
-
-            var count30 = _dbContext.Messages.Count(m => m.CreatedAt >= last30);
-            var count60 = _dbContext.Messages.Count(m => m.CreatedAt >= last60);
-
-            return Ok(new
-            {
-                last30Days = count30,
-                last60Days = count60
-            });
-        }
-
     }
 }

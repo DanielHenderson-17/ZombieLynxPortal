@@ -218,5 +218,190 @@ namespace ZombieLynxPortalAPI.Controllers
             return records;
         }
 
+        [HttpGet("user-overview-30days")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUserOverviewLast30Days()
+        {
+            var now = DateTime.UtcNow;
+            var thirtyDaysAgo = now.AddDays(-30);
+
+            var joinsLast30Days = await _dbContext.UserProfiles
+                .CountAsync(p => p.CreatedAt >= thirtyDaysAgo);
+
+            var leavesLast30Days = await _dbContext.Users
+                .CountAsync(u => !u.Active && u.LastLogin >= thirtyDaysAgo);
+
+            var activeUsers = await _dbContext.Users
+                .CountAsync(u => u.Active);
+
+            var inactiveUsers = await _dbContext.Users
+                .CountAsync(u => !u.Active);
+
+            var marketingOptIns = await _dbContext.UserProfiles
+                .CountAsync(p => p.AllowMarketingEmails);
+
+            var marketingOptOuts = await _dbContext.UserProfiles
+                .CountAsync(p => !p.AllowMarketingEmails);
+
+            return Ok(new
+            {
+                joinsLast30Days,
+                leavesLast30Days,
+                activeUsers,
+                inactiveUsers,
+                marketingOptIns,
+                marketingOptOuts
+            });
+        }
+        [HttpGet("user-activity-chart-30days")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUserActivityChartLast30Days()
+        {
+            var now = DateTime.UtcNow.Date;
+            var startDate = now.AddDays(-29);
+            var endDate = now.AddDays(1);
+
+            var userProfiles = await _dbContext.UserProfiles
+                .Where(p => p.CreatedAt >= startDate && p.CreatedAt < endDate)
+                .ToListAsync();
+
+            var users = await _dbContext.Users
+                .Where(u => !u.Active && u.LastLogin >= startDate && u.LastLogin < endDate)
+                .ToListAsync();
+
+            var results = Enumerable.Range(0, 30)
+                .Select(offset =>
+                {
+                    var date = startDate.AddDays(offset).Date;
+                    var formattedDate = date.ToString("yyyy-MM-dd");
+
+                    var joins = userProfiles.Count(p => p.CreatedAt.Date == date);
+                    var leaves = users.Count(u => u.LastLogin?.Date == date);
+
+                    return new
+                    {
+                        date = formattedDate,
+                        joins,
+                        leaves
+                    };
+                })
+                .ToList();
+
+            return Ok(results);
+        }
+
+        [HttpGet("ticket-overview-30days")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetTicketOverviewLast30Days()
+        {
+            var now = DateTime.UtcNow;
+            var start = now.Date.AddDays(-30);
+
+            // 1. Total tickets created
+            var totalCreated = await _dbContext.Tickets
+                .CountAsync(t => t.CreatedAt >= start);
+
+            // 2. Messages created
+            var messageCount = await _dbContext.Messages
+                .CountAsync(m => m.CreatedAt >= start);
+
+            // 3. Average ticket duration (closed only)
+            var closedTickets = await _dbContext.Tickets
+                .Where(t => t.Status == "Closed" && t.UpdatedAt >= start)
+                .ToListAsync();
+
+            double averageDuration = 0;
+            if (closedTickets.Any())
+            {
+                var totalMinutes = closedTickets
+                    .Select(t => (t.UpdatedAt - t.CreatedAt).TotalMinutes)
+                    .Sum();
+                averageDuration = Math.Round(totalMinutes / closedTickets.Count);
+            }
+
+            // 4. Completion rate (Closed / Created)
+            var totalClosed = closedTickets.Count;
+            var completionRate = totalCreated > 0
+                ? Math.Round((double)totalClosed / totalCreated * 100, 2)
+                : 0;
+
+            // 5. Open ticket count
+            var openTickets = await _dbContext.Tickets
+                .CountAsync(t => t.Status == "Open");
+
+            // 6. Top user by ticket count
+            var topUser = await _dbContext.UserTickets
+                .Where(ut => ut.AssignedAt >= start)
+                .GroupBy(ut => ut.UserProfileId)
+                .Select(g => new
+                {
+                    UserProfileId = g.Key,
+                    TicketCount = g.Count()
+                })
+                .OrderByDescending(g => g.TicketCount)
+                .FirstOrDefaultAsync();
+
+            string discordName = "--";
+            int ticketCount = 0;
+
+            if (topUser != null)
+            {
+                var zlgMember = await _dbContext.ZLGMembers
+                    .FirstOrDefaultAsync(z => z.UserProfileId == topUser.UserProfileId);
+
+                discordName = zlgMember?.DiscordName ?? "Unknown";
+                ticketCount = topUser.TicketCount;
+            }
+
+            return Ok(new
+            {
+                totalCreatedLast30Days = totalCreated,
+                messageCountLast30Days = messageCount,
+                averageDurationMinutes = averageDuration,
+                completionRatePercent = completionRate,
+                openTicketCount = openTickets,
+                topUserByTicketCount = new
+                {
+                    ticketCount,
+                    discordName
+                }
+            });
+        }
+        [HttpGet("ticket-activity-chart-30days")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetTicketActivityChartLast30Days()
+        {
+            var now = DateTime.UtcNow.Date;
+            var startDate = now.AddDays(-29); // includes today
+            var endDate = now.AddDays(1);     // exclusive upper bound
+
+            // Get all tickets created in the range
+            var ticketCounts = await _dbContext.Tickets
+                .Where(t => t.CreatedAt >= startDate && t.CreatedAt < endDate)
+                .GroupBy(t => t.CreatedAt.Date)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
+
+            // Fill missing days with 0s
+            var fullData = Enumerable.Range(0, 30)
+                .Select(offset =>
+                {
+                    var date = startDate.AddDays(offset);
+                    var count = ticketCounts.FirstOrDefault(c => c.Date == date)?.Count ?? 0;
+                    return new
+                    {
+                        date = date.ToString("yyyy-MM-dd"),
+                        count
+                    };
+                })
+                .ToList();
+
+            return Ok(fullData);
+        }
+
     }
 }

@@ -74,3 +74,54 @@ export const getRecentMonthlyPayments = () => {
       throw error;
     });
 };
+
+/**
+ * ✅ Get user overview stats for the last 30 days
+ * @returns {Promise<object>}
+ */
+export const getUserOverviewStats = () => {
+  return fetch(`${_apiUrl}/user-overview-30days`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching user overview stats:", error);
+      throw error;
+    });
+};
+/**
+ * ✅ Get 30-day user activity chart (joins + leaves)
+ * @returns {Promise<Array<{ date: string, joins: number, leaves: number }>>}
+ */
+export const getUserActivityChartData = () => {
+  return fetch(`${_apiUrl}/user-activity-chart-30days`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching user activity chart data:", error);
+      throw error;
+    });
+};
+
+export const getTicketOverviewStats = () => {
+  return fetch(`${_apiUrl}/ticket-overview-30days`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching ticket overview stats:", error);
+      throw error;
+    });
+};
+
+export const getTicketActivityChartData = () => {
+  return fetch(`${_apiUrl}/ticket-activity-chart-30days`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching ticket activity chart data:", error);
+      throw error;
+    });
+};

@@ -6,9 +6,9 @@ import {
 import TicketData from "./TicketData";
 import UserData from "./UserData";
 import TebexData from "./TebexData";
-import UserReports from "./UserReports";
-import TicketReports from "./TicketReports";
-import TebexReports from "./TebexReports";
+import UserReports from "./UserOverview";
+import TicketReports from "./TicketOverview";
+import TebexReports from "./SalesOverview";
 
 export default function Dashboard() {
   const [ticketStats, setTicketStats] = useState(null);

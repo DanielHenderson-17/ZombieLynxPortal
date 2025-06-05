@@ -1,78 +1,41 @@
 import { useEffect, useState } from "react";
-import { getAllMessagesCount } from "../../../managers/messageManager";
-import { getMonthlyTicketStats } from "../../../managers/dashboardManager";
-import { formatDiscordName } from "../../../utils/formatDiscordName";
 import {
-  getOpenTickets,
-  getAverageTicketDuration,
-  getTopUserByTicketCount,
-  getDailyTicketCounts,
-} from "../../../managers/ticketManager";
+  getTicketOverviewStats,
+  getTicketActivityChartData,
+} from "../../../managers/dashboardManager";
+import { formatDiscordName } from "../../../utils/formatDiscordName";
 import TicketLineChart from "./TicketLineChart";
 
-export default function TicketReports() {
-  const [last30Days, setLast30Days] = useState("--");
-  const [ticketStats, setTicketStats] = useState(null);
-  const [openTicketCount, setOpenTicketCount] = useState("--");
-  const [avgDuration, setAvgDuration] = useState("--");
-  const [dailyData, setDailyData] = useState([]);
+export default function TicketOverview() {
   const [totalCreated, setTotalCreated] = useState("--");
+  const [messageCount, setMessageCount] = useState("--");
+  const [avgDuration, setAvgDuration] = useState("--");
+  const [completionRate, setCompletionRate] = useState("--");
+  const [openTickets, setOpenTickets] = useState("--");
   const [topUser, setTopUser] = useState({
     ticketCount: "--",
     discordName: "",
   });
+  const [dailyData, setDailyData] = useState([]);
 
   useEffect(() => {
-    getDailyTicketCounts()
+    getTicketOverviewStats()
       .then((data) => {
-        setDailyData(data);
-        const total = data.reduce((sum, day) => sum + day.count, 0);
-        setTotalCreated(total);
+        setTotalCreated(data.totalCreatedLast30Days);
+        setMessageCount(data.messageCountLast30Days);
+        setAvgDuration(`${data.averageDurationMinutes}m`);
+        setCompletionRate(`${data.completionRatePercent}%`);
+        setOpenTickets(data.openTicketCount);
+        setTopUser(data.topUserByTicketCount);
       })
-      .catch((err) => console.error("Failed to fetch chart data:", err));
-  }, []);
-
-  useEffect(() => {
-    getTopUserByTicketCount()
-      .then((data) => setTopUser(data))
       .catch((err) => {
-        console.error("Failed to fetch top user by ticket count", err);
+        console.error("Failed to load ticket overview stats", err, openTickets);
       });
-  }, []);
 
-  useEffect(() => {
-    getAllMessagesCount().then(({ last30Days }) => {
-      setLast30Days(last30Days);
-    });
-  }, []);
-
-  useEffect(() => {
-    getMonthlyTicketStats()
-      .then((data) => {
-        setTicketStats(data);
-      })
+    getTicketActivityChartData()
+      .then((data) => setDailyData(data))
       .catch((err) => {
-        console.error("Failed to load ticket stats", err, ticketStats);
-      });
-  }, []);
-
-  useEffect(() => {
-    getOpenTickets()
-      .then((tickets) => {
-        setOpenTicketCount(tickets.length);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch open tickets", err, openTicketCount);
-      });
-  }, []);
-
-  useEffect(() => {
-    getAverageTicketDuration()
-      .then((minutes) => {
-        setAvgDuration(`${minutes}m`);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch average ticket duration", err);
+        console.error("Failed to fetch chart data", err);
       });
   }, []);
 
@@ -102,7 +65,7 @@ export default function TicketReports() {
             {/* 2 */}
             <div className="col">
               <div className="text-white rounded p-md-3 p-1 text-start">
-                <div className="fs-3 fw-bold">{last30Days}</div>
+                <div className="fs-3 fw-bold">{messageCount}</div>
                 <div>MESSAGES</div>
               </div>
             </div>
@@ -126,7 +89,7 @@ export default function TicketReports() {
             {/* 5 */}
             <div className="col">
               <div className="text-white rounded p-md-3 p-1 text-start">
-                <div className="fs-3 fw-bold">100%</div>
+                <div className="fs-3 fw-bold">{completionRate}</div>
                 <div>COMPLETION RATE</div>
               </div>
             </div>
