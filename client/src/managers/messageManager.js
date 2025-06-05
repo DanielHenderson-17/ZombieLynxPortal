@@ -86,3 +86,18 @@ export const deleteMessage = (messageId) => {
       throw error;
     });
 };
+
+/**
+ * ✅ Get message counts for the last 30 and 60 days
+ * @returns {Promise<{ last30Days: number, last60Days: number }>}
+ */
+export const getAllMessagesCount = () => {
+  return fetch(`${_apiUrl}/count`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching message counts:", error);
+      throw error;
+    });
+};

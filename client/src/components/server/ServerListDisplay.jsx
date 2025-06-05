@@ -113,8 +113,8 @@ export default function ServerListDisplay() {
               className="modal-dialog modal-dialog-centered modal-dialog-scrollable zlg-extra-wide-modal"
               role="document"
             >
-              <div className="modal-content bg-dark text-white server-info-modal">
-                <div className="modal-header">
+              <div className="modal-content bg-dark text-white server-info-modal border border-black shadow-lg">
+                <div className="modal-header border-0">
                   <h5 className="modal-title">{activeServer.title}</h5>
                   <button
                     type="button"
@@ -126,7 +126,7 @@ export default function ServerListDisplay() {
                 <div className="modal-body">
                   {ModalContentComponent && <ModalContentComponent />}
                 </div>
-                <div className="modal-footer">
+                <div className="modal-footer border-0">
                   <button
                     type="button"
                     className="btn btn-secondary"

@@ -1,10 +1,6 @@
 export default function ASEModalContent() {
   return (
     <div className="p-md-3 p-2">
-      <div className="nk-gap" />
-      <div id="services" />
-      <div className="nk-gap-2" />
-
       <div className="d-md-flex d-block justify-content-center single-server-details mb-2">
         {/* Rates */}
         <div className="rates-container col-12 ms-0 mt-md-0 mt-3">

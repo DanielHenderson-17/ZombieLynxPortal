@@ -125,6 +125,55 @@
 .border-card {
   border: 1px solid rgb(21, 22, 21) !important;
 }
+.border-card-top {
+  border-right: 1px solid rgb(21, 22, 21) !important;
+  border-left: 1px solid rgb(21, 22, 21) !important;
+  border-top: 1px solid rgb(21, 22, 21) !important;
+  border-bottom: none !important;
+  position: relative;
+  top: 1px;
+  z-index: 2;
+}
+
+.border-card-bottom {
+  border: 1px solid rgb(21, 22, 21) !important;
+  z-index: 1;
+  position: relative;
+}
+
+.btn-no-style {
+  border: none !important;
+  background: none !important;
+  color: #ccc;
+  z-index: 0;
+}
+
+.dashboard-select:hover {
+  background-color: #212529 !important;
+}
+.btn-special {
+  background-color: #1a1a1a !important;
+  border: 1px solid #1a1a1a;
+}
+.border-special {
+  border-bottom: 1px solid #1a1a1a !important;
+}
+.tab-border-filler {
+  height: 1px;
+  background-color: rgb(21, 22, 21);
+  margin-left: 1px;
+  margin-right: 1px;
+  z-index: 0;
+  position: relative;
+}
+
+.border-card-true {
+  border: 1px solid rgb(21, 22, 21);
+  border-top: none;
+  background-color: #1a1d21;
+  position: relative;
+  z-index: 1;
+}
 .rotate-45 {
   transform: rotate(-45deg);
 }

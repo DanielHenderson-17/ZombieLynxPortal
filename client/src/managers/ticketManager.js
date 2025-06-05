@@ -224,3 +224,49 @@ export const assignUserToTicket = (ticketId, userId) => {
     }
   });
 };
+
+/**
+ * ✅ Get average ticket duration (in minutes, last 30 days)
+ * @returns {Promise<number>}
+ */
+export const getAverageTicketDuration = () => {
+  return fetch(`${_apiUrl}/average-duration`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .then((data) => data.averageDurationMinutes)
+    .catch((error) => {
+      console.error("Error fetching average ticket duration:", error);
+      throw error;
+    });
+};
+
+/**
+ * ✅ Get user with most ticket assignments in last 30 days
+ * @returns {Promise<{ ticketCount: number, discordName: string }>}
+ */
+export const getTopUserByTicketCount = () => {
+  return fetch(`${_apiUrl}/top-user`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching top ticket user:", error);
+      throw error;
+    });
+};
+
+/**
+ * ✅ Get number of tickets created per day (last 30 days)
+ * @returns {Promise<{ date: string, count: number }[]>}
+ */
+export const getDailyTicketCounts = () => {
+  return fetch(`${_apiUrl}/daily-created`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching daily ticket counts:", error);
+      throw error;
+    });
+};
