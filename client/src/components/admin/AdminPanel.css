@@ -119,6 +119,15 @@
   z-index: 1;
   pointer-events: none;
 }
+.bg-header {
+  background-color: #1a1a1a;
+}
+.border-card {
+  border: 1px solid rgb(21, 22, 21) !important;
+}
+.rotate-45 {
+  transform: rotate(-45deg);
+}
 
 @media (max-width: 576px) {
   .responsive-modal .modal-content {

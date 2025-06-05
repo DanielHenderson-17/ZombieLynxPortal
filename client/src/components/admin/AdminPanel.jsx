@@ -22,6 +22,20 @@ export default function AdminPanel() {
       <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0">
         <div>
           <Link
+            to="/member/admin/dashboard"
+            className={`text-decoration-none ${
+              location.pathname.includes("/member/admin/dashboard")
+                ? "active"
+                : ""
+            }`}
+          >
+            <button className="btn d-block w-100 text-start mb-2 text-white d-flex align-items-center">
+              <i className="bi bi-speedometer2 me-3 text-white"></i>
+              <p className="m-0 p-0">Dashboard</p>
+            </button>
+          </Link>
+
+          <Link
             to="/member/admin/users"
             className={`text-decoration-none ${
               location.pathname.includes("/member/admin/users") ? "active" : ""

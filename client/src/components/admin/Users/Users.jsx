@@ -3,14 +3,14 @@ import {
   getAllUserData,
   promoteUser,
   updateUserPoints,
-} from "../../managers/userProfileManager";
+} from "../../../managers/userProfileManager";
 import EditPointsModal from "./EditPointsModal";
 import ConfirmPointsModal from "./ConfirmPointsModal";
 import BulkEditPointsModal from "./BulkEditPointsModal";
 import UserFilterBar from "./UserFilterBar";
-import useBulkSelection from "../../hooks/useBulkSelection";
-import { formatDiscordName } from "../../utils/formatDiscordName";
-import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
+import useBulkSelection from "../../../hooks/useBulkSelection";
+import { formatDiscordName } from "../../../utils/formatDiscordName";
+import { formatNumberWithCommas } from "../../../utils/formatNumberWithCommas";
 import { toast, ToastContainer } from "react-toastify";
 
 const tierIcons = {
