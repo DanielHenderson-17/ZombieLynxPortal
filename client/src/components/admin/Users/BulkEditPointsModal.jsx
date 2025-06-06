@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { bulkEditPoints } from "../../managers/userProfileManager";
-import { formatDiscordName } from "../../utils/formatDiscordName";
+import { bulkEditPoints } from "../../../managers/userProfileManager";
+import { formatDiscordName } from "../../../utils/formatDiscordName";
 
 export default function BulkEditPointsModal({
   selectedUsers,

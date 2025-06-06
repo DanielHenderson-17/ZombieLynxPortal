@@ -21,7 +21,8 @@ import PrivacyPolicy from "../components/legal/PrivacyPolicy";
 import Rules from "../components/legal/Rules";
 import DiscordRedirect from "../components/discord/DiscordRedirect";
 import AccountSettings from "./settings/AccountSettings";
-import Users from "./admin/Users";
+import Dashboard from "./admin/Dashboard/Dashboard";
+import Users from "./admin/Users/Users";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
@@ -118,6 +119,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           >
             <Route index element={<Users />} />
             <Route path="users" element={<Users />} />
+            <Route path="dashboard" element={<Dashboard />} />
           </Route>
 
           <Route

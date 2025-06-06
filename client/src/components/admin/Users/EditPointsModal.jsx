@@ -1,4 +1,4 @@
-import { formatDiscordName } from "../../utils/formatDiscordName";
+import { formatDiscordName } from "../../../utils/formatDiscordName";
 
 export default function EditPointsModal({
   user,

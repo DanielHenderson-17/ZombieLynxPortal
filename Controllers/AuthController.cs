@@ -341,6 +341,9 @@ namespace ZombieLynxPortalAPI.Controllers
             if (!user.Verified)
                 return Unauthorized("Please verify your email before logging in.");
 
+            user.LastLogin = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
             var token = GenerateJwtToken(user);
 
             return Ok(new
@@ -604,6 +607,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 return BadRequest("Account is already deactivated.");
 
             user.Active = false;
+            user.LastLogin = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
 
             // ✅ Send goodbye email

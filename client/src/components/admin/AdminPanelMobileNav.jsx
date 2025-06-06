@@ -20,6 +20,19 @@ export default function AdminPanelMobileNav() {
         ></i>
       </button>
 
+      {/* Dashboard */}
+      <Link
+        to="/member/admin/dashboard"
+        className={`text-decoration-none d-flex flex-column align-items-center ${
+          location.pathname.includes("/member/admin/dashboard")
+            ? "text-white fs-1"
+            : "text-secondary"
+        }`}
+      >
+        <i className="bi bi-speedometer2 fs-2"></i>
+        <small className="ticket-mobile-nav-title">Dashboard</small>
+      </Link>
+
       {/* Users */}
       <Link
         to="/member/admin/users"
