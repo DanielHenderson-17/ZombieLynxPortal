@@ -1,7 +1,7 @@
 public class FlatPaymentRecord
 {
     public long TransactionId { get; set; }
-    public string Amount { get; set; }
+    public decimal Amount { get; set; }
     public DateTime Date { get; set; }
     public string PlayerName { get; set; }
     public string PlayerUuid { get; set; }

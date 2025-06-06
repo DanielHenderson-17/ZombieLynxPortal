@@ -5,10 +5,10 @@ import {
 } from "../../../managers/dashboardManager";
 import TicketData from "./TicketData";
 import UserData from "./UserData";
-import TebexData from "./TebexData";
-import UserReports from "./UserOverview";
-import TicketReports from "./TicketOverview";
-import TebexReports from "./SalesOverview";
+import SalesData from "./SalesData";
+import UserOverview from "./UserOverview";
+import TicketOverview from "./TicketOverview";
+import SalesOverview from "./SalesOverview";
 
 export default function Dashboard() {
   const [ticketStats, setTicketStats] = useState(null);
@@ -35,11 +35,11 @@ export default function Dashboard() {
   const renderTabContent = () => {
     switch (activeTab) {
       case "Sales Overview":
-        return <TebexReports />;
+        return <SalesOverview />;
       case "User Overview":
-        return <UserReports />;
+        return <UserOverview />;
       case "Ticket Overview":
-        return <TicketReports />;
+        return <TicketOverview />;
 
       default:
         return null;
@@ -54,7 +54,7 @@ export default function Dashboard() {
     >
       <div className="row g-4 w-100 mx-auto mt-0">
         <div className="col-md-4">
-          <TebexData />
+          <SalesData />
         </div>
         <div className="col-md-4">
           {userStats && <UserData stats={userStats} />}
@@ -80,7 +80,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div className="mt-0 mx-2 border-card-bottom shadow-sm mb-3">
+      <div className="mt-0 mx-2 border-card-bottom shadow-sm mb-3 bg-dark">
         {renderTabContent()}
       </div>
     </div>

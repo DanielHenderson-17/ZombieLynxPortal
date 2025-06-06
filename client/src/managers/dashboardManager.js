@@ -125,3 +125,33 @@ export const getTicketActivityChartData = () => {
       throw error;
     });
 };
+
+/**
+ * ✅ Get sales overview stats for the last 30 days
+ * @returns {Promise<object>}
+ */
+export const getSalesOverviewStats = () => {
+  return fetch(`${_apiUrl}/sales-overview-30days`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching sales overview stats:", error);
+      throw error;
+    });
+};
+
+/**
+ * ✅ Get 30-day sales chart data (daily revenue totals)
+ * @returns {Promise<Array<{ date: string, revenue: number }>>}
+ */
+export const getSalesChartData = () => {
+  return fetch(`${_apiUrl}/sales-chart-30days`, {
+    headers: getAuthHeaders(),
+  })
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .catch((error) => {
+      console.error("Error fetching sales chart data:", error);
+      throw error;
+    });
+};

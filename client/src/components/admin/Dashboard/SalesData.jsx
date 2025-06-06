@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getRecentMonthlyPayments } from "../../../managers/dashboardManager";
 
-export default function TebexData() {
+export default function SalesData() {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
