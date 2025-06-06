@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import UserLineChart from "./UserLineChart";
+import UserStatusDoughnutChart from "./UserStatusDoughnutChart";
 import {
   getUserOverviewStats,
   getUserActivityChartData,
@@ -43,9 +44,23 @@ export default function UserOverview() {
       </div>
 
       <div className="row g-3">
-        <div className="col-12 col-md-8 p-0">
-          <div className="p-md-2 p-0" style={{ height: "320px" }}>
+        <div className="col-12 col-md-8 p-0 d-md-flex d-block justify-content-center align-items-center">
+          <div
+            className="p-md-2 p-0 col-md-8 col-12"
+            style={{ height: "320px" }}
+          >
             <UserLineChart data={dailyRevenueData} />
+          </div>
+          <div className="mt-0 d-flex flex-column align-items-center gap-4">
+            <div className="w-100 text-center pb-3">
+              <h6 className="text-white mb-2">Activity</h6>
+              <div style={{}}>
+                <UserStatusDoughnutChart
+                  active={parseInt(activeUsers) || 0}
+                  inactive={parseInt(inactiveUsers) || 0}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
