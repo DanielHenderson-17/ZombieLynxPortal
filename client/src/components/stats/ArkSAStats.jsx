@@ -15,7 +15,6 @@ export default function ArkSAStats() {
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
-      <img src="/images/Kibo.png" alt="" className="kibo" />
       <h1 className="pt-md-5 pt-2 text-secondary">Ark:SA Stats Coming Soon!</h1>
     </div>
   );

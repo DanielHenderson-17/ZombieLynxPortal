@@ -120,10 +120,8 @@ export default function OpenTickets({ onTicketChange }) {
                 You have no open tickets.
               </p>
             </div>
-            <img src="/images/Kaeneko.png" alt="" className="kaeneko" />
           </div>
           <div className="d-block d-md-none no-tickets justify-content-center align-items-center">
-            <img src="/images/Kaeneko.png" alt="" className="kaeneko" />
             <div>
               <p className="mt-2 pt-2 text-white fs-4">
                 You have no open tickets.

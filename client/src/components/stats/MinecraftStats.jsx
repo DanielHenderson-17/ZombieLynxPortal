@@ -15,7 +15,6 @@ export default function MinecraftStats() {
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
-      <img src="/images/Kibo.png" alt="" className="kibo" />
       <h1 className="pt-md-5 pt-2 text-secondary">
         Minecraft Stats Coming Soon!
       </h1>
