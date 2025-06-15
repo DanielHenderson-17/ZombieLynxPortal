@@ -244,6 +244,24 @@ export const deactivateAccount = () => {
   });
 };
 
+/**
+ * ✅ Fetch linked account status
+ * @returns {Promise<{ steamLinked: boolean, epicLinked: boolean, minecraftLinked: boolean }>}
+ */
+export const getLinkedStatus = () => {
+  const token = getToken();
+  return fetch(`${apiUrl}/linked-status`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  }).then(async (res) => {
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText || "Failed to get linked status.");
+    }
+    return res.json();
+  });
+};
+
 /* ============================================================================
  * 🔐 PASSWORD RESET
  * ========================================================================== */

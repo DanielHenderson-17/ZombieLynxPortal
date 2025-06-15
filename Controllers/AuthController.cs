@@ -592,7 +592,6 @@ namespace ZombieLynxPortalAPI.Controllers
         public async Task<IActionResult> DeactivateAccount()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             if (userId == null)
                 return Unauthorized("User ID not found in token.");
 
@@ -606,20 +605,32 @@ namespace ZombieLynxPortalAPI.Controllers
             if (!user.Active)
                 return BadRequest("Account is already deactivated.");
 
+            var zlgMember = await _context.ZLGMembers
+                .FirstOrDefaultAsync(m => m.UserProfileId == user.Profile.Id);
+
+            if (zlgMember == null)
+                return BadRequest("Linked account data not found.");
+
+            if (!string.IsNullOrEmpty(zlgMember.SteamId) ||
+                !string.IsNullOrEmpty(zlgMember.EosId) ||
+                !string.IsNullOrEmpty(zlgMember.MinecraftUuid))
+            {
+                return BadRequest("Please unlink all game accounts (Steam, Epic, Minecraft) before deactivating your account.");
+            }
+
             user.Active = false;
             user.LastLogin = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
-            // ✅ Send goodbye email
             var subject = "Your Zombie Lynx account has been deactivated";
             var body = $@"
-                <p>Hey {user.Profile.FirstName},</p>
-                <p>Your account has been successfully deactivated as requested.</p>
-                <p>Thank you for being a part of the Zombie Lynx Gaming community. 🧟‍♀️</p>
-                <p>We hope to see you again someday!</p>
-                <p>- The ZLG Team</p>
-                ";
+        <p>Hey {user.Profile.FirstName},</p>
+        <p>Your account has been successfully deactivated as requested.</p>
+        <p>Thank you for being a part of the Zombie Lynx Gaming community. 🧟‍♀️</p>
+        <p>We hope to see you again someday!</p>
+        <p>- The ZLG Team</p>
+        ";
 
             await _emailSender.SendEmailAsync(user.Email, subject, body);
 
@@ -655,5 +666,33 @@ namespace ZombieLynxPortalAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        [HttpGet("linked-status")]
+        [Authorize]
+        public async Task<IActionResult> GetLinkedStatus()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized("User ID not found in token.");
+
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            var zlgMember = await _context.ZLGMembers
+                .FirstOrDefaultAsync(z => z.UserProfileId == user.Profile.Id);
+
+            if (zlgMember == null)
+                return NotFound("ZLG member not found.");
+
+            return Ok(new
+            {
+                steamLinked = !string.IsNullOrEmpty(zlgMember.SteamId),
+                epicLinked = !string.IsNullOrEmpty(zlgMember.EosId),
+                minecraftLinked = !string.IsNullOrEmpty(zlgMember.MinecraftUuid)
+            });
+        }
     }
 }

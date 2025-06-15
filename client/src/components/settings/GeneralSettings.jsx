@@ -5,6 +5,7 @@ import {
   deactivateAccount,
   logout,
 } from "../../managers/authManager";
+import { getLinkedStatus } from "../../managers/authManager";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -79,6 +80,23 @@ export default function GeneralSettings() {
       toast.error(err.message || "Failed to update account.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const confirmDeactivation = async () => {
+    try {
+      const status = await getLinkedStatus();
+      if (status.steamLinked || status.epicLinked || status.minecraftLinked) {
+        toast.error("Unlink all game accounts before deactivating.");
+        setTimeout(() => {
+          window.location.href = "/member/settings/linked-accounts";
+        }, 4000);
+        return;
+      }
+
+      setShowDeactivateModal(true);
+    } catch (err) {
+      toast.error(err.message || "Failed to check linked accounts.");
     }
   };
 
@@ -210,7 +228,7 @@ export default function GeneralSettings() {
           <div className="col-auto">
             <button
               className="btn btn-outline-danger"
-              onClick={() => setShowDeactivateModal(true)}
+              onClick={confirmDeactivation}
             >
               Deactivate
             </button>
