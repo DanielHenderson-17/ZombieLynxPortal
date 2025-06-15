@@ -66,7 +66,6 @@ Welcome to the official web portal of **Zombie Lynx Gaming (ZLG)** — a central
   - Reopen or close tickets
   - Add/remove users from ticket channels
 - Supports full lifecycle management:
-
   - Ticket creation
   - Channel generation in Discord
   - Message syncing with frontend panel
@@ -78,7 +77,8 @@ Welcome to the official web portal of **Zombie Lynx Gaming (ZLG)** — a central
 ## 🖥 Server Monitoring & Status
 
 - View live server stats using external APIs:
-  - **Ark:SE**, **Ark:SA**
+  - **Ark:SE**
+  - **Ark:SA**
   - **Minecraft**
   - **Empyrion**
   - **Eco**
@@ -104,12 +104,45 @@ Welcome to the official web portal of **Zombie Lynx Gaming (ZLG)** — a central
 ## 🛠 Admin Tools
 
 - Fully functional admin dashboard:
-
   - Adjust user points manually
   - Promote or demote account statuses
   - View system logs and linked accounts
 
 <img src="screenshots/admin.png" alt="" width="600"/>
+
+---
+
+## 📊 Real-Time CRM Dashboard (Admin Panel)
+
+A fully developed internal **CRM & analytics suite** is available to administrators. It provides real-time visibility into system performance, sales, user behavior, and ticket management. All stats are visualized using interactive charts and graphs.
+
+### 💰 Sales Overview
+
+- **Month-to-date revenue**
+- **Last 30 days total**
+- **Transaction count**
+- **Average payment**
+- **Daily revenue average**
+- **Top buyer info** (name + total spent)
+
+### 👥 User Overview
+
+- Tracks **daily joins**, **leaves**, and **platform activity**
+- View spikes or drops in player base across services
+
+### 🎟 Ticket Metrics
+
+- **Total open/closed tickets**
+- **Average response time**
+- **Average resolution time**
+- **Completion rate** by staff
+- Live charting + performance over time
+
+All dashboards update **live** and are part of the `/admin` section.
+
+<img src="screenshots/crm1.png" alt="CRM Dashboard - Revenue & Tickets" width="600"/>
+<img src="screenshots/crm2.png" alt="CRM Dashboard - User Activity" width="600"/>
+<img src="screenshots/crm3.png" alt="CRM Dashboard - Ticket Analytics" width="600"/>
 
 ---
 
