@@ -115,6 +115,20 @@ builder.Services.AddDbContext<ArkLinkPointsDbContext>((serviceProvider, options)
     });
 });
 
+builder.Services.AddDbContext<ArkStatsDbContext>(options =>
+{
+    var connString = builder.Configuration.GetSection("StatsConnectionStrings")["ArkStats"];
+
+    options.UseMySQL(connString, mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
+    });
+});
+
 
 // Configure MySQL for AsaShop
 builder.Services.AddDbContext<AsaShopDbContext>((serviceProvider, options) =>
