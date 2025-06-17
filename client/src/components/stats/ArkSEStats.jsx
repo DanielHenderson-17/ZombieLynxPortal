@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Stats.css";
+import ArkSEKD from "./ArkSEKD";
 
 export default function ArkSEStats() {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,7 +16,10 @@ export default function ArkSEStats() {
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
-      <h1 className="pt-md-5 pt-2 text-secondary">Ark:SE Stats Coming Soon!</h1>
+      <div className="pt-md-5 pt-2 text-center text-secondary">
+        <h1 className="mb-4">Ark:SE Stats</h1>
+        <ArkSEKD />
+      </div>
     </div>
   );
 }
