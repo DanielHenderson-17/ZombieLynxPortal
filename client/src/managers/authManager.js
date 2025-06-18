@@ -318,3 +318,24 @@ export const resetPassword = (token, newPassword, confirmPassword) => {
       throw error;
     });
 };
+
+/**
+ * ✅ Get the logged-in user's Discord account info
+ * @returns {Promise<{ discordUsername: string, discordId: string, discordImgUrl: string } | null>}
+ */
+export const getLinkedDiscordAccount = () => {
+  const token = getToken();
+  if (!token) return Promise.resolve(null);
+
+  return fetch(`${apiUrl}/discord`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => (res.ok ? res.json() : null))
+    .catch((err) => {
+      console.error("❌ Error fetching linked Discord account:", err);
+      return null;
+    });
+};

@@ -694,5 +694,34 @@ namespace ZombieLynxPortalAPI.Controllers
                 minecraftLinked = !string.IsNullOrEmpty(zlgMember.MinecraftUuid)
             });
         }
+        [HttpGet("discord")]
+        [Authorize]
+        public async Task<IActionResult> GetDiscordIdentity()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized("User ID not found in token.");
+
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null || user.Profile == null)
+                return NotFound("User or profile not found.");
+
+            var zlgMember = await _context.ZLGMembers
+                .FirstOrDefaultAsync(z => z.UserProfileId == user.Profile.Id);
+
+            if (zlgMember == null || string.IsNullOrEmpty(zlgMember.DiscordName))
+                return NotFound("Discord account not linked.");
+
+            return Ok(new
+            {
+                discordId = zlgMember.DiscordId,
+                discordUsername = zlgMember.DiscordName,
+                discordImgUrl = zlgMember.DiscordImgUrl
+            });
+        }
+
     }
 }

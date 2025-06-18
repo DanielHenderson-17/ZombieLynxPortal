@@ -12,7 +12,7 @@ import {
   getKDChartBackgroundData,
   getKDChartOverlayData,
   getKDChartOptions,
-} from "../../utils/KDChartOptions";
+} from "../../utils/ASEKDChartOptions";
 
 import "./Stats.css";
 
@@ -61,7 +61,7 @@ ChartJS.register({
   },
 });
 
-export default function ArkSEKD() {
+export default function ArkSEPVP() {
   const canvasRef = useRef(null);
   const [backgroundData, setBackgroundData] = useState(null);
   const [overlayData, setOverlayData] = useState(null);
@@ -101,7 +101,8 @@ export default function ArkSEKD() {
     return <canvas ref={canvasRef} className="d-none" />;
 
   return (
-    <div className="kd-chart-wrapper">
+    <div className="chart-shell position-relative">
+      {/* Base Gradient Chart */}
       <Doughnut
         data={backgroundData}
         options={{
@@ -109,6 +110,8 @@ export default function ArkSEKD() {
           plugins: { ...chartOptions.plugins, needle: undefined },
         }}
       />
+
+      {/* Overlay Needle Chart */}
       <Doughnut
         id="kd-overlay"
         data={overlayData}
@@ -116,41 +119,59 @@ export default function ArkSEKD() {
           ...chartOptions,
           plugins: {
             ...chartOptions.plugins,
-            needle: {
-              value: clampedKD,
-            },
+            needle: { value: clampedKD },
           },
         }}
-        className="kd-chart-overlay"
+        className="position-absolute top-0 start-0 w-100 h-100"
       />
-      <div className="kd-chart-label w-100">
-        K/D: <span className="d-inline">{kdValue}</span>
+
+      {/* Center K/D Label */}
+      <div
+        className="position-absolute text-white fw-bold"
+        style={{
+          top: "92%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          fontSize: "1.7rem",
+          textShadow:
+            "-1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444, 1px 1px 0 #444",
+        }}
+      >
+        K/D: <span>{kdValue}</span>
       </div>
 
-      {/* ✅ Legend inside chart wrapper */}
-      <div className="kd-chart-legend">
-        <div className="legend-item">
-          <div className="legend-box" style={{ background: "#5a0000" }} />
-          <span>Poor</span>
+      {/* Stat Block */}
+      <div className="kd-chart-stats d-flex justify-content-around text-white text-center w-100">
+        <div className="stat-block d-flex flex-column align-items-center">
+          <span className="stat-label">Kills</span>
+          <span className="stat-value">{stats?.playerKills ?? 0}</span>
         </div>
-        <div className="legend-item">
-          <div className="legend-box" style={{ background: "#ff6600" }} />
-          <span>Average</span>
+        <div className="stat-block d-flex flex-column align-items-center">
+          <span className="stat-label">PvP Damage</span>
+          <span className="stat-value">{stats?.pvPDamage ?? 0}</span>
         </div>
-        <div className="legend-item">
-          <div className="legend-box" style={{ background: "#ffcc00" }} />
-          <span>Above Avg</span>
-        </div>
-        <div className="legend-item">
-          <div className="legend-box" style={{ background: "#33cc33" }} />
-          <span>Excellent</span>
+        <div className="stat-block d-flex flex-column align-items-center">
+          <span className="stat-label">Deaths</span>
+          <span className="stat-value">{stats?.playerDeaths ?? 0}</span>
         </div>
       </div>
-      {/* ✅ Top-right stat block */}
-      <div className="kd-chart-stats">
-        <div>Kills: {stats?.playerKills ?? 0}</div>
-        <div>Deaths: {stats?.playerDeaths ?? 0}</div>
-        <div>PvP Damage: {stats?.pvPDamage ?? 0}</div>
+
+      {/* Legend */}
+      <div className="kd-chart-legend position-absolute start-0 w-100 px-2 text-white small d-flex justify-content-center gap-3">
+        {[
+          { label: "Poor", color: "#7a032a" },
+          { label: "Average", color: "#6b0dac" },
+          { label: "Above Avg", color: "#443a8b" },
+          { label: "Excellent", color: "#1b178b" },
+        ].map((item) => (
+          <div key={item.label} className="d-flex align-items-center gap-1">
+            <div
+              className="legend-box"
+              style={{ backgroundColor: item.color }}
+            />
+            <span>{item.label}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

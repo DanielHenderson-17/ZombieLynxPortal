@@ -1,25 +1,29 @@
-// ✅ Base color chart — no labels
 export function getKDChartBackgroundData(ctx) {
   const gradient = ctx.createLinearGradient(0, 0, 320, 0);
-  gradient.addColorStop(0, "#5a0000"); //  dark red
-  gradient.addColorStop(0, "#8B0000"); //  deep red
-  gradient.addColorStop(0.15, "#ff0000"); //  red
-  gradient.addColorStop(0.25, "#ff6600"); //  orange
-  gradient.addColorStop(0.35, "#ffcc00"); //  yellow
-  gradient.addColorStop(0.45, "#ccff66"); // lime-yellow
-  gradient.addColorStop(0.55, "#66ff66"); // light green
-  gradient.addColorStop(0.7, "#33cc33"); // green
-  gradient.addColorStop(1, "#008000"); // ✅ saturated green
+
+  // 🔴 Aggressively dominant red
+  gradient.addColorStop(0.0, "#300000"); // blood red
+  gradient.addColorStop(0.1, "#4B0000"); // dark red
+  gradient.addColorStop(0.2, "#8B0000"); // classic dark red
+  gradient.addColorStop(0.3, "#B22222"); // firebrick
+  gradient.addColorStop(0.4, "#800000"); // base red
+
+  // 🟣 Compressed purple transition
+  gradient.addColorStop(0.6, "#6A0DAD"); // violet
+  gradient.addColorStop(0.75, "#483D8B"); // dark slate blue
+
+  // 🔵 Final blue wedge
+  gradient.addColorStop(1.0, "#00008B"); // navy
 
   return {
     labels: [""],
     datasets: [
       {
-        data: [1], // single arc for gradient to work
-        backgroundColor: [gradient], // ✅ WRAPPED IN ARRAY
+        data: [1],
+        backgroundColor: [gradient],
         borderColor: "rgba(255, 255, 255, 0.1)",
         borderWidth: 1,
-        cutout: "70%",
+        cutout: "65%",
         circumference: 180,
         rotation: -90,
         datalabels: {
@@ -47,11 +51,11 @@ export function getKDChartOverlayData() {
           "#666",
           "#555",
         ],
-        borderColor: "gray",
+        borderColor: "darkgray",
         borderWidth: 1,
         circumference: 180,
         rotation: -90,
-        cutout: "84%",
+        cutout: "90%",
         radius: "102%",
         datalabels: {
           color: "#fff",

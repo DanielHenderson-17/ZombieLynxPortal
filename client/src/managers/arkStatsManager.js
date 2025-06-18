@@ -87,3 +87,57 @@ export const getKDStatSummary = () => {
       return null;
     });
 };
+
+/**
+ * ✅ Get PvP stat summary for current user (min, max, avg per metric)
+ * @returns {Promise<object|null>}
+ */
+export const getPVPSummaryStats = () => {
+  if (!isMainJwtValid()) return Promise.resolve(null);
+
+  return fetch(`${ARK_STATS_API_BASE_URL}/pvp-summary`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${getMainJwtToken()}` },
+  })
+    .then((res) => (res.ok ? res.json() : null))
+    .catch((err) => {
+      console.error("❌ Error fetching PvP stat summary:", err);
+      return null;
+    });
+};
+
+/**
+ * ✅ Get top 10 players by KD (for leaderboard)
+ * @returns {Promise<Array|null>}
+ */
+export const getTopTenArkStats = () => {
+  if (!isMainJwtValid()) return Promise.resolve(null);
+
+  return fetch(`${ARK_STATS_API_BASE_URL}/pvp-top-ten`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${getMainJwtToken()}` },
+  })
+    .then((res) => (res.ok ? res.json() : null))
+    .catch((err) => {
+      console.error("❌ Error fetching top 10 Ark PvP stats:", err);
+      return null;
+    });
+};
+
+/**
+ * ✅ Get tribe stats for the current user's tribe
+ * @returns {Promise<{TribeName: string, Members: Array}>}
+ */
+export const getMyTribeStats = () => {
+  if (!isMainJwtValid()) return Promise.resolve(null);
+
+  return fetch(`${ARK_STATS_API_BASE_URL}/tribe`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${getMainJwtToken()}` },
+  })
+    .then((res) => (res.ok ? res.json() : null))
+    .catch((err) => {
+      console.error("❌ Error fetching tribe stats:", err);
+      return null;
+    });
+};
