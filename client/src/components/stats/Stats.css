@@ -3,6 +3,58 @@
   background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
 
+.chart-shell {
+  position: relative;
+  height: 150px;
+}
+
+.kd-chart-legend {
+  bottom: -30px;
+}
+
+.legend-box {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.kd-chart-stats {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.leaderboard-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.stat-card {
+  height: 250px !important;
+}
+.dino-card {
+  background-color: #1a1e22 !important;
+}
+
+.extra-small {
+  font-size: 0.7rem;
+}
 @media (max-width: 767.98px) {
   .kibo {
     height: 60%;
