@@ -1,6 +1,7 @@
 .stats-container {
   height: 100%;
   background: linear-gradient(145deg, #1a1d20, #1d2027);
+  overflow-x: hidden;
 }
 
 .chart-shell {
@@ -48,6 +49,7 @@
 .stat-card {
   height: 250px !important;
 }
+
 .dino-card {
   background-color: #1a1e22 !important;
 }
@@ -55,9 +57,80 @@
 .extra-small {
   font-size: 0.7rem;
 }
+
+.leaderboard-avatar {
+  width: 32px;
+  height: 32px;
+}
+.stat-label-sm {
+  font-size: 1rem;
+}
+
 @media (max-width: 767.98px) {
-  .kibo {
-    height: 60%;
-    margin-top: 10px;
+  .notifications-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    overflow-x: hidden;
+  }
+
+  .stat-card {
+    width: 100% !important;
+    margin: 0 auto;
+  }
+
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .col-12 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .ase-leaderboard-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ase-leaderboard-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .ase-leaderboard-table .player-col {
+    width: 35% !important;
+  }
+
+  .ase-leaderboard-table .stat-col {
+    width: 16% !important;
+    text-align: right;
+  }
+
+  .ase-leaderboard-table td.player-col > div {
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .ase-leaderboard-table td.player-col span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .ase-leaderboard-table td,
+  .ase-leaderboard-table th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .leaderboard-avatar {
+    width: 25px;
+    height: 25px;
+  }
+  .stat-label-sm {
+    font-size: 0.6rem;
   }
 }

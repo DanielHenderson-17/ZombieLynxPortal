@@ -5,9 +5,36 @@ export default function StatsMobileNav() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(true);
 
+  const navLinks = [
+    {
+      path: "/member/stats/arkse",
+      label: "Ark:SE",
+      icon: "/ase-logo.webp",
+      active: location.pathname.includes("/member/stats/arkse"),
+    },
+    {
+      path: "/member/stats/arksa",
+      label: "Ark:SA",
+      icon: "/asa-logo.webp",
+      active: location.pathname.includes("/member/stats/arksa"),
+    },
+    {
+      path: "/member/stats/minecraft",
+      label: "Minecraft",
+      icon: "/minecraft-logo.avif",
+      active: location.pathname.includes("/member/stats/minecraft"),
+    },
+    {
+      path: "/member/stats/rust",
+      label: "Rust",
+      icon: "/rust-logo.svg",
+      active: location.pathname.includes("/member/stats/rust"),
+    },
+  ];
+
   return (
     <div
-      className={`d-lg-none position-fixed ticket-float-nav py-3 px-3 bg-dark rounded-end-0 rounded-3 shadow ${
+      className={`d-lg-none position-fixed ticket-float-nav py-2 px-2 bg-dark rounded-end-0 rounded-3 shadow ${
         isOpen ? "ticket-float-open" : "ticket-float-closed"
       }`}
     >
@@ -20,57 +47,26 @@ export default function StatsMobileNav() {
         ></i>
       </button>
 
-      {/* Ark:SE */}
-      <Link
-        to="/member/stats/arkse"
-        className={`text-decoration-none d-flex flex-column align-items-center mb-2 ${
-          location.pathname.includes("/member/stats/arkse")
-            ? "text-white fs-1"
-            : "text-secondary"
-        }`}
-      >
-        <i className="bi bi-graph-up fs-2"></i>
-        <small className="ticket-mobile-nav-title">Ark:SE</small>
-      </Link>
-
-      {/* Ark:SA */}
-      <Link
-        to="/member/stats/arksa"
-        className={`text-decoration-none d-flex flex-column align-items-center mb-2 ${
-          location.pathname.includes("/member/stats/arksa")
-            ? "text-white fs-1"
-            : "text-secondary"
-        }`}
-      >
-        <i className="bi bi-bar-chart fs-2"></i>
-        <small className="ticket-mobile-nav-title">Ark:SA</small>
-      </Link>
-
-      {/* Minecraft */}
-      <Link
-        to="/member/stats/minecraft"
-        className={`text-decoration-none d-flex flex-column align-items-center mb-2 ${
-          location.pathname.includes("/member/stats/minecraft")
-            ? "text-white fs-1"
-            : "text-secondary"
-        }`}
-      >
-        <i className="bi bi-cube fs-2"></i>
-        <small className="ticket-mobile-nav-title">Minecraft</small>
-      </Link>
-
-      {/* Rust */}
-      <Link
-        to="/member/stats/rust"
-        className={`text-decoration-none d-flex flex-column align-items-center ${
-          location.pathname.includes("/member/stats/rust")
-            ? "text-white fs-1"
-            : "text-secondary"
-        }`}
-      >
-        <i className="bi bi-hammer fs-2"></i>
-        <small className="ticket-mobile-nav-title">Rust</small>
-      </Link>
+      {navLinks.map(({ path, label, icon, active }) => (
+        <Link
+          key={path}
+          to={path}
+          className={`text-decoration-none d-flex flex-column align-items-center mb-2 ${
+            active ? "text-white fs-1" : "text-secondary"
+          }`}
+        >
+          <img
+            src={icon}
+            alt={label}
+            width={28}
+            height={28}
+            style={{
+              filter: active ? "none" : "grayscale(100%) brightness(60%)",
+            }}
+          />
+          <small className="ticket-mobile-nav-title">{label}</small>
+        </Link>
+      ))}
     </div>
   );
 }
