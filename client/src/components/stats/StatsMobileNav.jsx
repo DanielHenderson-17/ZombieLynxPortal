@@ -21,7 +21,7 @@ export default function StatsMobileNav() {
     {
       path: "/member/stats/minecraft",
       label: "Minecraft",
-      icon: "/minecraft-logo.avif",
+      icon: "/minecraft-logo.png",
       active: location.pathname.includes("/member/stats/minecraft"),
     },
     {

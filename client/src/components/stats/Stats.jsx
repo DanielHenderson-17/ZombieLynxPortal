@@ -27,7 +27,7 @@ export default function Stats({ loggedInUser }) {
     {
       path: "minecraft",
       label: "Minecraft",
-      icon: <img src="/minecraft-logo.avif" alt="" width={24} height={24} />,
+      icon: <img src="/minecraft-logo.png" alt="" width={24} height={24} />,
       active: location.pathname.includes("/member/stats/minecraft"),
     },
     {
