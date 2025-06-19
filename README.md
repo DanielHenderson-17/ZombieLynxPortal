@@ -101,6 +101,22 @@ Welcome to the official web portal of **Zombie Lynx Gaming (ZLG)** — a central
 
 ---
 
+## 📈 Player Stats & Leaderboards
+
+- Players can **view their personal statistics**, including:
+  - Kills, deaths, K/D ratio, and PvP damage
+- Live **top 10 leaderboard** available for each supported game:
+  - Ark: Survival Evolved, Ark: Survival Ascended, Minecraft, Rust
+- **Team-based stat comparison**: players can compare their stats with linked tribe/clan members.
+- Includes **PvE-focused metrics** such as:
+  - Dino tames, boss kills, OSD completions, missions, resource gathering
+- All stats are normalized and visualized through **interactive charts** on the portal.
+- Data is fetched and synced in real-time from multiple game servers.
+
+<img src="screenshots/stats.png" alt="Player Stats Dashboard" width="600"/>
+
+---
+
 ## 🛠 Admin Tools
 
 - Fully functional admin dashboard:
