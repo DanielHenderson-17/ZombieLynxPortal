@@ -29,9 +29,11 @@
   height: 25px;
 }
 .member-header {
+  padding-left: 56px;
   height: 130px;
 }
 .member-content {
+  padding-left: 56px;
   height: 86vh;
   background: linear-gradient(145deg, #1a1d20, #1d2027);
 }
@@ -182,10 +184,16 @@
 }
 
 .member-desktop-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
   width: 56px;
   overflow: hidden;
   transition: width 0.2s ease;
-  height: 100% !important;
+  height: 100vh;
+  pointer-events: auto;
+  background: linear-gradient(145deg, #1a1d20, #292e38);
 }
 
 .member-desktop-wrapper:hover,
@@ -247,8 +255,10 @@
   .member-header {
     height: 100% !important;
     padding-bottom: 20px;
+    padding-left: 0px;
   }
   .member-content {
+    padding: 5px;
     height: 71vh;
   }
   .member-layout {
