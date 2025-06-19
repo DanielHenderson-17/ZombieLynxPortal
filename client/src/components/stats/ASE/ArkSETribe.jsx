@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getMyTribeStats } from "../../managers/arkStatsManager";
-import { getLinkedDiscordAccount } from "../../managers/authManager";
-import { formatDiscordName } from "../../utils/formatDiscordName";
+import { getMyTribeStats } from "../../../managers/arkStatsManager";
+import { getLinkedDiscordAccount } from "../../../managers/authManager";
+import { formatDiscordName } from "../../../utils/formatDiscordName";
 
 const fallbackAvatar = "https://cdn.discordapp.com/embed/avatars/0.png";
 
@@ -32,7 +32,7 @@ export default function ArkSETribe() {
 
   return (
     <div className="text-white small">
-      <h6 className="text-start my-1">Tribe: {tribeName}</h6>
+      <h6 className="text-start my-1">{tribeName}</h6>
       <div className="table-responsive">
         <table
           className="table table-dark table-borderless table-sm align-middle mb-0"

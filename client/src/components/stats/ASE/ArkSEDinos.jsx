@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMyArkStats } from "../../managers/arkStatsManager";
+import { getMyArkStats } from "../../../managers/arkStatsManager";
 
 export default function ArkSEDinos() {
   const [stats, setStats] = useState(null);

@@ -6,15 +6,13 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import {
   getMyArkStats,
   getKDStatSummary,
-} from "../../managers/arkStatsManager";
+} from "../../../managers/arkStatsManager";
 
 import {
   getKDChartBackgroundData,
   getKDChartOverlayData,
   getKDChartOptions,
-} from "../../utils/ASEKDChartOptions";
-
-import "./Stats.css";
+} from "../../../utils/ASEKDChartOptions";
 
 ChartJS.register(ArcElement, Tooltip, Title, Legend, ChartDataLabels);
 
