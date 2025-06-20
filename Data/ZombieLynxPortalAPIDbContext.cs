@@ -30,8 +30,8 @@ namespace ZombieLynxPortalAPI.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<VoteResult> VoteResults { get; set; }
-
-
+        public DbSet<BattlePassProgress> BattlePassProgress { get; set; }
+        public DbSet<BattlePassClaim> BattlePassClaims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -333,6 +333,30 @@ namespace ZombieLynxPortalAPI.Data
                 .WithMany()
                 .HasForeignKey(vr => vr.ZLGMemberId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ Battle Pass Progress Relationship
+            modelBuilder.Entity<BattlePassProgress>()
+                .HasOne(p => p.ZLGMember)
+                .WithMany()
+                .HasForeignKey(p => p.ZLGMemberId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ Battle Pass Claim Relationship
+            modelBuilder.Entity<BattlePassClaim>()
+                .HasOne(c => c.ZLGMember)
+                .WithMany()
+                .HasForeignKey(c => c.ZLGMemberId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ✅ Unique constraint: 1 progress per ZLGMember
+            modelBuilder.Entity<BattlePassProgress>()
+                .HasIndex(p => p.ZLGMemberId)
+                .IsUnique();
+
+            // ✅ Unique constraint: 1 claim per level per ZLGMember
+            modelBuilder.Entity<BattlePassClaim>()
+                .HasIndex(c => new { c.ZLGMemberId, c.LevelNumber })
+                .IsUnique();
         }
     }
 }
