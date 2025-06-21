@@ -21,6 +21,7 @@ premium:
 battle_passes:
   1:
     name: "Season of Shadows"
+    img: "/images/bp_banners/season_of_shadows.webp"
     start: "2025-05-01"
     end: "2025-07-01"
     rewards:

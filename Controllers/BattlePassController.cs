@@ -43,6 +43,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 return Ok(new
                 {
                     name = activeSeason.Name,
+                    img = activeSeason.Img,
                     start = activeSeason.Start,
                     end = activeSeason.End,
                     xpPerLevel = config.XpPerLevel,
@@ -50,6 +51,7 @@ namespace ZombieLynxPortalAPI.Controllers
                     premium = config.Premium,
                     rewards = activeSeason.Rewards
                 });
+
             }
             catch (Exception ex)
             {
@@ -107,11 +109,11 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(new
             {
-                xp = xp,
+                xp,
                 hasPremium = progress?.HasPremium ?? false,
                 premiumPurchasedAt = progress?.PremiumPurchasedAt,
                 claimedLevels = claims,
-                claimableLevels = claimableLevels,
+                claimableLevels,
                 rewards = activeSeason.Rewards
             });
         }
@@ -313,7 +315,7 @@ namespace ZombieLynxPortalAPI.Controllers
                 return NotFound("Active battle pass config not found.");
 
             var claimable = activeSeason.Rewards
-                .Where(r => (r.Key * config.XpPerLevel) <= progress.XP && !alreadyClaimed.Contains(r.Key))
+                .Where(r => (r.Key * config.XpPerLevel) <= progress.XP && (!r.Value.Premium || progress.HasPremium) && !alreadyClaimed.Contains(r.Key))
                 .Select(r => new BattlePassClaim
                 {
                     ZLGMemberId = zlgMember.Id,

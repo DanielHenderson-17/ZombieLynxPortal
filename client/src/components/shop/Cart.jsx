@@ -199,7 +199,7 @@ export default function Cart() {
         <span className="server-status-line"></span>
       </h3>
 
-      <div className="cart p-5 rounded mt-5">
+      <div className="cart p-md-5 p-2 rounded mt-md-5 mt-3">
         {singleItems.length === 0 && !subscription ? (
           <h5 className="text-start text-white">
             Your cart is empty{" "}
@@ -214,34 +214,53 @@ export default function Cart() {
           <>
             {/* Subscription */}
             {subscription && (
-              <div className="row align-items-center mb-2 p-md-3 p-1 rounded cart-item">
-                <div className="col-md-7 d-flex align-items-center">
-                  <img
-                    src={subscription.image}
-                    alt={subscription.name}
-                    className="cart-item-img me-3"
-                  />
-                  <span className="text-start">{subscription.name}</span>
-                </div>
-                <div className="col-md-3"></div>
-                <div className="col-md-1 text-center d-none d-md-block">
-                  ${subscription.total_price.toFixed(2)}
-                </div>
-                <div className="col-md-1 text-center d-none d-md-block">
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => removeItem(subscription.id, "subscription")}
-                  >
-                    <i className="bi bi-trash-fill fs-5"></i>
-                  </button>
-                </div>
-                <div className="d-md-none d-flex justify-content-end align-items-center mt-3">
-                  <div className="col-md-1 text-center me-3">
-                    ${subscription.total_price.toFixed(2)}
+              <div className="mb-2 p-md-3 p-2 rounded cart-item">
+                {/* Desktop: all in one row */}
+                <div className="d-none d-md-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={subscription.image}
+                      alt={subscription.name}
+                      className="cart-item-img me-md-3 me-1"
+                    />
+                    <span className="text-start">{subscription.name}</span>
                   </div>
-                  <div className="col-md-1 text-center">
+                  <div className="d-flex align-items-center">
+                    <div className="fw-semibold me-4">
+                      ${subscription.total_price.toFixed(2)}
+                    </div>
                     <button
-                      className="btn btn-sm btn-outline-danger"
+                      className="btn btn-sm text-danger"
+                      onClick={() =>
+                        removeItem(subscription.id, "subscription")
+                      }
+                    >
+                      <i className="bi bi-trash-fill fs-5"></i>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Mobile: 2 lines */}
+                <div className="d-flex d-md-none flex-column">
+                  {/* Line 1: img + name on left, price right */}
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={subscription.image}
+                        alt={subscription.name}
+                        className="cart-item-img me-md-3 me-1"
+                      />
+                      <span className="text-start">{subscription.name}</span>
+                    </div>
+                    <div className="fw-semibold text-end">
+                      ${subscription.total_price.toFixed(2)}
+                    </div>
+                  </div>
+
+                  {/* Line 2: trash icon aligned far right */}
+                  <div className="d-flex justify-content-end align-items-center mt-2">
+                    <button
+                      className="btn btn-sm text-danger ms-md-3 ms-1"
                       onClick={() =>
                         removeItem(subscription.id, "subscription")
                       }
@@ -259,121 +278,166 @@ export default function Cart() {
                 {singleItems.map((item) => (
                   <div
                     key={item.package.id}
-                    className={`row align-items-center mb-2 p-md-3 p-1 rounded cart-item ${
+                    className={`mb-2 p-md-3 p-2 rounded cart-item ${
                       highlightItemId === item.package.id
                         ? "border border-danger border-1"
                         : ""
                     } ${pulsingItemId === item.package.id ? "pulse" : ""}`}
                   >
-                    <div className="col-md-7 d-flex align-items-center">
-                      <img
-                        src={item.package.image}
-                        alt={item.package.name}
-                        className="cart-item-img me-3"
-                      />
-                      <span className="text-start">{item.package.name}</span>
-                    </div>
-                    <div className="col-md-3 d-md-flex justify-content-end align-items-center d-none">
-                      <button
-                        className="btn btn-sm btn-outline-secondary"
-                        onClick={() => {
-                          const newQty = item.quantity - 1;
-                          if (newQty <= 0) removeItem(item.package.id);
-                          else updateQuantity(item.package.id, newQty);
-                        }}
-                      >
-                        −
-                      </button>
-                      <input
-                        type="number"
-                        min="1"
-                        className="form-control mx-2 text-center cart-qty-input p-1"
-                        value={item.quantity}
-                        onChange={(e) => {
-                          const newQty = Math.max(1, parseInt(e.target.value));
-                          if (isFree(item.package) && newQty > 1) {
-                            toast.error("You can only add one of a free item.");
-                            return;
-                          }
-                          updateQuantity(item.package.id, newQty);
-                        }}
-                      />
-                      <button
-                        className="btn btn-sm btn-outline-secondary"
-                        onClick={() => {
-                          if (isFree(item.package) && item.quantity >= 1) {
-                            toast.error("You can only add one of a free item.");
-                            return;
-                          }
-                          updateQuantity(item.package.id, item.quantity + 1);
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
-                    <div className="col-md-1 text-center d-none d-md-block">
-                      ${(item.package.total_price * item.quantity).toFixed(2)}
-                    </div>
-                    <div className="col-md-1 text-center d-none d-md-block">
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => removeItem(item.package.id)}
-                      >
-                        <i className="bi bi-trash-fill fs-5"></i>
-                      </button>
-                    </div>
-                    <div className="d-md-flex d-none justify-content-end align-items-center mt-3">
-                      <div className="col-md-3 d-flex justify-content-end align-items-center d-md-none me-3">
-                        <button
-                          className="btn btn-sm btn-outline-secondary py-0"
-                          onClick={() => {
-                            const newQty = item.quantity - 1;
-                            if (newQty <= 0) removeItem(item.package.id);
-                            else updateQuantity(item.package.id, newQty);
-                          }}
-                        >
-                          −
-                        </button>
-                        <input
-                          type="number"
-                          min="1"
-                          className="form-control mx-2 text-center cart-qty-input py-0"
-                          value={item.quantity}
-                          onChange={(e) => {
-                            const newQty = Math.max(
-                              1,
-                              parseInt(e.target.value)
-                            );
-                            if (isFree(item.package) && newQty > 1) {
-                              toast.error(
-                                "You can only add one of a free item."
-                              );
-                              return;
-                            }
-                            updateQuantity(item.package.id, newQty);
-                          }}
+                    {/* === Desktop: all in one row === */}
+                    <div className="d-none d-md-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={item.package.image}
+                          alt={item.package.name}
+                          className="cart-item-img me-md-3 me-1"
                         />
-                        <button
-                          className="btn btn-sm btn-outline-secondary py-0"
-                          onClick={() => {
-                            if (isFree(item.package) && item.quantity >= 1) {
-                              toast.error(
-                                "You can only add one of a free item."
+                        <span className="text-start">{item.package.name}</span>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <div className="fw-semibold me-4">
+                          $
+                          {(item.package.total_price * item.quantity).toFixed(
+                            2
+                          )}
+                        </div>
+                        <div className="d-flex align-items-stretch me-0">
+                          <button
+                            className="btn btn-outline-secondary rounded-start rounded-end-0 px-3 py-1"
+                            onClick={() => {
+                              const newQty = item.quantity - 1;
+                              if (newQty <= 0) removeItem(item.package.id);
+                              else updateQuantity(item.package.id, newQty);
+                            }}
+                          >
+                            −
+                          </button>
+
+                          <input
+                            type="number"
+                            min="1"
+                            className="form-control text-center cart-qty-input px-2 py-1 border-secondary bg-dark text-white rounded-0"
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const newQty = Math.max(
+                                1,
+                                parseInt(e.target.value)
                               );
-                              return;
-                            }
-                            updateQuantity(item.package.id, item.quantity + 1);
-                          }}
+                              if (isFree(item.package) && newQty > 1) {
+                                toast.error(
+                                  "You can only add one of a free item."
+                                );
+                                return;
+                              }
+                              updateQuantity(item.package.id, newQty);
+                            }}
+                          />
+
+                          <button
+                            className="btn btn-outline-secondary rounded-start-0 rounded-end px-3 py-1"
+                            onClick={() => {
+                              if (isFree(item.package) && item.quantity >= 1) {
+                                toast.error(
+                                  "You can only add one of a free item."
+                                );
+                                return;
+                              }
+                              updateQuantity(
+                                item.package.id,
+                                item.quantity + 1
+                              );
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <button
+                          className="btn btn-sm text-danger ms-md-3 ms-1"
+                          onClick={() => removeItem(item.package.id)}
                         >
-                          +
+                          <i className="bi bi-trash-fill fs-5"></i>
                         </button>
                       </div>
-                      <div className="col-md-1 text-center d-md-none me-3">
-                        ${(item.package.total_price * item.quantity).toFixed(2)}
+                    </div>
+
+                    {/* === Mobile layout === */}
+                    <div className="d-flex d-md-none flex-column">
+                      {/* Line 1: image + name left, price right */}
+                      <div className="d-flex justify-content-between align-items-center">
+                        <div className="d-flex align-items-center">
+                          <img
+                            src={item.package.image}
+                            alt={item.package.name}
+                            className="cart-item-img me-md-3 me-1"
+                          />
+                          <span className="text-start">
+                            {item.package.name}
+                          </span>
+                        </div>
+                        <div className="fw-semibold text-end">
+                          $
+                          {(item.package.total_price * item.quantity).toFixed(
+                            2
+                          )}
+                        </div>
                       </div>
-                      <div className="col-md-1 text-center d-md-none">
+
+                      {/* Line 2: qty controls left, trash right */}
+                      <div className="d-flex justify-content-end align-items-center mt-2">
+                        <div className="d-flex align-items-stretch me-3">
+                          <button
+                            className="btn btn-outline-secondary rounded-start rounded-end-0 px-3 py-1"
+                            onClick={() => {
+                              const newQty = item.quantity - 1;
+                              if (newQty <= 0) removeItem(item.package.id);
+                              else updateQuantity(item.package.id, newQty);
+                            }}
+                          >
+                            −
+                          </button>
+
+                          <input
+                            type="number"
+                            min="1"
+                            className="form-control text-center cart-qty-input px-2 py-1 border-secondary bg-dark text-white rounded-0"
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const newQty = Math.max(
+                                1,
+                                parseInt(e.target.value)
+                              );
+                              if (isFree(item.package) && newQty > 1) {
+                                toast.error(
+                                  "You can only add one of a free item."
+                                );
+                                return;
+                              }
+                              updateQuantity(item.package.id, newQty);
+                            }}
+                          />
+
+                          <button
+                            className="btn btn-outline-secondary rounded-start-0 rounded-end px-3 py-1"
+                            onClick={() => {
+                              if (isFree(item.package) && item.quantity >= 1) {
+                                toast.error(
+                                  "You can only add one of a free item."
+                                );
+                                return;
+                              }
+                              updateQuantity(
+                                item.package.id,
+                                item.quantity + 1
+                              );
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+
                         <button
-                          className="btn btn-sm btn-outline-danger"
+                          className="btn btn-sm text-danger ms-md-3 ms-1"
                           onClick={() => removeItem(item.package.id)}
                         >
                           <i className="bi bi-trash-fill fs-6"></i>
@@ -384,6 +448,7 @@ export default function Cart() {
                 ))}
               </div>
             )}
+
             <h5 className="text-end mt-3 mb-0">
               Subtotal: ${total.toFixed(2)}
             </h5>
@@ -406,7 +471,7 @@ export default function Cart() {
             </div>
           </>
         )}
-        <div className="pt-5">
+        <div className="pt-md-5 pt-3">
           {checkoutErrorMessage && (
             <i className="text-danger d-block mb-2">{checkoutErrorMessage}</i>
           )}
