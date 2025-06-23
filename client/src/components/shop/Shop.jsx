@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getPackages, getPromoStatus } from "../../managers/tebexManager";
+import { getActiveBattlePass } from "../../managers/battlepassManager";
 import { getToken } from "../../managers/authManager";
 import { useCart } from "../../contexts/CartContext";
 import Subscriptions from "./Subscriptions";
 import PromoCard from "./PromoCard";
 import Points from "./Points";
+import BattlePass from "./BattlePass";
 import ShopFilterSidebar from "./ShopFilterSidebar";
 import "./Shop.css";
 
@@ -24,6 +26,8 @@ export default function Shop({ loggedInUser }) {
   const [maxPrice, setMaxPrice] = useState(9999);
   const [tempMinPrice, setTempMinPrice] = useState(0);
   const [tempMaxPrice, setTempMaxPrice] = useState(100);
+  const [showBattlePass, setShowBattlePass] = useState(true);
+  const [battlePassData, setBattlePassData] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);
@@ -36,6 +40,14 @@ export default function Shop({ loggedInUser }) {
         if (res?.data) setAllPackages(res.data);
       })
       .catch((err) => console.error("Failed to load Tebex packages:", err));
+  }, []);
+
+  useEffect(() => {
+    getActiveBattlePass()
+      .then((data) => {
+        if (data) setBattlePassData(data);
+      })
+      .catch((err) => console.error("Failed to load Battle Pass data:", err));
   }, []);
 
   useEffect(() => {
@@ -65,15 +77,35 @@ export default function Shop({ loggedInUser }) {
     (pkg) => pkg.type === "single"
   );
 
+  const battlePassPackages = filteredSingles.filter((pkg) =>
+    pkg.name.toLowerCase().includes("battle pass")
+  );
+
+  // Sort for consistency (optional)
+  const sortedBP = [...battlePassPackages].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
+  const mainPassPackage = sortedBP.find((pkg) =>
+    pkg.name.toLowerCase().includes("season")
+  ); // or however you uniquely identify the real BP
+
+  const addOnPackages = sortedBP.filter(
+    (pkg) => pkg.id !== mainPassPackage?.id
+  );
+
   const promoPackage = filteredSingles.find(
     (pkg) => pkg.id === PROMO_PACKAGE_ID
   );
+
   const regularSingles = filteredSingles.filter(
-    (pkg) => pkg.id !== PROMO_PACKAGE_ID
+    (pkg) =>
+      pkg.id !== PROMO_PACKAGE_ID &&
+      !pkg.name.toLowerCase().includes("battle pass")
   );
 
   return (
-    <div className="shop-container px-md-4 px-2">
+    <div className="shop-container px-md-4 px-0">
       {/* Search Bar: full width above all */}
       <div className="rainbow-spin-wrapper mt-md-4 my-2 position-relative shop-search-bar">
         <input
@@ -93,7 +125,7 @@ export default function Shop({ loggedInUser }) {
         }`}
       >
         <div className="row">
-          <div className="col-md-3 col-lg-2 mb-4 d-none d-md-block">
+          <div className="col-md-3 col-lg-2 col-12 mb-4 d-none d-md-block">
             <ShopFilterSidebar
               showSubscriptions={showSubscriptions}
               showPoints={showPoints}
@@ -112,11 +144,13 @@ export default function Shop({ loggedInUser }) {
               toast={toast}
               cartItems={cartItems}
               loggedInUser={loggedInUser}
+              showBattlePass={showBattlePass}
+              setShowBattlePass={setShowBattlePass}
             />
           </div>
 
           {/* Main Content: 4/5 width */}
-          <div className="col-md-9 col-lg-10">
+          <div className="col-md-9 col-lg-10 col-12">
             {/* Promo Card */}
             {promoPackage && (
               <PromoCard
@@ -132,8 +166,7 @@ export default function Shop({ loggedInUser }) {
             )}
 
             {/* Subscriptions */}
-            {((!showSubscriptions && !showPoints) || showSubscriptions) &&
-            filteredSubscriptions.length > 0 ? (
+            {showSubscriptions && filteredSubscriptions.length > 0 && (
               <>
                 <h3 className="text-start text-danger server-status-title mb-2 pt-2">
                   ZLG <span className="text-white ms-2">Subscriptions</span>
@@ -146,10 +179,9 @@ export default function Shop({ loggedInUser }) {
                   loggedInUser={loggedInUser}
                 />
               </>
-            ) : null}
+            )}
             {/* Points */}
-            {((!showSubscriptions && !showPoints) || showPoints) &&
-            regularSingles.length > 0 ? (
+            {showPoints && regularSingles.length > 0 && (
               <>
                 <h3 className="text-start text-danger server-status-title mb-3 py-2">
                   Buy <span className="text-white ms-2">Points</span>
@@ -166,7 +198,26 @@ export default function Shop({ loggedInUser }) {
                   loggedInUser={loggedInUser}
                 />
               </>
-            ) : null}
+            )}
+            {/* Battle Pass */}
+            {showBattlePass && battlePassPackages.length > 0 && (
+              <>
+                <h3 className="text-start text-danger server-status-title mb-3 py-2">
+                  Battle <span className="text-white ms-2">Pass</span>
+                  <span className="server-status-line"></span>
+                </h3>
+                <BattlePass
+                  mainPassPackage={mainPassPackage}
+                  addOnPackages={addOnPackages}
+                  cartItems={cartItems}
+                  addItem={addItem}
+                  updateQuantity={updateQuantity}
+                  removeItem={removeItem}
+                  toast={toast}
+                  battlePassData={battlePassData}
+                />
+              </>
+            )}
           </div>
         </div>
         <ToastContainer position="top-center" autoClose={2000} theme="dark" />
