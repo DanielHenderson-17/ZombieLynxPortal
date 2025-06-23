@@ -81,6 +81,19 @@ export default function Shop({ loggedInUser }) {
     pkg.name.toLowerCase().includes("battle pass")
   );
 
+  // Sort for consistency (optional)
+  const sortedBP = [...battlePassPackages].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
+  const mainPassPackage = sortedBP.find((pkg) =>
+    pkg.name.toLowerCase().includes("season")
+  ); // or however you uniquely identify the real BP
+
+  const addOnPackages = sortedBP.filter(
+    (pkg) => pkg.id !== mainPassPackage?.id
+  );
+
   const promoPackage = filteredSingles.find(
     (pkg) => pkg.id === PROMO_PACKAGE_ID
   );
@@ -194,13 +207,13 @@ export default function Shop({ loggedInUser }) {
                   <span className="server-status-line"></span>
                 </h3>
                 <BattlePass
-                  packages={battlePassPackages}
+                  mainPassPackage={mainPassPackage}
+                  addOnPackages={addOnPackages}
                   cartItems={cartItems}
                   addItem={addItem}
                   updateQuantity={updateQuantity}
                   removeItem={removeItem}
                   toast={toast}
-                  loggedInUser={loggedInUser}
                   battlePassData={battlePassData}
                 />
               </>

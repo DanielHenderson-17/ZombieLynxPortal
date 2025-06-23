@@ -10,6 +10,7 @@ import VerifyEmail from "./auth/VerifyEmail";
 import Member from "../components/member/Member";
 import Tickets from "../components/tickets/Tickets";
 import Stats from "../components/stats/Stats";
+import BattlePass from "../components/battlepass/BattlePass";
 import Shop from "../components/shop/Shop";
 import Cart from "../components/shop/Cart";
 import Notifications from "../components/notifications/Notifications";
@@ -94,7 +95,10 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             path="stats/*"
             element={<Stats loggedInUser={loggedInUser} />}
           />
-
+          <Route
+            path="battlepass"
+            element={<BattlePass loggedInUser={loggedInUser} />}
+          />
           <Route
             path="notifications/*"
             element={<Notifications loggedInUser={loggedInUser} />}

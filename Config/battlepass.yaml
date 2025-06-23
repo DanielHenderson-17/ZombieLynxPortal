@@ -37,7 +37,7 @@ battle_passes:
 
       2:
         type: "item"
-        id: "zlgCoin"
+        id: "Zombie Lynx Points"
         amount: 75
         premium: false
         img: "/images/bp_items/zlgCoin.webp"

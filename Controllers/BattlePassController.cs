@@ -114,7 +114,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 premiumPurchasedAt = progress?.PremiumPurchasedAt,
                 claimedLevels = claims,
                 claimableLevels,
-                rewards = activeSeason.Rewards
+                rewards = activeSeason.Rewards,
+                img = activeSeason.Img
             });
         }
 

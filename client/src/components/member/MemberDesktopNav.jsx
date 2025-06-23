@@ -42,6 +42,12 @@ export default function MemberDesktopNav({ loggedInUser, setLoggedInUser }) {
 
   const navItems = [
     { to: "/member/stats", icon: "bar-chart", label: "Stats" },
+    {
+      to: "/member/battlepass",
+      icon: "stars",
+      fillIcon: "stars",
+      label: "Battle Pass",
+    },
     { to: "/member/tickets", icon: "ticket", label: "Tickets" },
     { to: "/member/notifications", icon: "bell", label: "Alerts" },
     { to: "/member/vote", icon: "check-square", label: "Votes" },
@@ -79,7 +85,6 @@ export default function MemberDesktopNav({ loggedInUser, setLoggedInUser }) {
             <NavLink
               key={to}
               to={to}
-              // onClick={() => setLockedOpen(true)}
               className={({ isActive }) => linkClass(isActive)}
             >
               {({ isActive }) => (
