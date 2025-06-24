@@ -31,7 +31,7 @@ export default function Home() {
             <img
               src={backgroundDesktop}
               alt=""
-              loading="lazy"
+              loading="eager"
               aria-hidden="true"
               className="splash-background d-md-block d-none"
             />
