@@ -10,6 +10,12 @@ import {
   getTierGradient,
 } from "../../utils/subscriptionUtils";
 
+import goldIcon from "../../assets/nav/gold.webp";
+import diamondIcon from "../../assets/nav/diamond.webp";
+import vibraniumIcon from "../../assets/nav/vibranium.webp";
+import standardIcon from "../../assets/nav/standard.webp";
+import zlgCoin from "../../assets/nav/zlgCoin.webp";
+
 export default function NavBarMobileMainMenu({
   onClose,
   onLogout,
@@ -42,10 +48,10 @@ export default function NavBarMobileMainMenu({
   const tier = getMembershipTier(membership || {});
   const tierGradient = getTierGradient(tier);
   const tierIcons = {
-    Gold: "/images/gold.png",
-    Diamond: "/images/diamond.png",
-    Vibranium: "/images/vibranium.png",
-    Standard: "/images/standard.png",
+    Gold: goldIcon,
+    Diamond: diamondIcon,
+    Vibranium: vibraniumIcon,
+    Standard: standardIcon,
   };
 
   const avatarSrc =
@@ -99,9 +105,11 @@ export default function NavBarMobileMainMenu({
 
             <div className="mt-1 d-flex align-items-center gap-2">
               <img
-                src="/images/zlgCoin.png"
+                src={zlgCoin}
                 alt="ZLG Coin"
                 style={{ width: 25 }}
+                loading="lazy"
+                aria-hidden="true"
               />
               <strong className="fs-5 mb-1">
                 {formatNumberWithCommas(userPoints)}

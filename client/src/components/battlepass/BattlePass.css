@@ -102,8 +102,20 @@
 
 /* Item Detail Box */
 .bp-item-details {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.bp-item-details::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.25), transparent)
+      top left / 100% 1px no-repeat,
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.25), transparent) top left /
+      1px 100% no-repeat;
 }
 
 .bg-orange-gradient {
@@ -143,8 +155,14 @@
 }
 
 .bp-premium-gradient {
+  background-image: linear-gradient(to top, #dac616, #ffd700, #ecee5d);
+  color: black;
+}
+
+.bp-premium-gradient-text {
   background: linear-gradient(to bottom, #d6d6d6, #fade6d, #f5c400, #8d6e00);
-  color: #000;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .bp-img-stack {
@@ -170,4 +188,42 @@
 
 .bp-bar {
   width: 15px;
+}
+
+/* Common (fallback uses bg-dark from Bootstrap) */
+.bg-common {
+  background: linear-gradient(to bottom, #6c757d, #40474e);
+}
+
+/* Uncommon: subtle silver-gray gradient */
+.bg-uncommon {
+  background: linear-gradient(to bottom, #d3d3d3, #a8a8a8);
+  color: green;
+}
+
+/* Rare: vibrant blue gradient */
+.bg-rare {
+  background: linear-gradient(to bottom, #4da6ff, #003366);
+}
+
+/* Epic: rich purple gradient */
+.bg-purple {
+  background: linear-gradient(to bottom, #a64af5, #4b0082);
+}
+
+.bg-legendary {
+  /* orange */
+  background: linear-gradient(to bottom, #ff9900, #8d5500);
+}
+
+.rarity-tag {
+  height: 10px;
+  margin-bottom: 5px;
+}
+
+.rarity-box {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
 }

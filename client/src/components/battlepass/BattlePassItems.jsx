@@ -1,3 +1,6 @@
+import { getRarityGradientClass } from "../../utils/getRarityGradientClass";
+import { battlePassImageMap } from "../../utils/battlePassImageMap";
+
 export default function BattlePassItems({
   xp,
   claimedLevels,
@@ -52,13 +55,21 @@ export default function BattlePassItems({
             role="button"
             style={{ cursor: "pointer" }}
           >
-            {reward.amount > 1 && (
-              <div className="bp-item-amount">x{reward.amount}</div>
-            )}
+            {/* Rarity tag above the image */}
+            <div
+              className={`w-100 rarity-tag rounded-1 ${getRarityGradientClass(
+                level,
+                reward.rarity
+              )}`}
+            />
 
             <div
               className={`bp-img-stack rounded ${borderClass} ${backgroundClass} w-100`}
             >
+              {reward.amount > 1 && (
+                <div className="bp-item-amount">x{reward.amount}</div>
+              )}
+
               {isLocked && (
                 <i
                   className="bi bi-lock-fill position-absolute top-0 end-0 m-1 text-white fs-5"
@@ -68,7 +79,7 @@ export default function BattlePassItems({
               )}
 
               <img
-                src={reward.img}
+                src={battlePassImageMap[reward.img]}
                 alt=""
                 loading="lazy"
                 aria-hidden="true"
@@ -81,8 +92,8 @@ export default function BattlePassItems({
                   style={{
                     height: "6px",
                     zIndex: 0,
-                    bottom: "1px",
-                    width: "99%",
+                    bottom: "0px",
+                    width: "100%",
                   }}
                   title={`${xp} / ${level * 100} XP`}
                 >

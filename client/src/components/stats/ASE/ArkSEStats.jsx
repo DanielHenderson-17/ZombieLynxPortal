@@ -32,7 +32,7 @@ export default function ArkSEStats() {
             </div>
             <div className="mt-2 mt-md-0">
               <select
-                className="form-select form-select-sm bg-dark text-white"
+                className="form-select form-select-sm bg-dark text-white border border-black"
                 value={season}
                 onChange={(e) => setSeason(e.target.value)}
                 disabled

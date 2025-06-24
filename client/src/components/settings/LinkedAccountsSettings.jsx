@@ -19,6 +19,10 @@ import {
   openEpicAuthWindow,
 } from "../../managers/epicAuthManager";
 
+import epicIcon from "../../assets/settings/epicIcon.webp";
+import steamIcon from "../../assets/settings/steamIcon.webp";
+import minecraftIcon from "../../assets/settings/minecraftIcon.webp";
+
 export default function LinkedAccountsSettings() {
   const [, setSteamAccount] = useState(null);
   const [, setMinecraftAccount] = useState(null);
@@ -31,9 +35,9 @@ export default function LinkedAccountsSettings() {
   const [platformToUnlink, setPlatformToUnlink] = useState(null);
 
   const availableAccounts = [
-    { name: "Epic", icon: "/epicIcon.png" },
-    { name: "Steam", icon: "/steamIcon.png" },
-    { name: "Minecraft", icon: "/minecraftIcon.png" },
+    { name: "Epic", icon: epicIcon },
+    { name: "Steam", icon: steamIcon },
+    { name: "Minecraft", icon: minecraftIcon },
   ];
 
   useEffect(() => {
@@ -62,7 +66,6 @@ export default function LinkedAccountsSettings() {
           linked.push({ name: "Epic", ...epicData });
           setEpicAccount(epicData);
         }
-        console.log("Linked Accounts:", linked);
 
         setLinkedAccounts(linked);
       } catch (err) {
@@ -156,7 +159,7 @@ export default function LinkedAccountsSettings() {
               {linkedAccounts.map((acc) => (
                 <div
                   key={acc.name}
-                  className="d-flex align-items-center justify-content-between linked-back rounded mb-2 p-2"
+                  className="d-flex align-items-center justify-content-between linked-back rounded mb-2 p-2 border border-black shadow"
                 >
                   <div className="d-flex align-items-center gap-2">
                     <img
@@ -165,6 +168,8 @@ export default function LinkedAccountsSettings() {
                       }
                       alt={`${acc.name} Icon`}
                       style={{ width: "20px", height: "20px" }}
+                      loading="lazy"
+                      aria-hidden="true"
                     />
                     <span className="text-white fw-semibold">
                       {acc.name === "Steam"
@@ -204,7 +209,7 @@ export default function LinkedAccountsSettings() {
                   .map((acc) => (
                     <button
                       key={acc.name}
-                      className="btn btn-outline-secondary text-white d-flex align-items-center gap-2"
+                      className="btn border border-black text-white d-flex align-items-center gap-2 shadow"
                       onClick={() => handleLinkAccount(acc.name)}
                       disabled={loading}
                     >
@@ -212,6 +217,8 @@ export default function LinkedAccountsSettings() {
                         src={acc.icon}
                         alt={`${acc.name} Icon`}
                         style={{ width: "20px", height: "20px" }}
+                        loading="lazy"
+                        aria-hidden="true"
                       />
                       {acc.name}
                     </button>
@@ -221,12 +228,14 @@ export default function LinkedAccountsSettings() {
           )}
         </div>
       </section>
+
       {error && <p className="text-danger text-center">{error}</p>}
       <ToastContainer position="top-center" autoClose={4000} />
+
       {showModal && (
         <div className="modal fade show d-block" tabIndex="-1" role="dialog">
           <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content bg-dark border border-secondary text-white">
+            <div className="modal-content bg-dark border border-black text-white shadow">
               <div className="modal-header">
                 <h5 className="modal-title">Are you sure?</h5>
                 <button

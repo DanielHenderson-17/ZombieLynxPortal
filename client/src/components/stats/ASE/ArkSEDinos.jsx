@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getMyArkStats } from "../../../managers/arkStatsManager";
+import { getArkDinoImages } from "../../../utils/ASEDinoImages";
 
 export default function ArkSEDinos() {
   const [stats, setStats] = useState(null);
+  const images = getArkDinoImages();
 
   useEffect(() => {
     getMyArkStats().then(setStats);
@@ -14,47 +16,23 @@ export default function ArkSEDinos() {
     {
       label: "Boss Kills",
       value: stats.bossKills,
-      img: "/Broodmother_Trophy.webp",
+      img: images.broodmotherTrophy,
     },
-    {
-      label: "Dinos Tamed",
-      value: stats.tamedDinos,
-      img: "/Bola.webp",
-    },
-    {
-      label: "Alpha Kills",
-      value: stats.alphaKills,
-      img: "/Alpha_Tyrannosaur_Tooth.webp",
-    },
-    {
-      label: "Dinos Killed",
-      value: stats.wildDinoKills,
-      img: "/Pump-Action_Shotgun.webp",
-    },
-    {
-      label: "Fiber Harvest",
-      value: stats.fiberHarvest,
-      img: "/Fiber.webp",
-    },
-    {
-      label: "Fish Caught",
-      value: stats.fishCaught,
-      img: "/Fishing_Rod.webp",
-    },
-    {
-      label: "Quests Total",
-      value: stats.questsCompleted,
-      img: "/Note.webp",
-    },
+    { label: "Dinos Tamed", value: stats.tamedDinos, img: images.bola },
+    { label: "Alpha Kills", value: stats.alphaKills, img: images.alphaTooth },
+    { label: "Dinos Killed", value: stats.wildDinoKills, img: images.shotgun },
+    { label: "Fiber Harvest", value: stats.fiberHarvest, img: images.fiber },
+    { label: "Fish Caught", value: stats.fishCaught, img: images.fishingRod },
+    { label: "Quests Total", value: stats.questsCompleted, img: images.note },
     {
       label: "Daily Quests",
       value: stats.dailyQuestsCompleted,
-      img: "/calendar-date.svg",
+      img: images.calendarDate,
     },
     {
       label: "Weekly Quests",
       value: stats.weeklyQuestsCompleted,
-      img: "/calendar-month.svg",
+      img: images.calendarMonth,
     },
   ];
 
@@ -67,6 +45,8 @@ export default function ArkSEDinos() {
               src={card.img}
               alt={card.label}
               style={{ width: 32, height: 32 }}
+              loading="lazy"
+              aria-hidden="true"
             />
             <div className="d-flex flex-column align-items-start">
               <div className="fs-5 fw-bold text-white">{card.value}</div>

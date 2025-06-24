@@ -1,16 +1,30 @@
-export default function BattlePassSingleItem({ reward }) {
+import { battlePassImageMap } from "../../utils/battlePassImageMap";
+
+export default function BattlePassSingleItem({
+  reward,
+  level,
+  claimableLevels,
+}) {
   if (!reward) return null;
 
+  const isClaimable = claimableLevels.includes(Number(level));
+
   return (
-    <div className="h-100 d-flex flex-column justify-content-center align-items-center text-white">
+    <div className="d-flex flex-column justify-content-start align-items-center text-white bp-single-item mt-4 pt-2">
       <img
-        src={reward.img}
+        src={battlePassImageMap[reward.img]}
         alt=""
         loading="lazy"
         aria-hidden="true"
-        className="w-75 h-auto mb-3"
-        style={{ objectFit: "contain" }}
+        className="h-auto"
+        style={{ objectFit: "contain", width: "65%" }}
       />
+
+      {isClaimable && (
+        <button className="btn btn-success mt-3 px-4 fw-bold">
+          CLAIM REWARD
+        </button>
+      )}
     </div>
   );
 }

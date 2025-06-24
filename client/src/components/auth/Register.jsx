@@ -1,3 +1,4 @@
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 import { useState, useEffect } from "react";
 import { register } from "../../managers/authManager";
 import { Link, useNavigate } from "react-router-dom";
@@ -124,7 +125,13 @@ export default function Register() {
           isVisible ? "fade-in" : "fade-start"
         }`}
       >
-        <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
+        <img
+          src={zlgLogo}
+          alt="ZLG Logo"
+          className="col-10 mt-3 mb-3"
+          loading="lazy"
+          aria-hidden="true"
+        />
         <h5 className="mt-4 waiting-text">
           Waiting for Discord authentication...
         </h5>
@@ -135,7 +142,13 @@ export default function Register() {
 
   return (
     <div className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11">
-      <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
+      <img
+        src={zlgLogo}
+        alt="ZLG Logo"
+        className="col-10 mt-3 mb-3"
+        loading="lazy"
+        aria-hidden="true"
+      />
       <h4 className="register-title">Create a new account for</h4>
       <div className="d-flex justify-content-center align-items-center mb-2 register-user">
         <img

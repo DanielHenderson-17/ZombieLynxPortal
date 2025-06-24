@@ -1,3 +1,5 @@
+import { battlePassImageMap } from "../../utils/battlePassImageMap";
+
 export default function BattlePass({
   mainPassPackage,
   addOnPackages,
@@ -108,8 +110,10 @@ export default function BattlePass({
                 <h6 className="text-warning mb-1">Seasonal Battle Pass</h6>
                 {battlePassData?.img && (
                   <img
-                    src={battlePassData.img}
-                    alt="Battle Pass Banner"
+                    src={battlePassImageMap[battlePassData.img]}
+                    alt=""
+                    loading="lazy"
+                    aria-hidden="true"
                     className="img-fluid rounded mb-3"
                     style={{
                       maxHeight: "140px",

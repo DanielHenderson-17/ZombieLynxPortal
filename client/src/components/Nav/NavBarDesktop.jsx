@@ -2,6 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
 import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
+import zlgLogo from "../../assets/nav/zlg-logo.webp";
+import addPoints from "../../assets/nav/addPoints.webp";
+import zlgCoin from "../../assets/nav/zlgCoin.webp";
+import buyPoints from "../../assets/nav/buyPoints.webp";
 
 export default function NavBarDesktop({
   loggedInUser,
@@ -23,9 +27,11 @@ export default function NavBarDesktop({
       <Link to="/#home" className="navbar-brand col-7 text-start">
         <img
           className="zlg-logo"
-          src="/images/zlg-logo.png"
+          src={zlgLogo}
           alt="Zombie Lynx Gaming"
           style={{ height: "50px" }}
+          loading="lazy"
+          aria-hidden="true"
         />
       </Link>
 
@@ -37,7 +43,13 @@ export default function NavBarDesktop({
           title="Shop"
           data-bs-placement="bottom"
         >
-          <img src="/images/addPoints.png" alt="" className="me-4 addPoints" />
+          <img
+            src={addPoints}
+            alt=""
+            className="me-4 addPoints"
+            loading="lazy"
+            aria-hidden="true"
+          />
         </Link>
         <Link
           to={`/discord`}
@@ -110,12 +122,23 @@ export default function NavBarDesktop({
               </h5>
 
               <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-11 mx-md-auto ms-0 position-relative">
-                <img src="/images/zlgCoin.png" alt="" className="zlg-coin3" />
+                <img
+                  src={zlgCoin}
+                  alt=""
+                  className="zlg-coin3"
+                  loading="lazy"
+                  aria-hidden="true"
+                />
                 <div className="text-container points-container">
                   <p className="mb-0">{formatNumberWithCommas(userPoints)}</p>
                 </div>
                 <Link to="/shop" className="text-secondary buy-points3">
-                  <img src="/images/buyPoints.png" alt="" />
+                  <img
+                    src={buyPoints}
+                    alt=""
+                    loading="lazy"
+                    aria-hidden="true"
+                  />
                 </Link>
               </div>
             </div>
@@ -182,6 +205,7 @@ export default function NavBarDesktop({
                   <i className="bi bi-discord me-3 fs-2 text-white"></i> Zombie
                   Lynx Discord
                 </button>
+
                 <button
                   className="dropdown-item text-white d-flex justify-content-start align-items-center"
                   onClick={() => navigate("/member/admin/users")}
@@ -197,6 +221,7 @@ export default function NavBarDesktop({
                   <i className="bi bi-box-arrow-right px-1 me-2 fs-2"></i> Log
                   Out
                 </button>
+
                 <div className="d-flex align-items-center justify-content-around mt-4 mb-0">
                   <Link
                     to="/privacy-policy"

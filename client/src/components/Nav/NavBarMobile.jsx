@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import NavBarMobileMainMenu from "./NavBarMobileMainMenu";
+import zlgLogo from "../../assets/nav/zlg-logo.webp";
 
 export default function NavBarMobile({ loggedInUser }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,9 +20,11 @@ export default function NavBarMobile({ loggedInUser }) {
       >
         <NavLink to="/#home" className="navbar-brand">
           <img
-            src="/images/zlg-logo.png"
+            src={zlgLogo}
             alt="Zombie Lynx Gaming"
             style={{ height: "40px" }}
+            loading="lazy"
+            aria-hidden="true"
           />
         </NavLink>
 
@@ -63,7 +66,7 @@ export default function NavBarMobile({ loggedInUser }) {
           >
             {({ isActive }) => (
               <i
-                className={`bi ${isActive ? "bi-stars" : "bi-stars"} fs-4 ${
+                className={`bi bi-stars fs-4 ${
                   isActive ? "text-white" : "text-secondary"
                 }`}
               ></i>
