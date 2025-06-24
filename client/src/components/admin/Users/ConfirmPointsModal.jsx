@@ -20,10 +20,13 @@ export default function ConfirmPointsModal({
             <div className="d-flex justify-content-center align-items-center gap-2 mb-3">
               <img
                 src={user.discordImgUrl}
-                alt="Discord avatar"
+                alt=""
+                loading="lazy"
+                aria-hidden="true"
                 className="rounded-circle"
                 style={{ width: "32px", height: "32px" }}
               />
+
               <strong>{formatDiscordName(user.discordName)}</strong>
             </div>
             <button

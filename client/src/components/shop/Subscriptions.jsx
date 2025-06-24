@@ -1,6 +1,6 @@
 export default function Subscriptions({ subscriptions, addItem, toast }) {
   return (
-    <div className="row mx-0 text-white py-md-3 py-0 border-0 services-table-bg rounded-3">
+    <div className="row mx-0 text-white py-md-3 py-0 border-0 services-table-bg rounded-3 pb-md-0 pb-5 mb-md-5 mb-0">
       {subscriptions.map((pkg) => (
         <div key={pkg.id} className="col-md-6 col-lg-4 p-1">
           <div

@@ -1,3 +1,5 @@
+import lynxGif from "../../assets/auth/runninglynx.gif";
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { login, acceptTerms } from "../../managers/authManager";
@@ -90,9 +92,11 @@ export default function Login({ setLoggedInUser }) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
         <img
-          src="/images/runninglynx.gif"
+          src={lynxGif}
           alt="Logging in..."
           className="running-lynx"
+          loading="lazy"
+          aria-hidden="true"
         />
       </div>
     );
@@ -107,9 +111,11 @@ export default function Login({ setLoggedInUser }) {
         onSubmit={handleSubmit}
       >
         <img
-          src="/images/zlglogo.png"
+          src={zlgLogo}
           alt="ZLG Logo"
           className="col-10 mt-3 mb-3"
+          loading="lazy"
+          aria-hidden="true"
         />
         <h4>Welcome Back</h4>
         <hr />
@@ -117,7 +123,7 @@ export default function Login({ setLoggedInUser }) {
         <div className="mb-4">
           <input
             type="text"
-            className={`form-control bg-dark text-white border border-secondary ${
+            className={`form-control bg-dark text-white border border-black shadow-lg ${
               failedLogin ? "is-invalid" : ""
             }`}
             placeholder="Email"
@@ -131,7 +137,7 @@ export default function Login({ setLoggedInUser }) {
         <div className="mb-4">
           <input
             type="password"
-            className={`form-control bg-dark text-white border border-secondary ${
+            className={`form-control bg-dark text-white border border-black shadow-lg ${
               failedLogin ? "is-invalid" : ""
             }`}
             placeholder="Password"

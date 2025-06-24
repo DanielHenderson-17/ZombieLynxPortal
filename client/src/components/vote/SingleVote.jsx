@@ -72,7 +72,7 @@ export default function SingleVote() {
             <h6 className="mb-md-2 mb-1 mt-md-2 mt-2 vote-title d-md-none d-block">
               {vote.title}
             </h6>
-            <p className="mb-md-4 mb-0 pb-md-3 pb-1 vote-description">
+            <p className="mb-md-0 mb-0 pb-md-3 pb-0 vote-description">
               {truncateText(vote.description, 95)}
             </p>
             {vote.expiresAt && (
@@ -94,7 +94,7 @@ export default function SingleVote() {
                     {vote.userVote ? "✅" : "❌"}
                   </span>
                 </p>
-                <p className="mt-1 p-0 mb-1">
+                <p className="my-0 p-0 ">
                   Total Votes :{" "}
                   <span className="text-success fw-bold">{votesFor}</span> /{" "}
                   <span className="text-danger fw-bold">{votesAgainst}</span>{" "}

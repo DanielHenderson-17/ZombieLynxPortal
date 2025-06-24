@@ -1,3 +1,11 @@
+import goldIcon from "../../../assets/admin/gold.webp";
+import diamondIcon from "../../../assets/admin/diamond.webp";
+import vibraniumIcon from "../../../assets/admin/vibranium.webp";
+import standardIcon from "../../../assets/admin/standard.webp";
+import zlgCoin from "../../../assets/admin/zlgCoin.webp";
+import steamIcon from "../../../assets/admin/steamIcon.webp";
+import minecraftIcon from "../../../assets/admin/minecraftIcon.webp";
+import epicIcon from "../../../assets/admin/epicIcon.webp";
 import { useEffect, useState, useMemo } from "react";
 import {
   getAllUserData,
@@ -14,10 +22,10 @@ import { formatNumberWithCommas } from "../../../utils/formatNumberWithCommas";
 import { toast, ToastContainer } from "react-toastify";
 
 const tierIcons = {
-  Gold: "/images/gold.png",
-  Diamond: "/images/diamond.png",
-  Vibranium: "/images/vibranium.png",
-  Standard: "/images/standard.png",
+  Gold: goldIcon,
+  Diamond: diamondIcon,
+  Vibranium: vibraniumIcon,
+  Standard: standardIcon,
 };
 
 export default function Users() {
@@ -254,8 +262,10 @@ export default function Users() {
                     Linked Accounts:
                     {z?.steamId && (
                       <img
-                        src="/steamIcon.png"
-                        alt="Steam"
+                        src={steamIcon}
+                        alt=""
+                        loading="lazy"
+                        aria-hidden="true"
                         title={`Copy 📋\n${z.steamName} (${z.steamId})`}
                         onClick={() => handleCopy(z.steamId)}
                         style={{
@@ -268,8 +278,10 @@ export default function Users() {
                     )}
                     {z?.minecraftUuid && (
                       <img
-                        src="/minecraftIcon.png"
-                        alt="Minecraft"
+                        src={minecraftIcon}
+                        alt=""
+                        loading="lazy"
+                        aria-hidden="true"
                         title={`Copy 📋\n${z.minecraftUsername} (${z.minecraftUuid})`}
                         onClick={() => handleCopy(z.minecraftUuid)}
                         style={{
@@ -282,8 +294,10 @@ export default function Users() {
                     )}
                     {z?.eosId && (
                       <img
-                        src="/epicIcon.png"
-                        alt="Epic Games"
+                        src={epicIcon}
+                        alt=""
+                        loading="lazy"
+                        aria-hidden="true"
                         title={`Copy 📋\n${z.epicName} (${z.eosId})`}
                         onClick={() => handleCopy(z.eosId)}
                         style={{
@@ -297,8 +311,10 @@ export default function Users() {
                   </div>
                   <div className="text-white d-flex align-items-center mt-1">
                     <img
-                      src="/images/zlgCoin.png"
+                      src={zlgCoin}
                       alt=""
+                      loading="lazy"
+                      aria-hidden="true"
                       style={{ width: 20 }}
                       className="me-1"
                     />

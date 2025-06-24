@@ -1,3 +1,4 @@
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 import { useState } from "react";
 import { resendVerificationEmail } from "../../managers/authManager";
 
@@ -34,9 +35,11 @@ export default function Verify() {
       style={{ maxWidth: "500px", opacity: 0.95 }}
     >
       <img
-        src="/images/zlglogo.png"
+        src={zlgLogo}
         alt="Zombie Lynx Logo"
         className="col-10 mt-3 mb-3"
+        loading="lazy"
+        aria-hidden="true"
       />
       <h4 className="register-title mb-4">Confirm Your Email</h4>
       <p className="mb-3">

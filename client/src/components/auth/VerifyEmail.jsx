@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 
 export default function VerifyEmail() {
   const location = useLocation();
@@ -54,8 +55,10 @@ export default function VerifyEmail() {
         style={{ maxWidth: "500px", opacity: 0.95 }}
       >
         <img
-          src="/images/zlglogo.png"
+          src={zlgLogo}
           alt="Zombie Lynx Logo"
+          loading="lazy"
+          aria-hidden="true"
           className="col-10 mt-3 mb-3"
         />
         <h4 className="register-title mb-4">Email Verification</h4>

@@ -9,7 +9,10 @@ import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
 import {
   getMembershipTier,
   getTierGradient,
+  getTierBadgeImage,
 } from "../../utils/subscriptionUtils";
+import zlgCoin from "../../assets/member/zlgCoin.webp";
+import buyPoints from "../../assets/member/buyPoints.webp";
 
 export default function ProfileInfo({ loggedInUser }) {
   const [discordAccount, setDiscordAccount] = useState(null);
@@ -18,6 +21,7 @@ export default function ProfileInfo({ loggedInUser }) {
   const [userLoading, setUserLoading] = useState(true);
   const tier = getMembershipTier(membership);
   const tierGradient = getTierGradient(tier);
+  const tierBadge = getTierBadgeImage(tier);
 
   useEffect(() => {
     const fetchLinkedAccounts = async () => {
@@ -55,6 +59,7 @@ export default function ProfileInfo({ loggedInUser }) {
               src={discordAccount?.discordImgUrl}
               alt="Profile"
               className="profile-img"
+              loading="lazy"
             />
           </div>
           <div className="py-4 h-100 px-2 d-none d-md-block">
@@ -64,9 +69,11 @@ export default function ProfileInfo({ loggedInUser }) {
             {/* Discord Name */}
             <h3 className="text-white d-flex mb-0 member-name align-items-center">
               <img
-                src={`/${tier.toLowerCase()}.png`}
-                alt={`${tier} Subscription`}
+                src={tierBadge}
+                alt=""
                 className="subscription-icon me-2"
+                loading="lazy"
+                aria-hidden="true"
                 style={{ width: "25px", height: "25px" }}
               />
               <span
@@ -94,15 +101,26 @@ export default function ProfileInfo({ loggedInUser }) {
               {loggedInUser?.email || "Please log in to view your email."}
             </h6>
 
-            {/* Points*/}
+            {/* Points */}
             <div className="points d-flex align-items-center justify-content-start mt-2 pt-1 ps-2">
               <div className="d-flex justify-content-start align-items-center text-white fw-bold fs-6 col-8 position-relative points-container h-100">
-                <img src="/images/zlgCoin.png" alt="" className="zlg-coin" />
+                <img
+                  src={zlgCoin}
+                  alt=""
+                  className="zlg-coin"
+                  loading="lazy"
+                  aria-hidden="true"
+                />
                 <div className="text-container border border-secondary p-0 rounded-end-5">
                   <span>{formatNumberWithCommas(userPoints)}</span>
                 </div>
                 <Link to="/shop" className="text-secondary buy-points">
-                  <img src="/images/buyPoints.png" alt="" />
+                  <img
+                    src={buyPoints}
+                    alt=""
+                    loading="lazy"
+                    aria-hidden="true"
+                  />
                 </Link>
               </div>
             </div>

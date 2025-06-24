@@ -1,33 +1,35 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { getStatsNavIcons } from "../../utils/statsNavIcons";
 
 export default function StatsMobileNav() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(true);
+  const icons = getStatsNavIcons();
 
   const navLinks = [
     {
       path: "/member/stats/arkse",
       label: "Ark:SE",
-      icon: "/ase-logo.webp",
+      icon: icons.arkse,
       active: location.pathname.includes("/member/stats/arkse"),
     },
     {
       path: "/member/stats/arksa",
       label: "Ark:SA",
-      icon: "/asa-logo.webp",
+      icon: icons.arksa,
       active: location.pathname.includes("/member/stats/arksa"),
     },
     {
       path: "/member/stats/minecraft",
       label: "Minecraft",
-      icon: "/minecraft-logo.png",
+      icon: icons.minecraft,
       active: location.pathname.includes("/member/stats/minecraft"),
     },
     {
       path: "/member/stats/rust",
       label: "Rust",
-      icon: "/rust-logo.svg",
+      icon: icons.rust,
       active: location.pathname.includes("/member/stats/rust"),
     },
   ];
@@ -60,6 +62,8 @@ export default function StatsMobileNav() {
             alt={label}
             width={28}
             height={28}
+            loading="lazy"
+            aria-hidden="true"
             style={{
               filter: active ? "none" : "grayscale(100%) brightness(60%)",
             }}

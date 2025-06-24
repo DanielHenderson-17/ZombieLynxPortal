@@ -6,6 +6,8 @@ export default function ShopFilterSidebar({
   showPoints,
   setShowSubscriptions,
   setShowPoints,
+  showBattlePass,
+  setShowBattlePass,
   tempMinPrice,
   tempMaxPrice,
   setTempMinPrice,
@@ -134,13 +136,14 @@ export default function ShopFilterSidebar({
           className="form-check-input"
           type="checkbox"
           id="filter-battlepass"
-          disabled
+          checked={showBattlePass}
+          onChange={() => setShowBattlePass(!showBattlePass)}
         />
         <label
           className="form-check-label ms-1 text-white"
           htmlFor="filter-battlepass"
         >
-          BattlePass <small>(Coming Soon)</small>
+          BattlePass
         </label>
       </div>
 
