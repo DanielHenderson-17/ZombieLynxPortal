@@ -1,11 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import "./Home.css";
-import ServerListDisplay from "../server/ServerListDisplay";
-import ServerStatusDisplay from "../server/ServerStatusDisplay";
-import ServicesListDisplay from "../services/ServicesListDisplay";
 import { Link } from "react-router-dom";
 import Footer from "../Footer";
-import About from "../about/About";
 import backgroundDesktop from "../../assets/home/apoc-background-desktop.webp";
 import backgroundMobile from "../../assets/home/apoc-background-mobile.webp";
 import logoMain from "../../assets/home/zlg-logo-main.webp";
@@ -13,11 +9,17 @@ import logoMain from "../../assets/home/zlg-logo-main.webp";
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
 
+  const About = lazy(() => import("../about/About"));
+  const ServicesListDisplay = lazy(() =>
+    import("../services/ServicesListDisplay")
+  );
+  const ServerListDisplay = lazy(() => import("../server/ServerListDisplay"));
+  const ServerStatusDisplay = lazy(() =>
+    import("../server/ServerStatusDisplay")
+  );
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 50); // Slight delay for smoothness
-    return () => clearTimeout(timer);
+    setIsVisible(true);
   }, []);
 
   return (
@@ -36,7 +38,7 @@ export default function Home() {
             <img
               src={backgroundMobile}
               alt=""
-              loading="lazy"
+              loading="eager"
               aria-hidden="true"
               className="splash-background d-md-none d-block"
             />
@@ -142,11 +144,14 @@ export default function Home() {
         </div>
 
         <div className="main-content">
-          <About />
-          <ServicesListDisplay />
-          <ServerListDisplay />
-          <ServerStatusDisplay />
+          <Suspense fallback={<div></div>}>
+            <About />
+            <ServicesListDisplay />
+            <ServerListDisplay />
+            <ServerStatusDisplay />
+          </Suspense>
         </div>
+
         <Footer />
       </div>
     </div>
