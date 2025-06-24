@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
-import bpBackground from "../../assets/battlepass/BP_bg.webp";
+import smokeBg from "../../assets/battlepass/smoke-bg.webm";
 import "./BattlePass.css";
 import BattlePassItems from "./BattlePassItems";
 import BattlePassSingleItem from "./BattlePassSingleItem";
 import { getMyBattlePass } from "../../managers/battlePassManager";
 import BattlePassSingleItemDetails from "./BattlePassSingleItemDetails";
 import BattlePassPremiumCard from "./BattlePassPremiumCard";
+import { battlePassImageMap } from "../../utils/battlePassImageMap";
+import { getDaysLeft } from "../../utils/getDaysLeft";
 
 export default function BattlePass() {
   const [isVisible, setIsVisible] = useState(false);
   const [battlePassData, setBattlePassData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  // ✅ TEMP toggle
+  const showComingSoon = false;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);
@@ -18,12 +23,27 @@ export default function BattlePass() {
   }, []);
 
   useEffect(() => {
+    if (showComingSoon) return;
+
     getMyBattlePass().then((data) => {
       setBattlePassData(data);
-    });
-  }, []);
 
-  if (!battlePassData) return null;
+      const firstReward = data?.rewards?.[1];
+      if (firstReward) {
+        setSelectedItem(firstReward);
+      }
+    });
+  }, [showComingSoon]);
+
+  if (showComingSoon || !battlePassData) {
+    return (
+      <div className="text-center py-5 text-white">
+        <h2>Battle Pass Coming Soon!</h2>
+      </div>
+    );
+  }
+
+  const premiumImage = battlePassImageMap["season_of_shadows"];
 
   return (
     <div
@@ -31,17 +51,14 @@ export default function BattlePass() {
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
-      {/* <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0 position-relative">
-        <p className="text-secondary mb-2">Battle Pass</p>
-      </div> */}
-
-      <div className="flex-grow-1 mb-0 bp-main p-5">
-        <img
-          src={bpBackground}
-          alt=""
-          loading="lazy"
-          aria-hidden="true"
+      <div className="flex-grow-1 mb-0 bp-main py-4 px-5">
+        <video
           className="bp-background-img"
+          src={smokeBg}
+          autoPlay
+          loop
+          muted
+          playsInline
         />
 
         <div className="div1">
@@ -56,7 +73,7 @@ export default function BattlePass() {
         <div className="div2">
           <BattlePassPremiumCard
             hasPremium={battlePassData.hasPremium}
-            premiumImage={battlePassData.img}
+            premiumImage={premiumImage}
           />
         </div>
         <div className="div3 mb-4 pb-2">
@@ -97,7 +114,21 @@ export default function BattlePass() {
           )}
         </div>
         <div className="div5 mb-3">
-          {selectedItem && <BattlePassSingleItem reward={selectedItem} />}
+          <p className="mb-0 text-white">
+            Ends in: {getDaysLeft(battlePassData.end)} Day(s)
+          </p>
+          <h2 className="bp-premium-gradient-text rounded-2 mx-auto mb-0">
+            {battlePassData.name.toUpperCase()}
+          </h2>
+          {selectedItem && (
+            <BattlePassSingleItem
+              reward={selectedItem}
+              level={Object.keys(battlePassData.rewards).find(
+                (key) => battlePassData.rewards[key] === selectedItem
+              )}
+              claimableLevels={battlePassData.claimableLevels}
+            />
+          )}
         </div>
       </div>
     </div>

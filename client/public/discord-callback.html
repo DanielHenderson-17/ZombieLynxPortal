@@ -2,11 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Discord Authentication</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="preconnect" href="https://discord.com" />
+    <link rel="preconnect" href="https://cdn.discordapp.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
     <style>
       body {
         background-color: #2b2d2e;
@@ -19,63 +25,11 @@
         padding: 1rem;
       }
     </style>
+    <script defer src="discord-auth.js"></script>
   </head>
   <body>
-    <script>
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const accessToken = hashParams.get("access_token");
-
-      if (accessToken) {
-        fetch("https://discord.com/api/users/@me", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-          .then((res) => res.json())
-          .then(async (data) => {
-            if (!data.id) {
-              window.close();
-              return;
-            }
-
-            // Step 1: Check if already linked
-            const checkRes = await fetch(`/api/discord/is-linked/${data.id}`);
-            const checkData = await checkRes.json();
-
-            if (checkData.isLinked) {
-              // Show rejection message
-              document.body.innerHTML = "<p>This Discord account is already linked to another user. Please use a different account.</p>";
-              setTimeout(() => window.close(), 5000);
-              return;
-            }
-
-            // Step 2: If not linked, send back to opener
-            if (window.opener) {
-              window.opener.postMessage(
-                {
-                  type: "DISCORD_AUTH_SUCCESS",
-                  discordId: data.id,
-                  discordName: data.username + "#" + data.discriminator,
-                  discordImgUrl: data.avatar
-                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`
-                    : null,
-                },
-                window.origin
-              );
-            }
-
-            window.close();
-          })
-          .catch((err) => {
-            console.error("❌ Error fetching Discord user details:", err);
-            window.close();
-          });
-      } else {
-        window.close();
-      }
-    </script>
-
-    <p>Linking your Discord account... Please wait.</p>
+    <main>
+      <h1>Linking your Discord account... Please wait.</h1>
+    </main>
   </body>
 </html>

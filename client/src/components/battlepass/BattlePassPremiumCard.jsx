@@ -7,7 +7,7 @@ export default function BattlePassPremiumCard({ hasPremium, premiumImage }) {
         <img src={premiumImage} alt="Season" loading="lazy" className="w-100" />
         {hasPremium && (
           <div
-            className="position-absolute mt-2 me-3 bg-warning text-dark fw-bold px-2 py-1 small rounded-start bp-premium-gradient"
+            className="position-absolute mt-2 me-3 text-dark fw-bold px-2 py-1 small rounded-start bp-premium-gradient shadow"
             style={{ top: "0.5rem", right: "-1rem" }}
           >
             25% XP

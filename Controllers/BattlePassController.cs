@@ -109,6 +109,8 @@ namespace ZombieLynxPortalAPI.Controllers
 
             return Ok(new
             {
+                name = activeSeason.Name,
+                end = activeSeason.End,
                 xp,
                 hasPremium = progress?.HasPremium ?? false,
                 premiumPurchasedAt = progress?.PremiumPurchasedAt,

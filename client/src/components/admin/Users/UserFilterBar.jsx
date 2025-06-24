@@ -1,3 +1,7 @@
+import steamIcon from "../../../assets/admin/steamIcon.webp";
+import minecraftIcon from "../../../assets/admin/minecraftIcon.webp";
+import epicIcon from "../../../assets/admin/epicIcon.webp";
+
 export default function UserFilterBar({
   platformFilter,
   setPlatformFilter,
@@ -6,9 +10,9 @@ export default function UserFilterBar({
   onBulkEditClick,
 }) {
   const platforms = [
-    { name: "Steam", icon: "/steamIcon.png" },
-    { name: "Minecraft", icon: "/minecraftIcon.png" },
-    { name: "Epic", icon: "/epicIcon.png" },
+    { name: "Steam", icon: steamIcon },
+    { name: "Minecraft", icon: minecraftIcon },
+    { name: "Epic", icon: epicIcon },
   ];
 
   return (
@@ -26,11 +30,14 @@ export default function UserFilterBar({
         >
           <img
             src={icon}
-            alt={`${name} icon`}
+            alt=""
+            loading="lazy"
+            aria-hidden="true"
             width="20"
             height="20"
             style={{ objectFit: "contain" }}
           />
+
           <span className="d-none d-md-inline">{name}</span>
         </button>
       ))}

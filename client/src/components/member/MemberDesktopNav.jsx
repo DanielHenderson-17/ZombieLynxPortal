@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import "./Member.css";
 import { logout } from "../../managers/authManager";
+import zlgIcon from "../../assets/member/zlgico.webp";
 
 export default function MemberDesktopNav({ loggedInUser, setLoggedInUser }) {
   const [lockedOpen, setLockedOpen] = useState(false);
@@ -75,7 +76,13 @@ export default function MemberDesktopNav({ loggedInUser, setLoggedInUser }) {
       >
         <NavLink to="/" className={logoClass}>
           <>
-            <img src="/zlgico.png" alt="" style={{ width: "40px" }} />
+            <img
+              src={zlgIcon}
+              alt=""
+              loading="lazy"
+              aria-hidden="true"
+              style={{ width: "40px" }}
+            />
             <span className="member-desktop-label ms-2">Home</span>
           </>
         </NavLink>

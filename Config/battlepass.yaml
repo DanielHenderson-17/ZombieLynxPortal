@@ -21,106 +21,116 @@ premium:
 battle_passes:
   1:
     name: "Season of Shadows"
-    img: "/images/bp_banners/season_of_shadows.webp"
+    img: "season_of_shadows"
     start: "2025-05-01"
     end: "2025-07-01"
     rewards:
       1:
         type: "item"
         id: "Chibi-Skeletal_Wyvern"
+        rarity: "Rare"
         amount: 1
         premium: false
-        img: "/images/bp_items/Chibi-Skeletal_Wyvern.webp"
+        img: "Chibi-Skeletal_Wyvern"
         description: "A skeletal wyvern chibi companion."
-        category: "Cosmetic"
-        compatibility: ["ArkSE"]
+        category: "Dino Chibi"
+        compatibility: ["Ark:SE"]
 
       2:
-        type: "item"
+        type: "currency"
         id: "Zombie Lynx Points"
+        rarity: "Common"
         amount: 75
         premium: false
-        img: "/images/bp_items/zlgCoin.webp"
+        img: "zlgCoin"
         description: "75 ZLG Coins — spend in the shop."
         category: "Currency"
-        compatibility: ["ArkSE"]
+        compatibility: ["Ark:SE"]
 
       3:
         type: "item"
         id: "Jack-O-Lantern-Print_Shirt_Skin"
+        rarity: "Uncommon"
         amount: 1
         premium: false
-        img: "/images/bp_items/Jack-O-Lantern-Print_Shirt_Skin.webp"
+        img: "Jack-O-Lantern-Print_Shirt_Skin"
         description: "Pumpkin-themed shirt skin."
-        category: "Cosmetic"
-        compatibility: ["ArkSE"]
+        category: "Player Skin"
+        compatibility: ["Ark:SE"]
 
       4:
         type: "item"
         id: "ARK_Tester_Hat_Skin"
+        rarity: "Uncommon"
         amount: 1
         premium: false
-        img: "/images/bp_items/ARK_Tester_Hat_Skin.webp"
+        img: "ARK_Tester_Hat_Skin"
         description: "Official ARK tester hat skin."
-        category: "Cosmetic"
-        compatibility: ["ArkSE"]
+        category: "Player Skin"
+        compatibility: ["Ark:SE"]
 
       5:
         type: "item"
         id: "Element"
+        rarity: "Legendary"
         amount: 100
         premium: false
-        img: "/images/bp_items/Element.webp"
+        img: "Element"
         description: "100 Element for tek crafting."
         category: "Resource"
-        compatibility: ["ArkSE"]
+        compatibility: ["Ark:SE"]
 
       6:
         type: "item"
         id: "Giga_Bionic_Costume"
+        rarity: "Epic"
         amount: 1
         premium: false
-        img: "/images/bp_items/Giga_Bionic_Costume.webp"
+        img: "Giga_Bionic_Costume"
         description: "Metallic bionic costume for Giga."
-        category: "Cosmetic"
-        compatibility: ["ArkSE"]
+        category: "Dino Skin"
+        compatibility: ["Ark:SE"]
 
       7:
         type: "item"
         id: "Pump-Action_Shotgun"
+        rarity: "Epic"
         amount: 1
         premium: false
-        img: "/images/bp_items/Pump-Action_Shotgun.webp"
+        img: "Pump-Action_Shotgun"
         description: "High-damage pump-action shotgun."
         category: "Weapon"
-        compatibility: ["ArkSE"]
+        compatibility: ["Ark:SE"]
 
       8:
-        type: "item"
-        id: "zlgCoin"
+        type: "currency"
+        id: "Zombie Lynx Points"
+        rarity: "Common"
         amount: 75
         premium: false
-        img: "/images/bp_items/zlgCoin.webp"
+        img: "zlgCoin"
         description: "Another 75 ZLG Coins — earn more!"
-        category: "Currency"
-        compatibility: ["ArkSE"]
+        category: "Shop Currency"
+        compatibility: ["Ark:SE"]
 
       9:
         type: "item"
         id: "Air_Drums_Emote"
+        rarity: "Common"
         amount: 1
         premium: false
-        img: "/images/bp_items/Air_Drums_Emote.webp"
+        img: "Air_Drums_Emote"
         description: "Rock out with the air drums emote."
-        category: "Emote"
-        compatibility: ["ArkSE"]
+        category: "Player Emote"
+        compatibility: ["Ark:SE"]
 
       10:
-        type: "item"
+        type: "dino"
         id: "reaper"
+        rarity: "Legendary"
         amount: 1
         premium: false
-        img: "/images/bp_items/reaper.webp"
+        img: "reaper"
         description: "Reaper-themed item or skin."
-        category: "Cosmetic"
-        compatibility: ["ArkSE"]
+        category: "Dino"
+        compatibility: ["Ark:SE"]

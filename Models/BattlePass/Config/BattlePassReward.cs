@@ -7,6 +7,7 @@ namespace ZombieLynxPortalAPI.Models.BattlePass.Config
         public string Type { get; set; }
         public string Id { get; set; }
         public int Amount { get; set; }
+        public string Rarity { get; set; }
         public bool Premium { get; set; }
         public string Img { get; set; }
         public string Description { get; set; }

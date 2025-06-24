@@ -6,6 +6,9 @@ import ServicesListDisplay from "../services/ServicesListDisplay";
 import { Link } from "react-router-dom";
 import Footer from "../Footer";
 import About from "../about/About";
+import backgroundDesktop from "../../assets/home/apoc-background-desktop.webp";
+import backgroundMobile from "../../assets/home/apoc-background-mobile.webp";
+import logoMain from "../../assets/home/zlg-logo-main.webp";
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,21 +27,27 @@ export default function Home() {
         <div className="splash-main-container mt-0 bg-dark w">
           <div className="d-flex splash-container justify-content-start align-items-center col-12 ps-md-5 position-relative">
             <img
-              src="/images/apoc-background3.png"
+              src={backgroundDesktop}
               alt=""
+              loading="lazy"
+              aria-hidden="true"
               className="splash-background d-md-block d-none"
             />
             <img
-              src="/images/apoc-background4.png"
+              src={backgroundMobile}
               alt=""
+              loading="lazy"
+              aria-hidden="true"
               className="splash-background d-md-none d-block"
             />
             {/* Logo */}
             <div className="splash-logo col-md-5 col-12 text-start ms-md-3 m-0 d-flex justify-content-start align-items-center">
               <div>
                 <img
-                  src="/images/zlg-logo-main.png"
+                  src={logoMain}
                   alt=""
+                  loading="lazy"
+                  aria-hidden="true"
                   className="ms-3 d-block"
                 />
                 <div className="us">

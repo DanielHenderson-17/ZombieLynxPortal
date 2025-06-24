@@ -1,3 +1,4 @@
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { resetPassword } from "../../managers/authManager";
@@ -69,7 +70,13 @@ export default function ResetPassword() {
         }`}
         onSubmit={handleSubmit}
       >
-        <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
+        <img
+          src={zlgLogo}
+          alt="ZLG Logo"
+          className="col-10 mt-3 mb-3"
+          loading="lazy"
+          aria-hidden="true"
+        />
         <h4>Set a New Password</h4>
         <hr />
 

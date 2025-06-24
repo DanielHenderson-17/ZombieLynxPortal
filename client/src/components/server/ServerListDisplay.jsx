@@ -18,7 +18,6 @@ export default function ServerListDisplay() {
     3: EcoModalContent,
     4: MinecraftModalContent,
     5: EmpyrionModalContent,
-    // etc.
   };
 
   const ModalContentComponent = modalComponents[activeServer.id];

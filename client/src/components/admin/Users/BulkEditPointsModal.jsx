@@ -67,10 +67,13 @@ export default function BulkEditPointsModal({
                 >
                   <img
                     src={u.discordImgUrl}
-                    alt="avatar"
+                    alt=""
+                    loading="lazy"
+                    aria-hidden="true"
                     className="rounded-circle"
                     style={{ width: "24px", height: "24px" }}
                   />
+
                   <span className="small">
                     {formatDiscordName(u.discordName)} (Current: {u.points})
                   </span>

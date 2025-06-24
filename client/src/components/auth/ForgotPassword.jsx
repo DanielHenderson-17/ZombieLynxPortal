@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState, useEffect } from "react";
 import { requestPasswordReset } from "../../managers/authManager";
 import { Input, FormGroup, Button } from "reactstrap";
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -38,7 +39,13 @@ export default function ForgotPassword() {
       }`}
       onSubmit={handleSubmit}
     >
-      <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
+      <img
+        src={zlgLogo}
+        alt="Zombie Lynx Logo"
+        loading="lazy"
+        aria-hidden="true"
+        className="col-10 mt-3 mb-3"
+      />
       <h4>Reset Your Password</h4>
       <hr />
       <FormGroup className="mb-4">
