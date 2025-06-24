@@ -26,6 +26,21 @@ export const isMainJwtValid = () => {
   return payload.exp * 1000 > Date.now();
 };
 
+/**
+ * ✅ Convert raw Discord CDN image URL to local proxy URL
+ * @param {string} url
+ * @returns {string}
+ */
+export const getProxiedDiscordImgUrl = (url) => {
+  if (!url?.includes("cdn.discordapp.com")) return url;
+
+  const match = url.match(/avatars\/(\d+)\/([a-zA-Z0-9]+)\.png/);
+  if (!match) return url;
+
+  const [, id, hash] = match;
+  return `/api/Discord/proxy-avatar/${id}/${hash}`;
+};
+
 /* ============================================================================
  * ✅ DISCORD ACCOUNT MANAGEMENT
  * ========================================================================== */

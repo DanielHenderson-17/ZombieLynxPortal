@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
+import {
+  getLinkedDiscordAccount,
+  getProxiedDiscordImgUrl,
+} from "../../managers/discordAuthManager";
 import { getUserMembership } from "../../managers/userProfileManager";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
@@ -54,9 +57,9 @@ export default function NavBarMobileMainMenu({
     Standard: standardIcon,
   };
 
-  const avatarSrc =
-    discordAccount?.discordImgUrl ||
-    `https://ui-avatars.com/api/?name=${loggedInUser?.firstName || "User"}`;
+  const avatarSrc = discordAccount?.discordImgUrl
+    ? getProxiedDiscordImgUrl(discordAccount.discordImgUrl)
+    : `https://ui-avatars.com/api/?name=${loggedInUser?.firstName || "User"}`;
 
   const displayName =
     discordAccount?.discordName || loggedInUser?.firstName || "Guest";

@@ -21,20 +21,22 @@ export default function NavBarMobile({ loggedInUser }) {
         <NavLink to="/#home" className="navbar-brand">
           <img
             src={zlgLogo}
-            alt="Zombie Lynx Gaming"
+            alt=""
             style={{ height: "40px" }}
             loading="lazy"
             aria-hidden="true"
           />
+          <span className="visually-hidden">Zombie Lynx Gaming</span>
         </NavLink>
 
-        <div
-          role="button"
+        <button
+          aria-label="Open menu"
           onClick={() => setMenuOpen((prev) => !prev)}
-          className="d-flex flex-column align-items-center"
+          className="bg-transparent border-0 d-flex flex-column align-items-center"
+          style={{ outline: "none" }}
         >
           <i className="bi bi-list fs-1 text-white"></i>
-        </div>
+        </button>
       </div>
 
       {/* BOTTOM NAV */}
@@ -48,12 +50,14 @@ export default function NavBarMobile({ loggedInUser }) {
             to="/member/stats"
             className="col text-center"
             style={{ minWidth: 0 }}
+            aria-label="Stats"
           >
             {({ isActive }) => (
               <i
                 className={`bi ${
                   isActive ? "bi-bar-chart-fill" : "bi-bar-chart"
                 } fs-4 ${isActive ? "text-white" : "text-secondary"}`}
+                aria-hidden="true"
               ></i>
             )}
           </NavLink>
@@ -63,6 +67,7 @@ export default function NavBarMobile({ loggedInUser }) {
             to="/member/battlepass"
             className="col text-center"
             style={{ minWidth: 0 }}
+            aria-label="Battle Pass"
           >
             {({ isActive }) => (
               <i
@@ -78,6 +83,7 @@ export default function NavBarMobile({ loggedInUser }) {
             to="/member/tickets"
             className="col text-center"
             style={{ minWidth: 0 }}
+            aria-label="Tickets"
           >
             {({ isActive }) => (
               <i
@@ -93,6 +99,7 @@ export default function NavBarMobile({ loggedInUser }) {
             to="/member/vote"
             className="col text-center"
             style={{ minWidth: 0 }}
+            aria-label="Votes"
           >
             {({ isActive }) => (
               <i
@@ -108,6 +115,7 @@ export default function NavBarMobile({ loggedInUser }) {
             to="/member/notifications"
             className="col text-center"
             style={{ minWidth: 0 }}
+            aria-label="Notifications"
           >
             {({ isActive }) => (
               <i
@@ -123,6 +131,7 @@ export default function NavBarMobile({ loggedInUser }) {
             to="/member/settings/general"
             className="col text-center"
             style={{ minWidth: 0 }}
+            aria-label="Settings"
           >
             {({ isActive }) => (
               <i
