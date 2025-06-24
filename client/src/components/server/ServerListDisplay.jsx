@@ -38,7 +38,7 @@ export default function ServerListDisplay() {
               {servers.map((server) => (
                 <li
                   key={server.id}
-                  className={`list-group-item flex-grow-1 d-flex p-1 text-white border-0 my-1 my-md-0 ${
+                  className={`list-group-item flex-grow-1 d-flex p-1 text-white border-0 my-1 my-md-0 align-items-center ${
                     activeServer.id === server.id
                       ? "active bg-danger list-group-item-active"
                       : ""
@@ -47,7 +47,7 @@ export default function ServerListDisplay() {
                 >
                   <img
                     src={server.thumbImg}
-                    alt={server.title}
+                    alt={`Map view of ${server.title} server`}
                     className="img-fluid me-2 col-3 rounded-2 server-thumb"
                   />
                   <div className="col-10 my-auto mx-1 pe-1">

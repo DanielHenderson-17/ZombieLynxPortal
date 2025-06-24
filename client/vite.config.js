@@ -4,22 +4,20 @@ import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   server: {
-    open: true, // Automatically opens the browser on startup
-    port: 5174, // 👈 Fixed port number
-    strictPort: true, // 👈 Prevents Vite from switching to another port if 5176 is in use
+    open: true,
+    port: 5174,
+    strictPort: true,
     proxy: {
       "/api": {
-        target: "https://localhost:5001", // 👈 Backend URL (matches Program.cs launch settings)
+        target: "https://localhost:5001",
         changeOrigin: true,
-        secure: false, // 👈 Allows self-signed SSL certificates in development
+        secure: false,
       },
     },
   },
   build: {
-    outDir: "build", // Optional: Where the production build will be output
-    rollupOptions: {
-      plugins: [visualizer({ open: true })],
-    },
+    outDir: "build",
+    target: "esnext",
   },
-  plugins: [react()],
+  plugins: [react(), visualizer({ filename: "build/stats.html", open: true })],
 });

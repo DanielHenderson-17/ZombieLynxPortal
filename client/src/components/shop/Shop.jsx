@@ -8,7 +8,7 @@ import { useCart } from "../../contexts/CartContext";
 import Subscriptions from "./Subscriptions";
 import PromoCard from "./PromoCard";
 import Points from "./Points";
-import BattlePass from "./BattlePass";
+import ShopBattlePass from "./ShopBattlePass";
 import ShopFilterSidebar from "./ShopFilterSidebar";
 import "./Shop.css";
 
@@ -206,7 +206,7 @@ export default function Shop({ loggedInUser }) {
                   Battle <span className="text-white ms-2">Pass</span>
                   <span className="server-status-line"></span>
                 </h3>
-                <BattlePass
+                <ShopBattlePass
                   mainPassPackage={mainPassPackage}
                   addOnPackages={addOnPackages}
                   cartItems={cartItems}

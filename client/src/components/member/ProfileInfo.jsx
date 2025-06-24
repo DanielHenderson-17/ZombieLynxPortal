@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMainJwtToken } from "../../managers/steamAuthManager";
 import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
+import { getProxiedDiscordImgUrl } from "../../managers/discordAuthManager";
 import { getUserMembership } from "../../managers/userProfileManager";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
@@ -56,7 +57,7 @@ export default function ProfileInfo({ loggedInUser }) {
         <div className="d-flex flex-row align-items-center justify-content-start col-12 ps-md-2 ps-0 gap-1 h-100">
           <div className="hexagon" style={{ background: tierGradient }}>
             <img
-              src={discordAccount?.discordImgUrl}
+              src={getProxiedDiscordImgUrl(discordAccount?.discordImgUrl)}
               alt="Profile"
               className="profile-img"
               loading="lazy"

@@ -130,6 +130,8 @@
 }
 .server-thumb {
   width: 100px;
+  height: 85px;
+  object-fit: cover;
 }
 @media (max-width: 768px) {
   .server-description-text {
@@ -138,6 +140,7 @@
   .server-thumb {
     width: 30px;
     border-radius: 50% !important;
+    height: 25px !important;
   }
   .game-title2 {
     font-size: 0.85rem !important;
@@ -146,6 +149,7 @@
 @media (min-width: 2900px) {
   .server-thumb {
     width: 300px;
+    height: auto !important;
   }
   .game-title {
     font-size: 2.5rem !important;
