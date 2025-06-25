@@ -224,11 +224,12 @@ namespace ZombieLynxPortalAPI.Controllers
             var messageCount = await _dbContext.Messages
                 .CountAsync(m => m.CreatedAt >= start);
 
-            // 3. Average ticket duration (closed only)
+            // 3. Closed tickets (created + closed within range)
             var closedTickets = await _dbContext.Tickets
-                .Where(t => t.Status == "Closed" && t.UpdatedAt >= start)
+                .Where(t => t.Status == "Closed" && t.CreatedAt >= start)
                 .ToListAsync();
 
+            // 4. Average ticket duration
             double averageDuration = 0;
             if (closedTickets.Any())
             {
@@ -238,17 +239,17 @@ namespace ZombieLynxPortalAPI.Controllers
                 averageDuration = Math.Round(totalMinutes / closedTickets.Count);
             }
 
-            // 4. Completion rate (Closed / Created)
+            // 5. Completion rate
             var totalClosed = closedTickets.Count;
             var completionRate = totalCreated > 0
                 ? Math.Round((double)totalClosed / totalCreated * 100, 2)
                 : 0;
 
-            // 5. Open ticket count
+            // 6. Open ticket count
             var openTickets = await _dbContext.Tickets
                 .CountAsync(t => t.Status == "Open");
 
-            // 6. Top user by ticket count
+            // 7. Top user by ticket count
             var topUser = await _dbContext.UserTickets
                 .Where(ut => ut.AssignedAt >= start)
                 .GroupBy(ut => ut.UserProfileId)
@@ -292,8 +293,8 @@ namespace ZombieLynxPortalAPI.Controllers
         public async Task<IActionResult> GetTicketActivityChartLast30Days()
         {
             var now = DateTime.UtcNow.Date;
-            var startDate = now.AddDays(-29); // includes today
-            var endDate = now.AddDays(1);     // exclusive upper bound
+            var startDate = now.AddDays(-29);
+            var endDate = now.AddDays(1);
 
             // Get all tickets created in the range
             var ticketCounts = await _dbContext.Tickets

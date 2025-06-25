@@ -15,7 +15,7 @@ export default function BattlePass() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   // ✅ TEMP toggle
-  const showComingSoon = true;
+  const showComingSoon = false;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);

@@ -23,7 +23,7 @@ export default function BattlePassSingleItemDetails({ selectedItem }) {
         </>
       </div>
 
-      <div className="d-flex align-items-center gap-2 mt-1">
+      <div className="d-flex align-items-center gap-1 mt-1">
         <span className="text-secondary">Compatibility:</span>
         {compatibility.map((game) => (
           <img
@@ -33,7 +33,7 @@ export default function BattlePassSingleItemDetails({ selectedItem }) {
             loading="lazy"
             aria-hidden="true"
             title={game}
-            className="rounded-5"
+            className="rounded-5 border border-dark shadow-lg"
             style={{ width: "20px", height: "20px", objectFit: "contain" }}
           />
         ))}
