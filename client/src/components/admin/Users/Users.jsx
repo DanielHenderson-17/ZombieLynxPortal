@@ -6,6 +6,7 @@ import zlgCoin from "../../../assets/admin/zlgCoin.webp";
 import steamIcon from "../../../assets/admin/steamIcon.webp";
 import minecraftIcon from "../../../assets/admin/minecraftIcon.webp";
 import epicIcon from "../../../assets/admin/epicIcon.webp";
+import defaultAvatar from "../../../assets/admin/default-avatar.webp";
 import { useEffect, useState, useMemo } from "react";
 import {
   getAllUserData,
@@ -228,7 +229,12 @@ export default function Users() {
                     alt="discord avatar"
                     className="rounded-circle"
                     style={{ width: 54, height: 54 }}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = defaultAvatar;
+                    }}
                   />
+
                   {u.role !== "Admin" && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
