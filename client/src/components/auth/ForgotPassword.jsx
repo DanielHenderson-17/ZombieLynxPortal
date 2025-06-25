@@ -2,7 +2,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState, useEffect } from "react";
 import { requestPasswordReset } from "../../managers/authManager";
-import { Input, FormGroup, Button } from "reactstrap";
 import zlgLogo from "../../assets/auth/zlglogo.webp";
 
 export default function ForgotPassword() {
@@ -48,20 +47,20 @@ export default function ForgotPassword() {
       />
       <h4>Reset Your Password</h4>
       <hr />
-      <FormGroup className="mb-4">
-        <Input
+      <div className="mb-4">
+        <input
           type="email"
           placeholder="Enter your email"
-          className="bg-dark text-white border border-secondary"
+          className="form-control bg-dark text-white border border-secondary"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-      </FormGroup>
+      </div>
 
-      <Button color="primary" type="submit" disabled={loading}>
+      <button className="btn btn-primary" type="submit" disabled={loading}>
         {loading ? "Sending..." : "Send Reset Link"}
-      </Button>
+      </button>
       <ToastContainer position="top-center" />
     </form>
   );

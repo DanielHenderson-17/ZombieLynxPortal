@@ -23,14 +23,14 @@
   height: 92vh;
   background: linear-gradient(145deg, #121214, #1a1a1d);
 }
-.splash-background {
+/* .splash-background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   object-fit: cover;
   z-index: 1;
-}
+} */
 .splash-logo {
   z-index: 2;
   height: 80vh;
@@ -41,6 +41,10 @@
 }
 .about-single {
   background-color: #292e38;
+}
+
+.zlg-about {
+  margin-top: 1%;
 }
 .zlg-about h4 {
   font-family: "Montserrat", sans-serif;
@@ -66,7 +70,7 @@
     margin-top: 0px !important;
   }
   .zlg-about {
-    margin-top: 94%;
+    margin-top: 1%;
   }
   .custom-col-3-75 {
     flex: 0 0 33%;
@@ -85,7 +89,7 @@
     margin-top: 0px;
     height: 75%;
   }
-  .splash-background {
+  /* .splash-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -93,7 +97,7 @@
     height: 80vh;
     object-fit: stretch;
     z-index: 1;
-  }
+  } */
   .us {
   }
   .mission-statement h4 {
@@ -107,11 +111,11 @@
   .home-container {
     margin-top: 110px !important;
   }
-  .splash-background {
+  /* .splash-background {
     position: absolute;
     top: 0;
     left: 0;
-  }
+  } */
   .splash-logo {
     height: 100% !important;
   }
@@ -136,5 +140,22 @@
   }
   .splash-main-container {
     height: 94vh;
+  }
+}
+
+.splash-bg {
+  background-image: url("/apoc-background-mobile.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 1;
+  height: 80vh;
+}
+
+@media (min-width: 768px) {
+  .splash-bg {
+    background-image: url("/apoc-background-desktop.webp");
+    height: 80vh;
   }
 }

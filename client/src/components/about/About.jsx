@@ -78,16 +78,16 @@ export default function About() {
         </div>
       </div>
 
-      <h1 className="text-white mt-md-5 mt-1 pt-1 play-anywhere">
+      <div className="text-white mt-md-5 mt-1 pt-1 play-anywhere fs-1">
         <i>
           <span className="text-danger">Play</span> Anywhere,{" "}
           <span className="text-danger">Earn</span> Anywhere,{" "}
           <span className="text-danger">Spend</span> Freely!
         </i>
-      </h1>
-      <h6 className="text-secondary play-disclaimer">
+      </div>
+      <p className="text-secondary play-disclaimer">
         <i>*Select games available for spending points.</i>
-      </h6>
+      </p>
     </div>
   );
 }

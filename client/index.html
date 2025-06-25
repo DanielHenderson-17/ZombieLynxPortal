@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/zlgico.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
@@ -9,44 +10,83 @@
     />
     <title>Zombie Lynx Gaming</title>
 
-    <!-- ✅ Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/zlgico.png" />
-
-    <!-- ✅ Preconnect: performance hint for font/icons -->
+    <!-- ✅ Preconnect for speed -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- ✅ Bootstrap & Icons (de-duped & optimized) -->
+    <!-- ✅ Preload background images -->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      crossorigin="anonymous"
+      rel="preload"
+      as="image"
+      href="/apoc-background-mobile.webp"
+      type="image/webp"
     />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-      rel="stylesheet"
+      rel="preload"
+      as="image"
+      href="/apoc-background-desktop.webp"
+      type="image/webp"
     />
 
-    <!-- ✅ Font Awesome (if actually used) -->
+    <!-- ✅ Async-load Bootstrap CSS -->
     <link
+      rel="preload"
+      as="style"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      onload="this.onload=null;this.rel='stylesheet'"
+      crossorigin="anonymous"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        crossorigin="anonymous"
+      />
+    </noscript>
+
+    <!-- ✅ Async-load Bootstrap Icons -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      />
+    </noscript>
+
+    <!-- ✅ Async-load FontAwesome -->
+    <link
+      rel="preload"
+      as="style"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
       integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root" class="px-0"></div>
 
-    <!-- ✅ Your React/Vite entry point -->
+    <!-- ✅ Entry point and Bootstrap JS -->
     <script type="module" src="/src/main.jsx" defer></script>
-
-    <!-- ✅ Bootstrap bundle (JS only, defer to prevent blocking) -->
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
       defer
     ></script>
   </body>
