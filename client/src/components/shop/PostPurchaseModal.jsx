@@ -21,10 +21,10 @@ export default function PostPurchaseModal({ show, onClose }) {
             </p>
 
             <a
-              href="/member/accountsettings?tab=Accounts"
+              href="/member/settings/linked-accounts"
               className="text-info text-decoration-underline"
             >
-              Account Settings
+              Linked Accounts
             </a>
           </div>
           <div className="modal-footer">
