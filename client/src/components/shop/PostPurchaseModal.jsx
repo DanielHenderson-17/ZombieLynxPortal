@@ -5,7 +5,7 @@ export default function PostPurchaseModal({ show, onClose }) {
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog">
       <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content bg-dark text-white">
+        <div className="modal-content bg-dark text-white mx-auto">
           <div className="modal-header">
             <h5 className="modal-title">Thank You for Your Purchase!</h5>
             <button
