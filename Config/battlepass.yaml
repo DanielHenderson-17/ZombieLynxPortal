@@ -44,8 +44,8 @@ battle_passes:
         premium: false
         img: "zlgCoin"
         description: "75 ZLG Coins — spend in the shop."
-        category: "Currency"
-        compatibility: ["Ark:SE"]
+        category: "Shop Currency"
+        compatibility: ["Ark:SE", "Ark:SA", "Minecraft", "Rust"]
 
       3:
         type: "item"
@@ -111,7 +111,7 @@ battle_passes:
         img: "zlgCoin"
         description: "Another 75 ZLG Coins — earn more!"
         category: "Shop Currency"
-        compatibility: ["Ark:SE"]
+        compatibility: ["Ark:SE", "Ark:SA", "Minecraft", "Rust"]
 
       9:
         type: "item"
