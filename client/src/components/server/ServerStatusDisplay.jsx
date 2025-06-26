@@ -4,11 +4,13 @@ import { fetchServerData } from "../../managers/serverManager";
 import { serverTabs } from "../../utils/serverTabs";
 import { copyToClipboard } from "../../utils/clipboard";
 
+import onlineIcon from "../../assets/server/online.webp";
+import offlineIcon from "../../assets/server/offline.webp";
+
 export default function ServerStatusDisplay() {
   const [activeServer, setActiveServer] = useState(serverTabs[0]);
   const [serverDataCache, setServerDataCache] = useState({});
 
-  // Fetch the active server's data once on mount
   useEffect(() => {
     async function fetchInitialData() {
       const data = await fetchServerData(activeServer.name);
@@ -16,20 +18,17 @@ export default function ServerStatusDisplay() {
     }
 
     fetchInitialData();
-  }, [activeServer.name]); // Only run once on component mount
+  }, [activeServer.name]);
 
-  // Handle fetching data on tab click
   const handleTabClick = async (server) => {
     setActiveServer(server);
 
-    // Check if data is already cached
     if (!serverDataCache[server.name]) {
       const data = await fetchServerData(server.name);
       setServerDataCache((prev) => ({ ...prev, [server.name]: data }));
     }
   };
 
-  // Get the active server's data from the cache
   const activeServerData = serverDataCache[activeServer.name] || [];
 
   return (
@@ -38,13 +37,11 @@ export default function ServerStatusDisplay() {
       id="ServerStatusDisplay"
       data-aos="fade-up"
     >
-      {/* Server Status Header */}
       <h3 className="text-start text-danger server-status-title mb-3">
         SERVER <span className="text-white ms-2">STATUS</span>
         <span className="server-status-line"></span>
       </h3>
 
-      {/* Tab Navigation */}
       <ul className="nav nav-tabs mt-3 d-flex justify-content-between col-12 border-0 mb-0 p-0">
         {serverTabs.map((server) => (
           <li
@@ -63,7 +60,6 @@ export default function ServerStatusDisplay() {
         ))}
       </ul>
 
-      {/* Tab Content */}
       <div className="tab-content mt-0 mx-1">
         {serverTabs.map((server) => (
           <div
@@ -93,7 +89,7 @@ export default function ServerStatusDisplay() {
                       Players
                     </th>
                     <th className="vertical-line col-1 status-title">Vote</th>
-                    <th className="vertical-line col-1 d-none d-md-table-cell status-title ">
+                    <th className="vertical-line col-1 d-none d-md-table-cell status-title">
                       Connect
                     </th>
                   </tr>
@@ -103,13 +99,11 @@ export default function ServerStatusDisplay() {
                     <tr className="text-start" key={server.serverName}>
                       <td className="text-start">
                         <img
-                          src={
-                            server.isOnline
-                              ? "/images/online.png"
-                              : "/images/offline.png"
-                          }
+                          src={server.isOnline ? onlineIcon : offlineIcon}
                           alt={server.isOnline ? "Online" : "Offline"}
                           className="status-icon"
+                          loading="lazy"
+                          aria-hidden="true"
                         />
                       </td>
                       <td className="text-start p-0 status-title">
@@ -120,11 +114,12 @@ export default function ServerStatusDisplay() {
                           {server.serverName || "N/A"}
                         </span>
                       </td>
-
                       <td className="font-monospace d-none d-md-block status-title">
                         {server.version}
                       </td>
-                      <td className=" col-md-1 col-4 p-md-1 p-0 status-title">{`${server.players} / ${server.maxPlayers}`}</td>
+                      <td className="col-md-1 col-4 p-md-1 p-0 status-title">
+                        {`${server.players} / ${server.maxPlayers}`}
+                      </td>
                       <td className="pt-3 px-2 col-1 status-title">
                         <a
                           href={server.voteUrl}

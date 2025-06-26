@@ -151,5 +151,29 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok("Discord account unlinked successfully.");
         }
 
+        // GET: api/Discord/proxy-avatar/{discordId}/{hash}
+        [HttpGet("proxy-avatar/{discordId}/{hash}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ProxyDiscordAvatar(string discordId, string hash)
+        {
+            var imageUrl = $"https://cdn.discordapp.com/avatars/{discordId}/{hash}.png";
+
+            try
+            {
+                using var httpClient = new HttpClient();
+                var response = await httpClient.GetAsync(imageUrl);
+
+                if (!response.IsSuccessStatusCode)
+                    return NotFound("Unable to retrieve Discord avatar.");
+
+                var contentStream = await response.Content.ReadAsStreamAsync();
+                return File(contentStream, "image/png");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to proxy Discord avatar.");
+                return StatusCode(500, "Server error while proxying Discord avatar.");
+            }
+        }
     }
 }

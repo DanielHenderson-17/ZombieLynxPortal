@@ -1,7 +1,7 @@
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { resetPassword } from "../../managers/authManager";
-import { Input, FormGroup, Button, FormFeedback } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validatePassword } from "../../utils/validatePassword";
@@ -69,17 +69,24 @@ export default function ResetPassword() {
         }`}
         onSubmit={handleSubmit}
       >
-        <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
+        <img
+          src={zlgLogo}
+          alt="ZLG Logo"
+          className="col-10 mt-3 mb-3"
+          loading="lazy"
+          aria-hidden="true"
+        />
         <h4>Set a New Password</h4>
         <hr />
 
-        <FormGroup className="mb-4">
-          <Input
+        <div className="mb-4">
+          <input
             type="password"
             placeholder="New Password"
-            className="bg-dark text-white border border-secondary"
+            className={`form-control bg-dark text-white border border-secondary ${
+              passwordError || passwordMismatch ? "is-invalid" : ""
+            }`}
             value={newPassword}
-            invalid={!!passwordError || passwordMismatch}
             onChange={(e) => {
               const value = e.target.value;
               setNewPassword(value);
@@ -88,36 +95,37 @@ export default function ResetPassword() {
             }}
           />
           {passwordError && (
-            <FormFeedback className="d-block">{passwordError}</FormFeedback>
+            <div className="invalid-feedback d-block">{passwordError}</div>
           )}
-        </FormGroup>
+        </div>
 
-        <FormGroup className="mb-4">
-          <Input
+        <div className="mb-4">
+          <input
             type="password"
             placeholder="Confirm Password"
-            className="bg-dark text-white border border-secondary"
+            className={`form-control bg-dark text-white border border-secondary ${
+              passwordMismatch ? "is-invalid" : ""
+            }`}
             value={confirmPassword}
-            invalid={passwordMismatch}
             onChange={(e) => {
               setConfirmPassword(e.target.value);
               setPasswordMismatch(false);
             }}
           />
           {passwordMismatch && (
-            <FormFeedback className="d-block">
+            <div className="invalid-feedback d-block">
               Passwords do not match!
-            </FormFeedback>
+            </div>
           )}
-        </FormGroup>
+        </div>
 
-        <Button
-          color="primary"
+        <button
+          className="btn btn-primary"
           type="submit"
           disabled={loading || !token || !!passwordError || passwordMismatch}
         >
           {loading ? "Resetting..." : "Reset Password"}
-        </Button>
+        </button>
       </form>
 
       <ToastContainer position="top-center" />

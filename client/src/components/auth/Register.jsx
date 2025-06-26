@@ -1,7 +1,7 @@
+import zlgLogo from "../../assets/auth/zlglogo.webp";
 import { useState, useEffect } from "react";
 import { register } from "../../managers/authManager";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, FormFeedback, FormGroup, Input } from "reactstrap";
 import { fetchDiscordClientId } from "../../managers/discordAuthManager";
 import { validatePassword } from "../../utils/validatePassword";
 import "./Login.css";
@@ -124,7 +124,13 @@ export default function Register() {
           isVisible ? "fade-in" : "fade-start"
         }`}
       >
-        <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
+        <img
+          src={zlgLogo}
+          alt="ZLG Logo"
+          className="col-10 mt-3 mb-3"
+          loading="lazy"
+          aria-hidden="true"
+        />
         <h5 className="mt-4 waiting-text">
           Waiting for Discord authentication...
         </h5>
@@ -135,7 +141,13 @@ export default function Register() {
 
   return (
     <div className="container register-container rounded-3 p-4 shadow mt-5 col-md-6 col-11">
-      <img src="/images/zlglogo.png" alt="" className="col-10 mt-3 mb-3" />
+      <img
+        src={zlgLogo}
+        alt="ZLG Logo"
+        className="col-10 mt-3 mb-3"
+        loading="lazy"
+        aria-hidden="true"
+      />
       <h4 className="register-title">Create a new account for</h4>
       <div className="d-flex justify-content-center align-items-center mb-2 register-user">
         <img
@@ -151,51 +163,46 @@ export default function Register() {
       {/* Desktop: Side-by-side inputs for First Name and Last Name */}
       <div className="row mb-2 mt-5">
         <div className="col-12 col-md-6">
-          <FormGroup>
-            <Input
+          <div className="mb-4">
+            <input
               type="text"
               placeholder="First Name"
-              className="bg-dark text-white border border-secondary"
+              className="form-control bg-dark text-white border border-secondary"
               value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
+              onChange={(e) => setFirstName(e.target.value)}
             />
-          </FormGroup>
+          </div>
         </div>
         <div className="col-12 col-md-6">
-          <FormGroup>
-            <Input
+          <div className="mb-4">
+            <input
               type="text"
               placeholder="Last Name"
-              className="bg-dark text-white border border-secondary"
+              className="form-control bg-dark text-white border border-secondary"
               value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
+              onChange={(e) => setLastName(e.target.value)}
             />
-          </FormGroup>
+          </div>
         </div>
       </div>
 
-      <FormGroup className="mb-4">
-        <Input
+      <div className="mb-4">
+        <input
           type="email"
           placeholder="Email"
-          className="bg-dark text-white border border-secondary"
+          className="form-control bg-dark text-white border border-secondary"
           value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          onChange={(e) => setEmail(e.target.value)}
         />
-      </FormGroup>
+      </div>
 
-      <FormGroup className="mb-4">
-        <Input
+      <div className="mb-4">
+        <input
           type="password"
           placeholder="Password"
-          className="bg-dark text-white border border-secondary"
-          invalid={!!passwordError || passwordMismatch}
+          className={`form-control bg-dark text-white border border-secondary ${
+            !!passwordError || passwordMismatch ? "is-invalid" : ""
+          }`}
           value={password}
           onChange={(e) => {
             const newPassword = e.target.value;
@@ -205,27 +212,34 @@ export default function Register() {
           }}
         />
         {passwordError && (
-          <FormFeedback className="d-block">{passwordError}</FormFeedback>
+          <div className="invalid-feedback d-block">{passwordError}</div>
         )}
-      </FormGroup>
+      </div>
 
-      <FormGroup className="mb-4">
-        <Input
+      <div className="mb-4">
+        <input
           type="password"
           placeholder="Confirm Password"
-          className="bg-dark text-white border border-secondary"
-          invalid={passwordMismatch}
+          className={`form-control bg-dark text-white border border-secondary ${
+            passwordMismatch ? "is-invalid" : ""
+          }`}
           value={confirmPassword}
           onChange={(e) => {
             setPasswordMismatch(false);
             setConfirmPassword(e.target.value);
           }}
         />
-        <FormFeedback>Passwords do not match!</FormFeedback>
-      </FormGroup>
-      <FormGroup check className="mb-3 d-flex justify-content-start">
-        <Input
+        {passwordMismatch && (
+          <div className="invalid-feedback d-block">
+            Passwords do not match!
+          </div>
+        )}
+      </div>
+
+      <div className="form-check mb-3 d-flex justify-content-start">
+        <input
           type="checkbox"
+          className="form-check-input"
           id="termsCheckbox"
           checked={hasAcceptedTerms}
           onChange={(e) => setHasAcceptedTerms(e.target.checked)}
@@ -244,7 +258,7 @@ export default function Register() {
           </a>
           .
         </label>
-      </FormGroup>
+      </div>
 
       <p
         style={{ color: "red" }}
@@ -253,8 +267,9 @@ export default function Register() {
       >
         Registration Failure
       </p>
-      <Button
-        color="primary"
+      <button
+        type="submit"
+        className="btn btn-primary mt-3 mb-2"
         onClick={handleSubmit}
         disabled={
           !!passwordError ||
@@ -263,10 +278,9 @@ export default function Register() {
           !confirmPassword ||
           !hasAcceptedTerms
         }
-        className="mt-3 mb-2"
       >
         Register
-      </Button>
+      </button>
 
       <p className="mb-0">
         <Link to="/login" className="text-decoration-none text-secondary">

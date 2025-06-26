@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getLinkedDiscordAccount } from "../../managers/discordAuthManager";
+import {
+  getLinkedDiscordAccount,
+  getProxiedDiscordImgUrl,
+} from "../../managers/discordAuthManager";
 import { getUserMembership } from "../../managers/userProfileManager";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
@@ -9,6 +12,12 @@ import {
   getMembershipTier,
   getTierGradient,
 } from "../../utils/subscriptionUtils";
+
+import goldIcon from "../../assets/nav/gold.webp";
+import diamondIcon from "../../assets/nav/diamond.webp";
+import vibraniumIcon from "../../assets/nav/vibranium.webp";
+import standardIcon from "../../assets/nav/standard.webp";
+import zlgCoin from "../../assets/nav/zlgCoin.webp";
 
 export default function NavBarMobileMainMenu({
   onClose,
@@ -42,15 +51,15 @@ export default function NavBarMobileMainMenu({
   const tier = getMembershipTier(membership || {});
   const tierGradient = getTierGradient(tier);
   const tierIcons = {
-    Gold: "/images/gold.png",
-    Diamond: "/images/diamond.png",
-    Vibranium: "/images/vibranium.png",
-    Standard: "/images/standard.png",
+    Gold: goldIcon,
+    Diamond: diamondIcon,
+    Vibranium: vibraniumIcon,
+    Standard: standardIcon,
   };
 
-  const avatarSrc =
-    discordAccount?.discordImgUrl ||
-    `https://ui-avatars.com/api/?name=${loggedInUser?.firstName || "User"}`;
+  const avatarSrc = discordAccount?.discordImgUrl
+    ? getProxiedDiscordImgUrl(discordAccount.discordImgUrl)
+    : `https://ui-avatars.com/api/?name=${loggedInUser?.firstName || "User"}`;
 
   const displayName =
     discordAccount?.discordName || loggedInUser?.firstName || "Guest";
@@ -99,9 +108,11 @@ export default function NavBarMobileMainMenu({
 
             <div className="mt-1 d-flex align-items-center gap-2">
               <img
-                src="/images/zlgCoin.png"
+                src={zlgCoin}
                 alt="ZLG Coin"
                 style={{ width: 25 }}
+                loading="lazy"
+                aria-hidden="true"
               />
               <strong className="fs-5 mb-1">
                 {formatNumberWithCommas(userPoints)}

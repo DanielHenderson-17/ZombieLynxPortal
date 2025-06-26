@@ -1,52 +1,41 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy } from "react";
 import "./Home.css";
-import ServerListDisplay from "../server/ServerListDisplay";
-import ServerStatusDisplay from "../server/ServerStatusDisplay";
-import ServicesListDisplay from "../services/ServicesListDisplay";
 import { Link } from "react-router-dom";
 import Footer from "../Footer";
-import About from "../about/About";
+import logoMain from "../../assets/home/zlg-logo-main.webp";
 
 export default function Home() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 50); // Slight delay for smoothness
-    return () => clearTimeout(timer);
-  }, []);
+  const About = lazy(() => import("../about/About"));
+  const ServicesListDisplay = lazy(() =>
+    import("../services/ServicesListDisplay")
+  );
+  const ServerListDisplay = lazy(() => import("../server/ServerListDisplay"));
+  const ServerStatusDisplay = lazy(() =>
+    import("../server/ServerStatusDisplay")
+  );
 
   return (
-    <div className={`fade-container ${isVisible ? "fade-in" : ""}`}>
+    <div>
       <div className="home-container col-12 mx-auto p-md-0 pt-0 px-0" id="home">
         {/* Splash Container */}
         <div className="splash-main-container mt-0 bg-dark w">
-          <div className="d-flex splash-container justify-content-start align-items-center col-12 ps-md-5 position-relative">
-            <img
-              src="/images/apoc-background3.png"
-              alt=""
-              className="splash-background d-md-block d-none"
-            />
-            <img
-              src="/images/apoc-background4.png"
-              alt=""
-              className="splash-background d-md-none d-block"
-            />
+          <div className="d-flex splash-container splash-bg justify-content-start align-items-center col-12 ps-md-5 position-relative">
             {/* Logo */}
-            <div className="splash-logo col-md-5 col-12 text-start ms-md-3 m-0 d-flex justify-content-start align-items-center">
+            <div className="splash-logo col-md-5 col-12 text-start ms-md-3 m-0 d-flex justify-content-start align-items-start align-items-md-center pt-md-0 pt-5">
               <div>
                 <img
-                  src="/images/zlg-logo-main.png"
+                  src={logoMain}
                   alt=""
+                  loading="lazy"
+                  aria-hidden="true"
                   className="ms-3 d-block"
                 />
                 <div className="us">
                   <div className="d-md-flex d-block justify-content-start pt-3 pb-md-4 pb-0 mt-3 ms-md-3 m-0 mission-statement">
-                    <h4 className="text-white text-md-start text-center fw-normal mx-auto mx-md-0 col-10 col-md-11 mt-md-2 p-md-0 p-2 text-shadow2">
+                    <p className="text-white text-md-start text-center fw-normal mx-auto mx-md-0 col-10 col-md-11 mt-md-2 p-md-0 p-2 text-shadow2 fs-4">
                       Your ultimate destination for cutting edge game servers!
                       Elevate your gaming experience today!
-                    </h4>
+                    </p>
                   </div>
                   <div className="d-flex justify-content-md-start justify-content-center">
                     <Link
@@ -133,11 +122,14 @@ export default function Home() {
         </div>
 
         <div className="main-content">
-          <About />
-          <ServicesListDisplay />
-          <ServerListDisplay />
-          <ServerStatusDisplay />
+          <Suspense fallback={<div></div>}>
+            <About />
+            <ServicesListDisplay />
+            <ServerListDisplay />
+            <ServerStatusDisplay />
+          </Suspense>
         </div>
+
         <Footer />
       </div>
     </div>

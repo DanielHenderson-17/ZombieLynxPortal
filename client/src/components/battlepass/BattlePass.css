@@ -1,0 +1,229 @@
+.bp-background-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Layout Grid */
+.bp-main {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  min-height: 600px;
+  position: relative;
+  z-index: 1;
+}
+
+.bp-main > div {
+  z-index: 2;
+  position: relative;
+}
+
+.div1 {
+  grid-area: 5 / 1 / 6 / 13;
+}
+.div2 {
+  grid-area: 1 / 10 / 3 / 13;
+}
+.div3 {
+  grid-area: 4 / 10 / 5 / 13;
+}
+.div4 {
+  grid-area: 1 / 1 / 3 / 4;
+}
+.div5 {
+  grid-area: 1 / 5 / 5 / 9;
+}
+
+/* Item Grid */
+.bp-item-grid {
+  grid-template-columns: repeat(10, 1fr);
+  width: 100%;
+}
+
+/* Item Wrapper */
+.bp-item-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Image Stack for Flame Border */
+.bp-img-stack {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  transition: transform 0.2s ease;
+}
+
+.bp-img-stack img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.bp-item-container:hover {
+  transform: scale(1.08);
+  z-index: 3;
+}
+
+/* Main Item Image */
+.bp-item-img {
+  position: relative;
+  z-index: 0;
+  aspect-ratio: 1;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.bp-item-img.claimed {
+  filter: grayscale(100%);
+}
+
+/* Amount Overlay */
+.bp-item-amount {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background-color: #222;
+  color: white;
+  padding: 2px 6px;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Item Detail Box */
+.bp-item-details {
+  position: relative;
+}
+
+.bp-item-details::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.25), transparent)
+      top left / 100% 1px no-repeat,
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.25), transparent) top left /
+      1px 100% no-repeat;
+}
+
+.bg-orange-gradient {
+  background-image: url("https://imgur.com/XRHLPPs.gif");
+  background-size: cover;
+  border-radius: 0.5rem;
+}
+
+.bg-orange-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(46, 19, 1, 0.15);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gradient-border {
+  border-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(135deg, orange, black, white);
+}
+
+.bp-img-inner {
+  border-radius: 0.5rem;
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-dark-item {
+  background-color: #1c1f24;
+}
+
+.bp-premium-gradient {
+  background-image: linear-gradient(to top, #dac616, #ffd700, #ecee5d);
+  color: black;
+}
+
+.bp-premium-gradient-text {
+  background: linear-gradient(to bottom, #d6d6d6, #fade6d, #f5c400, #8d6e00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bp-img-stack {
+  overflow: hidden;
+  position: relative;
+}
+
+.diamond {
+  width: 32px;
+  aspect-ratio: 1;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 4px;
+}
+
+.diamond span {
+  transform: rotate(-45deg);
+  color: white;
+  font-weight: bold;
+}
+
+.bp-bar {
+  width: 15px;
+}
+
+/* Common (fallback uses bg-dark from Bootstrap) */
+.bg-common {
+  background: linear-gradient(to bottom, #6c757d, #40474e);
+}
+
+/* Uncommon: subtle silver-gray gradient */
+.bg-uncommon {
+  background: linear-gradient(to bottom, #d3d3d3, #a8a8a8);
+  color: green;
+}
+
+/* Rare: vibrant blue gradient */
+.bg-rare {
+  background: linear-gradient(to bottom, #4da6ff, #003366);
+}
+
+/* Epic: rich purple gradient */
+.bg-purple {
+  background: linear-gradient(to bottom, #a64af5, #4b0082);
+}
+
+.bg-legendary {
+  /* orange */
+  background: linear-gradient(to bottom, #ff9900, #8d5500);
+}
+
+.rarity-tag {
+  height: 10px;
+  margin-bottom: 5px;
+}
+
+.rarity-box {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}

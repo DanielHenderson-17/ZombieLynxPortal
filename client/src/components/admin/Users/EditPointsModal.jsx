@@ -21,10 +21,13 @@ export default function EditPointsModal({
             <div className="d-flex align-items-center justify-content-center w-100 gap-2 mt-2">
               <img
                 src={user.discordImgUrl}
-                alt="Discord avatar"
+                alt=""
+                loading="lazy"
+                aria-hidden="true"
                 className="rounded-circle"
                 style={{ width: "32px", height: "32px" }}
               />
+
               <span>{formatDiscordName(user.discordName)}</span>
             </div>
 

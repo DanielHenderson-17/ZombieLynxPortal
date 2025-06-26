@@ -5,35 +5,37 @@ import ArkSAStats from "./ArkSAStats";
 import MinecraftStats from "./MinecraftStats";
 import RustStats from "./RustStats";
 import StatsMobileNav from "./StatsMobileNav";
+import { getStatsNavIcons } from "../../utils/statsNavIcons";
 import "./Stats.css";
 
 export default function Stats({ loggedInUser }) {
   const location = useLocation();
   const [isVisible, setIsVisible] = useState(false);
+  const icons = getStatsNavIcons();
 
   const navLinks = [
     {
       path: "arkse",
       label: "Ark:SE",
-      icon: <img src="/ase-logo.webp" alt="" width={24} height={24} />,
+      icon: icons.arkse,
       active: location.pathname.includes("/member/stats/arkse"),
     },
     {
       path: "arksa",
       label: "Ark:SA",
-      icon: <img src="/asa-logo.webp" alt="" width={24} height={24} />,
+      icon: icons.arksa,
       active: location.pathname.includes("/member/stats/arksa"),
     },
     {
       path: "minecraft",
       label: "Minecraft",
-      icon: <img src="/minecraft-logo.png" alt="" width={24} height={24} />,
+      icon: icons.minecraft,
       active: location.pathname.includes("/member/stats/minecraft"),
     },
     {
       path: "rust",
       label: "Rust",
-      icon: <img src="/rust-logo.svg" alt="" width={24} height={24} />,
+      icon: icons.rust,
       active: location.pathname.includes("/member/stats/rust"),
     },
   ];
@@ -49,7 +51,6 @@ export default function Stats({ loggedInUser }) {
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
-      {/* Sidebar Navigation (Desktop Only) */}
       <div className="col-lg-2 p-3 border ticket-nav d-none d-lg-block border-0">
         <div>
           {navLinks.map(({ path, label, icon, active }) => (
@@ -59,15 +60,15 @@ export default function Stats({ loggedInUser }) {
               className={`text-decoration-none ${active ? "active" : ""}`}
             >
               <button className="btn d-block w-100 text-start mb-2 d-flex align-items-center">
-                {typeof icon === "string" ? (
-                  <i
-                    className={`me-3 ${icon} ${
-                      active ? "text-white" : "text-secondary"
-                    }`}
-                  ></i>
-                ) : (
-                  <span className="me-3 d-flex align-items-center">{icon}</span>
-                )}
+                <img
+                  src={icon}
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="me-3"
+                  loading="lazy"
+                  aria-hidden="true"
+                />
                 <p
                   className={`m-0 p-0 ${
                     active ? "text-white" : "text-secondary"
@@ -81,7 +82,6 @@ export default function Stats({ loggedInUser }) {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="flex-grow-1 mb-0 ticket-main">
         <Routes>
           <Route
@@ -104,7 +104,6 @@ export default function Stats({ loggedInUser }) {
         </Routes>
       </div>
 
-      {/* Mobile Navigation */}
       <StatsMobileNav />
     </div>
   );

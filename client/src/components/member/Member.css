@@ -132,14 +132,16 @@
 }
 .buy-points3 {
   position: absolute;
-  top: -6px;
+  top: -7px;
   right: -13px;
 }
 .buy-points3 img {
   width: 35px;
-  height: 35px;
+  aspect-ratio: 50 / 54;
+  object-fit: contain;
   cursor: pointer;
 }
+
 .buy-points {
   position: absolute;
   top: -4px;
@@ -259,7 +261,7 @@
   }
   .member-content {
     padding: 5px;
-    height: 71vh;
+    height: 73vh;
   }
   .member-layout {
     margin-top: 0px !important;

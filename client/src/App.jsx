@@ -8,7 +8,6 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Spinner } from "reactstrap";
 import ApplicationViews from "./components/ApplicationViews";
 import { CartProvider } from "./contexts/CartContext";
 import AOS from "aos";
@@ -70,7 +69,11 @@ function App() {
   if (loggedInUser === undefined) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
-        <Spinner color="primary" />
+        <div
+          className="spinner-border text-primary"
+          role="status"
+          aria-label="Loading"
+        />
       </div>
     );
   }

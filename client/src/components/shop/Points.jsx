@@ -17,9 +17,12 @@ export default function Points({
   const isFree = (pkg) => parseFloat(pkg.total_price) === 0;
 
   return (
-    <div className="row justify-content-start bg-points rounded-3 p-2 pb-5 mb-5">
+    <div className="row justify-content-start bg-points rounded-3 p-md-2 p-0 pb-md-0 pb-3 mb-md-5 mb-0">
       {packages.map((pkg) => (
-        <div className="col-12 col-md-6 col-lg-3 mb-4 h-100" key={pkg.id}>
+        <div
+          className="col-12 col-md-6 col-lg-3 mb-4 h-100 p-md-2 p-0"
+          key={pkg.id}
+        >
           <div className="card buy-card h-100">
             <img src={pkg.image} className="card-img-top" alt={pkg.name} />
             <div className="card-body">

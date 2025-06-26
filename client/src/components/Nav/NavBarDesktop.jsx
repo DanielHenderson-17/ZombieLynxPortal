@@ -2,6 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { formatDiscordName } from "../../utils/formatDiscordName";
 import { formatNumberWithCommas } from "../../utils/formatNumberWithCommas";
+import { getProxiedDiscordImgUrl } from "../../managers/discordAuthManager";
+import zlgLogo from "../../assets/nav/zlg-logo.webp";
+import addPoints from "../../assets/nav/addPoints.webp";
+import zlgCoin from "../../assets/nav/zlgCoin.webp";
+import buyPoints from "../../assets/nav/buyPoints.webp";
 
 export default function NavBarDesktop({
   loggedInUser,
@@ -20,27 +25,41 @@ export default function NavBarDesktop({
 
   return (
     <div className="d-none d-lg-flex align-items-center justify-content-between position-relative col-12 desktop-nav-bar">
-      <Link to="/#home" className="navbar-brand col-7 text-start">
+      <Link
+        to="/#home"
+        className="navbar-brand col-7 text-start"
+        aria-label="Home"
+      >
         <img
           className="zlg-logo"
-          src="/images/zlg-logo.png"
+          src={zlgLogo}
           alt="Zombie Lynx Gaming"
           style={{ height: "50px" }}
+          loading="lazy"
+          aria-hidden="true"
         />
       </Link>
 
       <div className="d-flex align-items-center justify-content-end col-5">
         <Link
           to={`/shop`}
+          aria-label="Shop"
           className="mb-1"
           data-bs-toggle="tooltip"
           title="Shop"
           data-bs-placement="bottom"
         >
-          <img src="/images/addPoints.png" alt="" className="me-4 addPoints" />
+          <img
+            src={addPoints}
+            alt=""
+            className="me-4 addPoints"
+            loading="lazy"
+            aria-hidden="true"
+          />
         </Link>
         <Link
           to={`/discord`}
+          aria-label="Discord"
           data-bs-toggle="tooltip"
           title="Discord"
           data-bs-placement="bottom"
@@ -49,6 +68,7 @@ export default function NavBarDesktop({
         </Link>
         <Link
           to="/#ServerListDisplay"
+          aria-label="Servers"
           data-bs-toggle="tooltip"
           title="Go to Servers"
           data-bs-placement="bottom"
@@ -59,6 +79,7 @@ export default function NavBarDesktop({
         {cartCount > 0 && (
           <Link
             to="/shop/cart"
+            aria-label="Cart"
             className="nav-link pe-2 ps-2 border-start border-secondary position-relative"
           >
             <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
@@ -79,6 +100,7 @@ export default function NavBarDesktop({
           <div className="d-flex justify-content-between align-items-center col-5">
             <Link
               to="/member/notifications"
+              aria-label="Notifications"
               className="nav-link ps-2 pe-2 position-relative border-end border-secondary"
             >
               <i className="bi bi-bell-fill text-white fs-6 me-2"></i>
@@ -110,26 +132,48 @@ export default function NavBarDesktop({
               </h5>
 
               <div className="d-flex align-items-center justify-content-between border border-secondary rounded-5 p-0 text-white col-11 mx-md-auto ms-0 position-relative">
-                <img src="/images/zlgCoin.png" alt="" className="zlg-coin3" />
+                <img
+                  src={zlgCoin}
+                  alt=""
+                  className="zlg-coin3"
+                  loading="lazy"
+                  aria-hidden="true"
+                />
                 <div className="text-container points-container">
                   <p className="mb-0">{formatNumberWithCommas(userPoints)}</p>
                 </div>
-                <Link to="/shop" className="text-secondary buy-points3">
-                  <img src="/images/buyPoints.png" alt="" />
+                <Link
+                  to="/shop"
+                  aria-label="Shop"
+                  className="text-secondary buy-points3"
+                >
+                  <img
+                    src={buyPoints}
+                    alt=""
+                    loading="lazy"
+                    aria-hidden="true"
+                  />
                 </Link>
               </div>
             </div>
 
-            <img
-              src={
-                discordAccount?.discordImgUrl ||
-                steamAccount?.steamImgUrl ||
-                `https://picsum.photos/seed/${randomSeed}/40/40`
-              }
-              alt="Profile"
-              className="profile-img rounded-circle mx-3"
+            <button
               onClick={() => setShowDropdown(!showDropdown)}
-            />
+              className="border-0 bg-transparent p-0 m-0"
+              aria-label="Toggle profile menu"
+            >
+              <img
+                src={
+                  discordAccount?.discordImgUrl
+                    ? getProxiedDiscordImgUrl(discordAccount.discordImgUrl)
+                    : steamAccount?.steamImgUrl ||
+                      `https://picsum.photos/seed/${randomSeed}/40/40`
+                }
+                alt="Profile"
+                className="profile-img rounded-circle mx-3"
+                loading="lazy"
+              />
+            </button>
 
             {showDropdown && (
               <div
@@ -139,9 +183,10 @@ export default function NavBarDesktop({
                 <div className="d-flex align-items-center mb-3 ps-2">
                   <img
                     src={
-                      discordAccount?.discordImgUrl ||
-                      steamAccount?.steamImgUrl ||
-                      `https://picsum.photos/seed/${randomSeed}/40/40`
+                      discordAccount?.discordImgUrl
+                        ? getProxiedDiscordImgUrl(discordAccount.discordImgUrl)
+                        : steamAccount?.steamImgUrl ||
+                          `https://picsum.photos/seed/${randomSeed}/40/40`
                     }
                     alt="Profile"
                     className="rounded-circle me-2"
@@ -182,6 +227,7 @@ export default function NavBarDesktop({
                   <i className="bi bi-discord me-3 fs-2 text-white"></i> Zombie
                   Lynx Discord
                 </button>
+
                 <button
                   className="dropdown-item text-white d-flex justify-content-start align-items-center"
                   onClick={() => navigate("/member/admin/users")}
@@ -197,15 +243,18 @@ export default function NavBarDesktop({
                   <i className="bi bi-box-arrow-right px-1 me-2 fs-2"></i> Log
                   Out
                 </button>
+
                 <div className="d-flex align-items-center justify-content-around mt-4 mb-0">
                   <Link
                     to="/privacy-policy"
+                    aria-label="Privacy Policy"
                     className="text-decoration-none text-white"
                   >
                     Privacy Policy
                   </Link>
                   <Link
                     to="/zlg-rules"
+                    aria-label="Rules"
                     className="text-decoration-none text-white"
                   >
                     Rules
