@@ -49,7 +49,7 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var unsubscribeFooter = $@"
                 <p style='font-size:10px;color:gray;margin-top:30px;'>
-                To manage your marketing email preferences, click <a href='{_frontendBaseUrl}/member/accountsettings'>here</a>.
+                To manage your marketing email preferences, click <a href='{_frontendBaseUrl}/member/settings/privacy'>here</a>.
                 </p>";
 
             if (dto.IsGlobal)

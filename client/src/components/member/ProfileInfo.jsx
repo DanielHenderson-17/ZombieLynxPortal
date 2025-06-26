@@ -47,7 +47,7 @@ export default function ProfileInfo({ loggedInUser }) {
   }, [loggedInUser]);
 
   return (
-    <div className="profile-info d-md-flex justify-content-center col-12 ps-md-0 ps-2">
+    <div className="profile-info d-md-flex justify-content-center col-12 ps-md-0 ps-2 pt-1">
       <div className="d-flex justify-content-md-end justify-content-center align-items-end img-name-points col-12 mb-md-0 mb-2">
         <div className="d-flex flex-row align-items-center justify-content-start col-12 ps-md-2 ps-0 gap-1 h-100">
           <div className="hexagon" style={{ background: tierGradient }}>

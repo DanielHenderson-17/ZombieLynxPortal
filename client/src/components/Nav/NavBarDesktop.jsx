@@ -170,7 +170,7 @@ export default function NavBarDesktop({
 
                 <button
                   className="dropdown-item text-white d-flex justify-content-start align-items-center"
-                  onClick={() => navigate("/member/accountsettings")}
+                  onClick={() => navigate("/member/settings/general")}
                 >
                   <i className="bi bi-gear me-3 fs-2"></i> Settings & Privacy
                 </button>
