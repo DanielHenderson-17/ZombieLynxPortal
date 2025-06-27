@@ -68,8 +68,9 @@
   object-fit: contain;
 }
 
-.bp-item-container:hover {
-  transform: scale(1.08);
+.bp-item-container:hover,
+.bp-item-container-selected {
+  transform: scale(1.11);
   z-index: 3;
 }
 

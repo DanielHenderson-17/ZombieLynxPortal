@@ -134,3 +134,223 @@ battle_passes:
         description: "Reaper-themed item or skin."
         category: "Dino"
         compatibility: ["Ark:SE"]
+
+      11:
+        type: "item"
+        id: "Chibi-Witching_Owl"
+        rarity: "Rare"
+        amount: 1
+        premium: false
+        img: "Chibi-Witching_Owl"
+        description: "Mysterious owl chibi with glowing eyes."
+        category: "Dino Chibi"
+        compatibility: ["Ark:SE"]
+
+      12:
+        type: "currency"
+        id: "Zombie Lynx Points"
+        rarity: "Common"
+        amount: 75
+        premium: false
+        img: "zlgCoin"
+        description: "75 ZLG Coins — spend in the shop."
+        category: "Shop Currency"
+        compatibility: ["Ark:SE", "Ark:SA", "Minecraft", "Rust"]
+
+      13:
+        type: "item"
+        id: "Witch_Hat_Skin"
+        rarity: "Uncommon"
+        amount: 1
+        premium: false
+        img: "Witch_Hat_Skin"
+        description: "Classic witch hat for seasonal flair."
+        category: "Player Skin"
+        compatibility: ["Ark:SE"]
+
+      14:
+        type: "item"
+        id: "Fabricated_Sniper_Rifle"
+        rarity: "Epic"
+        amount: 1
+        premium: false
+        img: "Fabricated_Sniper_Rifle"
+        description: "High-damage long-range sniper rifle."
+        category: "Weapon"
+        compatibility: ["Ark:SE"]
+
+      15:
+        type: "item"
+        id: "Element"
+        rarity: "Legendary"
+        amount: 100
+        premium: false
+        img: "Element"
+        description: "100 Element for tek crafting."
+        category: "Resource"
+        compatibility: ["Ark:SE"]
+
+      16:
+        type: "item"
+        id: "Inflatable_Rex_Costume"
+        rarity: "Uncommon"
+        amount: 1
+        premium: false
+        img: "Inflatable_Rex_Costume"
+        description: "Silly and fun inflatable T-Rex suit."
+        category: "Player Costume"
+        compatibility: ["Ark:SE"]
+
+      17:
+        type: "item"
+        id: "Chainsaw"
+        rarity: "Uncommon"
+        amount: 1
+        premium: false
+        img: "Chainsaw"
+        description: "Fuel-powered chainsaw for harvesting."
+        category: "Weapon"
+        compatibility: ["Ark:SE"]
+
+      18:
+        type: "currency"
+        id: "Zombie Lynx Points"
+        rarity: "Common"
+        amount: 75
+        premium: false
+        img: "zlgCoin"
+        description: "More ZLG Coins — you're rich!"
+        category: "Shop Currency"
+        compatibility: ["Ark:SE", "Ark:SA", "Minecraft", "Rust"]
+
+      19:
+        type: "item"
+        id: "Chibi-Direwolf_Ghost"
+        rarity: "Rare"
+        amount: 1
+        premium: false
+        img: "Chibi-Direwolf_Ghost"
+        description: "Spooky ghost direwolf chibi."
+        category: "Dino Chibi"
+        compatibility: ["Ark:SE"]
+
+      20:
+        type: "dino"
+        id: "Crystal_Wyvern"
+        rarity: "Legendary"
+        amount: 1
+        premium: false
+        img: "Crystal_Wyvern"
+        description: "A powerful and elegant Blood Crystal Wyvern."
+        category: "Dino"
+        compatibility: ["Ark:SE"]
+
+      21:
+        type: "item"
+        id: "Tek_Rifle"
+        rarity: "Legendary"
+        amount: 1
+        premium: false
+        img: "Tek_Rifle"
+        description: "Advanced tek rifle with explosive plasma."
+        category: "Weapon"
+        compatibility: ["Ark:SE"]
+
+      22:
+        type: "currency"
+        id: "Zombie Lynx Points"
+        rarity: "Common"
+        amount: 75
+        premium: false
+        img: "zlgCoin"
+        description: "Keep collecting those coins!"
+        category: "Shop Currency"
+        compatibility: ["Ark:SE", "Ark:SA", "Minecraft", "Rust"]
+
+      23:
+        type: "item"
+        id: "Jerboa_Bunny_Chibi"
+        rarity: "Rare"
+        amount: 1
+        premium: false
+        img: "Jerboa_Bunny_Chibi"
+        description: "Adorable bunny-eared Jerboa chibi."
+        category: "Dino Chibi"
+        compatibility: ["Ark:SE"]
+
+      24:
+        type: "item"
+        id: "Ghost_Reaper_Costume"
+        rarity: "Epic"
+        amount: 1
+        premium: false
+        img: "Ghost_Reaper_Costume"
+        description: "Haunting costume for your tames."
+        category: "Dino Skin"
+        compatibility: ["Ark:SE"]
+
+      25:
+        type: "item"
+        id: "Element"
+        rarity: "Legendary"
+        amount: 100
+        premium: false
+        img: "Element"
+        description: "More Element to fuel your base."
+        category: "Resource"
+        compatibility: ["Ark:SE"]
+
+      26:
+        type: "item"
+        id: "Tek_Bow"
+        rarity: "Legendary"
+        amount: 1
+        premium: false
+        img: "Tek_Bow"
+        description: "Multi-mode tek bow for precise strikes."
+        category: "Weapon"
+        compatibility: ["Ark:SE"]
+
+      27:
+        type: "item"
+        id: "Otter_Straw_Hat_Chibi"
+        rarity: "Rare"
+        amount: 1
+        premium: false
+        img: "Otter_Straw_Hat_Chibi"
+        description: "Beach-vibe otter with a straw hat."
+        category: "Dino Chibi"
+        compatibility: ["Ark:SE"]
+
+      28:
+        type: "currency"
+        id: "Zombie Lynx Points"
+        rarity: "Common"
+        amount: 75
+        premium: false
+        img: "zlgCoin"
+        description: "Almost there — spend it wisely!"
+        category: "Shop Currency"
+        compatibility: ["Ark:SE", "Ark:SA", "Minecraft", "Rust"]
+
+      29:
+        type: "item"
+        id: "Bone_Wyvern_Costume"
+        rarity: "Epic"
+        amount: 1
+        premium: false
+        img: "Bone_Wyvern_Costume"
+        description: "Bone-themed wyvern costume."
+        category: "Dino Skin"
+        compatibility: ["Ark:SE"]
+
+      30:
+        type: "dino"
+        id: "Giganotosaurus"
+        rarity: "Legendary"
+        amount: 1
+        premium: false
+        img: "Giganotosaurus"
+        description: "Summon a mighty Giga to your command."
+        category: "Dino"
+        compatibility: ["Ark:SE"]

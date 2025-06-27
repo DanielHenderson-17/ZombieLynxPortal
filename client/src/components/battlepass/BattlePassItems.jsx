@@ -1,5 +1,7 @@
 import { getRarityGradientClass } from "../../utils/getRarityGradientClass";
 import { battlePassImageMap } from "../../utils/battlePassImageMap";
+import { useRef } from "react";
+import hoverSound from "../../assets/battlepass/hover.ogg";
 
 export default function BattlePassItems({
   xp,
@@ -7,20 +9,26 @@ export default function BattlePassItems({
   claimableLevels,
   rewards,
   onSelect,
+  selectedItem,
+  activeTab,
 }) {
   const sortedLevels = Object.keys(rewards)
     .map(Number)
-    .sort((a, b) => a - b);
+    .sort((a, b) => a - b)
+    .filter((level) => level > (activeTab - 1) * 10 && level <= activeTab * 10);
 
   const getCurrentLevel = () => Math.floor(xp / 100) + 1;
   const getCurrentXp = () => xp % 100;
   const currentLevel = getCurrentLevel();
   const currentXp = getCurrentXp();
+  const hoverAudioRef = useRef(new Audio(hoverSound));
+  hoverAudioRef.current.volume = 0.02;
 
   return (
-    <div className="d-grid gap-4 bp-item-grid">
+    <div className="d-grid gap-4 bp-item-grid mb-2">
       {sortedLevels.map((level) => {
-        const reward = rewards[level];
+        const reward = rewards[level.toString()];
+
         const isClaimed = claimedLevels.includes(level);
         const isClaimable = claimableLevels.includes(level);
         const isLocked = !isClaimed && !isClaimable;
@@ -49,9 +57,14 @@ export default function BattlePassItems({
             key={level}
             className={`bp-item-container rounded-1 overflow-hidden text-center position-relative ${
               level === 10 ? "bp-item-big-wrapper" : ""
-            }`}
+            } ${reward === selectedItem ? "bp-item-container-selected" : ""}`}
             title={reward.description}
             onClick={() => onSelect(reward)}
+            onMouseEnter={() => {
+              const audio = hoverAudioRef.current;
+              audio.currentTime = 0;
+              audio.play();
+            }}
             role="button"
             style={{ cursor: "pointer" }}
           >

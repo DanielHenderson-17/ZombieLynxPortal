@@ -13,8 +13,9 @@ export default function BattlePass() {
   const [isVisible, setIsVisible] = useState(false);
   const [battlePassData, setBattlePassData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [activeTab, setActiveTab] = useState(1); // 1 = levels 1–10
 
-  // ✅ TEMP toggle
+  // TEMPORARY: Set to true to show the "Coming Soon" message
   const showComingSoon = true;
 
   useEffect(() => {
@@ -68,6 +69,8 @@ export default function BattlePass() {
             claimableLevels={battlePassData.claimableLevels}
             rewards={battlePassData.rewards}
             onSelect={setSelectedItem}
+            selectedItem={selectedItem}
+            activeTab={activeTab}
           />
         </div>
         <div className="div2">
@@ -85,26 +88,25 @@ export default function BattlePass() {
               <i className="bi bi-plus-circle mx-3 text-black fs-5 fw-bold"></i>
             </div>
           </div>
+
           <div className="text-end h-50 w-50 d-flex align-items-center ms-auto justify-content-end mt-3">
-            <div className="diamond border border-black bg-dark shadow">
-              <span>1</span>
-            </div>
-            <div className="border border-3 border-secondary bp-bar"></div>
-            <div className="diamond border border-black bg-dark shadow">
-              <span>2</span>
-            </div>
-            <div className="border border-3 border-secondary bp-bar"></div>
-            <div className="diamond border border-black bg-dark shadow">
-              <span>3</span>
-            </div>
-            <div className="border border-3 border-secondary bp-bar"></div>
-            <div className="diamond border border-black bg-dark shadow">
-              <span>4</span>
-            </div>
-            <div className="border border-3 border-secondary bp-bar"></div>
-            <div className="diamond border border-black bg-dark shadow">
-              <span>5</span>
-            </div>
+            {[1, 2, 3].map((tab, index) => (
+              <div key={tab} className="d-flex align-items-center">
+                <div
+                  className={`diamond border bg-dark shadow ${
+                    activeTab === tab ? "border-white" : "border-black"
+                  }`}
+                  role="button"
+                  onClick={() => setActiveTab(tab)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <span>{tab}</span>
+                </div>
+                {index < 2 && (
+                  <div className="border border-3 border-secondary bp-bar"></div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
