@@ -8,7 +8,12 @@ namespace ZombieLynxPortalAPI.Data
     {
         [Key]
         public int Id { get; set; }
+
         public ulong SteamId { get; set; }
+
         public int Points { get; set; }
+
+        [Column("kits")]
+        public string KitsJson { get; set; }
     }
 }

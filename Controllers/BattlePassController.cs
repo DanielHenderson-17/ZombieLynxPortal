@@ -17,10 +17,12 @@ namespace ZombieLynxPortalAPI.Controllers
     public class BattlePassController : ControllerBase
     {
         private readonly ZombieLynxPortalAPIDbContext _mainDb;
+        private readonly ArkShopDbContext _arkDb;
 
-        public BattlePassController(ZombieLynxPortalAPIDbContext mainDb)
+        public BattlePassController(ZombieLynxPortalAPIDbContext mainDb, ArkShopDbContext arkDb)
         {
             _mainDb = mainDb;
+            _arkDb = arkDb;
         }
 
         // ✅ Simple test route
@@ -59,6 +61,7 @@ namespace ZombieLynxPortalAPI.Controllers
             }
         }
 
+        // ✅ Returns user's battle pass progress, rewards, and claimable levels
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> GetMyBattlePass()
@@ -121,6 +124,7 @@ namespace ZombieLynxPortalAPI.Controllers
             });
         }
 
+        // ✅ Adds XP to user's battle pass progress
         [HttpPost("add-xp")]
         [AllowAnonymous]
         public async Task<IActionResult> AddXpToUser([FromBody] AddXpDTO dto)
@@ -169,6 +173,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 newXP = progress.XP
             });
         }
+
+        // ✅ Adds premium status to user's battle pass progress
         [HttpPost("add-premium")]
         [AllowAnonymous]
         public async Task<IActionResult> AddPremiumToUser([FromBody] AddPremiumDTO dto)
@@ -223,6 +229,8 @@ namespace ZombieLynxPortalAPI.Controllers
                 totalXP = progress.XP
             });
         }
+
+        // ✅ Claims a specific level reward for the user
         [HttpPost("claim/{level}")]
         [Authorize]
         public async Task<IActionResult> ClaimLevel(int level)
@@ -269,12 +277,27 @@ namespace ZombieLynxPortalAPI.Controllers
             if (alreadyClaimed)
                 return BadRequest("Reward for this level has already been claimed.");
 
+            // ✅ Add the claim record
             _mainDb.BattlePassClaims.Add(new BattlePassClaim
             {
                 ZLGMemberId = zlgMember.Id,
                 LevelNumber = level,
                 ClaimedAt = DateTime.UtcNow
             });
+
+            // ✅ Handle Zombie Lynx Points (internal points)
+            if (reward.Type == "currency" && reward.Id == "Zombie Lynx Points")
+            {
+                zlgMember.Points += reward.Amount;
+                _mainDb.ZLGMembers.Update(zlgMember);
+            }
+
+            // ✅ Handle ArkShopKit sync if eligible
+            if (!string.IsNullOrWhiteSpace(reward.ArkShopKey) &&
+                ulong.TryParse(zlgMember.SteamId, out var steamId))
+            {
+                await IncrementBattlePassKitAsync(steamId, reward.ArkShopKey);
+            }
 
             await _mainDb.SaveChangesAsync();
 
@@ -284,7 +307,7 @@ namespace ZombieLynxPortalAPI.Controllers
             });
         }
 
-
+        // ✅ Claims all available rewards for the user
         [HttpPost("claim-all")]
         [Authorize]
         public async Task<IActionResult> ClaimAllAvailable()
@@ -333,11 +356,63 @@ namespace ZombieLynxPortalAPI.Controllers
             _mainDb.BattlePassClaims.AddRange(claimable);
             await _mainDb.SaveChangesAsync();
 
+            // ✅ Add Zombie Lynx Points if any rewards are global currency
+            foreach (var claim in claimable)
+            {
+                if (activeSeason.Rewards.TryGetValue(claim.LevelNumber, out var reward))
+                {
+                    if (reward.Type == "currency" && reward.Id == "Zombie Lynx Points")
+                    {
+                        zlgMember.Points += reward.Amount;
+                    }
+                }
+            }
+            _mainDb.ZLGMembers.Update(zlgMember);
+            await _mainDb.SaveChangesAsync();
+
             return Ok(new
             {
                 message = $"Claimed {claimable.Count} rewards successfully.",
                 claimedLevels = claimable.Select(c => c.LevelNumber).ToList()
             });
+        }
+        private async Task<bool> IncrementBattlePassKitAsync(ulong steamId, string bpKey)
+        {
+            var player = await _arkDb.ArkShopPlayers.FirstOrDefaultAsync(p => p.SteamId == steamId);
+            if (player == null)
+                return false;
+
+            var kits = new Dictionary<string, KitAmount>();
+
+            if (!string.IsNullOrWhiteSpace(player.KitsJson))
+            {
+                try
+                {
+                    kits = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, KitAmount>>(player.KitsJson);
+                }
+                catch
+                {
+                    // If malformed, we’ll just reset to a fresh dictionary
+                    kits = new Dictionary<string, KitAmount>();
+                }
+            }
+
+            if (kits.ContainsKey(bpKey))
+                kits[bpKey].Amount++;
+            else
+                kits[bpKey] = new KitAmount { Amount = 1 };
+
+            player.KitsJson = System.Text.Json.JsonSerializer.Serialize(kits);
+
+            _arkDb.ArkShopPlayers.Update(player);
+            await _arkDb.SaveChangesAsync();
+
+            return true;
+        }
+
+        private class KitAmount
+        {
+            public int Amount { get; set; }
         }
 
     }
