@@ -41,6 +41,10 @@
 .div5 {
   grid-area: 1 / 5 / 5 / 9;
 }
+.div6 {
+  grid-area: 4 / 1 / 5 / 4;
+  z-index: 3;
+}
 
 /* Item Grid */
 .bp-item-grid {
@@ -52,6 +56,19 @@
 .bp-item-wrapper {
   position: relative;
   width: 100%;
+}
+.claim-all-button:hover .claim-all-text {
+  display: inline !important;
+}
+.claim-all-button {
+  height: 100% !important;
+}
+.claimed-check-icon {
+  font-size: 6.5rem;
+  z-index: 3;
+  pointer-events: none;
+  color: gray;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.7));
 }
 
 /* Image Stack for Flame Border */
@@ -183,8 +200,22 @@
 
 .diamond span {
   transform: rotate(-45deg);
-  color: white;
   font-weight: bold;
+}
+
+.tab-purple-gradient {
+  background: linear-gradient(
+    135deg,
+    #e0b3ff,
+    #b566ff,
+    #8e44fd,
+    #6610f2,
+    #4b0082
+  );
+  color: white !important;
+  border: 1px solid black !important;
+  transform: rotate(45deg) scale(1.15);
+  transition: transform 0.2s ease-in-out;
 }
 
 .bp-bar {

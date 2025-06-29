@@ -28,6 +28,7 @@ battle_passes:
       1:
         type: "item"
         id: "Chibi-Skeletal_Wyvern"
+        arkshop_key: "BPchibi_wyvern_bone"
         rarity: "Rare"
         amount: 1
         premium: false
@@ -39,6 +40,7 @@ battle_passes:
       2:
         type: "currency"
         id: "Zombie Lynx Points"
+        arkshop_key: "ZLP75"
         rarity: "Common"
         amount: 75
         premium: false
@@ -50,6 +52,7 @@ battle_passes:
       3:
         type: "item"
         id: "Jack-O-Lantern-Print_Shirt_Skin"
+        arkshop_key: "BPshirt_pumpkin"
         rarity: "Uncommon"
         amount: 1
         premium: false
@@ -61,6 +64,7 @@ battle_passes:
       4:
         type: "item"
         id: "ARK_Tester_Hat_Skin"
+        arkshop_key: "BPtester_hat"
         rarity: "Uncommon"
         amount: 1
         premium: false
@@ -72,6 +76,7 @@ battle_passes:
       5:
         type: "item"
         id: "Element"
+        arkshop_key: "BPelement"
         rarity: "Legendary"
         amount: 100
         premium: false
@@ -83,6 +88,7 @@ battle_passes:
       6:
         type: "item"
         id: "Giga_Bionic_Costume"
+        arkshop_key: "BPcostume_bionicgiga"
         rarity: "Epic"
         amount: 1
         premium: false
@@ -94,6 +100,7 @@ battle_passes:
       7:
         type: "item"
         id: "Pump-Action_Shotgun"
+        arkshop_key: "BPbp_shotgun"
         rarity: "Epic"
         amount: 1
         premium: false
@@ -105,6 +112,7 @@ battle_passes:
       8:
         type: "currency"
         id: "Zombie Lynx Points"
+        arkshop_key: "ZLP75"
         rarity: "Common"
         amount: 75
         premium: false
@@ -116,6 +124,7 @@ battle_passes:
       9:
         type: "item"
         id: "Air_Drums_Emote"
+        arkshop_key: "BPemote_airdrum"
         rarity: "Common"
         amount: 1
         premium: false
@@ -127,6 +136,7 @@ battle_passes:
       10:
         type: "dino"
         id: "reaper"
+        arkshop_key: "BPdino_reaper"
         rarity: "Legendary"
         amount: 1
         premium: false
@@ -138,6 +148,7 @@ battle_passes:
       11:
         type: "item"
         id: "Chibi-Witching_Owl"
+        arkshop_key: "BPchibi_witchingowl"
         rarity: "Rare"
         amount: 1
         premium: false
@@ -149,6 +160,7 @@ battle_passes:
       12:
         type: "currency"
         id: "Zombie Lynx Points"
+        arkshop_key: "ZLP75"
         rarity: "Common"
         amount: 75
         premium: false
@@ -160,6 +172,7 @@ battle_passes:
       13:
         type: "item"
         id: "Witch_Hat_Skin"
+        arkshop_key: "BPhat_witch"
         rarity: "Uncommon"
         amount: 1
         premium: false
@@ -171,6 +184,7 @@ battle_passes:
       14:
         type: "item"
         id: "Fabricated_Sniper_Rifle"
+        arkshop_key: "BPbp_sniper"
         rarity: "Epic"
         amount: 1
         premium: false
@@ -182,6 +196,7 @@ battle_passes:
       15:
         type: "item"
         id: "Element"
+        arkshop_key: "BPelement"
         rarity: "Legendary"
         amount: 100
         premium: false
@@ -193,6 +208,7 @@ battle_passes:
       16:
         type: "item"
         id: "Inflatable_Rex_Costume"
+        arkshop_key: "BPcostume_rex"
         rarity: "Uncommon"
         amount: 1
         premium: false
@@ -204,6 +220,7 @@ battle_passes:
       17:
         type: "item"
         id: "Chainsaw"
+        arkshop_key: "BPbp_chainsaw"
         rarity: "Uncommon"
         amount: 1
         premium: false
@@ -215,6 +232,7 @@ battle_passes:
       18:
         type: "currency"
         id: "Zombie Lynx Points"
+        arkshop_key: "ZLP75"
         rarity: "Common"
         amount: 75
         premium: false
@@ -226,6 +244,7 @@ battle_passes:
       19:
         type: "item"
         id: "Chibi-Direwolf_Ghost"
+        arkshop_key: "BPchibi_direwolf_ghost"
         rarity: "Rare"
         amount: 1
         premium: false
@@ -237,6 +256,7 @@ battle_passes:
       20:
         type: "dino"
         id: "Crystal_Wyvern"
+        arkshop_key: "BPdino_crystalwyvern"
         rarity: "Legendary"
         amount: 1
         premium: false
@@ -248,6 +268,7 @@ battle_passes:
       21:
         type: "item"
         id: "Tek_Rifle"
+        arkshop_key: "BPbp_tekrifle"
         rarity: "Legendary"
         amount: 1
         premium: false
@@ -259,6 +280,7 @@ battle_passes:
       22:
         type: "currency"
         id: "Zombie Lynx Points"
+        arkshop_key: "ZLP75"
         rarity: "Common"
         amount: 75
         premium: false
@@ -270,6 +292,7 @@ battle_passes:
       23:
         type: "item"
         id: "Jerboa_Bunny_Chibi"
+        arkshop_key: "BPchibi_jerboa_bunny"
         rarity: "Rare"
         amount: 1
         premium: false
@@ -281,6 +304,7 @@ battle_passes:
       24:
         type: "item"
         id: "Ghost_Reaper_Costume"
+        arkshop_key: "BPcostume_ghostreaper"
         rarity: "Epic"
         amount: 1
         premium: false
@@ -292,6 +316,7 @@ battle_passes:
       25:
         type: "item"
         id: "Element"
+        arkshop_key: "BPelement"
         rarity: "Legendary"
         amount: 100
         premium: false
@@ -303,6 +328,7 @@ battle_passes:
       26:
         type: "item"
         id: "Tek_Bow"
+        arkshop_key: "BPbp_tekbow"
         rarity: "Legendary"
         amount: 1
         premium: false
@@ -314,6 +340,7 @@ battle_passes:
       27:
         type: "item"
         id: "Otter_Straw_Hat_Chibi"
+        arkshop_key: "BPchibi_otter_strawhat"
         rarity: "Rare"
         amount: 1
         premium: false
@@ -325,6 +352,7 @@ battle_passes:
       28:
         type: "currency"
         id: "Zombie Lynx Points"
+        arkshop_key: "ZLP75"
         rarity: "Common"
         amount: 75
         premium: false
@@ -336,6 +364,7 @@ battle_passes:
       29:
         type: "item"
         id: "Bone_Wyvern_Costume"
+        arkshop_key: "BPcostume_bonewyvern"
         rarity: "Epic"
         amount: 1
         premium: false
@@ -347,6 +376,7 @@ battle_passes:
       30:
         type: "dino"
         id: "Giganotosaurus"
+        arkshop_key: "BPdino_giga"
         rarity: "Legendary"
         amount: 1
         premium: false

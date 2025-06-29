@@ -3,17 +3,26 @@ import smokeBg from "../../assets/battlepass/smoke-bg.webm";
 import "./BattlePass.css";
 import BattlePassItems from "./BattlePassItems";
 import BattlePassSingleItem from "./BattlePassSingleItem";
-import { getMyBattlePass } from "../../managers/battlePassManager";
+import BattlePassXpBar from "./BattlePassXpBar";
+import {
+  getMyBattlePass,
+  claimAllBattlePassRewards,
+} from "../../managers/battlePassManager";
 import BattlePassSingleItemDetails from "./BattlePassSingleItemDetails";
 import BattlePassPremiumCard from "./BattlePassPremiumCard";
 import { battlePassImageMap } from "../../utils/battlePassImageMap";
+import { claimBattlePassLevel } from "../../managers/battlePassManager";
 import { getDaysLeft } from "../../utils/getDaysLeft";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function BattlePass() {
   const [isVisible, setIsVisible] = useState(false);
   const [battlePassData, setBattlePassData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [activeTab, setActiveTab] = useState(1); // 1 = levels 1–10
+  const [activeTab, setActiveTab] = useState(1);
+
+  console.log(selectedItem);
 
   // TEMPORARY: Set to true to show the "Coming Soon" message
   const showComingSoon = true;
@@ -79,13 +88,52 @@ export default function BattlePass() {
             premiumImage={premiumImage}
           />
         </div>
+        <div className="div6">
+          <BattlePassXpBar xp={battlePassData.xp} />
+        </div>
+
         <div className="div3 mb-4 pb-2">
           <div className="h-50 d-flex align-items-center justify-content-end p-0 m-0 pt-3">
-            <div className="w-50 d-flex justify-content- align-items-center border border-black rounded bp-premium-gradient">
-              <button className="btn btn-outline text-end text-black w-100 fs-6 fw-bold">
-                BUY LEVELS
-              </button>
-              <i className="bi bi-plus-circle mx-3 text-black fs-5 fw-bold"></i>
+            <div className="w-100 d-flex gap-1 align-items-center justify-content-end h-100">
+              {battlePassData.claimableLevels.length > 0 && (
+                <div
+                  className="d-flex align-items-center border border-black rounded bg-success px-3 py-1 claim-all-button h-100"
+                  role="button"
+                  onClick={async () => {
+                    const result = await claimAllBattlePassRewards();
+
+                    if (result?.claimedLevels?.length) {
+                      const claimedIds = result.claimedLevels
+                        .map((lvl) => battlePassData.rewards[lvl]?.id)
+                        .filter(Boolean);
+
+                      claimedIds.forEach((id) => {
+                        toast.success(`🎉 Claimed ${id}`, {
+                          position: "bottom-right",
+                          autoClose: 4000,
+                        });
+                      });
+
+                      const refreshed = await getMyBattlePass();
+                      if (refreshed) setBattlePassData(refreshed);
+                    } else {
+                      toast.info("No rewards to claim.");
+                    }
+                  }}
+                >
+                  <i className="bi bi-files text-white"></i>
+                  <span className="claim-all-text text-white fw-bold d-none ms-2">
+                    Claim All
+                  </span>
+                </div>
+              )}
+
+              <div className="d-flex justify-content-end align-items-center border border-black rounded bp-premium-gradient px-3 py-1 h-100">
+                <button className="btn btn-outline text-end text-black w-100 fs-6 fw-bold">
+                  BUY LEVELS
+                </button>
+                <i className="bi bi-plus-circle mx-3 text-black fs-5 fw-bold"></i>
+              </div>
             </div>
           </div>
 
@@ -93,8 +141,10 @@ export default function BattlePass() {
             {[1, 2, 3].map((tab, index) => (
               <div key={tab} className="d-flex align-items-center">
                 <div
-                  className={`diamond border bg-dark shadow ${
-                    activeTab === tab ? "border-white" : "border-black"
+                  className={`diamond border shadow ${
+                    activeTab === tab
+                      ? "tab-purple-gradient"
+                      : "bg-dark text-white border-black"
                   }`}
                   role="button"
                   onClick={() => setActiveTab(tab)}
@@ -102,6 +152,7 @@ export default function BattlePass() {
                 >
                   <span>{tab}</span>
                 </div>
+
                 {index < 2 && (
                   <div className="border border-3 border-secondary bp-bar"></div>
                 )}
@@ -129,10 +180,30 @@ export default function BattlePass() {
                 (key) => battlePassData.rewards[key] === selectedItem
               )}
               claimableLevels={battlePassData.claimableLevels}
+              claimedLevels={battlePassData.claimedLevels}
+              onClaim={async (level) => {
+                try {
+                  const result = await claimBattlePassLevel(level);
+                  if (result) {
+                    toast.success(`🎉 Claimed ${selectedItem.id}!`);
+                    const refreshed = await getMyBattlePass();
+                    if (refreshed) setBattlePassData(refreshed);
+                  } else {
+                    toast.error(`❌ Failed to claim ${selectedItem.id}.`);
+                  }
+                } catch (err) {
+                  toast.error(`🚫 Error claiming reward: ${err.message}`);
+                }
+              }}
             />
           )}
         </div>
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={6000}
+        style={{ zIndex: "10000" }}
+      />
     </div>
   );
 }

@@ -8,13 +8,15 @@ namespace ZombieLynxPortalAPI.Data
         public ArkShopDbContext(DbContextOptions<ArkShopDbContext> options) : base(options) { }
 
         public DbSet<ArkShopPlayer> ArkShopPlayers { get; set; }
-
         public DbSet<ArkPointsSyncEntry> PointsSyncQueue { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ArkPointsSyncEntry>()
                 .ToTable("pointsyncqueue");
+
+            modelBuilder.Entity<ArkShopPlayer>()
+                .ToTable("arkshopplayers");
 
             base.OnModelCreating(modelBuilder);
         }

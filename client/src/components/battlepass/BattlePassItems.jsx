@@ -44,13 +44,14 @@ export default function BattlePassItems({
           .filter(Boolean)
           .join(" ");
 
-        const backgroundClass =
-          level === 5 || level === 10 ? "bg-orange-gradient" : "bg-dark-item";
+        const isLegendary = reward.rarity?.toLowerCase() === "legendary";
 
-        const borderClass =
-          level === 5 || level === 10
-            ? "gradient-border"
-            : "border border-black";
+        const backgroundClass = isLegendary
+          ? "bg-orange-gradient"
+          : "bg-dark-item";
+        const borderClass = isLegendary
+          ? "gradient-border"
+          : "border border-black";
 
         return (
           <div
@@ -98,6 +99,12 @@ export default function BattlePassItems({
                 aria-hidden="true"
                 className={imgClasses}
               />
+              {isClaimed && (
+                <i
+                  className="bi bi-check-lg position-absolute top-50 start-50 translate-middle claimed-check-icon"
+                  title="Claimed"
+                />
+              )}
 
               {isCurrentLevel && (
                 <div
