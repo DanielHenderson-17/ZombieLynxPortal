@@ -71,13 +71,13 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public async Task<IActionResult> CreateBasket([FromBody] BasketRequestDTO request)
         {
-            Log.Information("🔥 CreateBasket DTO endpoint HIT!");
+            // Log.Information("🔥 CreateBasket DTO endpoint HIT!");
 
             var webstoreIdentifier = _configuration["TebexWebstore:WebstoreIdentifier"];
             if (string.IsNullOrEmpty(webstoreIdentifier))
                 return BadRequest("Tebex Webstore Identifier is not configured.");
 
-            Log.Information("🛠️ Incoming basket request:");
+            // Log.Information("🛠️ Incoming basket request:");
             foreach (var item in request.Items)
             {
                 Log.Information($"- Package ID: {item.PackageId}, Qty: {item.Quantity}");
@@ -106,7 +106,10 @@ namespace ZombieLynxPortalAPI.Controllers
 
             var resultJson = await response.Content.ReadAsStringAsync();
 
-            Log.Information($"✅ Tebex Response ({response.StatusCode}):\n" + resultJson);
+            Log.Information("🟨🟨🟨🟨🟨 BEGIN TEBEX RESPONSE 🟨🟨🟨🟨🟨");
+            Log.Information($"✅ Tebex Response ({response.StatusCode}):\n{resultJson}");
+            Log.Information("🟨🟨🟨🟨🟨 END TEBEX RESPONSE 🟨🟨🟨🟨🟨");
+
 
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, "Failed to create basket on Tebex.");
@@ -161,7 +164,7 @@ namespace ZombieLynxPortalAPI.Controllers
         [Authorize]
         public async Task<IActionResult> AddPackageToBasket([FromRoute] string ident, [FromBody] BasketItemDTO item)
         {
-            Log.Information("📦 AddPackageToBasket endpoint hit!");
+            // Log.Information("📦 AddPackageToBasket endpoint hit!");
 
             var client = _httpClientFactory.CreateClient();
 
@@ -211,7 +214,7 @@ namespace ZombieLynxPortalAPI.Controllers
             };
 
             var payloadJson = JsonSerializer.Serialize(tebexPayload, new JsonSerializerOptions { WriteIndented = true });
-            Log.Information("➡ Sending to Tebex:\n" + payloadJson);
+            // Log.Information("➡ Sending to Tebex:\n" + payloadJson);
 
             var jsonContent = new StringContent(payloadJson);
             jsonContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -219,7 +222,7 @@ namespace ZombieLynxPortalAPI.Controllers
             var response = await client.PostAsync(postUrl, jsonContent);
             var resultJson = await response.Content.ReadAsStringAsync();
 
-            Log.Information($"✅ Package Added Response ({response.StatusCode}):\n{resultJson}");
+            // Log.Information($"✅ Package Added Response ({response.StatusCode}):\n{resultJson}");
 
             if ((int)response.StatusCode == 400)
             {
@@ -246,7 +249,7 @@ namespace ZombieLynxPortalAPI.Controllers
             var basketResponse = await client.GetAsync(getUrl);
             var basketJson = await basketResponse.Content.ReadAsStringAsync();
 
-            Log.Information($"🧾 Basket Lookup Response ({basketResponse.StatusCode}):\n{basketJson}");
+            // Log.Information($"🧾 Basket Lookup Response ({basketResponse.StatusCode}):\n{basketJson}");
 
             return Content(basketJson, "application/json");
         }
@@ -278,8 +281,8 @@ namespace ZombieLynxPortalAPI.Controllers
         {
             using var reader = new StreamReader(Request.Body);
             string rawJson = await reader.ReadToEndAsync();
-            Log.Information("📦 Raw JSON Payload:");
-            Log.Information(rawJson);
+            // Log.Information("📦 Raw JSON Payload:");
+            // Log.Information(rawJson);
 
             // Deserialize manually
             var payload = JsonSerializer.Deserialize<TebexBaseWebhookDTO>(rawJson, new JsonSerializerOptions
@@ -348,6 +351,7 @@ namespace ZombieLynxPortalAPI.Controllers
                                 Log.Warning("❌ No user_id found in payment webhook. Skipping processing gracefully.");
                                 return Ok();
                             }
+                            Log.Information($"🧾 Custom field for package {packageId}: {product.GetProperty("custom")}");
 
                             await _orderProcessor.ProcessOrderAsync(new TebexOrderActionDTO
                             {

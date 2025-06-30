@@ -164,7 +164,7 @@ All dashboards update **live** and are part of the `/admin` section.
 
 ## 🧠 What I Learned
 
-Throughout this capstone project, I gained hands-on experience with:
+Throughout this project, I gained hands-on experience with:
 
 - **Self-hosting and deployment** using Nginx as a reverse proxy and Cloudflare for DNS management, HTTPS enforcement, and security features.
 - Navigating the **complexity of OAuth callback URIs** across platforms like Discord and Steam, ensuring proper redirection and token flow in multi-environment setups.

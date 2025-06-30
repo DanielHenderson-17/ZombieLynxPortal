@@ -3,6 +3,7 @@ using ZombieLynxPortalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Services.Ark;
 using ZombieLynxPortalAPI.Services.Minecraft;
+using ZombieLynxPortalAPI.Models;
 using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Tebex
@@ -33,6 +34,67 @@ namespace ZombieLynxPortalAPI.Services.Tebex
             string? group = null;
             int points = 0;
 
+            // Check for bp-level first
+            if (parts.Length == 2 && parts[0].ToLower() == "bp-level")
+            {
+                if (int.TryParse(parts[1], out int xp))
+                {
+                    Log.Information($"🧬 Detected BP-Level purchase. Granting {xp} XP to user {dto.UserProfileId}");
+
+                    var userProfile = await _dbContext.UserProfiles
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(p => p.Id == dto.UserProfileId);
+
+                    if (userProfile == null)
+                    {
+                        Log.Warning("❌ User profile not found. Skipping XP grant.");
+                        return;
+                    }
+
+                    var zlgMember = await _dbContext.ZLGMembers
+                        .FirstOrDefaultAsync(z => z.UserProfileId == dto.UserProfileId);
+
+                    if (zlgMember == null)
+                    {
+                        Log.Warning("❌ ZLG member not found. Skipping XP grant.");
+                        return;
+                    }
+
+                    var progress = await _dbContext.BattlePassProgress
+                        .FirstOrDefaultAsync(p => p.ZLGMemberId == zlgMember.Id);
+
+                    if (progress == null)
+                    {
+                        progress = new BattlePassProgress
+
+                        {
+                            ZLGMemberId = zlgMember.Id,
+                            XP = xp,
+                            LastXPUpdate = DateTime.UtcNow
+                        };
+                        _dbContext.BattlePassProgress.Add(progress);
+                        Log.Information("🆕 Created new BattlePassProgress entry.");
+                    }
+                    else
+                    {
+                        progress.XP += xp;
+                        progress.LastXPUpdate = DateTime.UtcNow;
+                        _dbContext.BattlePassProgress.Update(progress);
+                        Log.Information($"📈 Updated BattlePassProgress. New XP: {progress.XP}");
+                    }
+
+                    await _dbContext.SaveChangesAsync();
+                    Log.Information("💾 Battle pass XP changes saved.");
+                    return; // ✅ Done, skip normal point/subscription flow
+                }
+                else
+                {
+                    Log.Warning("❌ Invalid XP value passed for bp-level.");
+                    return;
+                }
+            }
+
+            // Normal points/subscription flow
             if (parts.Length == 1)
             {
                 if (int.TryParse(parts[0], out var parsedPoints))
@@ -85,7 +147,6 @@ namespace ZombieLynxPortalAPI.Services.Tebex
 
                 Log.Information($"💰 Adding Tebex points: {originalPoints} + {addedPoints} = {member.Points} for user {member.UserProfileId}");
             }
-
 
             await _dbContext.SaveChangesAsync();
             Log.Information("💾 Changes saved to ZLGMember.");
