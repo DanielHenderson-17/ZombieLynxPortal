@@ -25,7 +25,7 @@ export default function BattlePass() {
   console.log(selectedItem);
 
   // TEMPORARY: Set to true to show the "Coming Soon" message
-  const showComingSoon = true;
+  const showComingSoon = false;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);

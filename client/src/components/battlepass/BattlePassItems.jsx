@@ -118,7 +118,7 @@ export default function BattlePassItems({
                   title={`${xp} / ${level * 100} XP`}
                 >
                   <div
-                    className="bg-primary rounded-5"
+                    className="bg-warning rounded-5"
                     style={{
                       height: "100%",
                       width: `${(currentXp / 100) * 100}%`,
