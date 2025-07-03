@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ZombieLynxPortalAPI.Services.Ark;
 using ZombieLynxPortalAPI.Services.Minecraft;
 using ZombieLynxPortalAPI.Models;
+using ZombieLynxPortalAPI.Services.BattlePass;
 using Serilog;
 
 namespace ZombieLynxPortalAPI.Services.Tebex
@@ -34,7 +35,7 @@ namespace ZombieLynxPortalAPI.Services.Tebex
             string? group = null;
             int points = 0;
 
-            // Check for bp-level first
+            // ✅ Handle bp-level
             if (parts.Length == 2 && parts[0].ToLower() == "bp-level")
             {
                 if (int.TryParse(parts[1], out int xp))
@@ -66,7 +67,6 @@ namespace ZombieLynxPortalAPI.Services.Tebex
                     if (progress == null)
                     {
                         progress = new BattlePassProgress
-
                         {
                             ZLGMemberId = zlgMember.Id,
                             XP = xp,
@@ -85,7 +85,7 @@ namespace ZombieLynxPortalAPI.Services.Tebex
 
                     await _dbContext.SaveChangesAsync();
                     Log.Information("💾 Battle pass XP changes saved.");
-                    return; // ✅ Done, skip normal point/subscription flow
+                    return;
                 }
                 else
                 {
@@ -94,7 +94,65 @@ namespace ZombieLynxPortalAPI.Services.Tebex
                 }
             }
 
-            // Normal points/subscription flow
+            // ✅ Handle bp-premium
+            if (parts.Length == 1 && parts[0].ToLower() == "bp-premium")
+            {
+                Log.Information($"👑 Detected BP-Premium purchase. Granting premium to user {dto.UserProfileId}");
+
+                var config = BattlePassConfigLoader.LoadConfig();
+                int bonusXp = config.Premium.BonusXp;
+
+                var userProfile = await _dbContext.UserProfiles
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(p => p.Id == dto.UserProfileId);
+
+                if (userProfile == null)
+                {
+                    Log.Warning("❌ User profile not found. Skipping premium grant.");
+                    return;
+                }
+
+                var zlgMember = await _dbContext.ZLGMembers
+                    .FirstOrDefaultAsync(z => z.UserProfileId == dto.UserProfileId);
+
+                if (zlgMember == null)
+                {
+                    Log.Warning("❌ ZLG member not found. Skipping premium grant.");
+                    return;
+                }
+
+                var progress = await _dbContext.BattlePassProgress
+                    .FirstOrDefaultAsync(p => p.ZLGMemberId == zlgMember.Id);
+
+                if (progress == null)
+                {
+                    progress = new BattlePassProgress
+                    {
+                        ZLGMemberId = zlgMember.Id,
+                        HasPremium = true,
+                        PremiumPurchasedAt = DateTime.UtcNow,
+                        XP = bonusXp,
+                        LastXPUpdate = DateTime.UtcNow
+                    };
+                    _dbContext.BattlePassProgress.Add(progress);
+                    Log.Information("🆕 Created new BattlePassProgress entry with premium.");
+                }
+                else
+                {
+                    progress.HasPremium = true;
+                    progress.PremiumPurchasedAt = DateTime.UtcNow;
+                    progress.XP += bonusXp;
+                    progress.LastXPUpdate = DateTime.UtcNow;
+                    _dbContext.BattlePassProgress.Update(progress);
+                    Log.Information($"📈 Updated BattlePassProgress: +{bonusXp} XP, Premium active.");
+                }
+
+                await _dbContext.SaveChangesAsync();
+                Log.Information("💾 Battle pass premium changes saved.");
+                return;
+            }
+
+            // 🔁 Normal points/subscription flow
             if (parts.Length == 1)
             {
                 if (int.TryParse(parts[0], out var parsedPoints))
@@ -130,6 +188,13 @@ namespace ZombieLynxPortalAPI.Services.Tebex
 
             if (!string.IsNullOrWhiteSpace(group))
             {
+                var forbidden = new[] { "bp-level", "bp-premium" };
+                if (forbidden.Contains(group.ToLower()))
+                {
+                    Log.Error($"🚫 Invalid group '{group}' detected in Tebex custom field. Blocking subscription processing.");
+                    return;
+                }
+
                 var expiration = DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-dd");
                 member.TimedPermissionGroups = $"{group}:{expiration}";
                 Log.Information($"✅ Applied timed permission group: {group} (expires {expiration})");
@@ -142,10 +207,8 @@ namespace ZombieLynxPortalAPI.Services.Tebex
             if (points > 0)
             {
                 var originalPoints = member.Points;
-                var addedPoints = points;
-                member.Points = originalPoints + addedPoints;
-
-                Log.Information($"💰 Adding Tebex points: {originalPoints} + {addedPoints} = {member.Points} for user {member.UserProfileId}");
+                member.Points = originalPoints + points;
+                Log.Information($"💰 Adding Tebex points: {originalPoints} + {points} = {member.Points} for user {member.UserProfileId}");
             }
 
             await _dbContext.SaveChangesAsync();

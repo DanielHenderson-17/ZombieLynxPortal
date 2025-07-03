@@ -46,9 +46,9 @@ export default function BattlePassItems({
 
         const isLegendary = reward.rarity?.toLowerCase() === "legendary";
 
-        const backgroundClass = isLegendary
-          ? "bg-orange-gradient"
-          : "bg-dark-item";
+        const backgroundClass =
+          isLegendary && !isClaimed ? "bg-orange-gradient" : "bg-dark-item";
+
         const borderClass = isLegendary
           ? "gradient-border"
           : "border border-black";

@@ -101,7 +101,7 @@
 }
 
 .bp-item-img.claimed {
-  filter: grayscale(100%);
+  filter: grayscale(100%) brightness(40%) contrast(100%);
 }
 
 /* Amount Overlay */
