@@ -73,7 +73,8 @@ builder.Services.AddScoped<MinecraftSubscriptionSyncService>();
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 // Add services for Notifications
 builder.Services.AddScoped<TebexNotificationService>();
-
+// Add services for BattlePass
+builder.Services.AddHostedService<BattlePassXPJob>();
 
 
 // Configure PostgreSQL

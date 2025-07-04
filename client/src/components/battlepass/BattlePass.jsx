@@ -4,6 +4,7 @@ import "./BattlePass.css";
 import BattlePassItems from "./BattlePassItems";
 import BattlePassSingleItem from "./BattlePassSingleItem";
 import BattlePassXpBar from "./BattlePassXpBar";
+import { Link } from "react-router-dom";
 import {
   getMyBattlePass,
   claimAllBattlePassRewards,
@@ -129,10 +130,13 @@ export default function BattlePass() {
               )}
 
               <div className="d-flex justify-content-end align-items-center border border-black rounded bp-premium-gradient px-3 py-1 h-100">
-                <button className="btn btn-outline text-end text-black w-100 fs-6 fw-bold">
-                  BUY LEVELS
-                </button>
-                <i className="bi bi-plus-circle mx-3 text-black fs-5 fw-bold"></i>
+                <Link
+                  to="/shop"
+                  className="text-decoration-none d-flex align-items-center text-black fw-bold justify-content-end"
+                >
+                  <p className="m-0"> BUY LEVELS</p>
+                  <i className="bi bi-plus-circle ms-3 text-black fs-5 fw-bold"></i>
+                </Link>
               </div>
             </div>
           </div>

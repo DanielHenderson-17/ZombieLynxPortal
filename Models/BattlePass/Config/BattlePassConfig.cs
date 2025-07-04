@@ -9,6 +9,7 @@ namespace ZombieLynxPortalAPI.Models.BattlePass.Config
         public int XpPerLevel { get; set; }
         public int DailyXpCap { get; set; }
         public PremiumConfig Premium { get; set; }
+        public XpConversionConfig XpConversion { get; set; }
         public Dictionary<int, BattlePassSeason> BattlePasses { get; set; }
     }
 }
