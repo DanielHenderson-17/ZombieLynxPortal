@@ -151,7 +151,42 @@
   z-index: 1;
 }
 
-.gradient-border {
+/* .gradient-border {
+  border-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(135deg, orange, black, white);
+} */
+
+.common-gradient-border {
+  border-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(135deg, gray, black);
+}
+
+.uncommon-gradient-border {
+  border-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(135deg, #28a745, black);
+}
+
+.rare-gradient-border {
+  border-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(135deg, #007bff, black);
+}
+
+.epic-gradient-border {
+  border-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(135deg, #6f42c1, black);
+}
+
+.legendary-gradient-border {
   border-width: 2px;
   border-style: solid;
   border-image-slice: 1;
@@ -229,8 +264,7 @@
 
 /* Uncommon: subtle silver-gray gradient */
 .bg-uncommon {
-  background: linear-gradient(to bottom, #d3d3d3, #a8a8a8);
-  color: green;
+  background: linear-gradient(to bottom, #1e8d1e, #3b943b);
 }
 
 /* Rare: vibrant blue gradient */

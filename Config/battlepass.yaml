@@ -8,6 +8,9 @@ active_bp: 1
 # 📈 XP system configuration
 xp_per_level: 100 # XP needed to level up once
 daily_xp_cap: 300 # Max XP a player can earn per day
+xp_conversion:
+  interval_minutes: 15
+  xp_per_interval: 25
 
 # 💎 Premium bonuses
 premium:
@@ -101,12 +104,12 @@ battle_passes:
         type: "item"
         id: "Pump-Action_Shotgun"
         arkshop_key: "BPbp_shotgun"
-        rarity: "Epic"
+        rarity: "Legendary"
         amount: 1
         premium: false
         img: "Pump-Action_Shotgun"
         description: "High-damage pump-action shotgun."
-        category: "Weapon"
+        category: "Weapon Blueprint"
         compatibility: ["Ark:SE"]
 
       8:
@@ -190,7 +193,7 @@ battle_passes:
         premium: false
         img: "Fabricated_Sniper_Rifle"
         description: "High-damage long-range sniper rifle."
-        category: "Weapon"
+        category: "Weapon Blueprint"
         compatibility: ["Ark:SE"]
 
       15:
@@ -226,7 +229,7 @@ battle_passes:
         premium: false
         img: "Chainsaw"
         description: "Fuel-powered chainsaw for harvesting."
-        category: "Weapon"
+        category: "Weapon Blueprint"
         compatibility: ["Ark:SE"]
 
       18:
@@ -274,7 +277,7 @@ battle_passes:
         premium: false
         img: "Tek_Rifle"
         description: "Advanced tek rifle with explosive plasma."
-        category: "Weapon"
+        category: "Weapon Blueprint"
         compatibility: ["Ark:SE"]
 
       22:
@@ -334,7 +337,7 @@ battle_passes:
         premium: false
         img: "Tek_Bow"
         description: "Multi-mode tek bow for precise strikes."
-        category: "Weapon"
+        category: "Weapon Blueprint"
         compatibility: ["Ark:SE"]
 
       27:
