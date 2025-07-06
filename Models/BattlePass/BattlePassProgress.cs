@@ -24,6 +24,6 @@ namespace ZombieLynxPortalAPI.Models
         public DateTime? LastXPUpdate { get; set; }
         public int LastMinutesPlayed { get; set; } = 0;
         public int UnprocessedMinutes { get; set; } = 0;
-
+        public int XpEarnedToday { get; set; } = 0;
     }
 }
