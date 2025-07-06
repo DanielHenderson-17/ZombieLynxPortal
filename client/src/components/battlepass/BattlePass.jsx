@@ -22,11 +22,18 @@ export default function BattlePass() {
   const [battlePassData, setBattlePassData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [activeTab, setActiveTab] = useState(1);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  console.log(selectedItem);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
 
-  // TEMPORARY: Set to true to show the "Coming Soon" message
-  const showComingSoon = true;
+    checkMobile(); // initial check
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 50);
@@ -37,14 +44,31 @@ export default function BattlePass() {
     if (showComingSoon) return;
 
     getMyBattlePass().then((data) => {
+      if (!data) return;
+
+      const daysLeft = getDaysLeft(data.end);
+      if (daysLeft <= 0) {
+        setShowComingSoon(true);
+        return;
+      }
+
       setBattlePassData(data);
 
-      const firstReward = data?.rewards?.[1];
+      const firstReward = data.rewards?.[1];
       if (firstReward) {
         setSelectedItem(firstReward);
       }
     });
   }, [showComingSoon]);
+
+  if (isMobile) {
+    return (
+      <div className="text-center py-5 text-white">
+        <h4>This feature is not yet optimized for Mobile.</h4>
+        <p>Please try again on a PC.</p>
+      </div>
+    );
+  }
 
   if (showComingSoon || !battlePassData) {
     return (

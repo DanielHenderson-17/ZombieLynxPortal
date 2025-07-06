@@ -9,8 +9,6 @@ export default function BattlePassXpBar({ xp }) {
 
   return (
     <div className="w-100 p-3 rounded text-white mt-5">
-      {/* <h5 className="mb-3">LEVEL {currentLevel}</h5> */}
-
       <div className="d-flex justify-content-between align-items-center mb-1">
         <span className="text-uppercase text-white-50 small mb-1">
           Next Level:
@@ -27,6 +25,10 @@ export default function BattlePassXpBar({ xp }) {
           aria-valuemin="0"
           aria-valuemax="100"
         />
+      </div>
+
+      <div className="text-end small fst-italic text-white-50 mt-1">
+        ({Math.min(xp, 3000)} / 3000)
       </div>
     </div>
   );

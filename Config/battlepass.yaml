@@ -25,8 +25,8 @@ battle_passes:
   1:
     name: "Season of Shadows"
     img: "season_of_shadows"
-    start: "2025-05-01"
-    end: "2025-07-01"
+    start: "2025-07-05"
+    end: "2025-08-06"
     rewards:
       1:
         type: "item"
