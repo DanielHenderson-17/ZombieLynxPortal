@@ -15,7 +15,6 @@ export default function ArkSELeaderboard() {
       }
     });
   }, []);
-
   return (
     <div className="text-white">
       <h5 className="text-center mb-4">🏆 ASE PvP Leaderboard (Top 10)</h5>
@@ -60,6 +59,10 @@ export default function ArkSELeaderboard() {
                         src={avatarUrl}
                         alt="avatar"
                         className="rounded-circle leaderboard-avatar"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = fallbackAvatar;
+                        }}
                       />
 
                       <span className="fw-semibold">
@@ -73,7 +76,9 @@ export default function ArkSELeaderboard() {
                   <td className="text-end px-3 stat-col">
                     {player.playerDeaths}
                   </td>
-                  <td className="text-end px-3 stat-col">{player.kd}</td>
+                  <td className="text-end px-3 stat-col">
+                    {Number(player.kd).toFixed(1)}
+                  </td>
                   <td className="text-end px-2 stat-col">
                     {player.pvPDamage.toLocaleString()}
                   </td>
