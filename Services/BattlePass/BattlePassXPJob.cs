@@ -90,17 +90,22 @@ public class BattlePassXPJob : BackgroundService
                 var eligibleXP = baseXP;
                 if (!progress.HasPremium)
                 {
-                    var earnedToday = progress.LastXPUpdate >= todayCutoff ? progress.XP % xpCap : 0;
-                    var remainingXP = xpCap - earnedToday;
-                    eligibleXP = Math.Min(remainingXP, baseXP);
-                }
+                    if (progress.LastXPUpdate < todayCutoff)
+                        progress.XpEarnedToday = 0;
 
+                    int remainingXP = xpCap - progress.XpEarnedToday;
+                    eligibleXP = Math.Min(remainingXP, baseXP);
+                    if (eligibleXP <= 0)
+                    {
+                        _logger.LogInformation($"[XP CAP] {member.DiscordName} (ZLG ID {member.Id}) hit daily XP cap of {xpCap} XP. Skipping XP gain.");
+                    }
+                }
                 if (eligibleXP > 0)
                 {
                     progress.XP += eligibleXP;
+                    progress.XpEarnedToday += eligibleXP;
                     progress.LastXPUpdate = now;
                 }
-
                 progress.LastMinutesPlayed = stat.MinutesPlayed;
                 progress.UnprocessedMinutes = leftover;
             }

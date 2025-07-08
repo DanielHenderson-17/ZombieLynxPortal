@@ -39,6 +39,7 @@ namespace ZombieLynxPortalAPI.Controllers
             try
             {
                 var config = BattlePassConfigLoader.LoadConfig();
+                var today = DateTime.UtcNow.Date;
                 if (!config.BattlePasses.TryGetValue(config.ActiveBp, out var activeSeason))
                     return NotFound("Active battle pass not found.");
 
@@ -145,22 +146,47 @@ namespace ZombieLynxPortalAPI.Controllers
             if (zlgMember == null)
                 return NotFound("ZLG member not found.");
 
+            var config = BattlePassConfigLoader.LoadConfig();
+            var today = DateTime.UtcNow.Date;
+
             var progress = await _mainDb.BattlePassProgress
                 .FirstOrDefaultAsync(p => p.ZLGMemberId == zlgMember.Id);
 
             if (progress == null)
             {
+                int xpToAdd = Math.Min(dto.XP, config.DailyXpCap);
                 progress = new BattlePassProgress
                 {
                     ZLGMemberId = zlgMember.Id,
-                    XP = dto.XP,
+                    XP = xpToAdd,
+                    XpEarnedToday = xpToAdd,
                     LastXPUpdate = DateTime.UtcNow
                 };
                 _mainDb.BattlePassProgress.Add(progress);
             }
             else
             {
-                progress.XP += dto.XP;
+                if (progress.HasPremium)
+                {
+                    // Premium users ignore the cap
+                    progress.XP += dto.XP;
+                }
+                else
+                {
+                    int xpEarnedToday = (progress.LastXPUpdate.HasValue && progress.LastXPUpdate.Value.Date == today)
+                        ? progress.XpEarnedToday
+                        : 0;
+
+                    int xpRemaining = config.DailyXpCap - xpEarnedToday;
+
+                    if (xpRemaining <= 0)
+                        return BadRequest("Daily XP cap reached.");
+
+                    int xpToAdd = Math.Min(dto.XP, xpRemaining);
+                    progress.XP += xpToAdd;
+                    progress.XpEarnedToday = xpEarnedToday + xpToAdd;
+                }
+
                 progress.LastXPUpdate = DateTime.UtcNow;
                 _mainDb.BattlePassProgress.Update(progress);
             }
@@ -170,7 +196,9 @@ namespace ZombieLynxPortalAPI.Controllers
             return Ok(new
             {
                 message = "XP added successfully.",
-                newXP = progress.XP
+                newXP = progress.XP,
+                earnedToday = progress.XpEarnedToday,
+                cap = config.DailyXpCap
             });
         }
 
