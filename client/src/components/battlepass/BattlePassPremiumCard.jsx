@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function BattlePassPremiumCard({ hasPremium, premiumImage }) {
   return (
     <div className="text-white border border-black rounded-3 shadow overflow-hidden">
-      <div className="position-relative mb-0">
+      <div className="position-relative mb-0 d-md-block d-none">
         <img src={premiumImage} alt="Season" loading="lazy" className="w-100" />
         {hasPremium && (
           <div
