@@ -8,8 +8,8 @@ export default function BattlePassSingleItemDetails({ selectedItem }) {
   const { category, id, compatibility, rarity, amount } = selectedItem;
 
   return (
-    <div className="bp-item-details text-white p-3 text-start">
-      <div className="fs-6 text-white mb-1 d-flex align-items-center gap-2">
+    <div className="bp-item-details text-white p-md-3 p-1 text-start">
+      <div className="fs-6 text-white mb-1 d-flex align-items-center gap-2 justify-content-md-start justify-content-center">
         <span className={`rarity-box ${getRarityGradientClass(0, rarity)}`} />
         <span className="text-uppercase">{rarity}</span>
         <span className="text-secondary">|</span>
@@ -23,7 +23,7 @@ export default function BattlePassSingleItemDetails({ selectedItem }) {
         </>
       </div>
 
-      <div className="d-flex align-items-center gap-1 mt-1">
+      <div className="d-flex align-items-center gap-1 mt-1 justify-content-md-start justify-content-center">
         <span className="text-secondary">Compatibility:</span>
         {compatibility.map((game) => (
           <img

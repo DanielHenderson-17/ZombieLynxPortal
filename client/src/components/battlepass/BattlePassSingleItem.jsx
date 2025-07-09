@@ -13,14 +13,13 @@ export default function BattlePassSingleItem({
   const isClaimed = claimedLevels.includes(Number(level));
 
   return (
-    <div className="d-flex flex-column justify-content-start align-items-center text-white bp-single-item mt-4 pt-2">
+    <div className="d-flex flex-column justify-content-start align-items-center text-white bp-single-item mt-md-4 mt-0 pt-2">
       <img
         src={battlePassImageMap[reward.img]}
         alt=""
         loading="lazy"
         aria-hidden="true"
-        className="h-auto"
-        style={{ objectFit: "contain", width: "65%" }}
+        className="bp-single-item-img h-auto"
       />
 
       {isClaimable && !isClaimed && (

@@ -8,7 +8,7 @@ export default function BattlePassXpBar({ xp }) {
   const progressPercent = (xpIntoLevel / 100) * 100;
 
   return (
-    <div className="w-100 p-3 rounded text-white mt-5">
+    <div className="w-100 p-md-3 p-1 px-2 rounded text-white mt-md-5 mt-0">
       <div className="d-flex justify-content-between align-items-center mb-1">
         <span className="text-uppercase text-white-50 small mb-1">
           Next Level:
