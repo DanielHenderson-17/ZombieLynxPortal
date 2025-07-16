@@ -480,6 +480,12 @@ export default function Cart() {
             during checkout or purchases. All purchases are handled through
             Tebex.
           </i>
+          <br />
+          <i className="fs-6 text-secondary">
+            All sales are final. No refunds will be issued. This currency is
+            donation only and has no real-world value. It is used to support the
+            server and its development. It is not for any specific game.
+          </i>
         </div>
       </div>
       <ToastContainer position="top-center" autoClose={2000} theme="dark" />
