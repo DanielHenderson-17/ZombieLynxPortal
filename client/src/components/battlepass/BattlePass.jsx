@@ -24,7 +24,7 @@ export default function BattlePass() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 1);
     };
 
     checkMobile();
@@ -83,7 +83,7 @@ export default function BattlePass() {
         isVisible ? "fade-in" : "fade-start"
       }`}
     >
-      <div className="flex-grow-1 mb-0 bp-main py-4 px-md-5 px-2 ">
+      <div className="flex-grow-1 mb-0 bp-main py-md-4 py-0 pt-1 px-md-5 px-2 ">
         <video
           className="bp-background-img d-none d-md-block"
           src={smokeBg}
@@ -114,7 +114,7 @@ export default function BattlePass() {
           <BattlePassXpBar xp={battlePassData.xp} />
         </div>
 
-        <div className="battlepass-buttons mb-4 pb-2">
+        <div className="battlepass-buttons mb-md-4 mb-0 pb-md-2 pb-0">
           <BattlePassButtons
             claimableLevels={battlePassData.claimableLevels}
             rewards={battlePassData.rewards}
@@ -129,7 +129,7 @@ export default function BattlePass() {
             <BattlePassSingleItemDetails selectedItem={selectedItem} />
           )}
         </div>
-        <div className="battlepass-single-item mb-3">
+        <div className="battlepass-single-item mb-md-3 mb-0">
           <p className="mb-0 text-white">
             Ends in: {getDaysLeft(battlePassData.end)} Day(s)
           </p>

@@ -35,7 +35,7 @@ export default function BattlePassButtons({
   };
 
   return (
-    <div className="div3 mb-4 pb-2">
+    <div className="div3 mb-md-4 mb-0 pb-md-2 pb-1">
       <div className="h-50 d-flex align-items-center justify-content-end p-0 m-0 pt-md-3 pt-0">
         <div className="w-100 d-flex gap-1 align-items-center justify-content-end h-100">
           {claimableLevels.length > 0 && (
@@ -63,7 +63,7 @@ export default function BattlePassButtons({
         </div>
       </div>
 
-      <div className="text-end h-50 w-50 d-flex align-items-center ms-auto justify-content-end mt-3">
+      <div className="text-end h-50 w-50 d-flex align-items-center ms-auto justify-content-end mt-md-3 mt-4">
         {[1, 2, 3].map((tab, index) => (
           <div key={tab} className="d-flex align-items-center">
             <div
