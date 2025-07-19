@@ -25,7 +25,7 @@ export default function BattlePassItems({
   hoverAudioRef.current.volume = 0.02;
 
   return (
-    <div className="d-grid gap-4 bp-item-grid mb-2">
+    <div className="d-grid gap-md-4 gap-2 bp-item-grid mb-md-2 mb-0 mt-0 py-md-0 py-2">
       {sortedLevels.map((level) => {
         const reward = rewards[level.toString()];
 
