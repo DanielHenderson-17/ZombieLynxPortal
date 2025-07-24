@@ -11,7 +11,7 @@ export default function About() {
       data-aos="fade-up"
     >
       <div className="col-11 mx-auto mt-4">
-        <h3 className="text-start text-danger server-status-title mb-3">
+        <h3 className="text-start text-danger server-status-title mb-3 pays-to-play">
           IT PAYS <span className="text-white ms-2">TO PLAY</span>
           <span className="server-status-line"></span>
         </h3>
