@@ -141,6 +141,9 @@
   .splash-main-container {
     height: 94vh;
   }
+  .mission-statement p {
+    font-size: 3rem !important;
+  }
 }
 
 .splash-bg {

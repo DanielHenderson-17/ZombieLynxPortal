@@ -156,7 +156,7 @@ export default function ServerStatusDisplay() {
               <p className="col-12 text-end mt-2 pb-5">
                 <a
                   href="https://docs.google.com/spreadsheets/d/1rPNzdXZXS9HyZKKXuqDCLD-UzksvRTLKeplzDUZ5SvY/edit?usp=sharing"
-                  className="col-12 text-decoration-none text-white"
+                  className="col-12 text-decoration-none text-white steam-favorites-link"
                 >
                   Steam Favorites Info
                 </a>

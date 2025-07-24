@@ -34,7 +34,6 @@ export default function NavBarDesktop({
           className="zlg-logo"
           src={zlgLogo}
           alt="Zombie Lynx Gaming"
-          style={{ height: "50px" }}
           loading="lazy"
           aria-hidden="true"
         />
@@ -82,8 +81,8 @@ export default function NavBarDesktop({
             aria-label="Cart"
             className="nav-link pe-2 ps-2 border-start border-secondary position-relative"
           >
-            <i className="fa-solid fa-cart-shopping text-white fs-6 me-2"></i>
-            <span className="cart-badge rounded-circle text-white bg-danger">
+            <i className="fa-solid fa-cart-shopping text-white notify-link me-2"></i>
+            <span className="cart-badge rounded-circle text-white bg-danger item-count">
               {cartCount}
             </span>
           </Link>
@@ -103,9 +102,9 @@ export default function NavBarDesktop({
               aria-label="Notifications"
               className="nav-link ps-2 pe-2 position-relative border-end border-secondary"
             >
-              <i className="bi bi-bell-fill text-white fs-6 me-2"></i>
+              <i className="bi bi-bell-fill text-white notify-link me-2"></i>
               {unreadNotifications > 0 && (
-                <span className="cart-badge rounded-circle text-white bg-danger">
+                <span className="cart-badge rounded-circle text-white bg-danger item-count2">
                   {unreadNotifications}
                 </span>
               )}

@@ -94,7 +94,7 @@ export default function ServerListDisplay() {
                 </p>
                 <div className="text-end pe-2 mb-2 pb-1">
                   <button
-                    className="btn btn-outline-light mt-2"
+                    className="btn btn-outline-light mt-2 server-info-button"
                     onClick={() => setShowInfoModal(true)}
                   >
                     Server Info
