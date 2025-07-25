@@ -94,7 +94,7 @@ export default function BattlePassItems({
 
               {isLocked && (
                 <i
-                  className="bi bi-lock-fill position-absolute top-0 end-0 m-1 text-white fs-5"
+                  className="bi bi-lock-fill position-absolute top-0 end-0 m-1 text-white fs-5 bp-item-status-icon"
                   style={{ zIndex: 2 }}
                   title="Locked"
                 />
@@ -109,7 +109,7 @@ export default function BattlePassItems({
               />
               {isClaimed && (
                 <i
-                  className="bi bi-check-lg position-absolute top-50 start-50 translate-middle claimed-check-icon"
+                  className="bi bi-check-lg position-absolute top-50 start-50 translate-middle claimed-check-icon "
                   title="Claimed"
                 />
               )}

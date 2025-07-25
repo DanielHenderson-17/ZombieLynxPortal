@@ -18,7 +18,7 @@ export default function BattlePassPremiumCard({ hasPremium, premiumImage }) {
       {!hasPremium ? (
         <Link
           to="/shop"
-          className="d-block text-center text-decoration-none bp-premium-gradient py-2 fw-bold"
+          className="d-block text-center text-decoration-none bp-premium-gradient py-2 fw-bold pass-text"
           style={{
             marginTop: "0",
             borderTopLeftRadius: 0,
@@ -36,7 +36,7 @@ export default function BattlePassPremiumCard({ hasPremium, premiumImage }) {
             borderTopRightRadius: 0,
           }}
         >
-          <span>PREMIUM PURCHASED</span>
+          <span className="pass-text">PREMIUM PURCHASED</span>
           <i className="bi bi-check-circle text-black fs-4" />
         </div>
       )}

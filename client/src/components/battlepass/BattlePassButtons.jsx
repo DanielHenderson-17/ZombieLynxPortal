@@ -44,8 +44,8 @@ export default function BattlePassButtons({
               role="button"
               onClick={handleClaimAll}
             >
-              <i className="bi bi-files text-white"></i>
-              <span className="claim-all-text text-white fw-bold d-none ms-2">
+              <i className="bi bi-files text-white buy-levels"></i>
+              <span className="claim-all-text text-white fw-bold d-none ms-2 buy-levels">
                 Claim All
               </span>
             </div>
@@ -56,8 +56,8 @@ export default function BattlePassButtons({
               to="/shop"
               className="text-decoration-none d-flex align-items-center text-black fw-bold justify-content-end"
             >
-              <p className="m-0"> BUY LEVELS</p>
-              <i className="bi bi-plus-circle ms-3 text-black fs-5 fw-bold"></i>
+              <p className="m-0 buy-levels"> BUY LEVELS</p>
+              <i className="bi bi-plus-circle ms-3 text-black fs-5 fw-bold buy-levels"></i>
             </Link>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function BattlePassButtons({
         {[1, 2, 3].map((tab, index) => (
           <div key={tab} className="d-flex align-items-center">
             <div
-              className={`diamond border shadow ${
+              className={`bp-menu-btn diamond border shadow ${
                 activeTab === tab
                   ? "tab-purple-gradient"
                   : "bg-dark text-white border-black"
