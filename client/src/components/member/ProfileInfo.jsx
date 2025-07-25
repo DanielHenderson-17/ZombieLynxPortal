@@ -98,7 +98,7 @@ export default function ProfileInfo({ loggedInUser }) {
             </h3>
 
             {/* Email */}
-            <h6 className="text-start text-secondary mt-1 mb-0">
+            <h6 className="text-start text-secondary mt-1 mb-0 member-email">
               {loggedInUser?.email || "Please log in to view your email."}
             </h6>
 
@@ -112,7 +112,7 @@ export default function ProfileInfo({ loggedInUser }) {
                   loading="lazy"
                   aria-hidden="true"
                 />
-                <div className="text-container border border-secondary p-0 rounded-end-5">
+                <div className="text-container border border-secondary p-0 rounded-end-5 user-points">
                   <span>{formatNumberWithCommas(userPoints)}</span>
                 </div>
                 <Link to="/shop" className="text-secondary buy-points">

@@ -422,7 +422,37 @@
   .bp-xp-bar,
   .pass-text,
   .buy-levels,
-  .bp-menu-btn {
+  .bp-menu-btn,
+  .single-item-name,
+  .claimed-check {
     font-size: 2.5rem !important;
+  }
+  .bp-premium-gradient-text {
+    font-size: 3.5rem !important;
+  }
+  .battlepass-single-item p {
+    font-size: 2.2rem !important;
+  }
+  .claim-button {
+    margin-top: 30px !important;
+    height: 70px !important;
+    font-size: 2.5rem !important;
+  }
+  .single-item-span-text span {
+    font-size: 2.5rem !important;
+  }
+  .single-item-compatibility-text {
+    font-size: 2.5rem !important;
+    margin-right: 20px;
+  }
+  .single-item-compatibility-icon {
+    width: 45px !important;
+    height: 45px !important;
+    margin: 0 5px;
+  }
+  .rarity-box {
+    width: 30px !important;
+    height: 30px !important;
+    margin-right: 10px;
   }
 }

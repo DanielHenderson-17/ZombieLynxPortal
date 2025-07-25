@@ -274,7 +274,7 @@ hr {
 }
 @media (min-width: 2900px) {
   .ticket-container {
-    height: 57vh;
+    height: 76vh;
   }
   .open-tickets,
   .closed-tickets {

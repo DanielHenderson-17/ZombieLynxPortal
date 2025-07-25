@@ -30,7 +30,7 @@
 }
 .member-header {
   padding-left: 56px;
-  height: 130px;
+  height: 140px;
 }
 .member-content {
   padding-left: 56px;
@@ -299,8 +299,8 @@
 }
 @media (min-width: 2900px) {
   .member-layout {
-    margin-top: 250px !important;
-    height: 80vh !important;
+    margin-top: 150px !important;
+    height: 93vh !important;
   }
   .add-accounts {
     margin-top: 40px;
@@ -310,12 +310,12 @@
     font-size: 2rem !important;
   }
   .member-header {
-    height: 470px !important;
+    height: 360px !important;
   }
   .hexagon {
-    margin-top: 200px;
-    width: 400px;
-    height: 430px;
+    margin-top: 10px;
+    width: 300px;
+    height: 330px;
     background: linear-gradient(to top, rgb(150, 6, 6), black);
     clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
     padding: 10px;
@@ -452,5 +452,21 @@
   .message-input,
   .message-button {
     font-size: 2.5rem !important;
+  }
+  .member-desktop-wrapper {
+    height: 100vh;
+    z-index: 10000;
+  }
+  .subscription-icon {
+    width: 75px !important;
+    height: 75px !important;
+  }
+  .member-email {
+    font-size: 2.5rem !important;
+    margin-top: 10px !important;
+  }
+  .user-points {
+    font-size: 2.5rem !important;
+    /* margin-left: 10px !important; */
   }
 }
