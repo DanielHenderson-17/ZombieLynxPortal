@@ -4,19 +4,12 @@
 .server-status-tab {
   background-color: #292e38;
 }
-.server-status-container {
-  padding: 20px;
-}
+
 .server-status-title {
   font-size: 1.5rem;
   font-weight: bold;
 }
-.server-status-img {
-  width: 30px;
-}
-.server-item {
-  height: 50px !important;
-}
+
 .server-status-tab .nav-link {
   background-color: #282a2d;
 }
@@ -62,14 +55,7 @@
     margin: 0 10px !important;
     font-size: 3rem;
   }
-  .server-status-header img {
-    width: 200px !important;
-    margin-left: 40px !important;
-  }
-  .server-status-header h4 {
-    font-size: 4rem;
-    padding-left: 40px !important;
-  }
+
   .status-title {
     font-size: 3rem;
   }

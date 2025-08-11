@@ -4,11 +4,7 @@
   background-color: #13151a;
   max-width: 500px;
 }
-.dark-input {
-  background-color: #212529 !important; /* Bootstrap's bg-dark */
-  color: #ffffff !important; /* text-white */
-  border: 1px solid #6c757d !important; /* border-secondary */
-}
+
 .running-lynx {
   height: 10%;
 }

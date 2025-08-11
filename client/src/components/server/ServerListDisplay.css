@@ -18,21 +18,7 @@
   color: #adadad;
   font-size: 0.95rem !important;
 }
-.modal-dialog.custom-top-modal {
-  transform: translateY(-124%) !important;
-  z-index: 1055 !important;
-}
-.modal.show.d-block {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1055;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.5);
-}
+
 .zlg-extra-wide-modal {
   width: 95vw;
   margin: 0 auto;
@@ -49,31 +35,7 @@
 .server-info-card {
   background-color: #2e343a;
 }
-.server-list-item {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  transition: background-color 0.2s;
-}
-.server-list-item:hover {
-  cursor: pointer !important;
-}
-.server-list-item img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  margin-right: 10px;
-  border-radius: 5px;
-}
-.server-list-item.active {
-  color: white;
-}
-.server-list-item.active p {
-  color: white !important;
-}
+
 .server-details img {
   max-height: 300px;
   object-fit: contain;

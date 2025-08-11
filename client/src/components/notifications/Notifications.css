@@ -1,8 +1,4 @@
-.notifications-float-nav {
-  top: 80% !important;
-}
-.notifications-container,
-.create-notification-container {
+.notifications-container {
   background-color: #13151a !important;
   height: 100%;
 }
@@ -13,8 +9,7 @@
 .notifications-container .flex-grow-1 {
   margin-bottom: 60px;
 }
-.single-notification,
-.create-notification-container {
+.single-notification {
   color: white;
   background-color: #2c3034;
 }
@@ -22,36 +17,14 @@
   background-color: #3c4044;
   color: #8d97a0 !important;
 }
-.user-selection {
-  border: 1px solid gray;
-  border-radius: 5px;
-  padding: 5px;
-  overflow-y: scroll;
-  min-height: 120px;
-  max-height: 150px;
-}
+
 @media (max-width: 768px) {
-  .notifications-container,
-  .create-notification-container {
+  .notifications-container {
     height: 100%;
   }
 }
 @media (min-width: 2900px) {
   .notifications-container {
     height: 57vh;
-  }
-  .no-notifications {
-    font-size: 3rem;
-  }
-  .create-notification-btn {
-    font-size: 2.5rem;
-    margin-right: 20px;
-  }
-  .create-notification-container {
-    font-size: 3rem;
-    height: 57vh;
-  }
-  .search-users {
-    font-size: 2.5rem;
   }
 }

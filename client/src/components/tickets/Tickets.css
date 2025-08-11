@@ -19,9 +19,7 @@
 .ticket-float-closed {
   transform: translateY(-50%) translateX(100%);
 }
-.new-ticket-container {
-  overflow-y: hidden !important;
-}
+
 .ticket-float-toggle {
   position: absolute;
   left: -16px;
@@ -38,10 +36,6 @@
   border-right: none !important;
 }
 
-.ticket-mobile-navlink {
-  border-radius: 50%;
-  padding: 3px;
-}
 .ticket-mobile-nav-title {
   font-size: 0.7rem;
   color: rgb(197, 197, 197);
@@ -74,10 +68,7 @@
 .toggle-arrow:hover {
   border: 1px solid rgb(29, 29, 29);
 }
-.single-img {
-  height: 100px;
-  width: 100px;
-}
+
 .ticket {
   min-width: 100% !important;
 }
@@ -119,21 +110,14 @@
   background-color: #13151a;
   border-radius: 5px;
 }
-.closed-status {
-  color: #b31818;
-}
+
 hr {
   border-top: 1px solid white;
 }
 .sub-text {
   color: rgb(150, 150, 150);
 }
-.gameImg {
-  height: 60px;
-}
-.gameImg2 {
-  height: 30px;
-}
+
 .gameImg3 {
   height: 80px;
 }
@@ -146,17 +130,7 @@ hr {
 .border-light {
   border: 1px solid #343a40 !important;
 }
-.bottom-nav {
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-}
-.bottom-nav .active {
-  color: #0d6efd;
-}
-.bottom-nav .badge {
-  font-size: 0.6rem;
-  margin-top: 10px;
-  margin-left: 10px;
-}
+
 .ticket-container .flex-grow-1 {
   margin-bottom: 60px;
 }
@@ -175,9 +149,7 @@ hr {
 .description {
   min-height: 100px;
 }
-.single-datetime {
-  font-size: 0.8rem;
-}
+
 .messages {
   overflow-x: auto;
   overflow-y: scroll;
@@ -207,11 +179,7 @@ hr {
   height: 40px;
   border-radius: 50%;
 }
-.discord-image {
-  display: block;
-  width: 100px;
-  border-radius: 50%;
-}
+
 @media (max-width: 767.98px) {
   .ticket-body1 {
     padding-bottom: 250px;
@@ -234,16 +202,11 @@ hr {
     opacity: 1;
     transform: translateY(0);
   }
-  .kaeneko {
-    height: 300px !important;
-    margin-top: 30px;
-  }
+
   .ticket-container {
     overflow-y: scroll;
   }
-  .subject-font {
-    font-size: 1.25rem;
-  }
+
   .message-box {
     margin-top: 0px;
     height: 100%;
@@ -259,11 +222,7 @@ hr {
     margin-top: 0 !important;
   }
 }
-@media (min-width: 768px) {
-  .subject-font {
-    font-size: 1.25rem;
-  }
-}
+
 @media (max-width: 768px) {
   .ticket-container {
     height: 63vh;
@@ -280,17 +239,7 @@ hr {
   .closed-tickets {
     font-size: 3rem;
   }
-  .create-ticket {
-    margin-top: 10px;
-    padding: 2px;
-    font-size: 2rem;
-  }
-  .create-ticket i {
-    margin-left: 25px;
-  }
-  .create-ticket p {
-    margin: 5px !important;
-  }
+
   .no-tickets {
     font-size: 3rem;
   }
