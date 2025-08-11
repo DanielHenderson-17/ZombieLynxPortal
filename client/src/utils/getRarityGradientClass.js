@@ -22,20 +22,3 @@ export function getRarityGradientClass(level, rarity) {
       return "bg-dark";
   }
 }
-
-export function getRarityTextClass(rarity) {
-  switch (rarity?.toLowerCase()) {
-    case "common":
-      return "rarity-common";
-    case "uncommon":
-      return "rarity-uncommon";
-    case "rare":
-      return "rarity-rare";
-    case "epic":
-      return "rarity-epic";
-    case "legendary":
-      return "rarity-legendary";
-    default:
-      return "";
-  }
-}

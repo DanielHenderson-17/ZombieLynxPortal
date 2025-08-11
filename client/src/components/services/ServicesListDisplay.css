@@ -1,10 +1,6 @@
 .zlg-services {
   height: 100vh;
 }
-.extra-life {
-  height: 250px;
-}
-.extra-life-text,
 .price-card {
   background: linear-gradient(145deg, #121214, #1a1a1d);
   outline: 1px solid #000000;
@@ -12,10 +8,7 @@
 .price-card {
   height: 560px;
 }
-.service-tab .nav-link.active {
-  background-color: #dc3545 !important;
-  color: white;
-}
+
 .subscription-badge {
   position: absolute;
   top: 15px;
@@ -67,10 +60,7 @@
   .price-card {
     height: 530px;
   }
-  .extra-life {
-    height: 200px;
-    margin-bottom: 10px;
-  }
+
   .single-border,
   .golden-border,
   .diamond-border,

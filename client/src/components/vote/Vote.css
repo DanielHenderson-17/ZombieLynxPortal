@@ -1,13 +1,5 @@
-.react-datepicker-wrapper {
-  width: 60%;
-}
-
 ::placeholder {
   color: #ffffff !important;
-}
-
-.vote-chart {
-  max-width: 400px;
 }
 
 .chart-text {
@@ -54,12 +46,6 @@
   }
   .vote-expiry {
     font-size: 0.85rem;
-  }
-  .vote-chart {
-    max-width: 300px !important;
-  }
-  .chart-text2 {
-    margin-bottom: 50px;
   }
 }
 

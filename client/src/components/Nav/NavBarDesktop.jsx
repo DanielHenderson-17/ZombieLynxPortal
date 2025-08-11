@@ -188,18 +188,19 @@ export default function NavBarDesktop({
                           `https://picsum.photos/seed/${randomSeed}/40/40`
                     }
                     alt="Profile"
-                    className="rounded-circle me-2"
-                    style={{ width: "50px", height: "50px" }}
+                    className="rounded-circle me-2 nav-profile-img"
                   />
                   <div>
-                    <span className="fw-bold fs-5">
+                    <span className="fw-bold fs-5 nav-profile-first-name">
                       {discordAccount?.discordName
                         ? capitalizeFirstLetter(
                             formatDiscordName(discordAccount.discordName)
                           )
                         : loggedInUser?.firstName || "Guest"}
                     </span>
-                    <span className="d-block fs-6">{loggedInUser.email}</span>
+                    <span className="d-block fs-6 nav-profile-email">
+                      {loggedInUser.email}
+                    </span>
                   </div>
                 </div>
 

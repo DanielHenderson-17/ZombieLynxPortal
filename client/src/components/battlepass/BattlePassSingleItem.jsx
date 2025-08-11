@@ -36,7 +36,7 @@ export default function BattlePassSingleItem({
           className="btn btn-secondary mt-md-3 mt-1 px-4 fw-bold d-flex align-items-center gap-2 claim-button"
           disabled
         >
-          <i className="bi bi-check-lg fs-5"></i>
+          <i className="bi bi-check-lg fs-5 claimed-check"></i>
           CLAIMED
         </button>
       )}
