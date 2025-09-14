@@ -127,4 +127,7 @@
     font-size: 3rem !important;
     margin-top: 40px !important;
   }
+  .server-status-title {
+    font-size: 4rem !important;
+  }
 }
