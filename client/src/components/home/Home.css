@@ -1,9 +1,10 @@
 /* Home */
 .home-container {
-  margin-top: 70px !important;
+  margin-top: 0 !important;
+  width: 100%;
 }
 .mission-text {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 }
 .custom-col-3-75 {
   flex: 0 0 31.25%;
@@ -15,17 +16,12 @@
 }
 
 .splash-main-container {
-  height: 92vh;
+  margin-top: 70px;
+  height: 100vh;
+  width: 100%;
   background: linear-gradient(145deg, #121214, #1a1a1d);
 }
-/* .splash-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  object-fit: cover;
-  z-index: 1;
-} */
+
 .splash-logo {
   z-index: 2;
   height: 80vh;
@@ -50,13 +46,10 @@
 .headset-icon {
   width: 40px;
 }
+
 @media (max-width: 768px) {
   .splash-main-container {
     height: 92vh;
-    margin-top: 5px !important;
-  }
-  .home-container {
-    margin-top: 67px !important;
   }
   .mission-statement {
     margin-top: 0px !important;
@@ -73,6 +66,7 @@
     margin-top: 10px;
   }
   .splash-container {
+    margin-top: 70px;
     height: 38%;
   }
   .splash-logo img {
@@ -81,22 +75,14 @@
     margin-top: 0px;
     height: 75%;
   }
-  /* .splash-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80vh;
-    object-fit: stretch;
-    z-index: 1;
-  } */
+
   .mission-statement h4 {
     font-size: 1.1rem;
   }
 }
 @media (min-width: 2900px) {
   .home-container {
-    margin-top: 110px !important;
+    margin-top: 0 !important;
   }
   /* .splash-background {
     position: absolute;
@@ -126,10 +112,19 @@
     height: 1600px;
   }
   .splash-main-container {
-    height: 94vh;
+    margin-top: 150px;
+    height: 100vh;
   }
   .mission-statement p {
     font-size: 3rem !important;
+  }
+
+  /* Keep zlg-about text at reasonable size for the bottom section - 3x normal */
+  .zlg-about .mission-text {
+    font-size: 3.25rem !important;
+  }
+  .zlg-about .headset-icon {
+    width: 120px;
   }
 }
 
@@ -146,6 +141,6 @@
 @media (min-width: 768px) {
   .splash-bg {
     background-image: url("/apoc-background-desktop.webp");
-    height: 80vh;
+    height: 90vh;
   }
 }
