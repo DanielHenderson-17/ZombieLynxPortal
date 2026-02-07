@@ -367,7 +367,6 @@ app.MapControllers();
 // ✅ Bind to all network interfaces
 app.Urls.Add("http://0.0.0.0:5001");
 app.Urls.Add("http://0.0.0.0:5000");
-app.Urls.Add("https://localhost:5001");
 
 
 // ✅ Start <GameName>PointsSyncService after app startup
