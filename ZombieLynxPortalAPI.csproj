@@ -27,18 +27,23 @@
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 
-  <!-- ✅ Build the frontend before the backend -->
-  <Target Name="BuildFrontend" BeforeTargets="Build">
+  <!-- ✅ Build the frontend before publish -->
+  <Target Name="BuildFrontend" BeforeTargets="Publish">
     <Exec Command="npm install" WorkingDirectory="client" />
     <Exec Command="npm run build" WorkingDirectory="client" />
   </Target>
 
   <!-- ✅ Copy built frontend to wwwroot -->
-  <Target Name="CopyFrontend" AfterTargets="Build">
+  <Target Name="CopyFrontend" AfterTargets="BuildFrontend" BeforeTargets="Publish">
     <ItemGroup>
-      <DistFiles Include="client\dist\**\*" />
+      <DistFiles Include="client\build\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(DistFiles)" DestinationFolder="wwwroot\%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
+
+  <!-- ✅ Include wwwroot in publish output -->
+  <ItemGroup>
+    <Content Include="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>
