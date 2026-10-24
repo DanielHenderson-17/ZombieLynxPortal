@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import {
   claimAllBattlePassRewards,
   getMyBattlePass,
-} from "../../managers/battlePassManager";
+} from "../../managers/battlepassManager";
 
 export default function BattlePassButtons({
   claimableLevels,
@@ -88,3 +88,4 @@ export default function BattlePassButtons({
     </div>
   );
 }
+

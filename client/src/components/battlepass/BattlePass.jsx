@@ -5,11 +5,11 @@ import BattlePassItems from "./BattlePassItems";
 import BattlePassSingleItem from "./BattlePassSingleItem";
 import BattlePassXpBar from "./BattlePassXpBar";
 import BattlePassButtons from "./BattlePassButtons";
-import { getMyBattlePass } from "../../managers/battlePassManager";
+import { getMyBattlePass } from "../../managers/battlepassManager";
 import BattlePassSingleItemDetails from "./BattlePassSingleItemDetails";
 import BattlePassPremiumCard from "./BattlePassPremiumCard";
 import { battlePassImageMap } from "../../utils/battlePassImageMap";
-import { claimBattlePassLevel } from "../../managers/battlePassManager";
+import { claimBattlePassLevel } from "../../managers/battlepassManager";
 import { getDaysLeft } from "../../utils/getDaysLeft";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -170,3 +170,4 @@ export default function BattlePass() {
     </div>
   );
 }
+
