@@ -9,7 +9,9 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       "/api": {
-        target: "https://localhost:5001",
+        // In development we talk to the API over HTTP, not HTTPS.
+        // For production builds this proxy is not used; frontend will call the real API URL.
+        target: "http://localhost:5000",
         changeOrigin: true,
         secure: false,
       },
@@ -19,5 +21,11 @@ export default defineConfig({
     outDir: "build",
     target: "esnext",
   },
-  plugins: [react(), visualizer({ filename: "build/stats.html", open: true })],
+  plugins: [
+    react(),
+    ...(process.env.ANALYZE === "true"
+      ? [visualizer({ filename: "build/stats.html", open: false })]
+      : []),
+  ],
 });
+

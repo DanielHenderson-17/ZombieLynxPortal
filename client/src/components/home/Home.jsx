@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Footer from "../Footer";
 import logoMain from "../../assets/home/zlg-logo-main.webp";
 
-export default function Home() {
+
   const About = lazy(() => import("../about/About"));
   const ServicesListDisplay = lazy(() =>
     import("../services/ServicesListDisplay")
@@ -14,6 +14,7 @@ export default function Home() {
     import("../server/ServerStatusDisplay")
   );
 
+export default function Home() {
   return (
     <div className="home-container col-12 p-md-0 pt-0 px-0" id="home">
       {/* Splash Container */}
@@ -133,3 +134,4 @@ export default function Home() {
     </div>
   );
 }
+

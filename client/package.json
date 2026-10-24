@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.27.6",
+    "@heroicons/react": "^2.2.0",
     "@tebexio/tebex.js": "^1.7.0",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.3",
@@ -25,21 +26,26 @@
     "react-chartjs-2": "^5.3.0",
     "react-datepicker": "^8.3.0",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.6.0",
     "react-router-dom": "^7.1.1",
     "react-slider": "^2.0.6",
     "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@tailwindcss/postcss": "^4.2.1",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.27",
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "postcss": "^8.5.8",
     "rollup-plugin-visualizer": "^6.0.3",
+    "tailwindcss": "^4.2.1",
     "vite": "^6.0.5"
   }
 }

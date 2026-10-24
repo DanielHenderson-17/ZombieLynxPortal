@@ -1,16 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Typography */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  /* background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Color tokens */
+  --color-primary: #1a1a1d;
+  --color-secondary: #dc3545;
+  --color-card: #19191c;
+  --color-secondary-selected: #282a2d;
+  --color-tabs: #19191c;
+
+  --color-border-primary: #55565b;
+
+  --color-text: #ffffff;
+  --color-text-muted: #a0a0a0;
+
+  --page-bg: #000000;
 }
 
 a {
@@ -28,6 +44,8 @@ body {
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
+  background-color: var(--page-bg);
+  color: var(--color-text);
 }
 
 h1 {
@@ -42,16 +60,44 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--color-primary);
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--color-secondary);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Utility: disable global button border/hover for specific buttons */
+.btn-no-border,
+.btn-no-border:hover,
+.btn-no-border:focus {
+  border: none !important;
+}
+
+/* Sign-in circle: keep visible ring, no red on hover, force circle not pill */
+.btn-signin-circle,
+.btn-signin-circle:hover,
+.btn-signin-circle:focus {
+  border-color: var(--color-border-primary) !important;
+  padding: 0 !important;
+  border-radius: 9999px !important;
+}
+
+/* Nav links (Shop, Discord, etc.): only bottom border under the word on hover, square corners */
+.nav-link-btn {
+  border: none !important;
+  border-radius: 0 !important;
+}
+.nav-link-btn .nav-link-btn-text {
+  border-bottom: 2px solid transparent;
+}
+.nav-link-btn:hover .nav-link-btn-text {
+  border-bottom-color: var(--color-secondary);
 }
 
 .facebook-header {
@@ -61,13 +107,7 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+    color: var(--color-text);
+    background-color: var(--page-bg);
   }
 }
